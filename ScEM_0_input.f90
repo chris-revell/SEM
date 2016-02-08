@@ -1,0 +1,209 @@
+! T. J Newman, Tempe, July 2010
+
+! edited for growth algorithm, September 2010
+
+module scem_0_input
+
+  implicit none
+
+  ! declare system parameters and constants
+
+  integer, parameter :: dim=3 ! --> number of spatial dimensions
+  integer, parameter :: ne_cell=128 ! --> number of elements per cell
+
+  integer :: ne,nc,np ! numbers of elements, cells, and element pairs
+  integer :: ne_size,nc_size,np_size ! parameters for array size allocations
+  integer :: flag_relist ! flag triggering relist of sector assignments
+  real*8 :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
+!  integer :: filenumber !for use in scem_output
+
+!  real*8 :: command_line_argument	!Value given at command line
+  CHARACTER(len=32) :: arg			!Dummy argument for reading value at command line
+
+  ! meaning of parameters given below when assigned values
+  real*8, allocatable, dimension(:,:,:,:,:) :: rel_strength		!For interaction of element a in cell A with element b in cell B argument is (type of cell A, type of cell B, type of element a, type of element b)
+  integer :: nx,ny,nz
+  integer :: iseed,iloop1,iloop2,iloop3,iloop4,iloop5
+  integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve,flag_background,flag_cortex,flag_DIT
+  integer :: n_c_types,n_e_types
+  integer :: n_bins
+  integer :: n_snapshots		!Number of system snapshots outputted to file "elements"
+  real*8 :: p3,pi,ot
+  real*8 :: r_cell,r_cell_sq
+!  real*8 :: r_boundary			!Radius of confining spherical boundary
+  real*8 :: viscous_timescale_cell,elastic_mod_cell,damping_cell,damping_element
+  real*8 :: kappa_cell,kappa_element,epsilon,pot_min,rho,force_amplitude
+  real*8 :: r_equil,r_equil_sq,frac_close,r_close_sq
+  real*8 :: frac_interaction_max,r_interaction_max,r_interaction_max_sq,d_r_sq,d_r_sq_recip
+  real*8 :: diff_coeff,diff_amp
+  real*8 :: cell_cycle_time,rate_new_element,establishment_time,prob_new_element,frac_growth
+  real*8 :: frac_placement_min,r_placement_min_sq
+  real*8 :: buffer_frac,buffer_size,buffer_size_sq,sector_size,sector_size_sq,recip_sector_size
+  real*8 :: time,time_out_1,time_max,dt,dt_amp_max,r_s_max !time_out_2,
+  real*8 :: trigger_frac
+  real*8 :: cortex_constant
+
+  ! user to assign values to system parameters and constants
+
+  contains
+
+    subroutine scem_input
+
+	  n_snapshots = 0
+
+!   Below used when cortical tension was specified at the command line.
+!      CALL get_command_argument(1, arg)
+!      read (arg,*) command_line_argument
+
+      flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
+      flag_diffusion  = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
+      flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
+      flag_background = 0 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
+      flag_growth     = 0 ! flag_growth = 0 (1) for no growth (growth)
+      flag_division   = 0 ! flag_division = 0 (1) for growth with no cell division (with cell division)
+      flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME 
+      flag_DIT        = 0 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
+
+
+      ! numerical constants
+      pi=4.0*atan(1.0) ! pi
+      ot=1.0/3.0 ! one third
+      p3=pi/(3.0*sqrt(2.0)) ! packing fraction in 3D
+
+      ! system parameters
+      iseed=-6345 ! initial random number seed, originally -6345
+      trigger_frac=0.5 ! safety margin for triggering array reallocation
+      ! derived quantitites
+      dt_amp_max=0.1*(1.0-0.875*flag_create) ! empirically found best values for time step amplitude
+
+      ! cell parameters
+      n_c_types=2 ! Number of cell types. 1=epliblast, 2=hypoblast
+      n_e_types=2 ! Number of element types. 1=cytoplasm, 2=cortex
+      r_cell=10.0 ! Radial spatial scale of one cell in *microns*
+      ! derived quantities
+      r_cell_sq=r_cell**2 ! radial scale squared
+      allocate(rel_strength(0:n_c_types,0:n_c_types,0:n_e_types,0:n_e_types,2)) ! allocate rel_strength array
+
+      ! physical parameters
+      viscous_timescale_cell=100 ! time scale of viscous relaxation for cell in *seconds*
+      elastic_mod_cell=1.0 ! elastic modulus of cell in *kiloPascals*
+      ! derived quantities
+      kappa_cell=elastic_mod_cell*r_cell ! effective spring constant for one cell in nanoNewtons/micron
+      kappa_element=kappa_cell/(ne_cell+0.0)**ot ! effective Hookean spring constant between elements (assuming 3D)
+      damping_cell=viscous_timescale_cell*kappa_cell ! effective damping constant for one cell
+      damping_element=damping_cell/ne_cell ! effective damping constant for one element
+
+      ! interactions
+        ! here are parameters for intracellular element interactions
+        ! all other pairwise interactions across element types will be scaled using a relative strength matrix
+        ! length scales will be kept constant across all element types for the time being
+      epsilon=0.01 ! --> value of potential relative to minimum at r_interaction_max
+      n_bins=1024 ! --> number of bins for potential table
+      frac_close=0.8 ! --> fraction of equilibrium distance for initialization (< approx 0.85)
+      frac_interaction_max=1.8 ! --> fraction of equilibrium distance for maximum interaction range (in window 1.5 to 1.9)
+                                !     1.5 has sharply contracted potential and efficient
+                                !     1.9 has more relaxed potential, and still reasonably efficient (factor of 2.5 slower)
+                                !     > 1.9 brings in more element interactions, contracting cell, and slowing simulation
+                                !     however, < 2.0 creates crystalline faceting with growth algorithms
+        ! derived quantitites
+        r_equil=2*r_cell*(p3/ne_cell)**ot ! equilibrium distance between elements (assuming 3D here)
+        r_equil_sq=r_equil**2 ! square of equilibrium distance
+        r_close_sq=(frac_close*r_equil)**2 ! square of minimum distance for initialization
+        r_interaction_max=frac_interaction_max*r_equil ! maximum interaction range
+        r_interaction_max_sq=r_interaction_max**2 ! square of maximum interaction range
+        d_r_sq=r_interaction_max_sq/n_bins
+        d_r_sq_recip=1.0/d_r_sq
+        rho=-(1.0/(frac_interaction_max**2-1.0))*log(1.0-sqrt(1.0-epsilon)) ! value of rho to ensure V/V_min=epsilon
+        pot_min=(kappa_element/8)*(r_equil/rho)**2 ! value of V_min to ensure correct spring constant
+        force_amplitude=4.0*pot_min*rho/r_equil**2 ! prefactor of force expression
+
+      ! diffusion parameters
+      diff_coeff=0.001 ! --> diffusion coefficient of elements in units of micron^2/s
+
+
+
+      ! growth parameters
+      cell_cycle_time=4320 !43200			!0.5*3600.0 ! --> cell cycle time in seconds
+      frac_growth=0.9 ! fraction of current cell radius within which new elements may be placed
+      frac_placement_min=0.6 ! minimum separation of new element from nearest neighbour, as fraction of r_equil
+        ! derived quantities
+        rate_new_element=ne_cell/cell_cycle_time ! rate per cell at which new elements introduced
+        establishment_time=1.0/rate_new_element ! transient time for each new element to become established ("faded in")
+                                                ! note: may need better derivation for this time and relationship to cell_cycle_time
+        r_placement_min_sq=(frac_placement_min*r_equil)**2 ! squared minimum distance from new element to nearest neighbour
+
+
+		!assign values to relative strength array
+		rel_strength(:,:,:,:,:)=0.0	!default interactions are zero
+		! User supplies entries for relative strength "matrix"
+		! Fill in values for pairwise interactions (i,j,k,l) with i < = j and k < = l.
+		! Algorithm will then automatically fill in values for switching indices i and j, and k and l (tensor is symmetric under flipping of these indices.
+		!Note that it is only symmetric if both indices are flipped - it is not symmetrical under flipping of only one index)
+		!                                                     last index = 1 (intra-cellular interactions)
+      	!                                                                = 2 (inter-cellular interactions)
+
+		rel_strength(1,1,1,1,1) = 10.0 	 !Intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+		rel_strength(1,1,1,2,1) = 10.0	 !Intra-cellular Epiblast cytoplasm-epiblast cortex
+!		rel_strength(1,1,2,2,1)	= command_line_argument	!Used in old version
+    rel_strength(1,1,2,2,1)	= 10.0   !Intra-cellular Epiblast cortex-epiblast cortex
+		rel_strength(1,2,1,1,1)	= 0.0	   !Intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
+		rel_strength(1,2,1,2,1) = 0.0	   !Intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
+		rel_strength(1,2,2,2,1) = 0.0	   !Intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
+		rel_strength(2,2,1,1,1) = 10.0	 !Intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+		rel_strength(2,2,1,2,1) = 10.0	 !Intra-cellular Hypoblast cytoplasm-hypoblast cortex
+		rel_strength(2,2,2,2,1) = 10.0	 !Intra-cellular Hypoblast cortex-hypoblast cortex
+
+		rel_strength(1,1,1,1,2) = 0.0    !Inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+		rel_strength(1,1,1,2,2) = 0.0    !Inter-cellular Epiblast cytoplasm-epiblast cortex
+		rel_strength(1,1,2,2,2) = 10.0   !Inter-cellular Epiblast cortex-epiblast cortex
+		rel_strength(1,2,1,1,2) = 0.0    !Inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+		rel_strength(1,2,1,2,2) = 0.0    !Inter-cellular Epiblast cytoplasm-hypoblast cortex
+		rel_strength(1,2,2,2,1) = 10.0   !Inter-cellular Epiblast cortex-hypoblast cortex
+		rel_strength(2,2,1,1,2) = 0.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+		rel_strength(2,2,1,2,2) = 0.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cortex
+		rel_strength(2,2,2,2,2) = 12.0   !Inter-cellular Hypoblast cortex-hypoblast cortex
+
+    cortex_constant = 0.5
+
+		! fill in transposed values of symmetric matrix (i.e. (i,j,k,l)=(j,i,l,k) )
+        r_s_max=0.0 ! calculate maximum matrix entry to rescale dt_amp_max
+        do iloop1=0,n_c_types
+			do iloop2=0,n_c_types									!max(0,iloop1-1)
+				do iloop3=1,n_e_types
+					do iloop4=1,n_e_types							!max(1,iloop3-1)
+						do iloop5=1,2
+							rel_strength(iloop1,iloop2,iloop3,iloop4,iloop5)=rel_strength(iloop2,iloop1,iloop4,iloop3,iloop5)
+							r_s_max=max(r_s_max,rel_strength(iloop1,iloop2,iloop3,iloop4,iloop5))
+						end do
+					end do
+				end do
+			end do
+		end do
+
+
+        dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
+      ! temporal parameters - all in *seconds*
+      time_max=0.5*cell_cycle_time ! --> time of simulation in seconds
+      time_out_1=int(time_max)/98 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
+!      time_out_2=cell_cycle_time/100.0 ! --> interval between quantitative data outputs
+       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
+        ! derived quantities
+        diff_amp=sqrt(dt*diff_coeff) ! amplitude of noise in diffusion term
+        prob_new_element=rate_new_element*dt ! probability of growth for each time step
+
+      ! sector parameters (used to highly optimize location of near neighbor elements)
+      buffer_frac=0.1 ! fractional size of buffer for lifetime of neighbor table (sweet spot between 0.08-0.15)
+        ! derived quantities
+        buffer_size=buffer_frac*r_interaction_max ! absolute width of buffer region
+        buffer_size_sq=buffer_size**2 ! square of buffer size for efficiency in module scem_flag_relist
+        sector_size=0.5*(1.0+buffer_frac)*r_interaction_max ! sector size is max interaction range plus buffer
+        sector_size_sq=sector_size**2 ! square of sector_size for efficiency in scem_2_pairs
+        recip_sector_size=1.0/sector_size ! calculate reciprocal of sector size for efficiency
+        nx=8*(2+int(4*r_cell/sector_size)) ! --> number of sectors in x direction
+        ny=nx ! --> isotropic choice
+        if (dim.eq.3) nz=nx ! --> isotropic choice in 3D
+        if (dim.eq.2) nz=1 ! --> a single layer of sectors for 2D simulations
+
+    end subroutine scem_input
+
+end module scem_0_input
