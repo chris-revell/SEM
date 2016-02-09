@@ -24,6 +24,9 @@ module scem_4_cortex
 			!Loop over all cells
 
 			cells(i)%cortex_elements(0)=0		!Set cortex counter to zero before counting cortex elements later on in this module.
+			do j=1, cells(i)%c_elements(0)
+				elements(cells(i)%c_elements(j))%type = 1		!Refresh all elements to bulk cytoplasm type. If this is not done, there will be a steady gain of cortex elements over time because once an element is labelled as cortex it can never revert back to bulk. 
+			enddo
 
 			call scem_polar(i)
 
