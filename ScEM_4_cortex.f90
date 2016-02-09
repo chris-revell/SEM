@@ -22,10 +22,11 @@ module scem_4_cortex
 
 		do i=1, nc
 			!Loop over all cells
+			write(*,*) "new cortex module"
 
 			cells(i)%cortex_elements(0)=0		!Set cortex counter to zero before counting cortex elements later on in this module.
 			do j=1, cells(i)%c_elements(0)
-				elements(cells(i)%c_elements(j))%type = 1		!Refresh all elements to bulk cytoplasm type. If this is not done, there will be a steady gain of cortex elements over time because once an element is labelled as cortex it can never revert back to bulk. 
+				elements(cells(i)%c_elements(j))%type = 1		!Refresh all elements to bulk cytoplasm type. If this is not done, there will be a steady gain of cortex elements over time because once an element is labelled as cortex it can never revert back to bulk.
 			enddo
 
 			call scem_polar(i)
@@ -188,6 +189,12 @@ module scem_4_cortex
 		!Should now have specified the type of all elements in all cells
 		!Elements set to be of cortex type if their radius exceeds 80% of the max radius in that bin
 		!and the max radius of that bin exceeds 50% of the max radius for the whole cell
+
+		do i=1, ne
+			if (elements(i)%type.EQ.2) then
+				write(*,*) elements(i)%label
+			endif
+		enddo
 
 !		open(unit=28,file='cortex', status='new')
 !		do i=1, ne

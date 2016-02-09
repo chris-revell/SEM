@@ -33,28 +33,37 @@ module scem_2_output_final
 
       !Povray experimental output
       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      open(unit=42,file='data/system_data/elements_povray.pov',status='unknown')
-      write(42,*) '#version 3.5;'
-      write(42,*) '#include "colors.inc"'
-      write(42,*) '#include "textures.inc"'
-      write(42,*) 'background {White}'
-      write(42,*)
-      write(42,*) 'camera {'
-      write(42,*) '   location  <0, 80, -200>'
-      write(42,*) '   angle 12'
-      write(42,*) '   look_at<0,-0.5,0>}'
-      write(42,*)
-      write(42,*) 'light_source { < -30, 30, 0 > color White }'
-      write(42,*)
-
-      do n=1, ne
-        write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A43)') ' sphere {  < ', &
-                      elements(n)%position(1), ',', elements(n)%position(2), &
-                        ',', elements(n)%position(3), &
-                          '> 0.5 texture { pigment { color Green } } }'
-        write(42,*)
-      enddo
-      close(unit=42)
+!      open(unit=42,file='data/system_data/elements_povray.pov',status='unknown')
+!      write(42,*) '#version 3.5;'
+!      write(42,*) '#include "colors.inc"'
+!      write(42,*) '#include "textures.inc"'
+!      write(42,*) 'background {White}'
+!      write(42,*)
+!      write(42,*) 'camera {'
+!      write(42,*) '   location  <0, 80, -200>'
+!      write(42,*) '   angle 12'
+!      write(42,*) '   look_at<0,-0.5,0>}'
+!      write(42,*)
+!      write(42,*) 'light_source { < -30, 30, 0 > color White }'
+!      write(42,*)
+!
+!      do n=1, ne
+!        if ((elements(n)%type).EQ.1) then
+!          write(*,*) elements(n)%type, 'green'
+!          write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A43)') ' sphere {  < ', &
+!                        elements(n)%position(1), ',', elements(n)%position(2), &
+!                          ',', elements(n)%position(3), &
+!                            '> 1.5 texture { pigment { color Green } } }'
+!        else
+!          write(*,*) elements(n)%type, 'red'
+!          write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A43)') ' sphere {  < ', &
+!                        elements(n)%position(1), ',', elements(n)%position(2), &
+!                          ',', elements(n)%position(3), &
+!                            '> 1.5 texture { pigment { color Red } } }'
+!        endif
+!        write(42,*)
+!      enddo
+!      close(unit=42)
       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 

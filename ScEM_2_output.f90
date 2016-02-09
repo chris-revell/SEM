@@ -35,7 +35,7 @@ module scem_2_output
 
          write(*,*) real(time),ne,nc,ne_size,nc_size,np,np_size,nx,ny,nz,n_snapshots    !This is the line which prints data to the command line
          write(29,*) nc													   				!Prints the number of cells in each data snapshot to the file "snapshot_data"
-		 call flush(29)
+		     call flush(29)
       	 call scem_measure																!Measure numerical sorting value of system
       	 call scem_measure_radius
       	 call scem_measure_neighbours
@@ -44,9 +44,9 @@ module scem_2_output
 
       	 !For this snapshot, create a new output filename for cell positions and open the file
       	 write(cells_filename_epi,"(A26,I2.2)") "data/cell_data/cells_epi_S", n_snapshots
-		 write(cells_filename_hypo,"(A27,I2.2)") "data/cell_data/cells_hypo_S", n_snapshots
-		 open(unit=19,file=trim(cells_filename_epi),status='unknown')
-		 open(unit=20,file=trim(cells_filename_hypo),status='unknown')
+		     write(cells_filename_hypo,"(A27,I2.2)") "data/cell_data/cells_hypo_S", n_snapshots
+		     open(unit=19,file=trim(cells_filename_epi),status='unknown')
+		     open(unit=20,file=trim(cells_filename_hypo),status='unknown')
 
       	 !The following do loop creates a data file in the voro++ input format for every cell at every visualisation snapshot. Also creates gnuplot command files for each snapshot that take the form fort.n_snapshots
       	 do k=1, nc
@@ -62,8 +62,8 @@ module scem_2_output
 
          	!Write cell label and positions to cell output file in voro++ format
          	if (cells(k)%fate.EQ.1) then
-		 		write(19,*) cells(k)%label, cells(k)%position(:)
-		 	else
+		 		  write(19,*) cells(k)%label, cells(k)%position(:)
+		 	  else
 		 		write(20,*) cells(k)%label, cells(k)%position(:)
 		 	end if
 		 end do
