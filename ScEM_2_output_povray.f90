@@ -22,7 +22,7 @@ module scem_2_output_povray
       !Open file for povray output
       open(unit=42, file=povray_filename,status='unknown')
 
-      do n=1, nc
+      do i=1, nc
 
         write(42,*) '#version 3.5;'
         write(42,*) '#include "colors.inc"'
