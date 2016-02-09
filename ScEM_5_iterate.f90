@@ -14,6 +14,7 @@ module scem_5_iterate
   use scem_2_growth
   use scem_2_integrate
   use scem_2_output
+  use scem_2_output_povray
   use scem_2_pairs
   use scem_2_relist
   use scem_2_resize
@@ -110,6 +111,7 @@ module scem_5_iterate
 
          ! write data to files
          call scem_output
+         call scem_output_povray
 
       end do
 
