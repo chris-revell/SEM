@@ -40,7 +40,7 @@ module scem_2_output_povray
         do j=1, cells(i)%c_elements(0)
           !n is the global label of the jth element in c_elements
           n=cell(i)%c_elements(j)
-          if ((elements(n))%type).EQ.1) then
+          if ((elements(n)%type).EQ.1) then
             write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A43)') ' sphere {  < ', &
                           elements(n)%position(1), ',', elements(n)%position(2), &
                             ',', elements(n)%position(3), &
