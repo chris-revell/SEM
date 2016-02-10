@@ -22,7 +22,6 @@ module scem_4_cortex
 
 		do i=1, nc
 			!Loop over all cells
-			write(*,*) "new cortex module"
 
 			cells(i)%cortex_elements(0)=0		!Set cortex counter to zero before counting cortex elements later on in this module.
 			do j=1, cells(i)%c_elements(0)
@@ -190,11 +189,11 @@ module scem_4_cortex
 		!Elements set to be of cortex type if their radius exceeds 80% of the max radius in that bin
 		!and the max radius of that bin exceeds 50% of the max radius for the whole cell
 
-		do i=1, ne
-			if (elements(i)%type.EQ.2) then
-				write(*,*) elements(i)%label
-			endif
-		enddo
+!		do i=1, ne
+!			if (elements(i)%type.EQ.2) then
+!				write(*,*) elements(i)%label
+!			endif
+!		enddo
 
 !		open(unit=28,file='cortex', status='new')
 !		do i=1, ne
