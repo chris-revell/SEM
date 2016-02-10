@@ -17,7 +17,7 @@ module scem_2_output_povray
 
       !Create filename for povray output file.
       character(len=30)	:: povray_filename
-      write(povray_filename,"A24,I2,A4") "data/povray_data/povray_", n_snapshots, ".pov"
+      write(povray_filename,"(A24,I2,A4)") "data/povray_data/povray_", n_snapshots, ".pov"
 
       !Open file for povray output
       open(unit=42, file=povray_filename,status='unknown')
