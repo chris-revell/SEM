@@ -1,6 +1,6 @@
 ! T. J Newman, Tempe, July 2010
 
-module scem_2_output
+module scem_2_output_system
 
   use scem_0_arrays
   use scem_0_input
