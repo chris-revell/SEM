@@ -110,8 +110,13 @@ module scem_5_iterate
          call volume_calculate
 
          ! write data to files
-         call scem_output
-         call scem_output_povray
+         call scem_output_system
+         if (flag_gnuplot.EQ.1) then
+           call scem_output
+         endif
+         if (flag_povray.EQ.1) then
+           call scem_output_povray
+         endif
 
       end do
 

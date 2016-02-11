@@ -156,7 +156,13 @@ module scem_5_initialize
       call volume_calculate
 
       ! write initial element configuration to file
-      call scem_output
+      call scem_output_system
+      if (flag_gnuplot.EQ.1) then
+        call scem_output_gnuplot 
+      endif
+      if (flag_povray.EQ.1) then
+        call scem_output_povray
+      endif
 
     end subroutine scem_initialize
 

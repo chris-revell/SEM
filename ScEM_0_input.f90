@@ -15,7 +15,6 @@ module scem_0_input
   integer :: ne_size,nc_size,np_size ! parameters for array size allocations
   integer :: flag_relist ! flag triggering relist of sector assignments
   real*8 :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
-!  integer :: filenumber !for use in scem_output
 
 !  real*8 :: command_line_argument	!Value given at command line
   CHARACTER(len=32) :: arg			!Dummy argument for reading value at command line
@@ -24,7 +23,8 @@ module scem_0_input
   real*8, allocatable, dimension(:,:,:,:,:) :: rel_strength		!For interaction of element a in cell A with element b in cell B argument is (type of cell A, type of cell B, type of element a, type of element b)
   integer :: nx,ny,nz
   integer :: iseed,iloop1,iloop2,iloop3,iloop4,iloop5
-  integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve,flag_background,flag_cortex,flag_DIT
+  integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve,&
+              flag_background,flag_cortex,flag_DIT,flag_gnuplot,flag_povray 
   integer :: n_c_types,n_e_types
   integer :: n_bins
   integer :: n_snapshots		!Number of system snapshots outputted to file "elements"
@@ -61,9 +61,12 @@ module scem_0_input
       flag_background = 0 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
       flag_growth     = 0 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 0 ! flag_division = 0 (1) for growth with no cell division (with cell division)
-      flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME 
+      flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
       flag_DIT        = 0 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
+      !Output control flags
+      flag_gnuplot    = 0 ! flag_gnuplot = 1 to output system data for visualisation in gnuplot format, 0 to not output gnuplot format data.
+      flag_povray     = 1 ! flag_povray = 1 to output system data in povray format, 0 to skip povray format.
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
