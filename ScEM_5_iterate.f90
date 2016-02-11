@@ -13,7 +13,7 @@ module scem_5_iterate
   use scem_2_flag_relist
   use scem_2_growth
   use scem_2_integrate
-  use scem_2_output_gnuplot
+  use scem_2_output_system
   use scem_2_output_gnuplot
   use scem_2_output_povray
   use scem_2_pairs
@@ -113,7 +113,7 @@ module scem_5_iterate
          ! write data to files
          call scem_output_system
          if (flag_gnuplot.EQ.1) then
-           call scem_output_gnuplot 
+           call scem_output_gnuplot
          endif
          if (flag_povray.EQ.1) then
            call scem_output_povray
