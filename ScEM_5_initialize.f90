@@ -11,7 +11,9 @@ module scem_5_initialize
   use scem_2_identity
   use scem_2_initial_create
   use scem_2_initial_exist
-  use scem_2_output
+  use scem_2_output_gnuplot
+  use scem_2_output_gnuplot
+  use scem_2_output_povray
   use scem_2_pairs
   use scem_2_relist
   use scem_4_cortex
@@ -158,7 +160,7 @@ module scem_5_initialize
       ! write initial element configuration to file
       call scem_output_system
       if (flag_gnuplot.EQ.1) then
-        call scem_output_gnuplot 
+        call scem_output_gnuplot
       endif
       if (flag_povray.EQ.1) then
         call scem_output_povray

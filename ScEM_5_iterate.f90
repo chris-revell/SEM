@@ -13,7 +13,8 @@ module scem_5_iterate
   use scem_2_flag_relist
   use scem_2_growth
   use scem_2_integrate
-  use scem_2_output
+  use scem_2_output_gnuplot
+  use scem_2_output_gnuplot
   use scem_2_output_povray
   use scem_2_pairs
   use scem_2_relist
