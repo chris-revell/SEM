@@ -113,7 +113,7 @@ module scem_5_iterate
          ! write data to files
          call scem_output_system
          if (flag_gnuplot.EQ.1) then
-           call scem_output
+           call scem_output_gnuplot 
          endif
          if (flag_povray.EQ.1) then
            call scem_output_povray
