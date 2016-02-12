@@ -24,7 +24,7 @@ module scem_0_input
   integer :: nx,ny,nz
   integer :: iseed,iloop1,iloop2,iloop3,iloop4,iloop5
   integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve,&
-              flag_background,flag_cortex,flag_DIT,flag_gnuplot,flag_povray 
+              flag_background,flag_cortex,flag_DIT,flag_gnuplot,flag_povray
   integer :: n_c_types,n_e_types
   integer :: n_bins
   integer :: n_snapshots		!Number of system snapshots outputted to file "elements"
@@ -49,7 +49,7 @@ module scem_0_input
 
     subroutine scem_input
 
-	  n_snapshots = 0
+	     n_snapshots = 0
 
 !   Below used when cortical tension was specified at the command line.
 !      CALL get_command_argument(1, arg)
@@ -97,9 +97,9 @@ module scem_0_input
       damping_element=damping_cell/ne_cell ! effective damping constant for one element
 
       ! interactions
-        ! here are parameters for intracellular element interactions
-        ! all other pairwise interactions across element types will be scaled using a relative strength matrix
-        ! length scales will be kept constant across all element types for the time being
+      ! here are parameters for intracellular element interactions
+      ! all other pairwise interactions across element types will be scaled using a relative strength matrix
+      ! length scales will be kept constant across all element types for the time being
       epsilon=0.01 ! --> value of potential relative to minimum at r_interaction_max
       n_bins=1024 ! --> number of bins for potential table
       frac_close=0.8 ! --> fraction of equilibrium distance for initialization (< approx 0.85)
@@ -123,8 +123,6 @@ module scem_0_input
       ! diffusion parameters
       diff_coeff=0.001 ! --> diffusion coefficient of elements in units of micron^2/s
 
-
-
       ! growth parameters
       cell_cycle_time=4320 !43200			!0.5*3600.0 ! --> cell cycle time in seconds
       frac_growth=0.9 ! fraction of current cell radius within which new elements may be placed
@@ -136,60 +134,62 @@ module scem_0_input
         r_placement_min_sq=(frac_placement_min*r_equil)**2 ! squared minimum distance from new element to nearest neighbour
 
 
-		!assign values to relative strength array
-		rel_strength(:,:,:,:,:)=0.0	!default interactions are zero
-		! User supplies entries for relative strength "matrix"
-		! Fill in values for pairwise interactions (i,j,k,l) with i < = j and k < = l.
-		! Algorithm will then automatically fill in values for switching indices i and j, and k and l (tensor is symmetric under flipping of these indices.
-		!Note that it is only symmetric if both indices are flipped - it is not symmetrical under flipping of only one index)
-		!                                                     last index = 1 (intra-cellular interactions)
-      	!                                                                = 2 (inter-cellular interactions)
+	    !assign values to relative strength array
+	    rel_strength(:,:,:,:,:)=0.0	!default interactions are zero
+		  ! User supplies entries for relative strength "matrix"
+		  ! Fill in values for pairwise interactions (i,j,k,l) with i < = j and k < = l.
+		  ! Algorithm will then automatically fill in values for switching indices i and j, and k and l (tensor is symmetric under flipping of these indices.
+		  !Note that it is only symmetric if both indices are flipped - it is not symmetrical under flipping of only one index)
+		  !                                                     last index = 1 (intra-cellular interactions)
+      !                                                                = 2 (inter-cellular interactions)
 
-		rel_strength(1,1,1,1,1) = 10.0 	 !Intra-cellular Epiblast cytoplasm-epiblast cytoplasm
-		rel_strength(1,1,1,2,1) = 10.0	 !Intra-cellular Epiblast cytoplasm-epiblast cortex
-!		rel_strength(1,1,2,2,1)	= command_line_argument	!Used in old version
-    rel_strength(1,1,2,2,1)	= 10.0   !Intra-cellular Epiblast cortex-epiblast cortex
-		rel_strength(1,2,1,1,1)	= 0.0	   !Intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
-		rel_strength(1,2,1,2,1) = 0.0	   !Intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
-		rel_strength(1,2,2,2,1) = 0.0	   !Intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
-		rel_strength(2,2,1,1,1) = 10.0	 !Intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-		rel_strength(2,2,1,2,1) = 10.0	 !Intra-cellular Hypoblast cytoplasm-hypoblast cortex
-		rel_strength(2,2,2,2,1) = 10.0	 !Intra-cellular Hypoblast cortex-hypoblast cortex
+		  rel_strength(1,1,1,1,1) = 10.0 	 !Intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(1,1,1,2,1) = 10.0	 !Intra-cellular Epiblast cytoplasm-epiblast cortex
+      rel_strength(1,1,2,2,1)	= 10.0   !Intra-cellular Epiblast cortex-epiblast cortex
+		  rel_strength(1,2,1,1,1)	= 0.0	   !Intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
+		  rel_strength(1,2,1,2,1) = 0.0	   !Intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
+		  rel_strength(1,2,2,2,1) = 0.0	   !Intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
+		  rel_strength(2,2,1,1,1) = 10.0	 !Intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+		  rel_strength(2,2,1,2,1) = 10.0	 !Intra-cellular Hypoblast cytoplasm-hypoblast cortex
+		  rel_strength(2,2,2,2,1) = 10.0	 !Intra-cellular Hypoblast cortex-hypoblast cortex
 
-		rel_strength(1,1,1,1,2) = 0.0    !Inter-cellular Epiblast cytoplasm-epiblast cytoplasm
-		rel_strength(1,1,1,2,2) = 0.0    !Inter-cellular Epiblast cytoplasm-epiblast cortex
-		rel_strength(1,1,2,2,2) = 10.0   !Inter-cellular Epiblast cortex-epiblast cortex
-		rel_strength(1,2,1,1,2) = 0.0    !Inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
-		rel_strength(1,2,1,2,2) = 0.0    !Inter-cellular Epiblast cytoplasm-hypoblast cortex
-		rel_strength(1,2,2,2,1) = 10.0   !Inter-cellular Epiblast cortex-hypoblast cortex
-		rel_strength(2,2,1,1,2) = 0.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-		rel_strength(2,2,1,2,2) = 0.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cortex
-		rel_strength(2,2,2,2,2) = 12.0   !Inter-cellular Hypoblast cortex-hypoblast cortex
+		  rel_strength(1,1,1,1,2) = 0.0    !Inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(1,1,1,2,2) = 0.0    !Inter-cellular Epiblast cytoplasm-epiblast cortex
+		  rel_strength(1,1,2,2,2) = 10.0   !Inter-cellular Epiblast cortex-epiblast cortex
+  		rel_strength(1,2,1,1,2) = 0.0    !Inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(1,2,1,2,2) = 0.0    !Inter-cellular Epiblast cytoplasm-hypoblast cortex
+  		rel_strength(1,2,2,2,1) = 10.0   !Inter-cellular Epiblast cortex-hypoblast cortex
+  		rel_strength(2,2,1,1,2) = 0.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(2,2,1,2,2) = 0.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cortex
+  		rel_strength(2,2,2,2,2) = 12.0   !Inter-cellular Hypoblast cortex-hypoblast cortex
 
-    cortex_constant = 0.5
+      !		  rel_strength(1,1,2,2,1)	= command_line_argument	!Used in old version
 
-		! fill in transposed values of symmetric matrix (i.e. (i,j,k,l)=(j,i,l,k) )
-        r_s_max=0.0 ! calculate maximum matrix entry to rescale dt_amp_max
-        do iloop1=0,n_c_types
-			do iloop2=0,n_c_types									!max(0,iloop1-1)
-				do iloop3=1,n_e_types
-					do iloop4=1,n_e_types							!max(1,iloop3-1)
-						do iloop5=1,2
-							rel_strength(iloop1,iloop2,iloop3,iloop4,iloop5)=rel_strength(iloop2,iloop1,iloop4,iloop3,iloop5)
-							r_s_max=max(r_s_max,rel_strength(iloop1,iloop2,iloop3,iloop4,iloop5))
-						end do
-					end do
-				end do
-			end do
-		end do
+      !Variable for inter-cortex potential 
+      cortex_constant = 0.5
 
+		  ! fill in transposed values of symmetric matrix (i.e. (i,j,k,l)=(j,i,l,k) )
+      r_s_max=0.0 ! calculate maximum matrix entry to rescale dt_amp_max
+      do iloop1=0,n_c_types
+			  do iloop2=0,n_c_types									!max(0,iloop1-1)
+				  do iloop3=1,n_e_types
+					  do iloop4=1,n_e_types							!max(1,iloop3-1)
+						  do iloop5=1,2
+							  rel_strength(iloop1,iloop2,iloop3,iloop4,iloop5)=rel_strength(iloop2,iloop1,iloop4,iloop3,iloop5)
+							  r_s_max=max(r_s_max,rel_strength(iloop1,iloop2,iloop3,iloop4,iloop5))
+						  end do
+					  end do
+				  end do
+			  end do
+		  end do
 
-        dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
+      dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
+
       ! temporal parameters - all in *seconds*
       time_max=0.5*cell_cycle_time ! --> time of simulation in seconds
       time_out_1=int(time_max)/98 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
-!      time_out_2=cell_cycle_time/100.0 ! --> interval between quantitative data outputs
-       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
+!     time_out_2=cell_cycle_time/100.0 ! --> interval between quantitative data outputs
+      dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities
         diff_amp=sqrt(dt*diff_coeff) ! amplitude of noise in diffusion term
         prob_new_element=rate_new_element*dt ! probability of growth for each time step
