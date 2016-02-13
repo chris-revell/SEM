@@ -143,25 +143,25 @@ module scem_0_input
 		  !                                                     last index = 1 (intra-cellular interactions)
       !                                                                = 2 (inter-cellular interactions)
 
-		  rel_strength(1,1,1,1,1) = 10.0 	 !Intra-cellular Epiblast cytoplasm-epiblast cytoplasm
-		  rel_strength(1,1,1,2,1) = 10.0	 !Intra-cellular Epiblast cytoplasm-epiblast cortex
-      rel_strength(1,1,2,2,1)	= 10.0   !Intra-cellular Epiblast cortex-epiblast cortex
+		  rel_strength(1,1,1,1,1) = 1.0 	 !Intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(1,1,1,2,1) = 1.0	 !Intra-cellular Epiblast cytoplasm-epiblast cortex
+      rel_strength(1,1,2,2,1)	= 1.0   !Intra-cellular Epiblast cortex-epiblast cortex
 		  rel_strength(1,2,1,1,1)	= 0.0	   !Intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
 		  rel_strength(1,2,1,2,1) = 0.0	   !Intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
 		  rel_strength(1,2,2,2,1) = 0.0	   !Intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
-		  rel_strength(2,2,1,1,1) = 10.0	 !Intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-		  rel_strength(2,2,1,2,1) = 10.0	 !Intra-cellular Hypoblast cytoplasm-hypoblast cortex
-		  rel_strength(2,2,2,2,1) = 10.0	 !Intra-cellular Hypoblast cortex-hypoblast cortex
+		  rel_strength(2,2,1,1,1) = 1.0	 !Intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+		  rel_strength(2,2,1,2,1) = 1.0	 !Intra-cellular Hypoblast cytoplasm-hypoblast cortex
+		  rel_strength(2,2,2,2,1) = 1.0	 !Intra-cellular Hypoblast cortex-hypoblast cortex
 
 		  rel_strength(1,1,1,1,2) = 0.0    !Inter-cellular Epiblast cytoplasm-epiblast cytoplasm
 		  rel_strength(1,1,1,2,2) = 0.0    !Inter-cellular Epiblast cytoplasm-epiblast cortex
-		  rel_strength(1,1,2,2,2) = 10.0   !Inter-cellular Epiblast cortex-epiblast cortex
+		  rel_strength(1,1,2,2,2) = 1.0   !Inter-cellular Epiblast cortex-epiblast cortex
   		rel_strength(1,2,1,1,2) = 0.0    !Inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
   		rel_strength(1,2,1,2,2) = 0.0    !Inter-cellular Epiblast cytoplasm-hypoblast cortex
-  		rel_strength(1,2,2,2,1) = 10.0   !Inter-cellular Epiblast cortex-hypoblast cortex
+  		rel_strength(1,2,2,2,1) = 1.0   !Inter-cellular Epiblast cortex-hypoblast cortex
   		rel_strength(2,2,1,1,2) = 0.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
   		rel_strength(2,2,1,2,2) = 0.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cortex
-  		rel_strength(2,2,2,2,2) = 12.0   !Inter-cellular Hypoblast cortex-hypoblast cortex
+  		rel_strength(2,2,2,2,2) = 1.20   !Inter-cellular Hypoblast cortex-hypoblast cortex
 
       !		  rel_strength(1,1,2,2,1)	= command_line_argument	!Used in old version
 
