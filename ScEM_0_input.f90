@@ -67,7 +67,7 @@ module scem_0_input
       !Output control flags
       flag_gnuplot    = 0 ! flag_gnuplot = 1 to output system data for visualisation in gnuplot format, 0 to not output gnuplot format data.
       flag_povray     = 1 ! flag_povray = 1 to output system data in povray format, 0 to skip povray format.
-      flag_povray_pairs = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to only show elements. 
+      flag_povray_pairs = 1 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to only show elements.
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
@@ -104,7 +104,7 @@ module scem_0_input
       epsilon=0.01 ! --> value of potential relative to minimum at r_interaction_max
       n_bins=1024 ! --> number of bins for potential table
       frac_close=0.8 ! --> fraction of equilibrium distance for initialization (< approx 0.85)
-      frac_interaction_max=1.8 ! --> fraction of equilibrium distance for maximum interaction range (in window 1.5 to 1.9)
+      frac_interaction_max=2.0     !1.8 ! --> fraction of equilibrium distance for maximum interaction range (in window 1.5 to 1.9)
                                 !     1.5 has sharply contracted potential and efficient
                                 !     1.9 has more relaxed potential, and still reasonably efficient (factor of 2.5 slower)
                                 !     > 1.9 brings in more element interactions, contracting cell, and slowing simulation
@@ -113,7 +113,7 @@ module scem_0_input
         r_equil=2*r_cell*(p3/ne_cell)**ot ! equilibrium distance between elements (assuming 3D here)
         r_equil_sq=r_equil**2 ! square of equilibrium distance
         r_close_sq=(frac_close*r_equil)**2 ! square of minimum distance for initialization
-        r_interaction_max=2*frac_interaction_max*r_equil ! maximum interaction range
+        r_interaction_max=frac_interaction_max*r_equil ! maximum interaction range
         r_interaction_max_sq=r_interaction_max**2 ! square of maximum interaction range
         d_r_sq=r_interaction_max_sq/n_bins
         d_r_sq_recip=1.0/d_r_sq
