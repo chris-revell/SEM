@@ -112,7 +112,7 @@ module scem_0_input
         r_equil=2*r_cell*(p3/ne_cell)**ot ! equilibrium distance between elements (assuming 3D here)
         r_equil_sq=r_equil**2 ! square of equilibrium distance
         r_close_sq=(frac_close*r_equil)**2 ! square of minimum distance for initialization
-        r_interaction_max=frac_interaction_max*r_equil ! maximum interaction range
+        r_interaction_max=2*frac_interaction_max*r_equil ! maximum interaction range
         r_interaction_max_sq=r_interaction_max**2 ! square of maximum interaction range
         d_r_sq=r_interaction_max_sq/n_bins
         d_r_sq_recip=1.0/d_r_sq
