@@ -55,22 +55,23 @@ module scem_2_output_povray
           write(42,*)
         enddo
 
-        !Draw cylinders for inter-element pair interactions
-        do j=1, np
-          write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                        F18.14,A42)') &
-                        ' cylinder {  < ', &
-                        elements(pairs(j,1))%position(1), ',', &
-                        elements(pairs(j,1))%position(2), ',', &
-                        elements(pairs(j,1))%position(3), '>, <', &
-                        elements(pairs(j,2))%position(1), ',', &
-                        elements(pairs(j,2))%position(2), ',', &
-                        elements(pairs(j,2))%position(3), &
-                        '> 0.5 texture { pigment { color Blue } } }'
-          write(42,*)
-        enddo
-
-    enddo
+        if(flag_povray_pairs.EQ.1) then
+          !Draw cylinders for inter-element pair interactions
+          do j=1, np
+            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
+                          F18.14,A42)') &
+                          ' cylinder {  < ', &
+                          elements(pairs(j,1))%position(1), ',', &
+                          elements(pairs(j,1))%position(2), ',', &
+                          elements(pairs(j,1))%position(3), '>, <', &
+                          elements(pairs(j,2))%position(1), ',', &
+                          elements(pairs(j,2))%position(2), ',', &
+                          elements(pairs(j,2))%position(3), &
+                          '> 0.5 texture { pigment { color Blue } } }'
+            write(42,*)
+          enddo
+        endif 
+      enddo
 
     close(unit=42)
 
