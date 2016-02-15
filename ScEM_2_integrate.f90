@@ -64,13 +64,6 @@ module scem_2_integrate
                     (sep_sq*potential_deriv_2(bin,1) + potential_deriv_2(bin,2))
         		  elements(n)%velocity(:) = elements(n)%velocity(:)+dx(:)*pot_deriv_interp
             	elements(nn)%velocity(:)= elements(nn)%velocity(:)-dx(:)*pot_deriv_interp
-
-
-              !              if (index_intra.EQ.1) then !Apply this step only for elements in the same cell
-              !                if (elements(n)%type.EQ.2.AND.elements(nn)%type.EQ.2) then !Apply this step only if both elements are cortex elements
-              !                  r_s = r_s*elements(n)%DIT_factor*elements(nn)%DIT_factor
-              !                endif
-              !              endif
             endif
      	    end if
         endif
