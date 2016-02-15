@@ -13,7 +13,13 @@ module scem_2_output_povray
 
     subroutine scem_output_povray
 
-      integer ::  n
+!**********
+
+      integer :: l
+      integer :: m
+      integer :: n
+!**********
+
 
       !Create filename for povray output file.
       character(len=30)	:: povray_filename
@@ -58,20 +64,52 @@ module scem_2_output_povray
           write(42,*)
         enddo
 
+        !Draw cylinders for inter-element pair interactions if flag_povray_pairs=1
         if(flag_povray_pairs.EQ.1) then
-          !Draw cylinders for inter-element pair interactions
           do j=1, np
-            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                          F18.14,A42)') &
-                          ' cylinder {  < ', &
-                          elements(pairs(j,1))%position(1), ',', &
-                          elements(pairs(j,1))%position(2), ',', &
-                          elements(pairs(j,1))%position(3), '>, <', &
-                          elements(pairs(j,2))%position(1), ',', &
-                          elements(pairs(j,2))%position(2), ',', &
-                          elements(pairs(j,2))%position(3), &
-                          '> 0.5 texture { pigment { color Blue } } }'
-            write(42,*)
+
+            l= elements(pairs(j,1))%type
+            elements(pairs(j,2))
+
+            !Inter-cell interactions
+            if(elements(pairs(j,1))%parent.NE.elements(pairs(j,2))%type) then
+              write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
+                            F18.14,A42)') &
+                            ' cylinder {  < ', &
+                            elements(pairs(j,1))%position(1), ',', &
+                            elements(pairs(j,1))%position(2), ',', &
+                            elements(pairs(j,1))%position(3), '>, <', &
+                            elements(pairs(j,2))%position(1), ',', &
+                            elements(pairs(j,2))%position(2), ',', &
+                            elements(pairs(j,2))%position(3), &
+                            '> 0.5 texture { pigment { color Black } } }'
+              write(42,*)
+            !Intra-cell cortex pair visualisation
+            elseif((elements(pairs(j,1))%type.EQ.2).AND.(elements(pairs(j,2))%type.EQ.2)) then
+              write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
+                            F18.14,A42)') &
+                            ' cylinder {  < ', &
+                            elements(pairs(j,1))%position(1), ',', &
+                            elements(pairs(j,1))%position(2), ',', &
+                            elements(pairs(j,1))%position(3), '>, <', &
+                            elements(pairs(j,2))%position(1), ',', &
+                            elements(pairs(j,2))%position(2), ',', &
+                            elements(pairs(j,2))%position(3), &
+                            '> 0.5 texture { pigment { color Red } } }'
+              write(42,*)
+            else
+              write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
+                            F18.14,A42)') &
+                            ' cylinder {  < ', &
+                            elements(pairs(j,1))%position(1), ',', &
+                            elements(pairs(j,1))%position(2), ',', &
+                            elements(pairs(j,1))%position(3), '>, <', &
+                            elements(pairs(j,2))%position(1), ',', &
+                            elements(pairs(j,2))%position(2), ',', &
+                            elements(pairs(j,2))%position(3), &
+                            '> 0.5 texture { pigment { color Red } } }'
+              write(42,*)
+            endif            
           enddo
         endif
       enddo
