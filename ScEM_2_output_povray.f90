@@ -34,10 +34,10 @@ module scem_2_output_povray
         write(42,*) '   angle 12'
         write(42,*) '   look_at<0,-0.5,0>}'
         write(42,*)
-        write(42,*) 'light_source { < -30, 30, 0 > color White }'
-        write(42,*) 'light_source { < 30, -30, 0 > color White }'
-        write(42,*) 'light_source { < 0, 0, 30 > color White }'
-        write(42,*) 'light_source { < 0, 0, -30 > color White }'
+        write(42,*) 'light_source { < -60, 60, 0 > color White }'
+        write(42,*) 'light_source { < 60, -60, 0 > color White }'
+        write(42,*) 'light_source { < 0, 0, 60 > color White }'
+        write(42,*) 'light_source { < 0, 0, -60 > color White }'
         write(42,*)
 
         !Draw spheres for all elements in the system, coloured according to element type
