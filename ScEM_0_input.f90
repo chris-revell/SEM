@@ -187,7 +187,7 @@ module scem_0_input
       dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
 
       ! temporal parameters - all in *seconds*
-      time_max=0.5*cell_cycle_time ! --> time of simulation in seconds
+      time_max=1.1*cell_cycle_time ! --> time of simulation in seconds
       time_out_1=int(time_max)/98 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
 !     time_out_2=cell_cycle_time/100.0 ! --> interval between quantitative data outputs
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
