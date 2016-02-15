@@ -61,10 +61,10 @@ module scem_2_output_povray
         !Draw cylinders for inter-element pair interactions if flag_povray_pairs=1
         if(flag_povray_pairs.EQ.1) then
           do j=1, np
-            !Inter-cell interactions
+            !Inter-cell interactions in black
             if(elements(pairs(j,1))%parent.NE.elements(pairs(j,2))%type) then
               write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                            F18.14,A42)') &
+                            F18.14,A43)') &
                             ' cylinder {  < ', &
                             elements(pairs(j,1))%position(1), ',', &
                             elements(pairs(j,1))%position(2), ',', &
@@ -74,7 +74,7 @@ module scem_2_output_povray
                             elements(pairs(j,2))%position(3), &
                             '> 0.5 texture { pigment { color Black } } }'
               write(42,*)
-            !Intra-cell cortex pair visualisation
+            !Intra-cell cortex pair interactions in red
             elseif((elements(pairs(j,1))%type.EQ.2).AND.(elements(pairs(j,2))%type.EQ.2)) then
               write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
                             F18.14,A42)') &
@@ -87,6 +87,7 @@ module scem_2_output_povray
                             elements(pairs(j,2))%position(3), &
                             '> 0.5 texture { pigment { color Red } } }'
               write(42,*)
+            !All other intra-cell interactions in blue
             else
               write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
                             F18.14,A42)') &
@@ -97,7 +98,7 @@ module scem_2_output_povray
                             elements(pairs(j,2))%position(1), ',', &
                             elements(pairs(j,2))%position(2), ',', &
                             elements(pairs(j,2))%position(3), &
-                            '> 0.5 texture { pigment { color Red } } }'
+                            '> 0.5 texture { pigment { color Blue } } }'
               write(42,*)
             endif
           enddo
