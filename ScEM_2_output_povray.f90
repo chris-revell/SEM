@@ -62,7 +62,7 @@ module scem_2_output_povray
         if(flag_povray_pairs.EQ.1) then
           do j=1, np
             !Inter-cell interactions in black
-            if(elements(pairs(j,1))%parent.NE.elements(pairs(j,2))%type) then
+            if(elements(pairs(j,1))%parent.NE.elements(pairs(j,2))%parent) then
               write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
                             F18.14,A43)') &
                             ' cylinder {  < ', &
