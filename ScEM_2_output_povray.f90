@@ -13,13 +13,7 @@ module scem_2_output_povray
 
     subroutine scem_output_povray
 
-!**********
-
-      integer :: l
-      integer :: m
       integer :: n
-!**********
-
 
       !Create filename for povray output file.
       character(len=30)	:: povray_filename
@@ -67,10 +61,6 @@ module scem_2_output_povray
         !Draw cylinders for inter-element pair interactions if flag_povray_pairs=1
         if(flag_povray_pairs.EQ.1) then
           do j=1, np
-
-            l= elements(pairs(j,1))%type
-            elements(pairs(j,2))
-
             !Inter-cell interactions
             if(elements(pairs(j,1))%parent.NE.elements(pairs(j,2))%type) then
               write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
@@ -109,7 +99,7 @@ module scem_2_output_povray
                             elements(pairs(j,2))%position(3), &
                             '> 0.5 texture { pigment { color Red } } }'
               write(42,*)
-            endif            
+            endif
           enddo
         endif
       enddo
