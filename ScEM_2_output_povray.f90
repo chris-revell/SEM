@@ -28,7 +28,7 @@ module scem_2_output_povray
       write(42,*) 'background {White}'
       write(42,*)
       write(42,*) 'camera {'
-      write(42,*) '   location  <0, 0, -200>'
+      write(42,*) '   location  <0, 125, 125>'
       write(42,*) '   angle 12'
       write(42,*) '   look_at<0,0,0>}'
       write(42,*)
