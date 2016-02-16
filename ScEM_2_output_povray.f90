@@ -22,23 +22,23 @@ module scem_2_output_povray
       !Open file for povray output
       open(unit=42, file=povray_filename,status='unknown')
 
-      do i=1, nc
+      write(42,*) '#version 3.5;'
+      write(42,*) '#include "colors.inc"'
+      write(42,*) '#include "textures.inc"'
+      write(42,*) 'background {White}'
+      write(42,*)
+      write(42,*) 'camera {'
+      write(42,*) '   location  <0, 0, -200>'
+      write(42,*) '   angle 12'
+      write(42,*) '   look_at<0,-0.5,0>}'
+      write(42,*)
+      write(42,*) 'light_source { < -60, 60, 0 > color White }'
+      write(42,*) 'light_source { < 60, -60, 0 > color White }'
+      write(42,*) 'light_source { < 0, 0, 60 > color White }'
+      write(42,*) 'light_source { < 0, 0, -60 > color White }'
+      write(42,*)
 
-        write(42,*) '#version 3.5;'
-        write(42,*) '#include "colors.inc"'
-        write(42,*) '#include "textures.inc"'
-        write(42,*) 'background {White}'
-        write(42,*)
-        write(42,*) 'camera {'
-        write(42,*) '   location  <0, 80, -200>'
-        write(42,*) '   angle 12'
-        write(42,*) '   look_at<0,-0.5,0>}'
-        write(42,*)
-        write(42,*) 'light_source { < -60, 60, 0 > color White }'
-        write(42,*) 'light_source { < 60, -60, 0 > color White }'
-        write(42,*) 'light_source { < 0, 0, 60 > color White }'
-        write(42,*) 'light_source { < 0, 0, -60 > color White }'
-        write(42,*)
+      do i=1, nc
 
         !Draw spheres for all elements in the system, coloured according to element type
         do j=1, cells(i)%c_elements(0)
