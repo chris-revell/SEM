@@ -41,15 +41,17 @@ module scem_2_output_povray
       !Draw spheres for all elements in the system, coloured according to element type
       do i=1, ne
         if ((elements(i)%type).EQ.1) then
-          write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A43)') ' sphere {  < ', &
+          write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A51,I2.2)') ' sphere {  < ', &
                         elements(i)%position(1), ',', elements(i)%position(2), &
                           ',', elements(i)%position(3), &
-                            '> 1.5 texture { pigment { color Green } } }'
+                            '> 1.5 texture { pigment { color Green } } } // cell ',
+                              elements(i)%parent
         else
-          write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A43)') ' sphere {  < ', &
+          write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A51,I2.2)') ' sphere {  < ', &
                         elements(i)%position(1), ',', elements(i)%position(2), &
                           ',', elements(i)%position(3), &
-                            '> 1.5 texture { pigment { color Red } } }'
+                            '> 1.5 texture { pigment { color Red } } } // cell ',
+                              elements(i)%parent
         endif
         write(42,*)
       enddo
@@ -60,7 +62,7 @@ module scem_2_output_povray
           !Inter-cell interactions in black
           if(elements(pairs(j,1))%parent.NE.elements(pairs(j,2))%parent) then
             write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                          F18.14,A43)') &
+                          F18.14,A51,I2.2,A8,I2.2)') &
                           ' cylinder {  < ', &
                           elements(pairs(j,1))%position(1), ',', &
                           elements(pairs(j,1))%position(2), ',', &
@@ -68,12 +70,14 @@ module scem_2_output_povray
                           elements(pairs(j,2))%position(1), ',', &
                           elements(pairs(j,2))%position(2), ',', &
                           elements(pairs(j,2))%position(3), &
-                          '> 0.5 texture { pigment { color Black } } }'
+                          '> 0.5 texture { pigment { color Black } } } // cell ',
+                          elements(pairs(j,1))%parent, ' , cell ',
+                          elements(pairs(j,2))%parent
             write(42,*)
           !Intra-cell cortex pair interactions in red
           elseif((elements(pairs(j,1))%type.EQ.2).AND.(elements(pairs(j,2))%type.EQ.2)) then
             write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                          F18.14,A42)') &
+                          F18.14,A50,I2.2,A8,I2.2)') &
                           ' cylinder {  < ', &
                           elements(pairs(j,1))%position(1), ',', &
                           elements(pairs(j,1))%position(2), ',', &
@@ -81,12 +85,14 @@ module scem_2_output_povray
                           elements(pairs(j,2))%position(1), ',', &
                           elements(pairs(j,2))%position(2), ',', &
                           elements(pairs(j,2))%position(3), &
-                          '> 0.5 texture { pigment { color Red } } }'
+                          '> 0.5 texture { pigment { color Red } } } // cell ',
+                          elements(pairs(j,1))%parent, ' , cell ',
+                          elements(pairs(j,2))%parent
             write(42,*)
           !All other intra-cell interactions in blue
           else
             write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                          F18.14,A42)') &
+                          F18.14,A50,I2.2,A8,I2.2)') &
                           ' cylinder {  < ', &
                           elements(pairs(j,1))%position(1), ',', &
                           elements(pairs(j,1))%position(2), ',', &
@@ -94,7 +100,9 @@ module scem_2_output_povray
                           elements(pairs(j,2))%position(1), ',', &
                           elements(pairs(j,2))%position(2), ',', &
                           elements(pairs(j,2))%position(3), &
-                          '> 0.5 texture { pigment { color Blue } } }'
+                          '> 0.5 texture { pigment { color Blue } } } // cell ',
+                          elements(pairs(j,1))%parent, ' , cell ',
+                          elements(pairs(j,2))%parent
             write(42,*)
           endif
         enddo
