@@ -39,23 +39,19 @@ module scem_2_output_povray
       write(42,*)
 
       !Draw spheres for all elements in the system, coloured according to element type
-      do i=1, nc
-        do j=1, cells(i)%c_elements(0)
-          !n is the global label of the jth element in c_elements
-          n=cells(i)%c_elements(j)
-          if ((elements(n)%type).EQ.1) then
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A43)') ' sphere {  < ', &
-                          elements(n)%position(1), ',', elements(n)%position(2), &
-                            ',', elements(n)%position(3), &
-                              '> 1.5 texture { pigment { color Green } } }'
-          else
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A43)') ' sphere {  < ', &
-                          elements(n)%position(1), ',', elements(n)%position(2), &
-                            ',', elements(n)%position(3), &
-                              '> 1.5 texture { pigment { color Red } } }'
-          endif
-          write(42,*)
-        enddo
+      do i=1, ne
+        if ((elements(i)%type).EQ.1) then
+          write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A43)') ' sphere {  < ', &
+                        elements(n)%position(1), ',', elements(n)%position(2), &
+                          ',', elements(n)%position(3), &
+                            '> 1.5 texture { pigment { color Green } } }'
+        else
+          write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A43)') ' sphere {  < ', &
+                        elements(n)%position(1), ',', elements(n)%position(2), &
+                          ',', elements(n)%position(3), &
+                            '> 1.5 texture { pigment { color Red } } }'
+        endif
+        write(42,*)
       enddo
 
       !Draw cylinders for inter-element pair interactions if flag_povray_pairs=1
