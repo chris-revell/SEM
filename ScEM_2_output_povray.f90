@@ -30,7 +30,7 @@ module scem_2_output_povray
       write(42,*) 'camera {'
       write(42,*) '   location  <0, 0, -200>'
       write(42,*) '   angle 12'
-      write(42,*) '   look_at<0,-0.5,0>}'
+      write(42,*) '   look_at<0,0,0>}'
       write(42,*)
       write(42,*) 'light_source { < -60, 60, 0 > color White }'
       write(42,*) 'light_source { < 60, -60, 0 > color White }'
@@ -42,13 +42,13 @@ module scem_2_output_povray
       do i=1, ne
         if ((elements(i)%type).EQ.1) then
           write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A43)') ' sphere {  < ', &
-                        elements(n)%position(1), ',', elements(n)%position(2), &
-                          ',', elements(n)%position(3), &
+                        elements(i)%position(1), ',', elements(i)%position(2), &
+                          ',', elements(i)%position(3), &
                             '> 1.5 texture { pigment { color Green } } }'
         else
           write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A43)') ' sphere {  < ', &
-                        elements(n)%position(1), ',', elements(n)%position(2), &
-                          ',', elements(n)%position(3), &
+                        elements(i)%position(1), ',', elements(i)%position(2), &
+                          ',', elements(i)%position(3), &
                             '> 1.5 texture { pigment { color Red } } }'
         endif
         write(42,*)
