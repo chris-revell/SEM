@@ -44,13 +44,13 @@ module scem_2_output_povray
           write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A51,I2.2)') ' sphere {  < ', &
                         elements(i)%position(1), ',', elements(i)%position(2), &
                           ',', elements(i)%position(3), &
-                            '> 1.5 texture { pigment { color Green } } } // cell ',
+                            '> 1.5 texture { pigment { color Green } } } // cell ',&
                               elements(i)%parent
         else
           write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A51,I2.2)') ' sphere {  < ', &
                         elements(i)%position(1), ',', elements(i)%position(2), &
                           ',', elements(i)%position(3), &
-                            '> 1.5 texture { pigment { color Red } } } // cell ',
+                            '> 1.5 texture { pigment { color Red } } } // cell ',&
                               elements(i)%parent
         endif
         write(42,*)
@@ -70,8 +70,8 @@ module scem_2_output_povray
                           elements(pairs(j,2))%position(1), ',', &
                           elements(pairs(j,2))%position(2), ',', &
                           elements(pairs(j,2))%position(3), &
-                          '> 0.5 texture { pigment { color Black } } } // cell ',
-                          elements(pairs(j,1))%parent, ' , cell ',
+                          '> 0.5 texture { pigment { color Black } } } // cell ',&
+                          elements(pairs(j,1))%parent, ' , cell ',&
                           elements(pairs(j,2))%parent
             write(42,*)
           !Intra-cell cortex pair interactions in red
@@ -85,8 +85,8 @@ module scem_2_output_povray
                           elements(pairs(j,2))%position(1), ',', &
                           elements(pairs(j,2))%position(2), ',', &
                           elements(pairs(j,2))%position(3), &
-                          '> 0.5 texture { pigment { color Red } } } // cell ',
-                          elements(pairs(j,1))%parent, ' , cell ',
+                          '> 0.5 texture { pigment { color Red } } } // cell ',&
+                          elements(pairs(j,1))%parent, ' , cell ',&
                           elements(pairs(j,2))%parent
             write(42,*)
           !All other intra-cell interactions in blue
@@ -100,8 +100,8 @@ module scem_2_output_povray
                           elements(pairs(j,2))%position(1), ',', &
                           elements(pairs(j,2))%position(2), ',', &
                           elements(pairs(j,2))%position(3), &
-                          '> 0.5 texture { pigment { color Blue } } } // cell ',
-                          elements(pairs(j,1))%parent, ' , cell ',
+                          '> 0.5 texture { pigment { color Blue } } } // cell ',&
+                          elements(pairs(j,1))%parent, ' , cell ',&
                           elements(pairs(j,2))%parent
             write(42,*)
           endif
