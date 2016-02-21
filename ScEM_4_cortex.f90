@@ -180,14 +180,15 @@ module scem_4_cortex
 !				end do
 !			end do
 
-			!This block of code allocates the highest radius element in each pyramid as cortex type without checking whether it is <50% of the max radius or checking if any others are >80% of the local max. 
+			!This block of code allocates the highest radius element in each pyramid as cortex type without checking whether it is <50% of the max radius or checking if any others are >80% of the local max.
 			do j=1,4
 				do k=1,8							!Do loop over all bins j,k
 					if (bin_counters(j,k).GT.0) then
-							elements(cells(i)%c_elements(n))%type=2					!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
+							l=max_radius_elements(j,k)		!l is label of max radius element in this bin
+							elements(l)%type=2					!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
 							cells(i)%cortex_elements(0)=cells(i)%cortex_elements(0)+1		!Increment cortex counter by 1
 							p=cells(i)%cortex_elements(0)																!Current value of cortex counter (for conciseness in next couple of lines)
-							q=elements(cells(i)%c_elements(n))%label										!Label of element under consideration, whose type has just been set to 2 in line above
+							q=elements(l)%label										!Label of element under consideration, whose type has just been set to 2 in line above
 							cells(i)%cortex_elements(p)=q																!pth element of cortex element array in cell data structure is set to the label of this cortex element q. So by the end cortex_elements contains a list of all cortex element labels.
 					endif
 				enddo
