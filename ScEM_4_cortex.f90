@@ -189,20 +189,6 @@ module scem_4_cortex
 		!Elements set to be of cortex type if their radius exceeds 80% of the max radius in that bin
 		!and the max radius of that bin exceeds 50% of the max radius for the whole cell
 
-!		do i=1, ne
-!			if (elements(i)%type.EQ.2) then
-!				write(*,*) elements(i)%label
-!			endif
-!		enddo
-
-!		open(unit=28,file='cortex', status='new')
-!		do i=1, ne
-!			if (elements(i)%type.EQ.2) then
-!				write(28,*) elements(i)%position(:),cells(elements(i)%parent)%label
-!			endif
-!		enddo
-!		close(28)
-
 		end subroutine scem_cortex
 
 end module scem_4_cortex
