@@ -67,7 +67,7 @@ module scem_0_input
       !Output control flags
       flag_gnuplot    = 0 ! flag_gnuplot = 1 to output system data for visualisation in gnuplot format, 0 to not output gnuplot format data.
       flag_povray     = 1 ! flag_povray = 1 to output system data in povray format, 0 to skip povray format.
-      flag_povray_pairs = 1 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to only show elements.
+      flag_povray_pairs = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to only show elements.
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
