@@ -71,7 +71,7 @@ module scem_0_input
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
-      ot=1.0/3.0 ! one third
+      ot=1.0/3.0 ! one thid
       p3=pi/(3.0*sqrt(2.0)) ! packing fraction in 3D
 
       ! system parameters
