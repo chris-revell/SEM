@@ -197,6 +197,20 @@ module scem_4_cortex
 			deallocate(max_radius_elements)
 		end do
 
+		!The following block of code allocates as cortex type any element
+		!that shares an interaction pair with an element from a different cell.
+		!This will hopefully establish a boundary whilst allowing for more shape
+		!variation than the previous method
+		do n=1, np
+			k=pairs(n,1)
+			l=pairs(n,2)
+
+			if (elements(k)%parent.NE.elements(l)%parent) then
+				elements(k)%type = 2
+				elements(l)%type = 2
+			endif
+		enddo
+
 		!Should now have specified the type of all elements in all cells
 		!Elements set to be of cortex type if their radius exceeds 80% of the max radius in that bin
 		!and the max radius of that bin exceeds 50% of the max radius for the whole cell
