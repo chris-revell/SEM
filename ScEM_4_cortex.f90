@@ -157,42 +157,39 @@ module scem_4_cortex
 			!radius is greater than 80% of the maximum radius of any element in its bin is *********
 			!also set to be a surface element.																							*******
 
-!			do j=1,4
-!				do k=1,8							!Do loop over all bins j,k
-!					if (bin_counters(j,k).EQ.0) then
-!						GO TO 50
-!					else
-!						l=max_radius_elements(j,k)		!l is label of max radius element in this bin
-!						if (elements_polar(l,1).GT.(0.5*R_max)) then	!Only set cortex elements in this bin if the max radius in the bin exceeds half of the max radius for the whole cell
-!							do m=1, bin_counters(j,k)					!Loop over all elements in bin
-!								n=bin_contents(j,k,m)					!m is the label of the element currently being considered - the mth element in bin (j,k)
-!								if (elements_polar(n, 1).GT.(0.8*elements_polar(l,1))) then
-!									elements(cells(i)%c_elements(n))%type=2					!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
-!									cells(i)%cortex_elements(0)=cells(i)%cortex_elements(0)+1		!Increment cortex counter by 1
-!									p=cells(i)%cortex_elements(0)																!Current value of cortex counter (for conciseness in next couple of lines)
-!									q=elements(cells(i)%c_elements(n))%label										!Label of element under consideration, whose type has just been set to 2 in line above
-!									cells(i)%cortex_elements(p)=q																!pth element of cortex element array in cell data structure is set to the label of this cortex element q. So by the end cortex_elements contains a list of all cortex element labels.
-!								end if
-!							end do
-!						end if
-!					end if
-!				50	Continue
-!				end do
-!			end do
-
-			!This block of code allocates the highest radius element in each pyramid as cortex type without checking whether it is <50% of the max radius or checking if any others are >80% of the local max.
 			do j=1,4
 				do k=1,8							!Do loop over all bins j,k
-					if (bin_counters(j,k).GT.0) then
-							l=max_radius_elements(j,k)		!l is label of max radius element in this bin
-							elements(l)%type=2					!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
-							cells(i)%cortex_elements(0)=cells(i)%cortex_elements(0)+1		!Increment cortex counter by 1
-							p=cells(i)%cortex_elements(0)																!Current value of cortex counter (for conciseness in next couple of lines)
-							q=elements(l)%label										!Label of element under consideration, whose type has just been set to 2 in line above
-							cells(i)%cortex_elements(p)=q																!pth element of cortex element array in cell data structure is set to the label of this cortex element q. So by the end cortex_elements contains a list of all cortex element labels.
-					endif
-				enddo
-			enddo
+					if (bin_counters(j,k).GT.0) then !Check that there are elements in this bin
+						l=max_radius_elements(j,k)		!l is label of max radius element in this bin
+!						if (elements_polar(l,1).GT.(0.5*R_max)) then	!Only set cortex elements in this bin if the max radius in the bin exceeds half of the max radius for the whole cell
+							do m=1, bin_counters(j,k)					!Loop over all elements in bin
+								n=bin_contents(j,k,m)					!m is the label of the element currently being considered - the mth element in bin (j,k)
+								if (elements_polar(n, 1).GT.(0.9*elements_polar(l,1))) then
+									elements(cells(i)%c_elements(n))%type=2											!Set all elements in this bin whose radius is greater than 90% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
+									cells(i)%cortex_elements(0)=cells(i)%cortex_elements(0)+1		!Increment cortex counter by 1
+									p=cells(i)%cortex_elements(0)																!Current value of cortex counter (for conciseness in next couple of lines)
+									q=elements(cells(i)%c_elements(n))%label										!Label of element under consideration, whose type has just been set to 2 in line above
+									cells(i)%cortex_elements(p)=q																!pth element of cortex element array in cell data structure is set to the label of this cortex element q. So by the end cortex_elements contains a list of all cortex element labels.
+								end if
+							end do
+!						end if
+					end if
+				end do
+			end do
+
+			!This block of code allocates the highest radius element in each pyramid as cortex type without checking whether it is <50% of the max radius or checking if any others are >80% of the local max.
+!			do j=1,4
+!				do k=1,8							!Do loop over all bins j,k
+!					if (bin_counters(j,k).GT.0) then
+!							l=max_radius_elements(j,k)		!l is label of max radius element in this bin
+!							elements(l)%type=2					!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
+!							cells(i)%cortex_elements(0)=cells(i)%cortex_elements(0)+1		!Increment cortex counter by 1
+!							p=cells(i)%cortex_elements(0)																!Current value of cortex counter (for conciseness in next couple of lines)
+!							q=elements(l)%label										!Label of element under consideration, whose type has just been set to 2 in line above
+!							cells(i)%cortex_elements(p)=q																!pth element of cortex element array in cell data structure is set to the label of this cortex element q. So by the end cortex_elements contains a list of all cortex element labels.
+!					endif
+!				enddo
+!			enddo
 
 			deallocate(elements_polar)
 			deallocate(bin_contents)
