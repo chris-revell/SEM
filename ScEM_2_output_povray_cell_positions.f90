@@ -44,13 +44,13 @@ module scem_2_output_povray_cell_positions
           write(39,'(A12,F18.14,A2,F18.14,A2,F18.14,A51,I2.2)') ' sphere {  < ', &
                         cells(i)%position(1), ',', cells(i)%position(2), &
                           ',', cells(i)%position(3), &
-                            '> 1.5 texture { pigment { color Green } } } // cell ',&
+                            '> 10 texture { pigment { color Green } } } // cell ',&
                               cells(i)%label
         else
           write(39,'(A12,F18.14,A2,F18.14,A2,F18.14,A51,I2.2)') ' sphere {  < ', &
                         cells(i)%position(1), ',', cells(i)%position(2), &
                           ',', cells(i)%position(3), &
-                            '> 1.5 texture { pigment { color Red } } } // cell ',&
+                            '> 10 texture { pigment { color Red } } } // cell ',&
                               cells(i)%label
         endif
         write(39,*)
