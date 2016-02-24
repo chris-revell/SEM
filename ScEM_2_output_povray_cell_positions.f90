@@ -17,26 +17,27 @@ module scem_2_output_povray_cell_positions
 
       !Create filename for povray output file.
       character(len=35)	:: povray_cells_filename
-      write(povray_cells_filename,"(A29,I2.2,A4)") "data/povray_cell_data/povray_", n_snapshots, ".pov"
+      write(povray_cells_filename,"(A29,I2.2,A4)") "data/povray_cell_&
+                                          data/povray_", n_snapshots, ".pov"
 
       !Open file for povray output
       open(unit=39, file=povray_cells_filename,status='unknown')
 
-      write(42,*) '#version 3.5;'
-      write(42,*) '#include "colors.inc"'
-      write(42,*) '#include "textures.inc"'
-      write(42,*) 'background {White}'
-      write(42,*)
-      write(42,*) 'camera {'
-      write(42,*) '   location  <500, 0, 0>'
-      write(42,*) '   angle 12'
-      write(42,*) '   look_at<0,0,0>}'
-      write(42,*)
-      write(42,*) 'light_source { < -600, 600, 0 > color White }'
-      write(42,*) 'light_source { < 600, -600, 0 > color White }'
-      write(42,*) 'light_source { < 0, 0, 600 > color White }'
-      write(42,*) 'light_source { < 0, 0, -600 > color White }'
-      write(42,*)
+      write(39,*) '#version 3.5;'
+      write(39,*) '#include "colors.inc"'
+      write(39,*) '#include "textures.inc"'
+      write(39,*) 'background {White}'
+      write(39,*)
+      write(39,*) 'camera {'
+      write(39,*) '   location  <500, 0, 0>'
+      write(39,*) '   angle 12'
+      write(39,*) '   look_at<0,0,0>}'
+      write(39,*)
+      write(39,*) 'light_source { < -600, 600, 0 > color White }'
+      write(39,*) 'light_source { < 600, -600, 0 > color White }'
+      write(39,*) 'light_source { < 0, 0, 600 > color White }'
+      write(39,*) 'light_source { < 0, 0, -600 > color White }'
+      write(39,*)
 
       !Draw spheres for all cells in the system, coloured according to cell type
       do i=1, nc
@@ -56,7 +57,7 @@ module scem_2_output_povray_cell_positions
         write(39,*)
       enddo
 
-      close(unit=42)
+      close(unit=39)
 
     end subroutine scem_output_povray_cell_positions
 
