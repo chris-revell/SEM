@@ -16,15 +16,20 @@ module scem_0_input
   integer :: flag_relist ! flag triggering relist of sector assignments
   real*8 :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
 
+!*******************
+!Necessary now?
+
 !  real*8 :: command_line_argument	!Value given at command line
-  CHARACTER(len=32) :: arg			!Dummy argument for reading value at command line
+!  CHARACTER(len=32) :: arg			!Dummy argument for reading value at command line
+!*******************
 
   ! meaning of parameters given below when assigned values
   real*8, allocatable, dimension(:,:,:,:,:) :: rel_strength		!For interaction of element a in cell A with element b in cell B argument is (type of cell A, type of cell B, type of element a, type of element b)
   integer :: nx,ny,nz
   integer :: iseed,iloop1,iloop2,iloop3,iloop4,iloop5
   integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve,&
-              flag_background,flag_cortex,flag_DIT,flag_gnuplot,flag_povray,flag_povray_pairs
+              flag_background,flag_cortex,flag_DIT,flag_gnuplot,flag_povray,flag_povray_pairs,&
+              flag_povray_cells
   integer :: n_c_types,n_e_types
   integer :: n_bins
   integer :: n_snapshots		!Number of system snapshots outputted to file "elements"
