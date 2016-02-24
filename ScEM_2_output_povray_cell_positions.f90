@@ -16,11 +16,11 @@ module scem_2_output_povray_cell_positions
       integer :: n
 
       !Create filename for povray output file.
-      character(len=30)	:: povray_filename
+      character(len=35)	:: povray_cells_filename
       write(povray_filename,"(A29,I2.2,A4)") "data/povray_cell_data/povray_", n_snapshots, ".pov"
 
       !Open file for povray output
-      open(unit=39, file=povray_filename,status='unknown')
+      open(unit=39, file=povray_cells_filename,status='unknown')
 
       write(42,*) '#version 3.5;'
       write(42,*) '#include "colors.inc"'
