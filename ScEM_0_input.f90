@@ -65,8 +65,9 @@ module scem_0_input
       flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
       !Output control flags
-      flag_gnuplot    = 1 ! flag_gnuplot = 1 to output system data for visualisation in gnuplot format, 0 to not output gnuplot format data.
-      flag_povray     = 1 ! flag_povray = 1 to output system data in povray format, 0 to skip povray format.
+!      flag_gnuplot    = 1 ! flag_gnuplot = 1 to output system data for visualisation in gnuplot format, 0 to not output gnuplot format data.
+      flag_povray_cells = 1 ! flag_povray = 1 to output cell position data in povray format, 0 to skip povray format.
+      flag_povray       = 1 ! flag_povray = 1 to output element position data in povray format, 0 to skip povray format.
       flag_povray_pairs = 1 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to only show elements.
 
       ! numerical constants

@@ -12,8 +12,9 @@ module scem_5_initialize
   use scem_2_initial_create
   use scem_2_initial_exist
   use scem_2_output_system
-  use scem_2_output_gnuplot
+!  use scem_2_output_gnuplot
   use scem_2_output_povray
+  use scem_2_output_povray_cell_positions
   use scem_2_pairs
   use scem_2_relist
   use scem_4_cortex
@@ -154,16 +155,20 @@ module scem_5_initialize
 !      close(unit=33)
 !      close(unit=34)
 
-	  ! Calculate initial cell volumes
+	    ! Calculate initial cell volumes
       call volume_calculate
 
-      ! write initial element configuration to file
+      ! write initial system data to file
       call scem_output_system
-      if (flag_gnuplot.EQ.1) then
-        call scem_output_gnuplot
-      endif
+
+      ! Write element and pair data to files in povray format
       if (flag_povray.EQ.1) then
         call scem_output_povray
+      endif
+
+      !Write cell position data to file in povray format
+      if (flag_povray_cells.EQ.1) then
+        call scem_output_povray_cell_positions
       endif
 
     end subroutine scem_initialize

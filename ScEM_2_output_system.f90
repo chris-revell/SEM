@@ -16,18 +16,14 @@ module scem_2_output_system
 
     subroutine scem_output_system
 
-    character(len=1024)	:: cells_filename_epi
-    character(len=1024)	:: cells_filename_hypo
-    character(len=1024)	:: elements_filename
-
-      !Only do anything at intervals of time_out_1.
-      !time_out_1 = cell_cycle_time/10.0 and is the time interval between data outputs
-      if (mod(time,(time_out_1)).lt.dt) then
+!***********************
+! Can dispense with these now that we are not outputting in voronoi format
+!    character(len=1024)	:: cells_filename_epi
+!    character(len=1024)	:: cells_filename_hypo
+!    character(len=1024)	:: elements_filename
 
 !***********************
-!Should this be here or in scem_iterate?
-         n_snapshots=n_snapshots+1
-!***********************
+
 
 !***********************
 !Do we really need to write all elements at all time points to the same file?
@@ -45,14 +41,6 @@ module scem_2_output_system
         open(unit=29,file='data/system_data/snapshot_data.txt', status='unknown')
         write(29,*) nc
 		    call flush(29)
-
-!************************
-!Should these calls be here or within scem_iterate?
-      	call scem_measure																!Measure numerical sorting value of system
-      	call scem_measure_radius
-      	call scem_measure_neighbours
-
-!************************
 
         !Print time and cell count to cell_count file to allow cell count to be plotted against time
         open(unit=37,file='data/system_data/cell_count.txt', status='unknown')
@@ -74,7 +62,6 @@ module scem_2_output_system
         write(27,'(F24.12,A)',advance='yes') cells(nc)%volume		!Advance line only after the last volume value so that all volumes appear on the same line.
         close(unit=27)
 
-      end if
 
     end subroutine scem_output_system
 
