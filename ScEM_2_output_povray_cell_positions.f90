@@ -14,12 +14,13 @@ module scem_2_output_povray_cell_positions
     subroutine scem_output_povray_cell_positions
 
       integer :: n
+      real*8  :: sphere_radius  !Radius of sphere used to represent cell in povray visualiation. Calculated from cell volume.
 
       !Create filename for povray output file.
-      character(len=40)	:: povray_cells_filename
-      write(povray_cells_filename,"(A34,I2.2,A4)") "data/povray_cell_&
-                                      data/povray_cell_", n_snapshots, ".pov"
-
+      character(len=35)	:: povray_cells_filename
+      write(povray_cells_filename,"(A29,I2.2,A4)") "data/povray_cell_&
+                                          data/povray_", n_snapshots, ".pov"
+      write(*,*) povray_cells_filename
       !Open file for povray output
       open(unit=43, file=povray_cells_filename,status='unknown')
 
@@ -41,18 +42,17 @@ module scem_2_output_povray_cell_positions
 
       !Draw spheres for all cells in the system, coloured according to cell type
       do i=1, nc
+        sphere_radius = 3*CBRT(cells(i)%volume)/(pi*4)
         if ((cells(i)%fate).EQ.1) then
-          write(43,'(A12,F18.14,A2,F18.14,A2,F18.14,A51,I2.2)') ' sphere {  < ', &
-                        cells(i)%position(1), ',', cells(i)%position(2), &
-                          ',', cells(i)%position(3), &
-                            '> 10 texture { pigment { color Green } } } // cell ',&
-                              cells(i)%label
+          write(43,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A47,I2.2)') &
+                ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
+                ',', cells(i)%position(3), '> ', sphere_volume,' texture { pigment &
+                { color Green } } } // cell ', cells(i)%label
         else
-          write(43,'(A12,F18.14,A2,F18.14,A2,F18.14,A51,I2.2)') ' sphere {  < ', &
-                        cells(i)%position(1), ',', cells(i)%position(2), &
-                          ',', cells(i)%position(3), &
-                            '> 10 texture { pigment { color Red } } } // cell ',&
-                              cells(i)%label
+          write(43,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A45,I2.2)') &
+                ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
+                ',', cells(i)%position(3), '> ', sphere_volume,' texture { pigment &
+                { color Red } } } // cell ', cells(i)%label
         endif
         write(43,*)
       enddo
