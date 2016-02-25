@@ -149,59 +149,71 @@ module scem_4_cortex
 			!radius for the whole cell and also an array max_radius_elements
 			!that gives the label of the element with the greatest radius in each bin
 
-			!We now need to set elements to be cortex elements
-			!All elements in max_radius_elements are set to be surface elements
-			!unless their radius is less than half of R_max
-			!(this is in order to exclude bins that by chance have no high radius elements in)
-			!Furthermore, in order to include some thickness to the cortex, any element whose
-			!radius is greater than 80% of the maximum radius of any element in its bin is
-			!also set to be a surface element.
+			!We now need to set elements to be cortex elements		************************
+			!All elements in max_radius_elements are set to be surface elements		*********
+			!unless their radius is less than half of R_max													*****************
+			!(this is in order to exclude bins that by chance have no high radius elements in) *****
+			!Furthermore, in order to include some thickness to the cortex, any element whose ******
+			!radius is greater than 80% of the maximum radius of any element in its bin is *********
+			!also set to be a surface element.																							*******
 
 			do j=1,4
 				do k=1,8							!Do loop over all bins j,k
-					if (bin_counters(j,k).EQ.0) then
-						GO TO 50
-					else
+					if (bin_counters(j,k).GT.0) then !Check that there are elements in this bin
 						l=max_radius_elements(j,k)		!l is label of max radius element in this bin
-						if (elements_polar(l,1).GT.(0.5*R_max)) then	!Only set cortex elements in this bin if the max radius in the bin exceeds half of the max radius for the whole cell
+!						if (elements_polar(l,1).GT.(0.5*R_max)) then	!Only set cortex elements in this bin if the max radius in the bin exceeds half of the max radius for the whole cell
 							do m=1, bin_counters(j,k)					!Loop over all elements in bin
 								n=bin_contents(j,k,m)					!m is the label of the element currently being considered - the mth element in bin (j,k)
 								if (elements_polar(n, 1).GT.(0.8*elements_polar(l,1))) then
-									elements(cells(i)%c_elements(n))%type=2					!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
+									elements(cells(i)%c_elements(n))%type=2											!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
 									cells(i)%cortex_elements(0)=cells(i)%cortex_elements(0)+1		!Increment cortex counter by 1
 									p=cells(i)%cortex_elements(0)																!Current value of cortex counter (for conciseness in next couple of lines)
 									q=elements(cells(i)%c_elements(n))%label										!Label of element under consideration, whose type has just been set to 2 in line above
 									cells(i)%cortex_elements(p)=q																!pth element of cortex element array in cell data structure is set to the label of this cortex element q. So by the end cortex_elements contains a list of all cortex element labels.
 								end if
 							end do
-						end if
+!						end if
 					end if
-				50	Continue
 				end do
 			end do
+
+			!This block of code allocates the highest radius element in each pyramid as cortex type without checking whether it is <50% of the max radius or checking if any others are >80% of the local max.
+!			do j=1,4
+!				do k=1,8							!Do loop over all bins j,k
+!					if (bin_counters(j,k).GT.0) then
+!							l=max_radius_elements(j,k)		!l is label of max radius element in this bin
+!							elements(l)%type=2					!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
+!							cells(i)%cortex_elements(0)=cells(i)%cortex_elements(0)+1		!Increment cortex counter by 1
+!							p=cells(i)%cortex_elements(0)																!Current value of cortex counter (for conciseness in next couple of lines)
+!							q=elements(l)%label										!Label of element under consideration, whose type has just been set to 2 in line above
+!							cells(i)%cortex_elements(p)=q																!pth element of cortex element array in cell data structure is set to the label of this cortex element q. So by the end cortex_elements contains a list of all cortex element labels.
+!					endif
+!				enddo
+!			enddo
+
 			deallocate(elements_polar)
 			deallocate(bin_contents)
 			deallocate(bin_counters)
 			deallocate(max_radius_elements)
 		end do
 
+		!The following block of code allocates as cortex type any element
+		!that shares an interaction pair with an element from a different cell.
+		!This will hopefully establish a boundary whilst allowing for more shape
+		!variation than the previous method
+		do n=1, np
+			k=pairs(n,1)
+			l=pairs(n,2)
+
+			if (elements(k)%parent.NE.elements(l)%parent) then
+				elements(k)%type = 2
+				elements(l)%type = 2
+			endif
+		enddo
+
 		!Should now have specified the type of all elements in all cells
 		!Elements set to be of cortex type if their radius exceeds 80% of the max radius in that bin
 		!and the max radius of that bin exceeds 50% of the max radius for the whole cell
-
-!		do i=1, ne
-!			if (elements(i)%type.EQ.2) then
-!				write(*,*) elements(i)%label
-!			endif
-!		enddo
-
-!		open(unit=28,file='cortex', status='new')
-!		do i=1, ne
-!			if (elements(i)%type.EQ.2) then
-!				write(28,*) elements(i)%position(:),cells(elements(i)%parent)%label
-!			endif
-!		enddo
-!		close(28)
 
 		end subroutine scem_cortex
 

@@ -38,23 +38,26 @@ module scem_2_output_povray
       write(42,*) 'light_source { < 0, 0, -60 > color White }'
       write(42,*)
 
-      !Draw spheres for all elements in the system, coloured according to element type
-      do i=1, ne
-        if ((elements(i)%type).EQ.1) then
-          write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A51,I2.2)') ' sphere {  < ', &
-                        elements(i)%position(1), ',', elements(i)%position(2), &
-                          ',', elements(i)%position(3), &
-                            '> 1.5 texture { pigment { color Green } } } // cell ',&
-                              elements(i)%parent
-        else
-          write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A51,I2.2)') ' sphere {  < ', &
-                        elements(i)%position(1), ',', elements(i)%position(2), &
-                          ',', elements(i)%position(3), &
-                            '> 1.5 texture { pigment { color Red } } } // cell ',&
-                              elements(i)%parent
-        endif
-        write(42,*)
-      enddo
+      !Draw spheres for all elements of all cells in the system, coloured according to element type
+!      do i=1, nc
+!        do j=1, cells(i)%c_elements(0)
+!          k=cells(i)%c_elements(j)
+!          if ((elements(k)%type).EQ.1) then
+!            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A51,I2.2)') ' sphere {  < ', &
+!                          elements(k)%position(1), ',', elements(k)%position(2), &
+!                            ',', elements(k)%position(3), &
+!                              '> 1.5 texture { pigment { color Green } } } // cell ',&
+!                                elements(k)%parent
+!          else
+!            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A51,I2.2)') ' sphere {  < ', &
+!                          elements(k)%position(1), ',', elements(k)%position(2), &
+!                            ',', elements(k)%position(3), &
+!                              '> 1.5 texture { pigment { color Red } } } // cell ',&
+!                                elements(k)%parent
+!          endif
+!          write(42,*)
+!        enddo
+!      enddo
 
       !Draw cylinders for inter-element pair interactions if flag_povray_pairs=1
       if(flag_povray_pairs.EQ.1) then

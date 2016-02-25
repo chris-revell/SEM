@@ -14,8 +14,9 @@ module scem_5_iterate
   use scem_2_growth
   use scem_2_integrate
   use scem_2_output_system
-  use scem_2_output_gnuplot
+!  use scem_2_output_gnuplot
   use scem_2_output_povray
+  use scem_2_output_povray_cell_positions
   use scem_2_pairs
   use scem_2_relist
   use scem_2_resize
@@ -110,14 +111,33 @@ module scem_5_iterate
          !Calculate cell volumes
          call volume_calculate
 
-         ! write data to files
-         call scem_output_system
-         if (flag_gnuplot.EQ.1) then
-           call scem_output_gnuplot
-         endif
-         if (flag_povray.EQ.1) then
-           call scem_output_povray
-         endif
+         !Outputting data to file
+         !Only output data at intervals of time_out_1.
+         !time_out_1 = cell_cycle_time/10.0 and is the time interval between data outputs
+         if (mod(time,(time_out_1)).lt.dt) then
+
+           !Incremenet n_snapshots to keep track of how many outputs there have been
+           n_snapshots=n_snapshots+1
+
+           ! write system data to files
+           call scem_output_system
+
+           ! Write element and pair data to files in povray format
+           if (flag_povray.EQ.1) then
+             call scem_output_povray
+           endif
+
+           !Write cell position data to file in povray format 
+           if (flag_povray_cells.EQ.1) then
+             call scem_output_povray_cell_positions
+           endif
+
+           call scem_measure																!Measure numerical sorting value of system
+           call scem_measure_radius
+           call scem_measure_neighbours
+
+         end if
+
 
       end do
 

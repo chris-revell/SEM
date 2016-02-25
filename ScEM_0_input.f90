@@ -16,15 +16,20 @@ module scem_0_input
   integer :: flag_relist ! flag triggering relist of sector assignments
   real*8 :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
 
+!*******************
+!Necessary now?
+
 !  real*8 :: command_line_argument	!Value given at command line
-  CHARACTER(len=32) :: arg			!Dummy argument for reading value at command line
+!  CHARACTER(len=32) :: arg			!Dummy argument for reading value at command line
+!*******************
 
   ! meaning of parameters given below when assigned values
   real*8, allocatable, dimension(:,:,:,:,:) :: rel_strength		!For interaction of element a in cell A with element b in cell B argument is (type of cell A, type of cell B, type of element a, type of element b)
   integer :: nx,ny,nz
   integer :: iseed,iloop1,iloop2,iloop3,iloop4,iloop5
   integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve,&
-              flag_background,flag_cortex,flag_DIT,flag_gnuplot,flag_povray,flag_povray_pairs
+              flag_background,flag_cortex,flag_DIT,flag_gnuplot,flag_povray,flag_povray_pairs,&
+              flag_povray_cells
   integer :: n_c_types,n_e_types
   integer :: n_bins
   integer :: n_snapshots		!Number of system snapshots outputted to file "elements"
@@ -62,16 +67,17 @@ module scem_0_input
       flag_growth     = 0 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 0 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
-      flag_DIT        = 0 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
+      flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
       !Output control flags
-      flag_gnuplot    = 0 ! flag_gnuplot = 1 to output system data for visualisation in gnuplot format, 0 to not output gnuplot format data.
-      flag_povray     = 1 ! flag_povray = 1 to output system data in povray format, 0 to skip povray format.
-      flag_povray_pairs = 1 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to only show elements.
+!      flag_gnuplot    = 1 ! flag_gnuplot = 1 to output system data for visualisation in gnuplot format, 0 to not output gnuplot format data.
+      flag_povray_cells = 1 ! flag_povray = 1 to output cell position data in povray format, 0 to skip povray format.
+      flag_povray       = 0 ! flag_povray = 1 to output element position data in povray format, 0 to skip povray format.
+      flag_povray_pairs = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to only show elements.
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
-      ot=1.0/3.0 ! one third
+      ot=1.0/3.0 ! one thid
       p3=pi/(3.0*sqrt(2.0)) ! packing fraction in 3D
 
       ! system parameters
