@@ -20,7 +20,7 @@ module scem_2_output_povray_cell_positions
       character(len=35)	:: povray_cells_filename
       write(povray_cells_filename,"(A29,I2.2,A4)") "data/povray_cell_&
                                           data/povray_", n_snapshots, ".pov"
-      write(*,*) povray_cells_filename
+
       !Open file for povray output
       open(unit=43, file=povray_cells_filename,status='unknown')
 
@@ -42,7 +42,7 @@ module scem_2_output_povray_cell_positions
 
       !Draw spheres for all cells in the system, coloured according to cell type
       do i=1, nc
-        sphere_radius = 3*(cells(i)%volume)**(1/3)/(pi*4)     !Radius is 3/4pi * cube root of volume 
+        sphere_radius = 3*(cells(i)%volume)**(1/3)/(pi*4)     !Radius is 3/4pi * cube root of volume
         if ((cells(i)%fate).EQ.1) then
           write(43,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A47,I2.2)') &
                 ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
