@@ -16,9 +16,9 @@ module scem_2_output_povray_cell_positions
       integer :: n
 
       !Create filename for povray output file.
-      character(len=35)	:: povray_cells_filename
+      character(len=40)	:: povray_cells_filename
       write(povray_cells_filename,"(A29,I2.2,A4)") "data/povray_cell_&
-                                          data/povray_", n_snapshots, ".pov"
+                                          data/povray_cell_", n_snapshots, ".pov"
 write(*,*) povray_cells_filename
       !Open file for povray output
       open(unit=43, file=povray_cells_filename,status='unknown')
