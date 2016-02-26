@@ -1,12 +1,8 @@
-function cube_root
-
-!  public :: cube_root
+function cube_root(x)
 
   implicit none
 
-
-
-  function cube_root(x) !result(root)
+!  function cube_root(x) !result(root)
 
   real,intent(in)  :: x
   real,intent(out) :: cube_root
@@ -17,6 +13,4 @@ function cube_root
 
   cube_root = exp(log_x/3.0)
 
-  end function cube_root
-
-end module cube_root_module
+end function cube_root
