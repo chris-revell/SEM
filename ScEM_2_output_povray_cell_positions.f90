@@ -6,7 +6,6 @@ module scem_2_output_povray_cell_positions
   use scem_0_input
   use scem_0_useful
   use scem_1_types
-  use cube_root_module
 
   implicit none
 
@@ -43,7 +42,7 @@ module scem_2_output_povray_cell_positions
 
       !Draw spheres for all cells in the system, coloured according to cell type
       do i=1, nc
-        sphere_radius = cube_root(3.0*cells(i)%volume/(pi*4.0))     !Radius is cube root of (3*volume/4pi)
+        sphere_radius = (3.0*cells(i)%volume/(pi*4.0))**(1.0/3.0)     !Radius is cube root of (3*volume/4pi)
         if ((cells(i)%fate).EQ.1) then
           write(43,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A47,I2.2)') &
                 ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
