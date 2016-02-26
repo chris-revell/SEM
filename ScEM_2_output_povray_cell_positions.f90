@@ -6,6 +6,7 @@ module scem_2_output_povray_cell_positions
   use scem_0_input
   use scem_0_useful
   use scem_1_types
+  use cube_root_module
 
   implicit none
 
