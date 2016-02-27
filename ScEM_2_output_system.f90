@@ -17,15 +17,6 @@ module scem_2_output_system
     subroutine scem_output_system
 
 !***********************
-! Can dispense with these now that we are not outputting in voronoi format
-!    character(len=1024)	:: cells_filename_epi
-!    character(len=1024)	:: cells_filename_hypo
-!    character(len=1024)	:: elements_filename
-
-!***********************
-
-
-!***********************
 !Do we really need to write all elements at all time points to the same file?
 !        do n=1,ne
 !          write(21,'(3f12.6,i4)')elements(n)%position(:),elements(n)%type		!21 is file "elements". 3f12.6,i4 means print 3 float variables consisting of 12 characters (11 digits and a point), with 6 digits after the point, then on the same line, one integer with 4 digits. So this is printing all 3 components of position plus one "parent" integer.

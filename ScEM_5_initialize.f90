@@ -12,7 +12,6 @@ module scem_5_initialize
   use scem_2_initial_create
   use scem_2_initial_exist
   use scem_2_output_system
-!  use scem_2_output_gnuplot
   use scem_2_output_povray
   use scem_2_output_povray_cell_positions
   use scem_2_pairs

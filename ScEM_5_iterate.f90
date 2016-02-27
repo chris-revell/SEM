@@ -14,7 +14,6 @@ module scem_5_iterate
   use scem_2_growth
   use scem_2_integrate
   use scem_2_output_system
-!  use scem_2_output_gnuplot
   use scem_2_output_povray
   use scem_2_output_povray_cell_positions
   use scem_2_pairs
@@ -34,7 +33,6 @@ module scem_5_iterate
       do while (time.lt.time_max)
 
          time=time+dt ! increment time
-!         r_boundary = r_boundary*(1-dt/time_max)
 
          forall(n=1:ne) xe_prev(n,:)=elements(n)%position(:) ! xe_prev records prior positions of elements
 
@@ -51,12 +49,6 @@ module scem_5_iterate
             call scem_diffusion
          end if
 
-!         open(unit=28,file='data/pos1.txt', status='unknown')
-!         open(unit=39,file='data/pos2.txt', status='unknown')
-!         do i=1,ne
-!           write(28,*) elements(i)%position(:)
-!         enddo
-
          !Conserve cell volumes
          do n=1, nc
            if (flag_conserve.eq.1) then
@@ -64,12 +56,6 @@ module scem_5_iterate
            endif
            deallocate(cells(n)%triplets)
          end do
-
-!         do i=1,ne
-!           write(39,*) elements(i)%position(:)
-!         enddo
-!         close(28)
-!         close(39)
 
          ! determine sector relist flag
          call scem_flag_relist
@@ -127,7 +113,7 @@ module scem_5_iterate
              call scem_output_povray
            endif
 
-           !Write cell position data to file in povray format 
+           !Write cell position data to file in povray format
            if (flag_povray_cells.EQ.1) then
              call scem_output_povray_cell_positions
            endif
