@@ -40,8 +40,8 @@ contains
       fate_2  = cells(cell_2)%fate
 
       if (fate_1.NE.fate_2) then
-        elements(pairs(j,1))%DIT_factor = 2
-        elements(pairs(j,2))%DIT_factor = 2
+        elements(pairs(j,1))%DIT_factor = fate_1    !Making DIT factor depend on fate. One cell type increases tension, the other does not. 
+        elements(pairs(j,2))%DIT_factor = fate_2    !
       else
         elements(pairs(j,1))%DIT_factor = 1
         elements(pairs(j,2))%DIT_factor = 1
