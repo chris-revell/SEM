@@ -28,8 +28,8 @@ module scem_0_input
   integer :: nx,ny,nz
   integer :: iseed,iloop1,iloop2,iloop3,iloop4,iloop5
   integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve,&
-              flag_background,flag_cortex,flag_DIT,flag_gnuplot,flag_povray,flag_povray_pairs,&
-              flag_povray_cells
+              flag_background,flag_cortex,flag_DIT,flag_gnuplot,flag_povray_elements,&
+              ,flag_povray_pairs,flag_povray_cells
   integer :: n_c_types,n_e_types
   integer :: n_bins
   integer :: n_snapshots		!Number of system snapshots outputted to file "elements"
@@ -70,9 +70,9 @@ module scem_0_input
       flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
       !Output control flags
-      flag_povray_cells = 1 ! flag_povray = 1 to output cell position data in povray format, 0 to skip povray format.
-      flag_povray       = 1 ! flag_povray = 1 to output element position data in povray format, 0 to skip povray format.
-      flag_povray_pairs = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to only show elements.
+      flag_povray_cells     = 1 ! flag_povray_cells = 1 to output cell position data in povray format, 0 to skip.
+      flag_povray_elements  = 1 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
+      flag_povray_pairs     = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
