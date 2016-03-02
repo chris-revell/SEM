@@ -17,7 +17,7 @@ module scem_2_output_povray_cell_positions
       real*8  :: sphere_radius  !Radius of sphere used to represent cell in povray visualiation. Calculated from cell volume.
 
       !Create filename for povray output file.
-      character(len=40)	:: povray_cells_filename
+      character(len=42)	:: povray_cells_filename
       write(povray_cells_filename,"(A36,I2.2,A4)") "data/povray_cells_&
                                           data/povray_cells_", n_snapshots, ".pov"
 

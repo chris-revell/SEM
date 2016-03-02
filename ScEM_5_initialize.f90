@@ -161,11 +161,14 @@ module scem_5_initialize
       ! write initial system data to file
       call scem_output_system
 
-      ! Write element and pair data to files in povray format
-      if (flag_povray.EQ.1) then
-        call scem_output_povray
+      ! Write element data to files in povray format
+      if (flag_povray_elements.EQ.1) then
+        call scem_output_povray_elements
       endif
-
+      ! Write pair data to files in povray format
+      if (flag_povray_pairs.EQ.1) then
+        call scem_output_povray_pairs
+      endif
       !Write cell position data to file in povray format
       if (flag_povray_cells.EQ.1) then
         call scem_output_povray_cell_positions

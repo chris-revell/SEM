@@ -29,7 +29,7 @@ module scem_0_input
   integer :: iseed,iloop1,iloop2,iloop3,iloop4,iloop5
   integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve,&
               flag_background,flag_cortex,flag_DIT,flag_gnuplot,flag_povray_elements,&
-              ,flag_povray_pairs,flag_povray_cells
+              flag_povray_pairs,flag_povray_cells
   integer :: n_c_types,n_e_types
   integer :: n_bins
   integer :: n_snapshots		!Number of system snapshots outputted to file "elements"

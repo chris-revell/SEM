@@ -16,7 +16,7 @@ module scem_2_output_povray_elements
       integer :: n
 
       !Create filename for povray output file.
-      character(len=30)	:: povray_filename
+      character(len=48)	:: povray_filename
       write(povray_filename,"(A42,I2.2,A4)") "data/povray_elements_data/povray_elements_", n_snapshots, ".pov"
 
       !Open file for povray output
