@@ -42,7 +42,7 @@ module scem_2_output_povray_pairs
       !Draw cylinders for inter-element pair interactions
       !Draw on a cell by cell basis to separate data by cell spatially in output file for ease of manipulation later on
 
-      do i=1, nc
+      do i=2, 2
         write(44,'(A7,I2.2)') "//Cell ", i
         do j=1, np
           !For all pairs, check if either of the two elements in the pair are in cell i before drawing.
