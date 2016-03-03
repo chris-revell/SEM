@@ -143,18 +143,6 @@ module scem_5_initialize
   	  write(22,*) rel_strength(2,2,2,2,2), "Inter-cellular Hypoblast cortex-hypoblast cortex"
       close(unit=22)
 
-!      open(unit=33,file='cell_cortex',status='unknown')
-!      open(unit=34,file='cell_cytoplasm',status='unknown')
-!      do i=1, cells(1)%c_elements(0)
-!      	if (elements(cells(1)%c_elements(i))%type.EQ.2) then
-!      		write(33,*) elements(cells(1)%c_elements(i))%position(:)
-!      	else
-!      		write(34,*) elements(cells(1)%c_elements(i))%position(:)
-!      	end if
-!      end do
-!      close(unit=33)
-!      close(unit=34)
-
 	    ! Calculate initial cell volumes
       call volume_calculate
 

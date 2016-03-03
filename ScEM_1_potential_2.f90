@@ -54,11 +54,11 @@ module scem_1_potential_2
       close(unit=31)
 
       ! write functional form of potential to file
-!      open(unit=32,file='data/system_data/potential_function_2',status='unknown')
+!      open(unit=?,file='data/system_data/potential_function_2',status='unknown')
 !      do j=0,n_bins
 !         dist=((j+0.0)/n_bins)*r_interaction_max
 !         pot=pot_min*(exp(2*rho*(1.0-dist**2/r_equil_sq))-2*exp(rho*(1.0-dist**2/r_equil_sq)))
-!         write(32,*)dist,pot
+!         write(?,*)dist,pot
 !      end do
 !      close(unit=32)
 

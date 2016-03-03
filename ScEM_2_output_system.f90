@@ -45,7 +45,7 @@ module scem_2_output_system
         close(unit=26)
 
 		    !Write cell volume data to file
-        open(unit=31,file='data/system_data/cell_volumes.txt',status='unknown',position="append")
+        open(unit=27,file='data/system_data/cell_volumes.txt',status='unknown',position="append")
         write(27,'(F24.12,A)',advance="no") time, "	"
         do n=1, nc-1
           write(27,'(F24.12,A)',advance="no") cells(n)%volume, "	"

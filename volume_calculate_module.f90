@@ -128,30 +128,6 @@ module volume_calculate_module
 
 				cells(j)%volume = volume_cell
 
-	!			write(delaunay_filename,"(A29,I2.2,A2,I2.2)") "data/delaunay_data/delaunay_S", n_snapshots, "_C", j
-	!	 		open(unit=28,file=delaunay_filename, status='unknown')
-
-	!	 		do i=1, cells(j)%cortex_elements(0)
-	!	 			x_raw(i) = x_raw(i) + cells(j)%position(1)
-	!	 			y_raw(i) = y_raw(i) + cells(j)%position(2)
-	!	 			z_raw(i) = z_raw(i) + cells(j)%position(3)
-	!	 		end do
-
-	!	 		do i=1, nt
-	!				write(28,*) x_raw(ltri(1,i)), "	", y_raw(ltri(1,i)), "	", z_raw(ltri(1,i)), "	", (x_raw(ltri(2,i))-x_raw(ltri(1,i))) &
-	!					, "	", (y_raw(ltri(2,i))-y_raw(ltri(1,i))), "	", (z_raw(ltri(2,i))-z_raw(ltri(1,i)))
-	!				write(28,*) x_raw(ltri(2,i)), "	", y_raw(ltri(2,i)), "	", z_raw(ltri(2,i)), "	", (x_raw(ltri(3,i))-x_raw(ltri(2,i))) &
-	!					, "	", (y_raw(ltri(3,i))-y_raw(ltri(2,i))), "	", (z_raw(ltri(3,i))-z_raw(ltri(2,i)))
-	!				write(28,*) x_raw(ltri(3,i)), "	", y_raw(ltri(3,i)), "	", z_raw(ltri(3,i)), "	", (x_raw(ltri(1,i))-x_raw(ltri(3,i))) &
-	!					, "	", (y_raw(ltri(1,i))-y_raw(ltri(3,i))), "	", (z_raw(ltri(1,i))-z_raw(ltri(3,i)))
-	!			end do
-
-	!			do i=1, cells(j)%cortex_elements(0)
-	!				write(28,*) cells(j)%position(1), cells(j)%position(2), cells(j)%position(3), x_raw(i), y_raw(i), z_raw(i)
-	!			end do
-
-	!			close(28)
-
 				deallocate(x_raw)
 				deallocate(y_raw)
 				deallocate(z_raw)

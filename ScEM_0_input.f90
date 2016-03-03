@@ -14,7 +14,7 @@ module scem_0_input
   integer :: ne,nc,np ! numbers of elements, cells, and element pairs
   integer :: ne_size,nc_size,np_size ! parameters for array size allocations
   integer :: flag_relist ! flag triggering relist of sector assignments
-  real*8 :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
+  real*8  :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
 
 !*******************
 !Necessary now?
@@ -33,20 +33,20 @@ module scem_0_input
   integer :: n_c_types,n_e_types
   integer :: n_bins
   integer :: n_snapshots		!Number of system snapshots outputted to file "elements"
-  real*8 :: p3,pi,ot
-  real*8 :: r_cell,r_cell_sq
+  real*8  :: p3,pi,ot
+  real*8  :: r_cell,r_cell_sq
 !  real*8 :: r_boundary			!Radius of confining spherical boundary
-  real*8 :: viscous_timescale_cell,elastic_mod_cell,damping_cell,damping_element
-  real*8 :: kappa_cell,kappa_element,epsilon,pot_min,rho,force_amplitude
-  real*8 :: r_equil,r_equil_sq,frac_close,r_close_sq
-  real*8 :: frac_interaction_max,r_interaction_max,r_interaction_max_sq,d_r_sq,d_r_sq_recip
-  real*8 :: diff_coeff,diff_amp
-  real*8 :: cell_cycle_time,rate_new_element,establishment_time,prob_new_element,frac_growth
-  real*8 :: frac_placement_min,r_placement_min_sq
-  real*8 :: buffer_frac,buffer_size,buffer_size_sq,sector_size,sector_size_sq,recip_sector_size
-  real*8 :: time,time_out_1,time_max,dt,dt_amp_max,r_s_max !time_out_2,
-  real*8 :: trigger_frac
-  real*8 :: cortex_constant
+  real*8  :: viscous_timescale_cell,elastic_mod_cell,damping_cell,damping_element
+  real*8  :: kappa_cell,kappa_element,epsilon,pot_min,rho,force_amplitude
+  real*8  :: r_equil,r_equil_sq,frac_close,r_close_sq
+  real*8  :: frac_interaction_max,r_interaction_max,r_interaction_max_sq,d_r_sq,d_r_sq_recip
+  real*8  :: diff_coeff,diff_amp
+  real*8  :: cell_cycle_time,rate_new_element,establishment_time,prob_new_element,frac_growth
+  real*8  :: frac_placement_min,r_placement_min_sq
+  real*8  :: buffer_frac,buffer_size,buffer_size_sq,sector_size,sector_size_sq,recip_sector_size
+  real*8  :: time,time_out_1,time_max,dt,dt_amp_max,r_s_max !time_out_2,
+  real*8  :: trigger_frac
+  real*8  :: cortex_constant
 
   ! user to assign values to system parameters and constants
 
@@ -64,8 +64,8 @@ module scem_0_input
       flag_diffusion  = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background = 0 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
-      flag_growth     = 0 ! flag_growth = 0 (1) for no growth (growth)
-      flag_division   = 0 ! flag_division = 0 (1) for growth with no cell division (with cell division)
+      flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
+      flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
       flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 

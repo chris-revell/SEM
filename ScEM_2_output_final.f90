@@ -6,6 +6,7 @@ module scem_2_output_final
   use scem_0_input
   use scem_0_useful
   use scem_1_types
+  use scem_1_plotting_commands
 
   implicit none
 
@@ -30,6 +31,8 @@ module scem_2_output_final
 
       close(unit=24)
       close(unit=25)
+
+      call scem_plotting_commands
 
     end subroutine scem_output_final
 
