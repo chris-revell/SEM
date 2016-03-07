@@ -30,7 +30,7 @@ module scem_2_measure_radius
 		real*8, dimension(3) :: cell_vector		!Vector position of cell relative to system centre of mass
 
 
-		open(unit=36,file='data/system_data/system_data_radius.txt', status='unknown')
+		open(unit=36,file='data/system_data/sorting_data_radius.txt', status='unknown')
 
 		!For now we will assume (0,0,0) is the centre of the cell aggregate.
 		!Therefore no need to identify centre of mass of aggregate.
