@@ -10,7 +10,7 @@ contains
 
   subroutine scem_plotting_commands
 
-  open(unit=45,file='scripts/gnuplot_commands_system_plots.gnu',status='unknown')
+  open(unit=54,file='data/system_data/gnuplot_commands_system_plots.gnu',status='unknown')
 
   write(45,*) 'set nokey'
   write(45,*) 'set terminal png'
@@ -55,6 +55,7 @@ contains
   write(45,*)
 
   write(45,*) 'set title "Cell volumes against time"'
+  write(45,*) 'set key'
   write(45,*) 'set xlabel "Time /s"'
   write(45,*) 'set ylabel "Volume /?"'
   write(45,*) 'set output "data/system_data/cell_volumes.png"'
@@ -62,12 +63,22 @@ contains
   write(45,'(A26)',advance="no") 'title "cell  1" with lines'
   if (nc.GT.1) then
     do n=2, nc
-      write(45,'(A46)',advance="no") ', "data/system_data/cell_volumes.txt" using 1:'
-      write(45,'(I2.2,A13)',advance="no") n+1, ' title "cell '
-      if (n.LT.nc) then
-        write(45,'(I2.2,A13)') n, '" with lines\'
-      else 
-        write(45,'(I2.2,A12)') n, '" with lines'
+      if (n.LT.9) then
+        write(45,'(A46)',advance="no") ', "data/system_data/cell_volumes.txt" using 1:'
+        write(45,'(I1,A13)',advance="no") n+1, ' title "cell '
+        if (n.LT.nc) then
+          write(45,'(I1,A13)') n, '" with lines\'
+        else
+          write(45,'(I1,A12)') n, '" with lines'
+        endif
+      else
+        write(45,'(A46)',advance="no") ', "data/system_data/cell_volumes.txt" using 1:'
+        write(45,'(I2,A13)',advance="no") n+1, ' title "cell '
+        if (n.LT.nc) then
+          write(45,'(I2,A13)') n, '" with lines\'
+        else
+          write(45,'(I2,A12)') n, '" with lines'
+        endif
       endif
     enddo
   endif

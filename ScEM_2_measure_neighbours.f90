@@ -83,45 +83,53 @@ module scem_2_measure_neighbours
 
 		!At this point we have a nearest neighbour array with no redundancy, as required.
 
+
+!*******************
+!This section is related to neighbour visualisation and probably not necessary any more
 		!Create neighbour vector files for this snapshot
 !		write(vectors_filename,"(A45,I2.2)") "data/neighbour_vector_data/neighbour_vectors_", n_snapshots
 !		open(unit=39,file=trim(vectors_filename),status='unknown')
+!*******************
 
 		!Now calculate proportion of near neighbours that are of the same type
-!		same_fate_counter=0
-!		do m=1, neighbours_counter
+		same_fate_counter=0
+		do m=1, neighbours_counter
 
-!			fate_1 = cells(neighbours(m,1))%fate
-!			fate_2 = cells(neighbours(m,2))%fate
-!			cell_position1(:)	= cells(neighbours(m,1))%position(:)
-!			cell_position2(:)	= cells(neighbours(m,2))%position(:)
+			fate_1 = cells(neighbours(m,1))%fate
+			fate_2 = cells(neighbours(m,2))%fate
+			cell_position1(:)	= cells(neighbours(m,1))%position(:)
+			cell_position2(:)	= cells(neighbours(m,2))%position(:)
 
+!*******************
+!This section is related to neighbour visualisation and probably not necessary any more
 !			do i=1, 3
 !				vector(i) = cell_position1(i) + 0.5*(cell_position2(i)-cell_position1(i))
 !			end do
 !			do i=4, 6
 !				vector(i) = cell_position2(i-3)-cell_position1(i-3)
 !			end do
+!*******************
+
+			if (fate_1.EQ.fate_2) then
+				same_fate_counter = same_fate_counter+1
+			end if
 
 
-!			if (fate_1.EQ.fate_2) then
-!				same_fate_counter = same_fate_counter+1
-!			end if
+			if (fate_1.eq.fate_2) then
+				if (fate_1.eq.1) then
+					pair_type = 1
+				else
+					pair_type = 2
+				end if
+			else
+				pair_type = 3
+			end if
 
-
-!			if (fate_1.eq.fate_2) then
-!				if (fate_1.eq.1) then
-!					pair_type = 1
-!				else
-!					pair_type = 2
-!				end if
-!			else
-!				pair_type = 3
-!			end if
-
+!*******************
+!This section is related to neighbour visualisation and probably not necessary any more
 !			write(39,*) vector(:), pair_type
-
-!		end do
+!*******************
+		end do
 
 		sorting_measure = real(same_fate_counter)/real(neighbours_counter)
 		!Write measurement to file sorting_data_neighbours
