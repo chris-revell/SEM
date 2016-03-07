@@ -12,7 +12,8 @@ module scem_5_initialize
   use scem_2_initial_create
   use scem_2_initial_exist
   use scem_2_output_system
-  use scem_2_output_povray
+  use scem_2_output_povray_elements
+  use scem_2_output_povray_pairs
   use scem_2_output_povray_cell_positions
   use scem_2_pairs
   use scem_2_relist
@@ -142,29 +143,20 @@ module scem_5_initialize
   	  write(22,*) rel_strength(2,2,2,2,2), "Inter-cellular Hypoblast cortex-hypoblast cortex"
       close(unit=22)
 
-!      open(unit=33,file='cell_cortex',status='unknown')
-!      open(unit=34,file='cell_cytoplasm',status='unknown')
-!      do i=1, cells(1)%c_elements(0)
-!      	if (elements(cells(1)%c_elements(i))%type.EQ.2) then
-!      		write(33,*) elements(cells(1)%c_elements(i))%position(:)
-!      	else
-!      		write(34,*) elements(cells(1)%c_elements(i))%position(:)
-!      	end if
-!      end do
-!      close(unit=33)
-!      close(unit=34)
-
 	    ! Calculate initial cell volumes
       call volume_calculate
 
       ! write initial system data to file
       call scem_output_system
 
-      ! Write element and pair data to files in povray format
-      if (flag_povray.EQ.1) then
-        call scem_output_povray
+      ! Write element data to files in povray format
+      if (flag_povray_elements.EQ.1) then
+        call scem_output_povray_elements
       endif
-
+      ! Write pair data to files in povray format
+      if (flag_povray_pairs.EQ.1) then
+        call scem_output_povray_pairs
+      endif
       !Write cell position data to file in povray format
       if (flag_povray_cells.EQ.1) then
         call scem_output_povray_cell_positions

@@ -14,7 +14,7 @@ module scem_0_input
   integer :: ne,nc,np ! numbers of elements, cells, and element pairs
   integer :: ne_size,nc_size,np_size ! parameters for array size allocations
   integer :: flag_relist ! flag triggering relist of sector assignments
-  real*8 :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
+  real*8  :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
 
 !*******************
 !Necessary now?
@@ -28,25 +28,25 @@ module scem_0_input
   integer :: nx,ny,nz
   integer :: iseed,iloop1,iloop2,iloop3,iloop4,iloop5
   integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve,&
-              flag_background,flag_cortex,flag_DIT,flag_gnuplot,flag_povray,flag_povray_pairs,&
-              flag_povray_cells
+              flag_background,flag_cortex,flag_DIT,flag_gnuplot,flag_povray_elements,&
+              flag_povray_pairs,flag_povray_cells
   integer :: n_c_types,n_e_types
   integer :: n_bins
   integer :: n_snapshots		!Number of system snapshots outputted to file "elements"
-  real*8 :: p3,pi,ot
-  real*8 :: r_cell,r_cell_sq
+  real*8  :: p3,pi,ot
+  real*8  :: r_cell,r_cell_sq
 !  real*8 :: r_boundary			!Radius of confining spherical boundary
-  real*8 :: viscous_timescale_cell,elastic_mod_cell,damping_cell,damping_element
-  real*8 :: kappa_cell,kappa_element,epsilon,pot_min,rho,force_amplitude
-  real*8 :: r_equil,r_equil_sq,frac_close,r_close_sq
-  real*8 :: frac_interaction_max,r_interaction_max,r_interaction_max_sq,d_r_sq,d_r_sq_recip
-  real*8 :: diff_coeff,diff_amp
-  real*8 :: cell_cycle_time,rate_new_element,establishment_time,prob_new_element,frac_growth
-  real*8 :: frac_placement_min,r_placement_min_sq
-  real*8 :: buffer_frac,buffer_size,buffer_size_sq,sector_size,sector_size_sq,recip_sector_size
-  real*8 :: time,time_out_1,time_max,dt,dt_amp_max,r_s_max !time_out_2,
-  real*8 :: trigger_frac
-  real*8 :: cortex_constant
+  real*8  :: viscous_timescale_cell,elastic_mod_cell,damping_cell,damping_element
+  real*8  :: kappa_cell,kappa_element,epsilon,pot_min,rho,force_amplitude
+  real*8  :: r_equil,r_equil_sq,frac_close,r_close_sq
+  real*8  :: frac_interaction_max,r_interaction_max,r_interaction_max_sq,d_r_sq,d_r_sq_recip
+  real*8  :: diff_coeff,diff_amp
+  real*8  :: cell_cycle_time,rate_new_element,establishment_time,prob_new_element,frac_growth
+  real*8  :: frac_placement_min,r_placement_min_sq
+  real*8  :: buffer_frac,buffer_size,buffer_size_sq,sector_size,sector_size_sq,recip_sector_size
+  real*8  :: time,time_out_1,time_max,dt,dt_amp_max,r_s_max !time_out_2,
+  real*8  :: trigger_frac
+  real*8  :: cortex_constant
 
   ! user to assign values to system parameters and constants
 
@@ -70,10 +70,9 @@ module scem_0_input
       flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
       !Output control flags
-!      flag_gnuplot    = 1 ! flag_gnuplot = 1 to output system data for visualisation in gnuplot format, 0 to not output gnuplot format data.
-      flag_povray_cells = 1 ! flag_povray = 1 to output cell position data in povray format, 0 to skip povray format.
-      flag_povray       = 0 ! flag_povray = 1 to output element position data in povray format, 0 to skip povray format.
-      flag_povray_pairs = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to only show elements.
+      flag_povray_cells     = 1 ! flag_povray_cells = 1 to output cell position data in povray format, 0 to skip.
+      flag_povray_elements  = 1 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
+      flag_povray_pairs     = 1 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
