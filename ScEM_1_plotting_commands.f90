@@ -10,7 +10,7 @@ contains
 
   subroutine scem_plotting_commands
 
-  open(unit=54,file='data/system_data/gnuplot_commands_system_plots.gnu',status='unknown')
+  open(unit=45,file='data/system_data/gnuplot_commands_system_plots.gnu',status='unknown')
 
   write(45,*) 'set nokey'
   write(45,*) 'set terminal png'
