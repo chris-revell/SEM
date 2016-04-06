@@ -28,7 +28,7 @@ module scem_2_output_povray_elements
       write(42,*) 'background {White}'
       write(42,*)
       write(42,*) 'camera {'
-      write(42,*) '   location  <0, 125, 125>'
+      write(42,*) '   location  <500, 0, 0>'
       write(42,*) '   angle 12'
       write(42,*) '   look_at<0,0,0>}'
       write(42,*)
@@ -39,7 +39,7 @@ module scem_2_output_povray_elements
       write(42,*)
 
       !Draw spheres for all elements of all cells in the system, coloured according to element type
-      do i=2, 2
+      do i=1, nc
         do j=1, cells(i)%c_elements(0)
           k=cells(i)%c_elements(j)
           if ((elements(k)%type).EQ.1) then

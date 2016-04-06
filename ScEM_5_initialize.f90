@@ -120,6 +120,7 @@ module scem_5_initialize
       write(22,*)'linear sector size = ',real(sector_size)
       write(22,*)'time = ',real(time)
       write(22,*)'center of mass = ',real(cells(1)%position(:))
+      write(22,*)'frac_interaction_max = ',frac_interaction_max
 !      write(22,*)'boundary radius = ',r_boundary
       write(22,*) "Interaction magnitudes"
   	  write(22,*) rel_strength(1,1,1,1,1), "Intra-cellular Epiblast cytoplasm-epiblast cytoplasm"

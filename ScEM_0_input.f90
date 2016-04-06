@@ -64,8 +64,8 @@ module scem_0_input
       flag_diffusion  = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background = 0 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
-      flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
-      flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
+      flag_growth     = 0 ! flag_growth = 0 (1) for no growth (growth)
+      flag_division   = 0 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
       flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
@@ -109,7 +109,7 @@ module scem_0_input
       epsilon=0.01 ! --> value of potential relative to minimum at r_interaction_max
       n_bins=1024 ! --> number of bins for potential table
       frac_close=0.8 ! --> fraction of equilibrium distance for initialization (< approx 0.85)
-      frac_interaction_max=2.0     !1.8 ! --> fraction of equilibrium distance for maximum interaction range (in window 1.5 to 1.9)
+      frac_interaction_max=2.0  !1.8 ! --> fraction of equilibrium distance for maximum interaction range (in window 1.5 to 1.9)
                                 !     1.5 has sharply contracted potential and efficient
                                 !     1.9 has more relaxed potential, and still reasonably efficient (factor of 2.5 slower)
                                 !     > 1.9 brings in more element interactions, contracting cell, and slowing simulation

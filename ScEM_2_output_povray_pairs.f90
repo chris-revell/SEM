@@ -29,7 +29,7 @@ module scem_2_output_povray_pairs
       write(44,*) 'background {White}'
       write(44,*)
       write(44,*) 'camera {'
-      write(44,*) '   location  <0, 125, 125>'
+      write(44,*) '   location  <500, 0, 0>'
       write(44,*) '   angle 12'
       write(44,*) '   look_at<0,0,0>}'
       write(44,*)
@@ -42,7 +42,7 @@ module scem_2_output_povray_pairs
       !Draw cylinders for inter-element pair interactions
       !Draw on a cell by cell basis to separate data by cell spatially in output file for ease of manipulation later on
 
-      do i=2, 2
+      do i=1, nc
         write(44,'(A7,I2.2)') "//Cell ", i
         do j=1, np
           !For all pairs, check if either of the two elements in the pair are in cell i before drawing.
