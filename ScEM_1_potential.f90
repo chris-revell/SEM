@@ -22,7 +22,7 @@ module scem_1_potential
       allocate(potential_deriv(0:n_bins-1,2)) ! potential_deriv is an interpolation table for (1/r)dV/dr            Note n_bins is the number of elements into which the max distance of potential is divided (I think)
       allocate(pot_deriv_table(0:n_bins)) ! pot_deriv_table is a local array containing (1/r)dV/dr
       allocate(r_sq_table(0:n_bins)) ! r_sq_table is a local array containing tabulated values of r^2
-      
+
       ! loop over table bins
       do j=0,n_bins
          sep_sq=j*d_r_sq ! calculate r^2
@@ -40,14 +40,14 @@ module scem_1_potential
       ! rescale force by damping_element to retrieve (what ultimately will be) a velocity
       ! note, for efficiency, this quantity needs to be multiplied by a position vector to yield a true velocity
       ! see scem_2_integration for implementation
-      potential_deriv=potential_deriv/damping_element 
+      potential_deriv=potential_deriv/damping_element
 
       ! deallocate local arrays
       deallocate(pot_deriv_table)
       deallocate(r_sq_table)
 
       ! write useful potential data to file
-      open(unit=31,file='data/system_data/potential_data',status='unknown')
+      open(unit=31,file=output_folder//'/system_data/potential_data',status='unknown')
       write(31,*)'scale factor rho = ',rho
       write(31,*)'potential minimum = ',pot_min
       write(31,*)'epsilon = ',epsilon
@@ -59,7 +59,7 @@ module scem_1_potential
       close(unit=31)
 
       ! write functional form of potential to file
-      open(unit=32,file='data/system_data/potential_function',status='unknown')
+      open(unit=32,file=output_folder//'/system_data/potential_function',status='unknown')
       do j=0,n_bins
          dist=((j+0.0)/n_bins)*r_interaction_max
          pot=pot_min*(exp(2*rho*(1.0-dist**2/r_equil_sq))-2*exp(rho*(1.0-dist**2/r_equil_sq)))

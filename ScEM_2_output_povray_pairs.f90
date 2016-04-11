@@ -18,10 +18,10 @@ module scem_2_output_povray_pairs
 
       !Create filename for povray output file.
       character(len=42)	:: povray_filename
-      write(povray_filename,"(A36,I2.2,A4)") "data/povray_pairs_data/povray_pairs_", n_snapshots, ".pov"
+      write(povray_filename,"(A32,I2.2,A4)") "/povray_pairs_data/povray_pairs_", n_snapshots, ".pov"
 
       !Open file for povray output
-      open(unit=44, file=povray_filename,status='unknown')
+      open(unit=44, file=output_folder//povray_filename,status='unknown')
 
       write(44,*) '#version 3.5;'
       write(44,*) '#include "colors.inc"'

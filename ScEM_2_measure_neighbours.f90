@@ -35,7 +35,7 @@ module scem_2_measure_neighbours
 
 		allocate(neighbours(np,2))
 
-		open(unit=38,file='data/system_data/sorting_data_neighbours.txt', status='unknown')
+		open(unit=38,file=output_folder//'/system_data/sorting_data_neighbours.txt', status='unknown')
 
 		neighbours_counter=0
 		sorting_count=0

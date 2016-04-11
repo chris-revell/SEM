@@ -15,7 +15,7 @@ module scem_2_measure
 
 		integer :: sorting_count
 
-		open(unit=35,file='data/system_data/sorting_data.txt', status='unknown')
+		open(unit=35,file=output_folder//'/system_data/sorting_data.txt', status='unknown')
 
 		sorting_count=0
 

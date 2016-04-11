@@ -15,8 +15,8 @@ module scem_2_output_final
     subroutine scem_output_final
 
       ! write final system data to files
-      open(unit=24,file='data/system_data/elements_final',status='unknown')
-      open(unit=25,file='data/system_data/end_of_run_data',status='unknown')
+      open(unit=24,file=output_folder//'/system_data/elements_final',status='unknown')
+      open(unit=25,file=output_folder//'/system_data/end_of_run_data',status='unknown')
       do i=1,ne
          write(24,'(3f12.6,i4)')elements(i)%position(:),elements(i)%parent
       end do
@@ -33,6 +33,8 @@ module scem_2_output_final
       close(unit=25)
 
       call scem_plotting_commands
+
+      call system('gnuplot -c "'//output_folder//'/system_data/gnuplot_commands_system_plots.gnu"')
 
     end subroutine scem_output_final
 

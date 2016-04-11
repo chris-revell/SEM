@@ -46,7 +46,7 @@ module scem_1_potential_2
       deallocate(r_sq_table)
 
       ! write useful potential data to file
-      open(unit=31,file='data/system_data/potential_data',status='unknown')
+      open(unit=31,file=output_folder//'/system_data/potential_data',status='unknown')
       write(31,*) ""
       write(31,*)'Potential 2 : '
       write(31,*)'maximum range = ',r_interaction_max
@@ -54,7 +54,7 @@ module scem_1_potential_2
       close(unit=31)
 
       ! write functional form of potential to file
-!      open(unit=?,file='data/system_data/potential_function_2',status='unknown')
+!      open(unit=?,file=output_folder//'/system_data/potential_function_2',status='unknown')
 !      do j=0,n_bins
 !         dist=((j+0.0)/n_bins)*r_interaction_max
 !         pot=pot_min*(exp(2*rho*(1.0-dist**2/r_equil_sq))-2*exp(rho*(1.0-dist**2/r_equil_sq)))

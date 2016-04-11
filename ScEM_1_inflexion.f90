@@ -31,7 +31,7 @@ module scem_1_inflexion
       r_inflex=r_equil*sqrt(x/rho) ! inflexion point in unscaled variables
 
       ! write r_inflex to potential data file
-      open(unit=31,file='data/system_data/potential_data',status='old',access='append')
+      open(unit=31,file=output_folder//'/system_data/potential_data',status='old',access='append')
       write(31,*)'inflexion point = ',r_inflex
       close(unit=31)
 

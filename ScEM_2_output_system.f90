@@ -29,23 +29,23 @@ module scem_2_output_system
         write(*,*) real(time),ne,nc,ne_size,nc_size,np,np_size,nx,ny,nz,n_snapshots
 
         !Print the number of cells in each data snapshot (time point) to the file "snapshot_data"
-        open(unit=29,file='data/system_data/snapshot_data.txt', status='unknown')
+        open(unit=29,file=output_folder//'/system_data/snapshot_data.txt', status='unknown')
         write(29,*) nc
 		    call flush(29)
 
         !Print time and cell count to cell_count file to allow cell count to be plotted against time
-        open(unit=37,file='data/system_data/cell_count.txt', status='unknown')
+        open(unit=37,file=output_folder//'/system_data/cell_count.txt', status='unknown')
       	write(37,*) real(time), nc
 
         !Write cell fate data at each snapshot to file
-        open(unit=26,file='data/system_data/cell_fate_data_final', status='unknown')
+        open(unit=26,file=output_folder//'/system_data/cell_fate_data_final', status='unknown')
         do n=1, nc
           write(26,*) cells(n)%fate
         end do
         close(unit=26)
 
 		    !Write cell volume data to file
-        open(unit=27,file='data/system_data/cell_volumes.txt',status='unknown',position="append")
+        open(unit=27,file=output_folder//'/system_data/cell_volumes.txt',status='unknown',position="append")
         write(27,'(F24.12,A)',advance="no") time, "	"
         do n=1, nc-1
           write(27,'(F24.12,A)',advance="no") cells(n)%volume, "	"

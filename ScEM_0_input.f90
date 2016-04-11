@@ -16,13 +16,6 @@ module scem_0_input
   integer :: flag_relist ! flag triggering relist of sector assignments
   real*8  :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
 
-!*******************
-!Necessary now?
-
-!  real*8 :: command_line_argument	!Value given at command line
-!  CHARACTER(len=32) :: arg			!Dummy argument for reading value at command line
-!*******************
-
   ! meaning of parameters given below when assigned values
   real*8, allocatable, dimension(:,:,:,:,:) :: rel_strength		!For interaction of element a in cell A with element b in cell B argument is (type of cell A, type of cell B, type of element a, type of element b)
   integer :: nx,ny,nz
@@ -47,6 +40,9 @@ module scem_0_input
   real*8  :: time,time_out_1,time_max,dt,dt_amp_max,r_s_max !time_out_2,
   real*8  :: trigger_frac
   real*8  :: cortex_constant
+  character(len=8) :: date_of_run   !Date of simulation run
+  character(len=4) :: time_of_run   !Time of simulation run
+  character(len=18):: output_folder !Name of folder created for data output, labelled according to date and time of run.
 
   ! user to assign values to system parameters and constants
 
