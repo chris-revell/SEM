@@ -60,10 +60,10 @@ module volume_conserve_module
 					!If k=1 gives an element that is the same as element i there is no need to test the other two, so we use a GOTO command to quit the loop.
 					do k=1, 3
 						if(cells(c)%triplets(k,j).EQ.i) then
-							!If an element in one of the Delaunay triplets of cell n is the same as the element under
-							!consideration, i, then this triplet will have a non-zero contribution to three
-							!components corresponding to the 3 dimensions of element i in the derivative of the volume function
-							!because moving element i in any one of its 3 dimensions will change the value of the volume fragment
+							!If element cells(c)%triplets(k,j) is element i then element i is part of this triangle
+	            !and so this triplet will have a non-zero contribution to three
+							!components in the derivative of the volume function corresponding to the 3 dimensions of element i.
+							!This is because moving element i in any one of its 3 dimensions will change the value of the volume fragment
 							!corresponding to this triplet.
 							!Calculate vector positions of 3 triplet elements relative to the centre of the cell. One of these will be element i but it doesn't matter to us which.
 
@@ -75,16 +75,14 @@ module volume_conserve_module
 								Q(:)		= xe_prev(label_q,:)-cells(c)%position(:)
 								label_r = cells(c)%cortex_elements(cells(c)%triplets(3,j))
 								R(:)		= xe_prev(label_r,:)-cells(c)%position(:)
-							endif
-							if (k.EQ.2) then
+							elseif(k.EQ.2) then
 								label_p = cells(c)%cortex_elements(cells(c)%triplets(2,j))
 								P(:)		= xe_prev(label_p,:)-cells(c)%position(:)
 								label_q = cells(c)%cortex_elements(cells(c)%triplets(1,j))
 								Q(:)		= xe_prev(label_q,:)-cells(c)%position(:)
 								label_r	= cells(c)%cortex_elements(cells(c)%triplets(3,j))
 								R(:)		= xe_prev(label_r,:)-cells(c)%position(:)
-							endif
-							if (k.EQ.3) then
+							else !k.EQ.3
 								label_p	= cells(c)%cortex_elements(cells(c)%triplets(3,j))
 								P(:)		= xe_prev(label_p,:)-cells(c)%position(:)
 								label_q	= cells(c)%cortex_elements(cells(c)%triplets(1,j))
@@ -112,10 +110,11 @@ module volume_conserve_module
 								D(3*i)	=D(3*i)	 +(Q(1)*R(2)-Q(2)*R(1))
 							end if
 
-							GOTO 10
+							EXIT
+						else
+							CYCLE
 						endif
 					end do
-					10 		CONTINUE
 				end do
 			enddo
 

@@ -65,6 +65,7 @@ module scem_5_initialize
       allocate(head(nx,ny,nz))
       allocate(list(ne_size))
       allocate(pairs(np_size,2))
+      allocate(pairs_cortex(np_size,2))
 
       ! open data file for element positions
       open(unit=21,file=output_folder//'/system_data/elements',status='unknown')

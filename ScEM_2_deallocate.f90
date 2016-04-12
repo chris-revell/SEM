@@ -20,6 +20,7 @@ module scem_2_deallocate
       deallocate(head)
       deallocate(list)
       deallocate(pairs)
+      deallocate(pairs_cortex)
       deallocate(rel_strength)
 
     end subroutine scem_deallocate

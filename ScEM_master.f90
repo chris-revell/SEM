@@ -8,7 +8,6 @@ program scem_master
   use scem_0_input
   use scem_1_inflexion
   use scem_1_potential
-  use scem_1_potential_2
   use scem_2_deallocate
   use scem_2_output_final
   use scem_5_initialize
@@ -31,7 +30,6 @@ program scem_master
 
   ! Construct interaction potential tables and locate inflexion point(s). scem_potential and scem_inflexion are subroutines contained within ScEM_1_potential.f90 and ScEM_1_inflexion.f90.
   call scem_potential
-  call scem_potential_2
   call scem_inflexion
 
   ! initialize system and create/input first cell
