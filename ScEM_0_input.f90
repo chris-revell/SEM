@@ -56,6 +56,16 @@ module scem_0_input
       !Take time when run is initiated
       call SYSTEM_CLOCK(start_time)
 
+      !Create labelled file for data output
+      !Catch date and time, create folder to store data in
+      call date_and_time(DATE=date_of_run,TIME=time_of_run)
+      output_folder = "data/"//date_of_run//"_"//time_of_run
+      call system("mkdir "//output_folder)
+      call system("mkdir "//output_folder//"/system_data")
+      call system("mkdir "//output_folder//"/povray_pairs_data")
+      call system("mkdir "//output_folder//"/povray_elements_data")
+      call system("mkdir "//output_folder//"/povray_cells_data")
+
 	    n_snapshots = 0
 
 !   Below used when cortical tension was specified at the command line.
