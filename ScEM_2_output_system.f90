@@ -25,8 +25,12 @@ module scem_2_output_system
 !        write(21,*)
 !**********************
 
+        !Calculate time expired so far
+        call SYSTEM_CLOCK(current_time)
+        total_system_time = (end_time-start_time)/count_rate
+
         !Write system progress update to the command line.
-        write(*,*) real(time),ne,nc,ne_size,nc_size,np,np_size,nx,ny,nz,n_snapshots
+        write(*,*) real(time),total_system_time,ne,nc,np,n_snapshots !Old version: real(time),ne,nc,ne_size,nc_size,np,np_size,nx,ny,nz,n_snapshots
 
         !Print the number of cells in each data snapshot (time point) to the file "snapshot_data"
         open(unit=29,file=output_folder//'/system_data/snapshot_data.txt', status='unknown')

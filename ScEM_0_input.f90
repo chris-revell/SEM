@@ -43,14 +43,20 @@ module scem_0_input
   character(len=8) :: date_of_run   !Date of simulation run
   character(len=4) :: time_of_run   !Time of simulation run
   character(len=18):: output_folder !Name of folder created for data output, labelled according to date and time of run.
-
+  integer :: start_time             !Variables for measuring time expired during simulation run
+  integer :: current_time           !^
+  integer :: total_system_time      !^
+  real    :: count_rate             !^
   ! user to assign values to system parameters and constants
 
   contains
 
     subroutine scem_input
 
-	     n_snapshots = 0
+      !Take time when run is initiated
+      call SYSTEM_CLOCK(start_time)
+
+	    n_snapshots = 0
 
 !   Below used when cortical tension was specified at the command line.
 !      CALL get_command_argument(1, arg)

@@ -15,14 +15,6 @@ program scem_master
 
   implicit none
 
-  integer :: start_time
-  integer :: end_time
-  integer :: total_system_time
-  real    :: count_rate
-
-  !Take time when run is initiated
-  call SYSTEM_CLOCK(start_time)
-
   ! Retrieve system parameters and constants. scem_input is a subroutine in ScEM_0_input.f90 that initialises a large number of system parameters that have already been defined but not evaluated. To vary the system parameters simply change the numbers in this subroutine.
   call scem_input
 
@@ -51,11 +43,5 @@ program scem_master
 
   ! deallocate arrays
   call scem_deallocate
-
-  !Take time when run finishes
-  call SYSTEM_CLOCK(end_time,count_rate)
-  !Calculate total time of run and print to command line.
-  total_system_time = (end_time-start_time)/count_rate
-  write(*,*) "Time taken for run (seconds):", total_system_time
 
 end program scem_master
