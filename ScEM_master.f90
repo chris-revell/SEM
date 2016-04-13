@@ -27,16 +27,6 @@ program scem_master
   ! Retrieve system parameters and constants. scem_input is a subroutine in ScEM_0_input.f90 that initialises a large number of system parameters that have already been defined but not evaluated. To vary the system parameters simply change the numbers in this subroutine.
   call scem_input
 
-  !Create labelled file for data output
-  !Catch date and time, create folder to store data in
-  call date_and_time(DATE=date_of_run,TIME=time_of_run)
-  output_folder = "data/"//date_of_run//"_"//time_of_run
-  call system("mkdir "//output_folder)
-  call system("mkdir "//output_folder//"/system_data")
-  call system("mkdir "//output_folder//"/povray_pairs_data")
-  call system("mkdir "//output_folder//"/povray_elements_data")
-  call system("mkdir "//output_folder//"/povray_cells_data")
-
   ! Construct interaction potential tables and locate inflexion point(s). scem_potential and scem_inflexion are subroutines contained within ScEM_1_potential.f90 and ScEM_1_inflexion.f90.
   call scem_potential
   call scem_potential_2
