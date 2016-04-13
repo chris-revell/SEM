@@ -16,7 +16,7 @@ module scem_2_output_final
 
       !Calculate total time of run. Print to command line and end_of_run_data
       call SYSTEM_CLOCK(current_time)
-      total_system_time = (end_time-start_time)/count_rate
+      total_system_time = (current_time-start_time)/count_rate
       write(*,*) "Time taken for run (seconds):", total_system_time
 
       ! write final system data to files

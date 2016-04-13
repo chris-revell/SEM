@@ -27,7 +27,7 @@ module scem_2_output_system
 
         !Calculate time expired so far
         call SYSTEM_CLOCK(current_time)
-        total_system_time = (end_time-start_time)/count_rate
+        total_system_time = (current_time-start_time)/count_rate
 
         !Write system progress update to the command line.
         write(*,*) real(time),total_system_time,ne,nc,np,n_snapshots !Old version: real(time),ne,nc,ne_size,nc_size,np,np_size,nx,ny,nz,n_snapshots

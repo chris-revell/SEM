@@ -54,36 +54,41 @@ contains
               CYCLE !Still need to check remaining k values
             endif
           enddo
+
+          pair_counter = pair_counter + 1
+          pairs_cortex(pair_counter,1) = other_element_in_pair1
+          pairs_cortex(pair_counter,2) = other_element_in_pair2
+
           !Now have 2 elements that are in cortex pairs with element i
           !Remove redundancy by checking for pre-existing pairs in array before adding
           !First require a condition for when there are no pairs in the array yet.
-          if (pair_counter.EQ.0) then
-            pairs_cortex(1,1) = other_element_in_pair1
-            pairs_cortex(1,2) = other_element_in_pair2
-            pair_counter = pair_counter + 1
-          else
-            is_in_flag = 0 !Initiate is_in_flag=0. Set =1 if the newly found pair is seen to exist in pairs_cortex already
-            do l=1, pair_counter
-              if ((pairs_cortex(l,1).EQ.other_element_in_pair1).AND.(pairs_cortex(l,2).EQ.other_element_in_pair2)) then
+!          if (pair_counter.EQ.0) then
+!            pairs_cortex(1,1) = other_element_in_pair1
+!            pairs_cortex(1,2) = other_element_in_pair2
+!            pair_counter = pair_counter + 1
+!          else
+!            is_in_flag = 0 !Initiate is_in_flag=0. Set =1 if the newly found pair is seen to exist in pairs_cortex already
+!            do l=1, pair_counter
+!              if ((pairs_cortex(l,1).EQ.other_element_in_pair1).AND.(pairs_cortex(l,2).EQ.other_element_in_pair2)) then
                 !In this case, the newly found pair already exists in pairs_cortex, so we set is_in_flag = 1
-                is_in_flag = 1
-                EXIT
-              else
-                CYCLE
-              endif
-            enddo
-            if (is_in_flag.EQ.1) then !pair is already in pairs_cortex, so do nothing and cycle to next triangle
-              CYCLE
-            else !Pair is not already in pairs_cortex, so we can add it
-              pairs_cortex(pair_counter,1) = other_element_in_pair1
-              pairs_cortex(pair_counter,2) = other_element_in_pair2
-              pair_counter = pair_counter + 1
-            endif
-          endif
+!                is_in_flag = 1
+!                EXIT
+!              else
+!                CYCLE
+!              endif
+!            enddo
+!            if (is_in_flag.EQ.1) then !pair is already in pairs_cortex, so do nothing and cycle to next triangle
+!              CYCLE
+!            else !Pair is not already in pairs_cortex, so we can add it
+!              pairs_cortex(pair_counter,1) = other_element_in_pair1
+!              pairs_cortex(pair_counter,2) = other_element_in_pair2
+!              pair_counter = pair_counter + 1
+!            endif
+!          endif
         enddo !End loop over triangles from Delaunay triangulation
       enddo !End loop over cortex elements in cell
     enddo !End loop over cells
-    pair_counter=pair_counter-1 !Pair counter will always count 1 past the actual number of pairs, so for later use we subtract that 1 after the routine above
+!    pair_counter=pair_counter-1 !Pair counter will always count 1 past the actual number of pairs, so for later use we subtract that 1 after the routine above
     !At this point we have evaluated the pairs_cortex(:,:) array to define the cortical network.
 
     !Now update velocities for all pairs in this network.

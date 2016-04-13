@@ -54,7 +54,7 @@ module scem_0_input
     subroutine scem_input
 
       !Take time when run is initiated
-      call SYSTEM_CLOCK(start_time)
+      call SYSTEM_CLOCK(start_time, count_rate)
 
       !Create labelled file for data output
       !Catch date and time, create folder to store data in
@@ -184,7 +184,7 @@ module scem_0_input
       !		  rel_strength(1,1,2,2,1)	= command_line_argument	!Used in old version
 
       !Variable for inter-cortex potential
-      cortex_constant = 0.5
+      cortex_constant = 0.01
 
 		  ! fill in transposed values of symmetric matrix (i.e. (i,j,k,l)=(j,i,l,k) )
       r_s_max=0.0 ! calculate maximum matrix entry to rescale dt_amp_max
