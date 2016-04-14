@@ -1,7 +1,7 @@
 module jrand_module
 
 	contains
-	
+
 		integer function jrand ( n, ix, iy, iz )
 
 				!*****************************************************************************80
@@ -10,7 +10,7 @@ module jrand_module
 				!
 				!  Discussion:
 				!
-				!   This function returns a uniformly distributed pseudorandom integer 
+				!   This function returns a uniformly distributed pseudorandom integer
 				!   in the range 1 to N.
 				!
 				!  Modified:
@@ -21,20 +21,20 @@ module jrand_module
 				!
 				!    Robert Renka
 				!
-				!  Reference:  
+				!  Reference:
 				!
-				!    Brian Wichmann, David Hill, 
+				!    Brian Wichmann, David Hill,
 				!    An Efficient and Portable Pseudo-random Number Generator,
-				!    Applied Statistics, 
+				!    Applied Statistics,
 				!    Volume 31, Number 2, 1982, pages 188-190.
 				!
 				!  Parameters:
 				!
 				!    Input, integer ( kind = 4 ) N, the maximum value to be returned.
 				!
-				!    Input/output, integer ( kind = 4 ) IX, IY, IZ = seeds initialized to 
-				!    values in the range 1 to 30,000 before the first call to JRAND, and 
-				!    not altered between subsequent calls (unless a sequence of random 
+				!    Input/output, integer ( kind = 4 ) IX, IY, IZ = seeds initialized to
+				!    values in the range 1 to 30,000 before the first call to JRAND, and
+				!    not altered between subsequent calls (unless a sequence of random
 				!    numbers is to be repeated by reinitializing the seeds).
 				!
 				!    Output, integer ( kind = 4 ) JRAND, a random integer in the range 1 to N.
@@ -57,13 +57,11 @@ module jrand_module
 				  iy = mod ( 172 * iy, 30307 )
 				  iz = mod ( 170 * iz, 30323 )
 
-				  x = ( real ( ix, kind = 8 ) / 30269.0D+00 ) &
-					+ ( real ( iy, kind = 8 ) / 30307.0D+00 ) &
-					+ ( real ( iz, kind = 8 ) / 30323.0D+00 )
+				  x = ( real ( ix, kind = 8 ) / 30269.0D+00 ) + ( real ( iy, kind = 8 ) / 30307.0D+00 ) + ( real ( iz, kind = 8 ) / 30323.0D+00 )
 
 				  u = x - int ( x )
 				  jrand = real ( n, kind = 8 ) * u + 1.0D+00
-				  
+
 				  return
 			end function jrand
 end module jrand_module

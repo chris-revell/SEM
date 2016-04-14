@@ -1,5 +1,5 @@
 module addnod_module
-	
+
 	use trfind_module
 	use intadd_module
 	use bdyadd_module
@@ -7,11 +7,11 @@ module addnod_module
 	use swap_module
 	use lstptr_module
 	use swptst_module
-	
-	implicit none	
-	
+
+	implicit none
+
 	contains
-	
+
 		subroutine addnod ( nst, k, x, y, z, list, lptr, lend, lnew, ier )
 
 			!*****************************************************************************80
@@ -29,9 +29,9 @@ module addnod_module
 			!    index is added to the data structure (INTADD or BDYADD),
 			!    and a sequence of swaps (SWPTST and SWAP) are applied to
 			!    the arcs opposite K so that all arcs incident on node K
-			!    and opposite node K are locally optimal (satisfy the circumcircle test).  
+			!    and opposite node K are locally optimal (satisfy the circumcircle test).
 			!
-			!    Thus, if a Delaunay triangulation of nodes 1 through K-1 is input, 
+			!    Thus, if a Delaunay triangulation of nodes 1 through K-1 is input,
 			!    a Delaunay triangulation of nodes 1 through K will be output.
 			!
 			!  Modified:
@@ -52,19 +52,19 @@ module addnod_module
 			!
 			!  Parameters:
 			!
-			!    Input, integer ( kind = 4 ) NST, the index of a node at which TRFIND 
-			!    begins its search.  Search time depends on the proximity of this node to 
+			!    Input, integer ( kind = 4 ) NST, the index of a node at which TRFIND
+			!    begins its search.  Search time depends on the proximity of this node to
 			!    K.  If NST < 1, the search is begun at node K-1.
 			!
-			!    Input, integer ( kind = 4 ) K, the nodal index (index for X, Y, Z, and 
+			!    Input, integer ( kind = 4 ) K, the nodal index (index for X, Y, Z, and
 			!    LEND) of the new node to be added.  4 <= K.
 			!
 			!    Input, real ( kind = 8 ) X(K), Y(K), Z(K), the coordinates of the nodes.
 			!
-			!    Input/output, integer ( kind = 4 ) LIST(6*(N-2)), LPTR(6*(N-2)), LEND(K), 
-			!    LNEW.  On input, the data structure associated with the triangulation of 
-			!    nodes 1 to K-1.  On output, the data has been updated to include node 
-			!    K.  The array lengths are assumed to be large enough to add node K. 
+			!    Input/output, integer ( kind = 4 ) LIST(6*(N-2)), LPTR(6*(N-2)), LEND(K),
+			!    LNEW.  On input, the data structure associated with the triangulation of
+			!    nodes 1 to K-1.  On output, the data has been updated to include node
+			!    K.  The array lengths are assumed to be large enough to add node K.
 			!    Refer to TRMESH.
 			!
 			!    Output, integer ( kind = 4 ) IER, error indicator:
@@ -152,8 +152,7 @@ module addnod_module
 			!  (I1) and leftmost (I2) visible boundary nodes as viewed
 			!  from node K.
 			!
-			  call trfind ( ist, p, km1, x, y, z, list, lptr, lend, b1, b2, b3, &
-				i1, i2, i3 )
+			  call trfind ( ist, p, km1, x, y, z, list, lptr, lend, b1, b2, b3, i1, i2, i3 )
 			!
 			!  Test for collinear or duplicate nodes.
 			!
@@ -277,4 +276,3 @@ module addnod_module
 			  return
 		end subroutine addnod
 end module addnod_module
-	
