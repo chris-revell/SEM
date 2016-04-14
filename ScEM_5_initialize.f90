@@ -13,7 +13,6 @@ module scem_5_initialize
   use scem_2_initial_exist
   use scem_2_output_system
   use scem_2_output_povray
-  use scem_2_output_povray_cell_positions
   use scem_2_pairs
   use scem_2_relist
   use scem_4_cortex
@@ -153,11 +152,6 @@ module scem_5_initialize
       ! Write element data to files in povray format
       if (flag_povray.EQ.1) then
         call scem_output_povray
-      endif
-
-      !Write cell position data to file in povray format
-      if (flag_povray_cells.EQ.1) then
-        call scem_output_povray_cell_positions
       endif
 
     end subroutine scem_initialize

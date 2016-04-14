@@ -41,6 +41,8 @@ module scem_2_output_final
 
       call system('gnuplot -c "'//output_folder//'/system_data/gnuplot_commands_system_plots.gnu"')
 
+      write(*,*) "Output folder is:", output_folder
+
     end subroutine scem_output_final
 
 end module scem_2_output_final
