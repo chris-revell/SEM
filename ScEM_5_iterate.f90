@@ -15,7 +15,6 @@ module scem_5_iterate
   use scem_2_integrate
   use scem_2_output_system
   use scem_2_output_povray
-  use scem_2_output_povray_cell_positions
   use scem_2_pairs
   use scem_2_relist
   use scem_2_resize
