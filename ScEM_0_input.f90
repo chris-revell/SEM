@@ -64,7 +64,6 @@ module scem_0_input
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/povray_data")
-      call system("mkdir "//output_folder//"/povray_cells_data")
 
 	    n_snapshots = 0
 
