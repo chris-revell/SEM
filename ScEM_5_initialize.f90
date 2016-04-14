@@ -153,10 +153,7 @@ module scem_5_initialize
       if (flag_povray.EQ.1) then
         call scem_output_povray
       endif
-      ! Write pair data to files in povray format
-      if (flag_povray_pairs.EQ.1) then
-        call scem_output_povray_pairs
-      endif
+
       !Write cell position data to file in povray format
       if (flag_povray_cells.EQ.1) then
         call scem_output_povray_cell_positions
