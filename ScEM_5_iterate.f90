@@ -113,11 +113,6 @@ module scem_5_iterate
              call scem_output_povray
            endif
 
-           !Write cell position data to file in povray format
-           if (flag_povray_cells.EQ.1) then
-             call scem_output_povray_cell_positions
-           endif
-
            call scem_measure																!Measure numerical sorting value of system
            call scem_measure_radius
            call scem_measure_neighbours

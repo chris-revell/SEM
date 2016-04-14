@@ -13,8 +13,10 @@ module scem_2_output_povray
 
     subroutine scem_output_povray
 
-      !Create filename for povray output file.
       character(len=48)	:: povray_filename
+      real*8  :: sphere_radius  !Radius of sphere used to represent cell volume in povray visualiation. Calculated from cell volume.
+
+      !Create filename for povray output file.
       write(povray_filename,"(A20,I2.2,A4)") "/povray_data/povray_", n_snapshots, ".pov"
 
       !Open file for povray output
@@ -98,6 +100,27 @@ module scem_2_output_povray
                             elements(pairs(j,1))%parent, ' , cell ',&
                             elements(pairs(j,2))%parent
           endif
+        enddo
+      endif
+      write(42,*)
+
+      !Write cell position data to file in povray format
+      if (flag_povray_cells.EQ.1) then
+        !Draw spheres for all cells in the system, coloured according to cell type, with transparency set to 0.66 and phong set to 0.8
+        do i=1, nc
+          sphere_radius = (3.0*cells(i)%volume/(pi*4.0))**(1.0/3.0)     !Radius is cube root of (3*volume/4pi)
+          if ((cells(i)%fate).EQ.1) then
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A75,I2.2)') &
+                  ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
+                  ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment &
+                  { color Green transmit .66}finish{phong .8} } } // cell ', cells(i)%label
+          else
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A73,I2.2)') &
+                  ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
+                  ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment &
+                  { color Red transmit .66}finish{phong .8} } } // cell ', cells(i)%label
+          endif
+          write(42,*)
         enddo
       endif
 
