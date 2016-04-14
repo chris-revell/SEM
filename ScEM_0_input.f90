@@ -43,14 +43,30 @@ module scem_0_input
   character(len=8) :: date_of_run   !Date of simulation run
   character(len=4) :: time_of_run   !Time of simulation run
   character(len=18):: output_folder !Name of folder created for data output, labelled according to date and time of run.
-
+  integer :: start_time             !Variables for measuring time expired during simulation run
+  integer :: current_time           !^
+  integer :: total_system_time      !^
+  real    :: count_rate             !^
   ! user to assign values to system parameters and constants
 
   contains
 
     subroutine scem_input
 
-	     n_snapshots = 0
+      !Take time when run is initiated
+      call SYSTEM_CLOCK(start_time, count_rate)
+
+      !Create labelled file for data output
+      !Catch date and time, create folder to store data in
+      call date_and_time(DATE=date_of_run,TIME=time_of_run)
+      output_folder = "data/"//date_of_run//"_"//time_of_run
+      call system("mkdir "//output_folder)
+      call system("mkdir "//output_folder//"/system_data")
+      call system("mkdir "//output_folder//"/povray_pairs_data")
+      call system("mkdir "//output_folder//"/povray_elements_data")
+      call system("mkdir "//output_folder//"/povray_cells_data")
+
+	    n_snapshots = 0
 
 !   Below used when cortical tension was specified at the command line.
 !      CALL get_command_argument(1, arg)
@@ -168,7 +184,7 @@ module scem_0_input
       !		  rel_strength(1,1,2,2,1)	= command_line_argument	!Used in old version
 
       !Variable for inter-cortex potential
-      cortex_constant = 0.5
+      cortex_constant = 0.01
 
 		  ! fill in transposed values of symmetric matrix (i.e. (i,j,k,l)=(j,i,l,k) )
       r_s_max=0.0 ! calculate maximum matrix entry to rescale dt_amp_max
