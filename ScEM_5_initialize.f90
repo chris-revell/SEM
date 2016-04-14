@@ -12,8 +12,7 @@ module scem_5_initialize
   use scem_2_initial_create
   use scem_2_initial_exist
   use scem_2_output_system
-  use scem_2_output_povray_elements
-  use scem_2_output_povray_pairs
+  use scem_2_output_povray
   use scem_2_output_povray_cell_positions
   use scem_2_pairs
   use scem_2_relist
@@ -152,13 +151,10 @@ module scem_5_initialize
       call scem_output_system
 
       ! Write element data to files in povray format
-      if (flag_povray_elements.EQ.1) then
-        call scem_output_povray_elements
+      if (flag_povray.EQ.1) then
+        call scem_output_povray
       endif
-      ! Write pair data to files in povray format
-      if (flag_povray_pairs.EQ.1) then
-        call scem_output_povray_pairs
-      endif
+
       !Write cell position data to file in povray format
       if (flag_povray_cells.EQ.1) then
         call scem_output_povray_cell_positions

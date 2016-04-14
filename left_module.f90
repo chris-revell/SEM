@@ -58,9 +58,7 @@ module left_module
 			!
 			!  LEFT = TRUE iff <N0,N1 X N2> = det(N0,N1,N2) >= 0.
 			!
-			  left = x0 * ( y1 * z2 - y2 * z1 ) &
-				   - y0 * ( x1 * z2 - x2 * z1 ) &
-				   + z0 * ( x1 * y2 - x2 * y1 ) >= 0.0D+00
+			  left = x0 * ( y1 * z2 - y2 * z1 ) - y0 * ( x1 * z2 - x2 * z1 ) + z0 * ( x1 * y2 - x2 * y1 ) >= 0.0D+00
 
 			  return
 		end function left
