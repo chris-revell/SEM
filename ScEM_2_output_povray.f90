@@ -44,7 +44,7 @@ module scem_2_output_povray
           if ((elements(i)%type).EQ.1) then
             write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A61,I2.2)') ' sphere {  < ',elements(i)%position(1), ',', elements(i)%position(2),',', elements(i)%position(3),'> 1.5 texture { pigment { color Green } } } // element, cell ',elements(i)%parent
           else
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A58,I2.2)') ' sphere {  < ',elements(i)%position(1), ',', elements(i)%position(2),',', elements(i)%position(3),'> 1.5 texture { pigment { color Red } } } // element, cell ',elements(i)%parent
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A59,I2.2)') ' sphere {  < ',elements(i)%position(1), ',', elements(i)%position(2),',', elements(i)%position(3),'> 1.5 texture { pigment { color Red } } } // element, cell ',elements(i)%parent
           endif
         enddo
       endif
