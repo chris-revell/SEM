@@ -17,7 +17,7 @@ module scem_2_output_povray
       real*8  :: sphere_radius  !Radius of sphere used to represent cell volume in povray visualiation. Calculated from cell volume.
 
       !Create filename for povray output file.
-      write(povray_filename,"(A18,I2.2,A4)") "/povray_data/snap_", n_snapshots, ".pov"
+      write(povray_filename,"(A20,I2.2,A4)") "/povray_data/povray_", n_snapshots, ".pov"
 
       !Open file for povray output
       open(unit=42, file=output_folder//povray_filename,status='unknown')
@@ -121,9 +121,9 @@ module scem_2_output_povray
                   ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
                   ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment { color Red transmit .66}finish{phong .8} } } // volume cell', cells(i)%label
           endif
+          write(42,*)
         enddo
       endif
-      write(42,*)
 
       close(unit=42)
 
