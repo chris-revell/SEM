@@ -113,13 +113,13 @@ module scem_2_output_povray
         do i=1, nc
           sphere_radius = (3.0*cells(i)%volume/(pi*4.0))**(1.0/3.0)     !Radius is cube root of (3*volume/4pi)
           if ((cells(i)%fate).EQ.1) then
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A75,I2.2)') &
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A82,I2.2)') &
                   ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
-                  ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment { color Green transmit .66}finish{phong .8} } } // cell ', cells(i)%label
+                  ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment { color Green transmit .66}finish{phong .8} } } // volume cell ', cells(i)%label
           else
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A73,I2.2)') &
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A80,I2.2)') &
                   ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
-                  ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment { color Red transmit .66}finish{phong .8} } } // cell ', cells(i)%label
+                  ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment { color Red transmit .66}finish{phong .8} } } // volume cell ', cells(i)%label
           endif
           write(42,*)
         enddo
