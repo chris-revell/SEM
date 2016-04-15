@@ -71,7 +71,7 @@ module scem_0_input
 !      CALL get_command_argument(1, arg)
 !      read (arg,*) command_line_argument
 
-      flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
+      flag_create     = 1 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background = 0 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
