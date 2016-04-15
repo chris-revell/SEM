@@ -42,9 +42,9 @@ module scem_2_output_povray
         !Draw spheres for all elements of all cells in the system, coloured according to element type
         do i=1, ne
           if ((elements(i)%type).EQ.1) then
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A61,I2.2)') ' sphere {  < ',elements(i)%position(1), ',', elements(i)%position(2),',', elements(i)%position(3),'> 1.5 texture { pigment { color Green } } } // element, cell ',elements(i)%parent
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A60,I2.2)') ' sphere {  < ',elements(i)%position(1), ',', elements(i)%position(2),',', elements(i)%position(3),'> 1.5 texture { pigment { color Green } } } // element, cell',elements(i)%parent
           else
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A59,I2.2)') ' sphere {  < ',elements(i)%position(1), ',', elements(i)%position(2),',', elements(i)%position(3),'> 1.5 texture { pigment { color Red } } } // element, cell ',elements(i)%parent
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A58,I2.2)') ' sphere {  < ',elements(i)%position(1), ',', elements(i)%position(2),',', elements(i)%position(3),'> 1.5 texture { pigment { color Red } } } // element, cell',elements(i)%parent
           endif
         enddo
       endif
@@ -61,7 +61,7 @@ module scem_2_output_povray
           if (k.NE.l) then !Elements are not in the same cell
             !Inter-cell interactions in black
             write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                          F18.14,A63,I2.2,A8,I2.2)') &
+                          F18.14,A62,I2.2,A7,I2.2)') &
                           ' cylinder {  < ', &
                           elements(m)%position(1), ',', &
                           elements(m)%position(2), ',', &
@@ -69,8 +69,8 @@ module scem_2_output_povray
                           elements(n)%position(1), ',', &
                           elements(n)%position(2), ',', &
                           elements(n)%position(3), &
-                          '> 0.5 texture { pigment { color Black } } } // pair inter cell ',&
-                          elements(m)%parent, ' , cell ',&
+                          '> 0.5 texture { pigment { color Black } } } // pair inter cell',&
+                          elements(m)%parent, ' , cell',&
                           elements(n)%parent
 
 
@@ -91,7 +91,7 @@ module scem_2_output_povray
           else !Elements are in the same cell
             !All intra-cell interactions in blue
             write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                            F18.14,A62,I2.2,A8,I2.2)') &
+                            F18.14,A61,I2.2,A7,I2.2)') &
                             ' cylinder {  < ', &
                             elements(pairs(j,1))%position(1), ',', &
                             elements(pairs(j,1))%position(2), ',', &
@@ -99,8 +99,8 @@ module scem_2_output_povray
                             elements(pairs(j,2))%position(1), ',', &
                             elements(pairs(j,2))%position(2), ',', &
                             elements(pairs(j,2))%position(3), &
-                            '> 0.5 texture { pigment { color Blue } } } // pair intra cell ',&
-                            elements(pairs(j,1))%parent, ' , cell ',&
+                            '> 0.5 texture { pigment { color Blue } } } // pair intra cell',&
+                            elements(pairs(j,1))%parent, ' , cell',&
                             elements(pairs(j,2))%parent
           endif
         enddo
@@ -113,13 +113,13 @@ module scem_2_output_povray
         do i=1, nc
           sphere_radius = (3.0*cells(i)%volume/(pi*4.0))**(1.0/3.0)     !Radius is cube root of (3*volume/4pi)
           if ((cells(i)%fate).EQ.1) then
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A82,I2.2)') &
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A81,I2.2)') &
                   ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
-                  ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment { color Green transmit .66}finish{phong .8} } } // volume cell ', cells(i)%label
+                  ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment { color Green transmit .66}finish{phong .8} } } // volume cell', cells(i)%label
           else
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A80,I2.2)') &
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A79,I2.2)') &
                   ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
-                  ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment { color Red transmit .66}finish{phong .8} } } // volume cell ', cells(i)%label
+                  ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment { color Red transmit .66}finish{phong .8} } } // volume cell', cells(i)%label
           endif
           write(42,*)
         enddo
