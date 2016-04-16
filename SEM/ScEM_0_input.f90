@@ -43,7 +43,7 @@ module scem_0_input
   real*8  :: cortex_constant
   character(len=8) :: date_of_run   !Date of simulation run
   character(len=4) :: time_of_run   !Time of simulation run
-  character(len=18):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+  character(len=21):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   integer :: start_time             !Variables for measuring time expired during simulation run
   integer :: current_time           !^
   integer :: total_system_time      !^
@@ -60,7 +60,7 @@ module scem_0_input
       !Create labelled file for data output
       !Catch date and time, create folder to store data in
       call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "data/"//date_of_run//"_"//time_of_run
+      output_folder = "../data/"//date_of_run//"_"//time_of_run
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/povray_data")

@@ -59,12 +59,12 @@ contains
   write(45,*) 'set xlabel "Time /s"'
   write(45,*) 'set ylabel "Volume /?"'
   write(45,*) 'set output "'//output_folder//'/system_data/cell_volumes.png"'
-  write(45,'(A66)',advance="no") ' plot "'//output_folder//'/system_data/cell_volumes.txt" using 1:2 '
+  write(45,'(A69)',advance="no") ' plot "'//output_folder//'/system_data/cell_volumes.txt" using 1:2 '
   write(45,'(A26)',advance="no") 'title "cell  1" with lines'
   if (nc.GT.1) then
     do n=2, nc
       if (n.LT.9) then
-        write(45,'(A60)',advance="no") ', "'//output_folder//'/system_data/cell_volumes.txt" using 1:'
+        write(45,'(A63)',advance="no") ', "'//output_folder//'/system_data/cell_volumes.txt" using 1:'
         write(45,'(I1,A13)',advance="no") n+1, ' title "cell '
         if (n.LT.nc) then
           write(45,'(I1,A13)') n, '" with lines\'
@@ -72,7 +72,7 @@ contains
           write(45,'(I1,A12)') n, '" with lines'
         endif
       else
-        write(45,'(A60)',advance="no") ', "'//output_folder//'/system_data/cell_volumes.txt" using 1:'                             
+        write(45,'(A63)',advance="no") ', "'//output_folder//'/system_data/cell_volumes.txt" using 1:'
         write(45,'(I2,A13)',advance="no") n+1, ' title "cell '
         if (n.LT.nc) then
           write(45,'(I2,A13)') n, '" with lines\'
