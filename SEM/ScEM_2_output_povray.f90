@@ -13,8 +13,11 @@ module scem_2_output_povray
 
     subroutine scem_output_povray
 
-      character(len=46)	:: povray_filename
-      real*8  :: sphere_radius  !Radius of sphere used to represent cell volume in povray visualiation. Calculated from cell volume.
+      character(len=46)	    :: povray_filename  !Filename for data output
+      real*8                :: sphere_radius    !Radius of sphere used to represent cell volume in povray visualiation. Calculated from cell volume.
+      integer               :: corner_element   !Label of element forming corner of smoothed_triangle
+      real*8, dimension(3)  :: corner           !Array to store corner vector used in smoothed_triangle data output
+      real*8, dimension(3)  :: normal           !Array to store normal vector used in smoothed_triangle data output
 
       !Create filename for povray output file.
       write(povray_filename,"(A18,I2.2,A4)") "/povray_data/snap_", n_snapshots, ".pov"
@@ -121,9 +124,44 @@ module scem_2_output_povray
                   ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
                   ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment { color Red transmit .66}finish{phong .8} } } // volume cell', cells(i)%label
           endif
-          write(42,*)
+        enddo
+        write(42,*)
+      endif
+
+      !Write cell surface triangles to file in povray smoothed_triangle format
+      if (flag_povray_triangles.EQ.1) then
+        do i=1, nc                                                !Loop over all cells
+          do j=1, cells(i)%triplet_count                          !Loop over all delaunay triangles within the cell
+            write(42,'(A17)',advance='no') "smooth_triangle {"    !Begin writing data structure for smoothed triangle for each delaunay triangle
+            do k=1, 3                                             !Loop over all element in Delaunay triangle
+              corner_element = cells(i)%cortex_elements(cells(i)%triplets(k,j))
+              corner(:) = elements(corner_element)%position(:)    !Calculate corner and normal for the element
+              normal(:) = corner(:)-cells(i)%position(:)
+              write(42,'(A1,F18.14,A1,F18.14,A1,F18.14,A2)',advance='no') "<", corner(1), ',', corner(2), ',', corner(3), '>,'  !Write corner and normal to file
+              write(42,'(A1,F18.14,A1,F18.14,A1,F18.14,A1)',advance='no') "<", normal(1), ',', normal(2), ',', normal(3), '>'
+              if (k.LT.3) then
+                write(42,'(A1)',advance='no') ","
+              else
+                EXIT
+              endif
+            enddo
+            write(42,"(A23)",advance='no') " texture{pigment{color "
+            if (cells(i)%fate.EQ.1) then
+              write(42,'(A8)') "Green}}}"
+            else
+              write(42,'(A6)') "Red}}}"
+            endif
+          enddo
         enddo
       endif
+      write(42,*) ""
+
+
+
+
+
+
+
 
       close(unit=42)
 
