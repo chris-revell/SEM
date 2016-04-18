@@ -59,7 +59,7 @@ module volume_conserve_module
 					!The following loop is used to test all 3 elements in triplet j to see if any of them is the same as element i.
 					!If k=1 gives an element that is the same as element i there is no need to test the other two, so we use a GOTO command to quit the loop.
 					do k=1, 3
-						if(cells(c)%triplets(k,j).EQ.i) then
+						if(cells(c)%triplets(k,j).EQ.cells(c)%cortex_elements(i)) then
 							!If element cells(c)%triplets(k,j) is element i then element i is part of this triangle
 	            !and so this triplet will have a non-zero contribution to three
 							!components in the derivative of the volume function corresponding to the 3 dimensions of element i.
@@ -69,25 +69,25 @@ module volume_conserve_module
 
 							!The following if loops ensure that the position of element i is always labelled P, so we can always differentiate by P.
 							if(k.EQ.1) then
-								label_p = cells(c)%cortex_elements(cells(c)%triplets(1,j))
+								label_p = cells(c)%triplets(1,j)
 								P(:)		= xe_prev(label_p,:)-cells(c)%position(:)									!!!!IS THIS THE CORRECT CELL POSITION TO USE
-								label_q = cells(c)%cortex_elements(cells(c)%triplets(2,j))
+								label_q = cells(c)%triplets(2,j)
 								Q(:)		= xe_prev(label_q,:)-cells(c)%position(:)
-								label_r = cells(c)%cortex_elements(cells(c)%triplets(3,j))
+								label_r = cells(c)%triplets(3,j)
 								R(:)		= xe_prev(label_r,:)-cells(c)%position(:)
 							elseif(k.EQ.2) then
-								label_p = cells(c)%cortex_elements(cells(c)%triplets(2,j))
+								label_p = cells(c)%triplets(2,j)
 								P(:)		= xe_prev(label_p,:)-cells(c)%position(:)
-								label_q = cells(c)%cortex_elements(cells(c)%triplets(1,j))
+								label_q = cells(c)%triplets(1,j)
 								Q(:)		= xe_prev(label_q,:)-cells(c)%position(:)
-								label_r	= cells(c)%cortex_elements(cells(c)%triplets(3,j))
+								label_r	= cells(c)%triplets(3,j)
 								R(:)		= xe_prev(label_r,:)-cells(c)%position(:)
 							else !k.EQ.3
-								label_p	= cells(c)%cortex_elements(cells(c)%triplets(3,j))
+								label_p	= cells(c)%triplets(3,j)
 								P(:)		= xe_prev(label_p,:)-cells(c)%position(:)
-								label_q	= cells(c)%cortex_elements(cells(c)%triplets(1,j))
+								label_q	= cells(c)%triplets(1,j)
 								Q(:)		= xe_prev(label_q,:)-cells(c)%position(:)
-								label_r	= cells(c)%cortex_elements(cells(c)%triplets(2,j))
+								label_r	= cells(c)%triplets(2,j)
 								R(:)		= xe_prev(label_r,:)-cells(c)%position(:)
 							end if
 

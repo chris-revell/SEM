@@ -18,6 +18,8 @@ module scem_2_output_povray
       integer               :: corner_element   !Label of element forming corner of smoothed_triangle
       real*8, dimension(3)  :: corner           !Array to store corner vector used in smoothed_triangle data output
       real*8, dimension(3)  :: normal           !Array to store normal vector used in smoothed_triangle data output
+      integer               :: label1           !Useful for abbreviating long expressions
+      integer               :: label2
 
       !Create filename for povray output file.
       write(povray_filename,"(A18,I2.2,A4)") "/povray_data/snap_", n_snapshots, ".pov"
@@ -134,7 +136,7 @@ module scem_2_output_povray
           do j=1, cells(i)%triplet_count                          !Loop over all delaunay triangles within the cell
             write(42,'(A17)',advance='no') "smooth_triangle {"    !Begin writing data structure for smoothed triangle for each delaunay triangle
             do k=1, 3                                             !Loop over all element in Delaunay triangle
-              corner_element = cells(i)%cortex_elements(cells(i)%triplets(k,j))
+              corner_element = cells(i)%triplets(k,j)
               corner(:) = elements(corner_element)%position(:)    !Calculate corner and normal for the element
               normal(:) = corner(:)-cells(i)%position(:)
               write(42,'(A1,F18.14,A1,F18.14,A1,F18.14,A2)',advance='no') "<", corner(1), ',', corner(2), ',', corner(3), '>,'  !Write corner and normal to file
@@ -147,21 +149,61 @@ module scem_2_output_povray
             enddo
             write(42,"(A23)",advance='no') " texture{pigment{color "
             if (cells(i)%fate.EQ.1) then
-              write(42,'(A8)') "Green}}}"
+              write(42,'(A25,I2.2)') "Green}}} // triangle cell", cells(i)%label
             else
-              write(42,'(A6)') "Red}}}"
+              write(42,'(A23,I2.2)') "Red}}} // triangle cell", cells(i)%label
             endif
           enddo
         enddo
       endif
       write(42,*) ""
 
-
-
-
-
-
-
+      !Write commands to draw Delaunay cortex interactions to file.
+      if (flag_povray_cortex_pairs.EQ.1) then
+        do i=1, nc  !Loop over all cells
+          do j=1, cells(i)%triplet_count  !Loop over all Delaunay triangles in each cell
+            label1 = cells(i)%triplets(1,j) !Labels for adjacent elements in this triplet of the triangulation
+            label2 = cells(i)%triplets(2,j)
+            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
+                            F18.14,A61,I2.2)') &
+                            ' cylinder {  < ', &
+                            elements(label1)%position(1), ',', &
+                            elements(label1)%position(2), ',', &
+                            elements(label1)%position(3), '>, <', &
+                            elements(label2)%position(1), ',', &
+                            elements(label2)%position(2), ',', &
+                            elements(label2)%position(3), &
+                            '> 0.5 texture { pigment { color Red } } } // cortex pair cell',&
+                            elements(label1)%parent !Both elements are in the same cell so we only need one label
+            label1 = cells(i)%triplets(2,j) !Labels for adjacent elements in this triplet of the triangulation
+            label2 = cells(i)%triplets(3,j)
+            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
+                            F18.14,A61,I2.2)') &
+                            ' cylinder {  < ', &
+                            elements(label1)%position(1), ',', &
+                            elements(label1)%position(2), ',', &
+                            elements(label1)%position(3), '>, <', &
+                            elements(label2)%position(1), ',', &
+                            elements(label2)%position(2), ',', &
+                            elements(label2)%position(3), &
+                            '> 0.5 texture { pigment { color Red } } } // cortex pair cell',&
+                            elements(label1)%parent !Both elements are in the same cell so we only need one label
+            label1 = cells(i)%triplets(3,j) !Labels for adjacent elements in this triplet of the triangulation
+            label2 = cells(i)%triplets(1,j)
+            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
+                            F18.14,A61,I2.2)') &
+                            ' cylinder {  < ', &
+                            elements(label1)%position(1), ',', &
+                            elements(label1)%position(2), ',', &
+                            elements(label1)%position(3), '>, <', &
+                            elements(label2)%position(1), ',', &
+                            elements(label2)%position(2), ',', &
+                            elements(label2)%position(3), &
+                            '> 0.5 texture { pigment { color Red } } } // cortex pair cell',&
+                            elements(label1)%parent !Both elements are in the same cell so we only need one label
+          enddo
+        enddo
+      endif
 
       close(unit=42)
 

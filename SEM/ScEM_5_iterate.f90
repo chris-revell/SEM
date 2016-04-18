@@ -101,7 +101,7 @@ module scem_5_iterate
          !time_out_1 = cell_cycle_time/10.0 and is the time interval between data outputs
          if (mod(time,(time_out_1)).lt.dt) then
 
-           !Incremenet n_snapshots to keep track of how many outputs there have been
+           !Increment n_snapshots to keep track of how many outputs there have been
            n_snapshots=n_snapshots+1
 
            ! write system data to files
@@ -117,7 +117,6 @@ module scem_5_iterate
            call scem_measure_neighbours
 
          end if
-
 
       end do
 

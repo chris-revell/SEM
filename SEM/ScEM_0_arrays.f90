@@ -17,6 +17,6 @@ module scem_0_arrays
   integer, allocatable, dimension(:)		      	:: read_cell_fate   !Initial fate of cells read from file
   double precision, allocatable, dimension(:,:) :: elements_polar		!Positions of elements in polar coordinates (r,theta,phi) relative to the centre of mass of their cell, as used in scem_cortex
   integer, allocatable, dimension(:,:)		    	:: neighbours
-
+  integer, dimension(4,8)                       :: max_radius_elements  !For use in scem_cortex
 
 end module scem_0_arrays

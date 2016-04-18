@@ -89,12 +89,15 @@ module volume_calculate_module
 				!Call trlist2 to extract usable triplet list ltri from trmesh results
 				call trlist2 ( cells(j)%cortex_elements(0), list, lptr, lend, nt, ltri, ier )
 
-				!Now that we have the list of Delaunay triangles, we can also allocate and fill the triplets array in the cell data structure so that the triplets can be used in other modules.
+				!Now that we have the list of Delaunay triangles, we can also allocate and fill the triplets array in the
+				!cell data structure so that the triplets can be used in other modules.
+				!Use cells(j)%cortex_elements() array to convert the label of elements in ltri(:,:) into the global element
+				!label in cells(j)%triplets(:,:). This will make life much easier when the triplets array is used later on. 
 				allocate(cells(j)%triplets(3,(2*cells(j)%cortex_elements(0)-4)))
 				do i=1, nt
-					cells(j)%triplets(1,i)=ltri(1,i)
-					cells(j)%triplets(2,i)=ltri(2,i)
-					cells(j)%triplets(3,i)=ltri(3,i)
+					cells(j)%triplets(1,i)=cells(j)%cortex_elements(ltri(1,i))
+					cells(j)%triplets(2,i)=cells(j)%cortex_elements(ltri(2,i))
+					cells(j)%triplets(3,i)=cells(j)%cortex_elements(ltri(3,i))
 				end do
 				cells(j)%triplet_count = nt
 

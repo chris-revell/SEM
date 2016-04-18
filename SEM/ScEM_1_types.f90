@@ -34,6 +34,7 @@ module scem_1_types
      integer :: triplet_count  !Number of element triplets in the Delaunay triangulation
      integer, dimension(0:2*ne_cell)      :: cortex_elements  !List of labels of cortical elements in the cell. Zeroth component is the number of cortical elements. (Is ne_cell big enough???)
      integer, allocatable, dimension(:,:) :: triplets         !Array of cortex element triplets in cell formed by Delaunay triangulation.
+                                                              !Note that the values in these triplets are now global element labels, not indices for the cortex_elements array. This proved to be a more convenient format for later use. 
   end type cell
 
   ! declare element and cell data arrays

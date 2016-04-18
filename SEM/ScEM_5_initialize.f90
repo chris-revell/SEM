@@ -63,7 +63,7 @@ module scem_5_initialize
       allocate(head(nx,ny,nz))
       allocate(list(ne_size))
       allocate(pairs(np_size,2))
-      allocate(pairs_cortex(np_size,2))
+      !pairs_cortex can only be allocated after volume_calculate has been called because it relies on the Delaunay triangulation.
 
       ! open data file for element positions
       open(unit=21,file=output_folder//'/system_data/elements',status='unknown')
