@@ -47,9 +47,17 @@ module scem_2_output_povray
         !Draw spheres for all elements of all cells in the system, coloured according to element type
         do i=1, ne
           if ((elements(i)%type).EQ.1) then
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A60,I2.2)') ' sphere {  < ',elements(i)%position(1), ',', elements(i)%position(2),',', elements(i)%position(3),'> 1.5 texture { pigment { color Green } } } // element, cell',elements(i)%parent
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A60,I2.2)') ' sphere {  < ',&
+                elements(i)%position(1), ',', elements(i)%position(2),',', &
+                elements(i)%position(3),&
+                '> 1.5 texture { pigment { color Green } } } // element, cell',&
+                elements(i)%parent
           else
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A58,I2.2)') ' sphere {  < ',elements(i)%position(1), ',', elements(i)%position(2),',', elements(i)%position(3),'> 1.5 texture { pigment { color Red } } } // element, cell',elements(i)%parent
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A58,I2.2)') ' sphere {  < ',&
+                elements(i)%position(1), ',', elements(i)%position(2),',', &
+                elements(i)%position(3),&
+                '> 1.5 texture { pigment { color Red } } } // element, cell',&
+                elements(i)%parent
           endif
         enddo
       endif
@@ -120,11 +128,15 @@ module scem_2_output_povray
           if ((cells(i)%fate).EQ.1) then
             write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A81,I2.2)') &
                   ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
-                  ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment { color Green transmit .66}finish{phong .8} } } // volume cell', cells(i)%label
+                  ',', cells(i)%position(3), '> ', sphere_radius,&
+                  ' texture { pigment { color Green transmit .66}finish{phong .8} } } // volume cell', &
+                  cells(i)%label
           else
             write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A79,I2.2)') &
                   ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
-                  ',', cells(i)%position(3), '> ', sphere_radius,' texture { pigment { color Red transmit .66}finish{phong .8} } } // volume cell', cells(i)%label
+                  ',', cells(i)%position(3), '> ', sphere_radius,&
+                  ' texture { pigment { color Red transmit .66}finish{phong .8} } } // volume cell', &
+                  cells(i)%label
           endif
         enddo
         write(42,*)
@@ -139,8 +151,10 @@ module scem_2_output_povray
               corner_element = cells(i)%triplets(k,j)
               corner(:) = elements(corner_element)%position(:)    !Calculate corner and normal for the element
               normal(:) = corner(:)-cells(i)%position(:)
-              write(42,'(A1,F18.14,A1,F18.14,A1,F18.14,A2)',advance='no') "<", corner(1), ',', corner(2), ',', corner(3), '>,'  !Write corner and normal to file
-              write(42,'(A1,F18.14,A1,F18.14,A1,F18.14,A1)',advance='no') "<", normal(1), ',', normal(2), ',', normal(3), '>'
+              write(42,'(A1,F18.14,A1,F18.14,A1,F18.14,A2)',advance='no') "<", &
+                  corner(1), ',', corner(2), ',', corner(3), '>,'  !Write corner and normal to file
+              write(42,'(A1,F18.14,A1,F18.14,A1,F18.14,A1)',advance='no') "<", &
+                  normal(1), ',', normal(2), ',', normal(3), '>'
               if (k.LT.3) then
                 write(42,'(A1)',advance='no') ","
               else

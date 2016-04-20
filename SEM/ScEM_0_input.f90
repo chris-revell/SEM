@@ -42,7 +42,7 @@ module scem_0_input
   real*8  :: trigger_frac
   real*8  :: cortex_constant
   character(len=8) :: date_of_run   !Date of simulation run
-  character(len=4) :: time_of_run   !Time of simulation run
+  character(len=10) :: time_of_run   !Time of simulation run
   character(len=21):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   integer :: start_time             !Variables for measuring time expired during simulation run
   integer :: current_time           !^
@@ -77,8 +77,8 @@ module scem_0_input
       flag_diffusion  = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background = 0 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
-      flag_growth     = 0 ! flag_growth = 0 (1) for no growth (growth)
-      flag_division   = 0 ! flag_division = 0 (1) for growth with no cell division (with cell division)
+      flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
+      flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
       flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
@@ -208,7 +208,7 @@ module scem_0_input
       dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
 
       ! temporal parameters - all in *seconds*
-      time_max=1.1*cell_cycle_time ! --> time of simulation in seconds
+      time_max=2*cell_cycle_time ! --> time of simulation in seconds
       time_out_1=int(time_max)/98 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
 !     time_out_2=cell_cycle_time/100.0 ! --> interval between quantitative data outputs
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment

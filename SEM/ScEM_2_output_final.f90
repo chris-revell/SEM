@@ -40,6 +40,7 @@ module scem_2_output_final
       call scem_plotting_commands
 
       call system('gnuplot -c "'//output_folder//'/system_data/gnuplot_commands_system_plots.gnu"')
+!      call system("cp visualise_povray_script.sh "//output_folder//"povray_data")  This line doesn't work and creates a strange executable file
 
       write(*,*) "Output folder is:", output_folder
 

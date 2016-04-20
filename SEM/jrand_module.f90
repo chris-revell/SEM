@@ -57,7 +57,8 @@ module jrand_module
 				  iy = mod ( 172 * iy, 30307 )
 				  iz = mod ( 170 * iz, 30323 )
 
-				  x = ( real ( ix, kind = 8 ) / 30269.0D+00 ) + ( real ( iy, kind = 8 ) / 30307.0D+00 ) + ( real ( iz, kind = 8 ) / 30323.0D+00 )
+				  x = ( real ( ix, kind = 8 ) / 30269.0D+00 ) + ( real ( iy, kind = 8 ) / 30307.0D+00 )&
+					 			+ ( real ( iz, kind = 8 ) / 30323.0D+00 )
 
 				  u = x - int ( x )
 				  jrand = real ( n, kind = 8 ) * u + 1.0D+00
