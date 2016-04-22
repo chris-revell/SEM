@@ -23,7 +23,7 @@ module scem_2_output_povray
 
       !Create filename for povray output file.
       write(povray_filename,"(A18,I2.2,A4)") "/povray_data/snap_", n_snapshots, ".pov"
-
+      
       !Open file for povray output
       open(unit=42, file=output_folder//povray_filename,status='unknown')
 

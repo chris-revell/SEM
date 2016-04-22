@@ -85,9 +85,9 @@ module scem_0_input
       !Output control flags
       flag_povray = 1          !switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
-        flag_povray_elements     = 1 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
+        flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
-        flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
+        flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 1 ! Switch to turn Delaunay cortex interaction on and off
 
       ! numerical constants
