@@ -121,7 +121,7 @@ module scem_2_output_povray
       write(42,*)
 
       !Write cell position data to file in povray format
-      if (flag_povray_cells.EQ.1) then
+      if (flag_povray_volumes.EQ.1) then
         !Draw spheres for all cells in the system, coloured according to cell type, with transparency set to 0.66 and phong set to 0.8
         do i=1, nc
           sphere_radius = (3.0*cells(i)%volume/(pi*4.0))**(1.0/3.0)     !Radius is cube root of (3*volume/4pi)

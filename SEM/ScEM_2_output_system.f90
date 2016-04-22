@@ -16,15 +16,6 @@ module scem_2_output_system
 
     subroutine scem_output_system
 
-!***********************
-!Do we really need to write all elements at all time points to the same file?
-!        do n=1,ne
-!          write(21,'(3f12.6,i4)')elements(n)%position(:),elements(n)%type		!21 is file "elements". 3f12.6,i4 means print 3 float variables consisting of 12 characters (11 digits and a point), with 6 digits after the point, then on the same line, one integer with 4 digits. So this is printing all 3 components of position plus one "parent" integer.
-!        end do
-!        write(21,*)
-!        write(21,*)
-!**********************
-
         !Calculate time expired so far
         call SYSTEM_CLOCK(current_time)
         total_system_time = (current_time-start_time)/count_rate
@@ -32,17 +23,12 @@ module scem_2_output_system
         !Write system progress update to the command line.
         write(*,*) real(time),total_system_time,ne,nc,np,n_snapshots !Old version: real(time),ne,nc,ne_size,nc_size,np,np_size,nx,ny,nz,n_snapshots
 
-        !Print the number of cells in each data snapshot (time point) to the file "snapshot_data"
-        open(unit=29,file=output_folder//'/system_data/snapshot_data.txt', status='unknown')
-        write(29,*) nc
-		    call flush(29)
-
         !Print time and cell count to cell_count file to allow cell count to be plotted against time
         open(unit=37,file=output_folder//'/system_data/cell_count.txt', status='unknown')
       	write(37,*) real(time), nc
 
         !Write cell fate data at each snapshot to file
-        open(unit=26,file=output_folder//'/system_data/cell_fate_data_final', status='unknown')
+        open(unit=26,file=output_folder//'/system_data/cell_fate_data_final.txt', status='unknown')
         do n=1, nc
           write(26,*) cells(n)%fate
         end do

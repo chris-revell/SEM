@@ -22,7 +22,7 @@ module scem_2_initial_exist
 	  end do
 
       ! open data file of element positions
-      open(unit=12,file='config_files/elements_config',status='old')
+      open(unit=12,file='config_files/elements_config.txt',status='old')
       ! read element positions from file
       do n=1,ne
          read(12,*)elements(n)%position(:), elements(n)%parent

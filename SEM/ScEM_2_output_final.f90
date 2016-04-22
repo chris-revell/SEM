@@ -20,8 +20,8 @@ module scem_2_output_final
       write(*,*) "Time taken for run (seconds):", total_system_time
 
       ! write final system data to files
-      open(unit=24,file=output_folder//'/system_data/elements_final',status='unknown')
-      open(unit=25,file=output_folder//'/system_data/end_of_run_data',status='unknown')
+      open(unit=24,file=output_folder//'/system_data/elements_final.txt',status='unknown')
+      open(unit=25,file=output_folder//'/system_data/end_of_run_data.txt',status='unknown')
       do i=1,ne
          write(24,'(3f12.6,i4)')elements(i)%position(:),elements(i)%parent
       end do

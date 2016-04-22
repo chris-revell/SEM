@@ -35,13 +35,13 @@ module scem_5_initialize
          np=ne
       else
       	 WRITE(*,*) "READ"
-         open(unit=11,file='config_files/config_data',status='old')
+         open(unit=11,file='config_files/config_data.txt',status='old')
          read(11,*)nc
          read(11,*)ne
          read(11,*)np
          close(unit=11)
 		 allocate(read_cell_fate(nc))
-         open(unit=12,file='config_files/cell_fate_data',status='old')
+         open(unit=12,file='config_files/cell_fate_data.txt',status='old')
          do n=1, nc
          	read(12,*)read_cell_fate(n)
          end do
@@ -65,10 +65,8 @@ module scem_5_initialize
       allocate(pairs(np_size,2))
       !pairs_cortex can only be allocated after volume_calculate has been called because it relies on the Delaunay triangulation.
 
-      ! open data file for element positions
-      open(unit=21,file=output_folder//'/system_data/elements',status='unknown')
       ! open/write/close data file for initialization data check
-      open(unit=22,file=output_folder//'/system_data/initialization_data',status='unknown')
+      open(unit=22,file=output_folder//'/system_data/initialization_data.txt',status='unknown')
       ! open data file for radius of gyration and center of mass
 !      open(unit=23,file='radius_gyration',status='unknown')
       ! open data file to log relisting events
