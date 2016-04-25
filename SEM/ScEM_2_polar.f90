@@ -31,23 +31,8 @@ module scem_2_polar
 			cos_theta = r_vector(3)/elements(i)%polar(1)
 			elements(i)%polar(2) = ACOS(cos_theta)
 
-			!Calculate azimuthal angle of the element
-			tan_phi = r_vector(1)/r_vector(2)
-
-			if ((r_vector(1).GE.0).AND.(r_vector(2).GE.0)) then
-				elements(i)%polar(3) = ATAN(tan_phi)
-				print*, elements(i)%polar(3), ATAN2(r_vector(2),r_vector(1)), elements(i)%polar(3)-pi+ATAN2(r_vector(2),r_vector(1))
-			elseif ((r_vector(1).LT.0).AND.(r_vector(2).GE.0)) then
-				elements(i)%polar(3) = pi + ATAN(tan_phi)
-				print*, elements(i)%polar(3), ATAN2(r_vector(2),r_vector(1)), elements(i)%polar(3)-pi+ATAN2(r_vector(2),r_vector(1))
-			elseif ((r_vector(1).LT.0).AND.(r_vector(2).LT.0)) then
-				elements(i)%polar(3) = ATAN(tan_phi) + pi
-				print*, elements(i)%polar(3), ATAN2(r_vector(2),r_vector(1)), elements(i)%polar(3)-pi+ATAN2(r_vector(2),r_vector(1))
-			else
-				!((r_vector(1).GE.0).AND.(r_vector(2).LT.0))
-				elements(i)%polar(3) = 2*pi + ATAN(tan_phi)
-				print*, elements(i)%polar(3), ATAN2(r_vector(2),r_vector(1)), elements(i)%polar(3)-pi+ATAN2(r_vector(2),r_vector(1))
-			end if
+			!Calculate azimuthal angle of the element. Add pi to define angle between 0 and 2pi rather than -pi and +pi.
+			elements(i)%polar(3) = pi+ATAN2(r_vector(2),r_vector(1))
 
 		end do
 
