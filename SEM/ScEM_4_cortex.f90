@@ -6,7 +6,7 @@ module scem_4_cortex
 	use scem_0_input
 	use scem_0_arrays
 	use scem_1_types
-	use scem_3_polar
+	use scem_2_polar
 
 	implicit none
 
@@ -17,22 +17,24 @@ module scem_4_cortex
 
 		real*8 R, R_max
 		integer	p, q
+		integer :: element_label
+
+		call scem_polar
 
 		do i=1, nc
-			!Loop over all cells
+		!Loop over all cells
 			cells(i)%cortex_elements(0)=0		!Set cortex counter to zero before counting cortex elements later on in this module.
-			do j=1, cells(i)%c_elements(0)
-				elements(cells(i)%c_elements(j))%type = 1		!Refresh all elements to bulk cytoplasm type. If this is not done, there will be a steady gain of cortex elements over time because once an element is labelled as cortex it can never revert back to bulk.
-			enddo
 
-			call scem_polar(i)
+			!Refresh all elements to bulk cytoplasm type. If this is not done, there will be a steady gain of cortex elements over time because once an element is labelled as cortex it can never revert back to bulk.
+			do n=1, cells(i)%c_elements(0)
+				elements(cells(i)%c_elements(n))%type = 1
+			enddo
 
 			!Divide cell into solid angle bins.
 			!Take the element with the largest radius in each bin to be a surface element.
 			!This element and others within the cortex thickness set to type 2 - cortex.
 			!The number of solid angle bins is chosen so that there are roughly 4 elements per bin on average.
 			!So for 128 elements we want about 32 bins, which can be achieved with 4x8 slices.
-			!Note that the label of an element in elements_polar is not the same as the true label of the element.
 
 			!Bins are labelled by the number of divisions in the polar and azimuthal angles
 			!So each bin has a label of the form (i,j) where in this case i runs from 1 to 4
@@ -44,95 +46,47 @@ module scem_4_cortex
 			k=0
 			bin_counters(:,:) = 0
 			bin_contents(:,:,:) = 0
+
 			do l=1, cells(i)%c_elements(0)				!Loop over all elements in the cell
-			if (elements_polar(l,2).LE.(pi/4)) then
-					j=1
-					GO TO 20
-				else
-					if (elements_polar(l,2).LE.(pi/2)) then
-						j=2
-						GO TO 20
-					else
-						if (elements_polar(l,2).LE.(3*pi/4)) then
-							j=3
-							GO TO 20
-						else
-							if (elements_polar(l,2).LE.pi) then
-								j=4
-								GO TO 20
-							end if
-						end if
-					end if
-				end if
 
-			20	CONTINUE
-				if (elements_polar(l,3).LE.(pi/4)) then
-					k=1
-					GO TO 30
-				else
-					if (elements_polar(l,3).LE.(pi/2)) then
-						k=2
-						GO TO 30
-					else
-						if (elements_polar(l,3).LE.(3*pi/4)) then
-							k=3
-							GO TO 30
-						else
-							if (elements_polar(l,3).LE.(pi)) then
-								k=4
-								GO TO 30
-							else
-								if (elements_polar(l,3).LE.(5*pi/4)) then
-									k=5
-									GO TO 30
-								else
-									if (elements_polar(l,3).LE.(3*pi/2)) then
-										k=6
-										GO TO 30
-									else
-										if (elements_polar(l,3).LE.(7*pi/4)) then
-											k=7
-											GO TO 30
-										else
-											if (elements_polar(l,3).LT.(2*pi)) then	!Note last bin is has a "less than and not equal to" bound to prevent double counting
-												k=8
-												GO TO 30
-											end if
-										end if
-									end if
-								end if
-							end if
-						end if
-					end if
-				end if
+				element_label = cells(i)%c_elements(l)
 
-			30	CONTINUE
+				j = int(elements(element_label)%polar(2)/(pi/4))+1
+				k = int(elements(element_label)%polar(3)/(pi/4))+1
+
+				!Note that where previously the boundaries between bins were "less than or equal to" the upper boundary, they are now "less than"
+				!This means that an element whose azimuthal or polar angle lies exactly on the boundary of a bin will now fall into the bin
+				!above the one in which it would previously have been found, but this shouldn't be a problem since the chances of an angle
+				!exactly coinciding with the boundary of a bin is vanishingly small.
+				!We may also need to include terms for what to do if the polar angle is exactly equal to +/- pi or the azimuthal angle is equal to
+				!precisely 2pi, since in both these cases j or k would take a value of 5 or 9 respectively, which would put it outside the bounds
+				!of the bin_contents and bin_counters arrays. The chances of this should again be vanishingly small but it's worth bearing in mind
+				!should the problem ever occur.
 
 				!At this point, (j,k) identifies the bin in which the element falls
 				!Next step is to increase bin counter by 1 and allocate element to bin array
 				!The array element in bin_contents to which the label of this SEM element is
 				!added is given by the value of bin_counters(j,k) at this time
 				bin_counters(j,k)=bin_counters(j,k)+1
-				bin_contents(j,k,bin_counters(j,k))=l
-			end do
+				bin_contents(j,k,bin_counters(j,k))=element_label
+
+			end do !End loop over all elements in the cell.
+
+
 			!At this stage we have an array containing a list of which elements lie in each bin
 			!Next step is to determine which element in each bin has the greatest radius.
-
 			R_max=0
 			do j=1,4
 				do k=1,8							!Do loop over all bins j,k
 					R=0
-					if (bin_counters(j,k).EQ.0) then
-						GO TO 40
-					else
+					if (bin_counters(j,k).GT.0) then
 						do l=1, bin_counters(j,k)		!Do loop over all elements in bin j,k
-							if (elements_polar(bin_contents(j,k,l),1).GT.R) then
-								R=elements_polar(bin_contents(j,k,l),1)
+							if (elements(bin_contents(j,k,l))%polar(1).GT.R) then
+								R=elements(bin_contents(j,k,l))%polar(1)
 								max_radius_elements(j,k)=bin_contents(j,k,l)	!Update the array that contains the label of the element with the maximum radius
 							end if
 						end do
 					end if
-				40	Continue
 					if (R.GT.R_max) then			!If the maximum radius in this bin exceeds previous max, reset max to be equal to the local max in this bin
 						R_max=R
 					end if
@@ -155,10 +109,10 @@ module scem_4_cortex
 				do k=1,8							!Do loop over all bins j,k
 					if (bin_counters(j,k).GT.0) then !Check that there are elements in this bin
 						l=max_radius_elements(j,k)		!l is label of max radius element in this bin
-!						if (elements_polar(l,1).GT.(0.5*R_max)) then	!Only set cortex elements in this bin if the max radius in the bin exceeds half of the max radius for the whole cell
+!						if (elements(element_label)%polar(1).GT.(0.5*R_max)) then	!Only set cortex elements in this bin if the max radius in the bin exceeds half of the max radius for the whole cell
 							do m=1, bin_counters(j,k)					!Loop over all elements in bin
 								n=bin_contents(j,k,m)					!m is the label of the element currently being considered - the mth element in bin (j,k)
-								if (elements_polar(n, 1).GT.(0.8*elements_polar(l,1))) then
+								if (elements(n)%polar(1).GT.(0.8*elements(l)%polar(1))) then
 									elements(cells(i)%c_elements(n))%type=2											!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
 									cells(i)%cortex_elements(0)=cells(i)%cortex_elements(0)+1		!Increment cortex counter by 1
 									p=cells(i)%cortex_elements(0)																!Current value of cortex counter (for conciseness in next couple of lines)
@@ -170,8 +124,6 @@ module scem_4_cortex
 					end if
 				end do
 			end do
-
-			deallocate(elements_polar)
 
 		end do
 
