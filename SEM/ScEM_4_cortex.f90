@@ -51,33 +51,17 @@ module scem_4_cortex
 
 				element_label = cells(i)%c_elements(l)
 
-				if (elements(element_label)%polar(2).LE.(pi/4)) then
-						j=1
-				elseif (elements(element_label)%polar(2).LE.(pi/2)) then
-						j=2
-				elseif (elements(element_label)%polar(2).LE.(3*pi/4)) then
-						j=3
-				elseif (elements(element_label)%polar(2).LE.pi) then
-						j=4
-				end if
+				j = int(elements(element_label)%polar(2)/(pi/4))+1
+				k = int(elements(element_label)%polar(3)/(pi/4))+1
 
-				if (elements(element_label)%polar(3).LE.(pi/4)) then
-					k=1
-				elseif (elements(element_label)%polar(3).LE.(pi/2)) then
-					k=2
-				elseif (elements(element_label)%polar(3).LE.(3*pi/4)) then
-					k=3
-				elseif (elements(element_label)%polar(3).LE.(pi)) then
-					k=4
-				elseif (elements(element_label)%polar(3).LE.(5*pi/4)) then
-					k=5
-				elseif (elements(element_label)%polar(3).LE.(3*pi/2)) then
-					k=6
-				elseif (elements(element_label)%polar(3).LE.(7*pi/4)) then
-					k=7
-				elseif (elements(element_label)%polar(3).LT.(2*pi)) then	!Note last bin is has a "less than and not equal to" bound to prevent double counting
-					k=8
-				end if
+				!Note that where previously the boundaries between bins were "less than or equal to" the upper boundary, they are now "less than"
+				!This means that an element whose azimuthal or polar angle lies exactly on the boundary of a bin will now fall into the bin
+				!above the one in which it would previously have been found, but this shouldn't be a problem since the chances of an angle
+				!exactly coinciding with the boundary of a bin is vanishingly small.
+				!We may also need to include terms for what to do if the polar angle is exactly equal to +/- pi or the azimuthal angle is equal to
+				!precisely 2pi, since in both these cases j or k would take a value of 5 or 9 respectively, which would put it outside the bounds
+				!of the bin_contents and bin_counters arrays. The chances of this should again be vanishingly small but it's worth bearing in mind
+				!should the problem ever occur.
 
 				!At this point, (j,k) identifies the bin in which the element falls
 				!Next step is to increase bin counter by 1 and allocate element to bin array
