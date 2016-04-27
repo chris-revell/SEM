@@ -5,6 +5,7 @@ module scem_4_cortex
 
 	use scem_0_input
 	use scem_0_arrays
+	use scem_0_useful
 	use scem_1_types
 	use scem_2_polar
 
@@ -16,14 +17,14 @@ module scem_4_cortex
 
 
 		real*8 R, R_max
-		integer	p, q
+		integer	p
 		integer :: element_label
 
 		call scem_polar
 
 		do i=1, nc
 		!Loop over all cells
-			cells(i)%cortex_elements(0)=0		!Set cortex counter to zero before counting cortex elements later on in this module.
+			cells(i)%cortex_elements(:)=0		!Set cortex counter to zero before counting cortex elements later on in this module.
 
 			!Refresh all elements to bulk cytoplasm type. If this is not done, there will be a steady gain of cortex elements over time because once an element is labelled as cortex it can never revert back to bulk.
 			do n=1, cells(i)%c_elements(0)
@@ -69,7 +70,6 @@ module scem_4_cortex
 				!added is given by the value of bin_counters(j,k) at this time
 				bin_counters(j,k)=bin_counters(j,k)+1
 				bin_contents(j,k,bin_counters(j,k))=element_label
-
 			end do !End loop over all elements in the cell.
 
 
@@ -84,11 +84,17 @@ module scem_4_cortex
 							if (elements(bin_contents(j,k,l))%polar(1).GT.R) then
 								R=elements(bin_contents(j,k,l))%polar(1)
 								max_radius_elements(j,k)=bin_contents(j,k,l)	!Update the array that contains the label of the element with the maximum radius
+							else
+								CYCLE
 							end if
 						end do
-					end if
-					if (R.GT.R_max) then			!If the maximum radius in this bin exceeds previous max, reset max to be equal to the local max in this bin
-						R_max=R
+						if (R.GT.R_max) then			!If the maximum radius in this bin exceeds previous max, reset max to be equal to the local max in this bin
+							R_max=R
+						else
+							CYCLE
+						end if
+					else
+						CYCLE
 					end if
 				end do
 			end do
@@ -111,13 +117,12 @@ module scem_4_cortex
 						l=max_radius_elements(j,k)		!l is label of max radius element in this bin
 !						if (elements(element_label)%polar(1).GT.(0.5*R_max)) then	!Only set cortex elements in this bin if the max radius in the bin exceeds half of the max radius for the whole cell
 							do m=1, bin_counters(j,k)					!Loop over all elements in bin
-								n=bin_contents(j,k,m)					!m is the label of the element currently being considered - the mth element in bin (j,k)
+								n=bin_contents(j,k,m)						!n is the label of the element currently being considered - the mth element in bin (j,k)
 								if (elements(n)%polar(1).GT.(0.8*elements(l)%polar(1))) then
-									elements(cells(i)%c_elements(n))%type=2											!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
+									elements(n)%type=2																					!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
 									cells(i)%cortex_elements(0)=cells(i)%cortex_elements(0)+1		!Increment cortex counter by 1
-									p=cells(i)%cortex_elements(0)																!Current value of cortex counter (for conciseness in next couple of lines)
-									q=elements(cells(i)%c_elements(n))%label										!Label of element under consideration, whose type has just been set to 2 in line above
-									cells(i)%cortex_elements(p)=q																!pth element of cortex element array in cell data structure is set to the label of this cortex element q. So by the end cortex_elements contains a list of all cortex element labels.
+									p=cells(i)%cortex_elements(0)																!Current value of cortex counter (for conciseness in next line)
+									cells(i)%cortex_elements(cells(i)%cortex_elements(0))=n			!pth element of cortex element array in cell data structure is set to the label of this cortex element q. So by the end cortex_elements contains a list of all cortex element labels.
 								end if
 							end do
 !						end if
