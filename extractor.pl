@@ -23,7 +23,7 @@ defined($ARGV[1]) or die "Missing second argument - provide at least one criteri
 
 my $originalfolder = shift(@ARGV);
 #Create the name of the directory into which data will be written
-my $directoryname = join("_","../data/".$originalfolder."/extracted_",@ARGV);
+my $directoryname = join("_","../data/".$originalfolder."/extracted",@ARGV);
 
 #Store remaining arguments in @expressions. These are the regular expressions to search for.
 my @expressions = @ARGV;
