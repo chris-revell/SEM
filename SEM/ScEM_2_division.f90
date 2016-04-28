@@ -7,7 +7,7 @@ module scem_2_division
   use scem_0_ran_array
   use scem_0_useful
   use scem_1_types
-  
+
 
   implicit none
 
@@ -66,20 +66,21 @@ module scem_2_division
             cells(nc)%age=0.0
             cells(k)%c_elements(:)=c_el_temp1(:)
             cells(nc)%c_elements(:)=c_el_temp2(:)
-            
+
             !fate_decider is a random number between 0 and 1. If this random number is greater than 0.2
-            !then division is symmetric, otherwise it is asymmetric. 
+            !then division is symmetric, otherwise it is asymmetric.
             !This models the 80:20 split for symmetric vs asymmetric observed for ICM cell division
-            fate_decider = rng(iseed)			
-			if (fate_decider.GT.0.5) then		
-				cells(nc)%fate=cells(k)%fate	!Symmetric division
-			else if (cells(k)%fate.eq.1) then
-					cells(nc)%fate=2			!Asymmetric division where parent cell has type 1
-				 else
-				 	cells(nc)%fate=1			!Asymmetric division where parent cell has type 2
-			end if	
+            fate_decider = rng(iseed)
+      			if (fate_decider.GT.0.5) then
+      				cells(nc)%fate=cells(k)%fate	!Symmetric division
+      			else if (cells(k)%fate.eq.1) then
+      					cells(nc)%fate=2			!Asymmetric division where parent cell has type 1
+      				 else
+      				 	cells(nc)%fate=1			!Asymmetric division where parent cell has type 2
+      			end if
 
             cells(nc)%label=nc
+
          end if
       end do
 

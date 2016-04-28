@@ -99,16 +99,6 @@ module scem_5_initialize
         call scem_cortex
       endif
 
-      !Make all elements cortex elements
-      !!!!!!!!!!!!!!!!!!!!
-!      do i=1, nc
-!        do j=1, cells(i)%c_elements(0)
-!          cells(i)%cortex_elements(0) = cells(i)%c_elements(0)
-!          cells(i)%cortex_elements(j) = cells(i)%c_elements(j)
-!        enddo
-!      enddo
-      !!!!!!!!!!!!!!!!!!!
-
       ! write/close data file for initialization data check
       write(22,*)'number of elements = ',ne
       write(22,*)'number of pairs = ',np

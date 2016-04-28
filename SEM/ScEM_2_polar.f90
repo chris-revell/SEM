@@ -14,10 +14,10 @@ module scem_2_polar
 
 		subroutine scem_polar
 
-		double precision, dimension(3) :: r_vector
-		double precision :: r_squared
-		double precision :: cos_theta
-		double precision :: tan_phi
+		real*8, dimension(3) :: r_vector
+		real*8							 :: r_squared
+		real*8							 :: cos_theta
+		real*8							 :: tan_phi
 
 		!Loop over all elements in the system
 		do i=1, ne
