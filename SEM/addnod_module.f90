@@ -7,7 +7,6 @@ module addnod_module
 	use swap_module
 	use lstptr_module
 	use swptst_module
-	use scem_2_output_povray
 
 	implicit none
 
@@ -193,7 +192,6 @@ module addnod_module
 				  write ( *, '(a)' ) ' '
 				  write ( *, '(a)' ) 'ADDNOD - Fatal error!'
 				  write ( *, '(a,i8,a,i8)' ) '  Node ', l, ' is equal to node ', k
-					call scem_output_povray
 				  stop
 				end if
 

@@ -49,7 +49,7 @@ module scem_0_input
   integer :: total_system_time      !^
   real    :: count_rate             !^
   !Arrays for cortex element allocation
-  integer, dimension(4,8,20)        :: bin_contents
+  integer, dimension(4,8,40)        :: bin_contents
   integer, dimension(4,8)           :: bin_counters
 
   contains
@@ -80,15 +80,15 @@ module scem_0_input
       flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
-      flag_DIT        = 0 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
+      flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
       !Output control flags
       flag_povray = 1          !switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 1 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
-        flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
-        flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
+        flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
+        flag_povray_cortex_pairs = 1 ! Switch to turn Delaunay cortex interaction on and off
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
