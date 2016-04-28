@@ -26,11 +26,14 @@ contains
 
     !Allocate the size of the pairs_cortex array by summing over 3 times the number of delaunay triangles in each cell.
     if (allocated(pairs_cortex)) deallocate(pairs_cortex)
-    np_cortex_size = 0
+    np_cortex = 0
     do i=1, nc
-      np_cortex_size = np_cortex_size + 3*cells(i)%triplet_count
+      np_cortex = np_cortex + 3*cells(i)%triplet_count
     enddo
-    allocate(pairs_cortex(np_cortex_size,2))
+    allocate(pairs_cortex(np_cortex,3))
+
+    !Default setting for the 3rd column of the 2nd dimension of pairs_cortex, updated later in scem_DIT
+    pairs_cortex(:,3)=1
 
     pair_counter=0
     !Loop over all cells
@@ -67,8 +70,8 @@ contains
 
       !Update element velocities according to interaction potentials with overdamped langevin dynamics
       !Constant force cortex_constant applied.
-      elements(n)%velocity(:) = elements(n)%velocity(:)-dx(:)*cortex_constant
-      elements(nn)%velocity(:)= elements(nn)%velocity(:)+dx(:)*cortex_constant
+      elements(n)%velocity(:) = elements(n)%velocity(:) - dx(:)*cortex_constant*pairs_cortex(m,3)
+      elements(nn)%velocity(:)= elements(nn)%velocity(:)+ dx(:)*cortex_constant*pairs_cortex(m,3)
     end do
 
   end subroutine scem_cortical_tension_update

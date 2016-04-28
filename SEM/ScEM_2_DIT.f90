@@ -23,30 +23,38 @@ contains
     integer :: fate_2
 
 
-    !For each element interaction pair, test to see if the parent cells of the two elements
-    !in the pair are of the same fate.
-    !If the fates of the two cells are different, we can update the "DIT_factor"
+    !For each standard near-neighbour element interaction pair, test to see if the parent
+    !cells of the two elements in the pair are of the same fate.
+    !If the fates of the two cells are the same, we can update the "DIT_factor"
     !for each element in the pair to a value greater than 1.
     !This factor is a component of the "elements" data structure and is used
     !as a factor in the calculation of forces on elements.
 
-    elements(:)%DIT_factor = 1
+    !No need to refresh DIT_factor at each timestep as the loop over all pairs guarantees to update every element
 
     do j=1,np
-
       cell_1  = elements(pairs(j,1))%parent
       fate_1  = cells(cell_1)%fate
       cell_2  = elements(pairs(j,2))%parent
       fate_2  = cells(cell_2)%fate
-
-      if (fate_1.NE.fate_2) then
-        elements(pairs(j,1))%DIT_factor = fate_1    !Making DIT factor depend on fate. One cell type increases tension, the other does not. 
-        elements(pairs(j,2))%DIT_factor = fate_2    !
+      !Set DIT_factor to be .TRUE. for elements only if both elements are in different cells
+      !and those cells have different fates. This routine naturally excludes elements in the same
+      !cell because in this case the fate will always be the same.
+      if (fate_1.EQ.fate_2) then
+        elements(pairs(j,1))%DIT_factor = .FALSE.
+        elements(pairs(j,2))%DIT_factor = .FALSE.
       else
-        elements(pairs(j,1))%DIT_factor = 1
-        elements(pairs(j,2))%DIT_factor = 1
+        elements(pairs(j,1))%DIT_factor = .TRUE.
+        elements(pairs(j,2))%DIT_factor = .TRUE.
       endif
+    enddo
 
+    do j=1, np_cortex
+      if (elements(pairs_cortex(j,1))%DIT_factor.AND.elements(pairs_cortex(j,2))%DIT_factor) then
+        pairs_cortex(j,3) = 1
+      else
+        pairs_cortex(j,3) = 1
+      endif
     enddo
 
   end subroutine
