@@ -20,11 +20,14 @@ module scem_2_output_final
       write(*,*) "Time taken for run (seconds):", total_system_time
 
       ! write final system data to files
-      open(unit=24,file=output_folder//'/system_data/elements_final.txt',status='unknown')
+      if (flag_elements_final.EQ.1) then
+        open(unit=24,file=output_folder//'/system_data/elements_final.txt',status='unknown')
+        do i=1,ne
+          write(24,'(3f12.6,i4)')elements(i)%position(:),elements(i)%parent
+        end do
+      endif
+      
       open(unit=25,file=output_folder//'/system_data/end_of_run_data.txt',status='unknown')
-      do i=1,ne
-         write(24,'(3f12.6,i4)')elements(i)%position(:),elements(i)%parent
-      end do
       write(25,*)nc
       write(25,*)ne
       write(25,*)np
@@ -40,7 +43,6 @@ module scem_2_output_final
       call scem_plotting_commands
 
       call system('gnuplot -c "'//output_folder//'/system_data/gnuplot_commands_system_plots.gnu"')
-!      call system("cp visualise_povray_script.sh "//output_folder//"povray_data")  This line doesn't work and creates a strange executable file
 
       write(*,*) "Output folder is:", output_folder
 

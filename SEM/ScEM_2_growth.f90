@@ -27,14 +27,14 @@ module scem_2_growth
       ! attempt creation of new element in each cell
       ! (use an improved algorithm here? - I think we need to eventually - talk to Mikael Bjorkland?)
       do k=1,nc
-         call ran_array(ra1,1,1,iseed) ! retrieve one random number 
+         call ran_array(ra1,1,1,iseed) ! retrieve one random number
          rn=ra1(1,1)
          if (rn.lt.prob_new_element) then			!prob_new_element comes from ScEM_0_input
             flag_success=0
             n_el_cell_k=cells(k)%c_elements(0)
             r_core=frac_growth*cells(k)%rad_gyration ! defining radius of growth core in terms of cell's rad. of gyr.
             do while (flag_success.eq.0) ! attempt placement of new element until successful
-               call ran_array(ra1,1,1,iseed) ! retrieve one random number 
+               call ran_array(ra1,1,1,iseed) ! retrieve one random number
                rn=ra1(1,1)
                m=1+int(rn*cells(k)%c_elements(0)) ! randomly select an element in cell k
                n=cells(k)%c_elements(m)
@@ -43,7 +43,7 @@ module scem_2_growth
                if (rad_sq.lt.r_core**2) then ! check for successful placement of new element within cell core
                   flag_success=1
                   ne=ne+1
-                  call ran_array(ra2,1,2,iseed) ! retrieve two random numbers for random orientation 
+                  call ran_array(ra2,1,2,iseed) ! retrieve two random numbers for random orientation
                   phi=2*pi*ra2(1,1) ! azimuthal angle
                   theta=acos(2*(ra2(1,2)-0.5)) ! polar angle, appropriately weighted
                   d_pos(1)=0.6*r_equil*sin(theta)*cos(phi) ! define random x-position of new element rel. to element n
@@ -69,7 +69,7 @@ module scem_2_growth
             ! code lifted verbatim from pairs module - code here saves a global relisting and global pair construction
             pos_1(:)=elements(ne)%position(:)
             ! adding 1 in next statement for more meaningful sector assignment
-            ixe(:)=1+int((elements(ne)%position(:)+x_cen(:))*recip_sector_size) 
+            ixe(:)=1+int((elements(ne)%position(:)+x_cen(:))*recip_sector_size)
             do ix=-1,1
                do iy=-1,1
                   do iz=-1,1

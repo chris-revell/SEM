@@ -23,26 +23,31 @@ module scem_2_output_system
         !Write system progress update to the command line.
         write(*,*) real(time),total_system_time,ne,nc,np,n_snapshots !Old version: real(time),ne,nc,ne_size,nc_size,np,np_size,nx,ny,nz,n_snapshots
 
-        !Print time and cell count to cell_count file to allow cell count to be plotted against time
-        open(unit=37,file=output_folder//'/system_data/cell_count.txt', status='unknown')
-      	write(37,*) real(time), nc
+        if (flag_count_output.EQ.1) then
+          !Print time and cell count to cell_count file to allow cell count to be plotted against time
+          open(unit=37,file=output_folder//'/system_data/cell_count.txt', status='unknown')
+      	  write(37,*) real(time), nc
+        endif
+        
+        if (flag_fate_output.EQ.1) then
+          !Write cell fate data at each snapshot to file
+          open(unit=26,file=output_folder//'/system_data/cell_fate_data_final.txt', status='unknown')
+          do n=1, nc
+            write(26,*) cells(n)%fate
+          end do
+          close(unit=26)
+        endif
 
-        !Write cell fate data at each snapshot to file
-        open(unit=26,file=output_folder//'/system_data/cell_fate_data_final.txt', status='unknown')
-        do n=1, nc
-          write(26,*) cells(n)%fate
-        end do
-        close(unit=26)
-
-		    !Write cell volume data to file
-        open(unit=27,file=output_folder//'/system_data/cell_volumes.txt',status='unknown',position="append")
-        write(27,'(F24.12,A)',advance="no") time, "	"
-        do n=1, nc-1
-          write(27,'(F24.12,A)',advance="no") cells(n)%volume, "	"
-        end do
-        write(27,'(F24.12,A)',advance='yes') cells(nc)%volume		!Advance line only after the last volume value so that all volumes appear on the same line.
-        close(unit=27)
-
+        if (flag_volume_output.EQ.1) then
+  		    !Write cell volume data to file
+          open(unit=27,file=output_folder//'/system_data/cell_volumes.txt',status='unknown',position="append")
+          write(27,'(F24.12,A)',advance="no") time, "	"
+          do n=1, nc-1
+            write(27,'(F24.12,A)',advance="no") cells(n)%volume, "	"
+          end do
+          write(27,'(F24.12,A)',advance='yes') cells(nc)%volume		!Advance line only after the last volume value so that all volumes appear on the same line.
+          close(unit=27)
+        endif
 
     end subroutine scem_output_system
 
