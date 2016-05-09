@@ -15,9 +15,7 @@ contains
   subroutine scem_near_neighbour_update
 
     real*8, dimension(3) :: dx
-    real*8  :: dz,sep_sq,pot_deriv_interp,fadein_amp,r_s
-    real*8  :: element_radius_sq
-    real*8  :: element_radius
+    real*8  :: sep_sq,pot_deriv_interp,fadein_amp,r_s
     integer :: bin,index_intra
 
 

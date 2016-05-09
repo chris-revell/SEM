@@ -145,7 +145,7 @@ module volume_conserve_module
 !			enddo
 
 			!Use E to find P_2
-			P_2(:) = P_1(:) - E(:)   !******IS THIS THE CORRECT SIGN************
+			P_2(:) = P_1(:) + E(:)   !******IS THIS THE CORRECT SIGN************
 
 			!Use P_2 to update global position data
 			do l=1, cells(c)%cortex_elements(0)

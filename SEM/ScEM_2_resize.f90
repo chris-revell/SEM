@@ -19,7 +19,7 @@ module scem_2_resize
       real*8, allocatable, dimension(:,:) :: xe_compare_temp
       real*8, allocatable, dimension(:,:) :: xe_prev_temp
       integer, allocatable, dimension(:) :: list_temp
-      integer, allocatable, dimension(:,:) :: pairs_temp
+!      integer, allocatable, dimension(:,:) :: pairs_temp
       real*8 :: x_max,y_max,z_max
 
 	  !When the number of elements in the system exceeds half of the dimension size of the elements array (ne_size) then arrays are reallocated

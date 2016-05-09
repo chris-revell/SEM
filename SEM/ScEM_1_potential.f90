@@ -15,7 +15,7 @@ module scem_1_potential
   contains
 
     subroutine scem_potential
-      real*8 :: sep_sq,factor,dist,pot
+      real*8 :: sep_sq,factor
       real*8, allocatable, dimension(:) :: r_sq_table
       real*8, allocatable, dimension(:) :: pot_deriv_table
 

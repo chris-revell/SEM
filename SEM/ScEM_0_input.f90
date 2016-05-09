@@ -51,7 +51,7 @@ module scem_0_input
   integer :: total_system_time      !^
   real    :: count_rate             !^
   !Arrays for cortex element allocation
-  integer, dimension(4,8,40)        :: bin_contents
+  integer, dimension(4,8,80)        :: bin_contents
   integer, dimension(4,8)           :: bin_counters
 
   contains
@@ -76,28 +76,28 @@ module scem_0_input
 !      read (arg,*) command_line_argument
 
       flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
-      flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
-      flag_conserve   = 1 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
-      flag_background = 0 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
-      flag_growth     = 0 ! flag_growth = 0 (1) for no growth (growth)
-      flag_division   = 0 ! flag_division = 0 (1) for growth with no cell division (with cell division)
+      flag_diffusion  = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
+      flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
+      flag_background = 3 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
+      flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
+      flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
       flag_DIT        = 0 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
       !Output control flags
       flag_povray = 1          !switch to turn off povray output entirely
-        flag_povray_volumes      = 1 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
+        flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 1 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
-        flag_povray_pairs        = 1 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
+        flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
         flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 1 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 1    ! Switch to turn off outputting cell volume data
-      flag_measure            = 1    ! Switch to turn off element pair ratio sorting measurement
-      flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
-      flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
-      flag_elements_final     = 0
+      flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
+      flag_measure            = 0    ! Switch to turn off element pair ratio sorting measurement
+      flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
+      flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
@@ -190,14 +190,14 @@ module scem_0_input
   		rel_strength(1,2,1,1,2) = 1.0    !Inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
   		rel_strength(1,2,1,2,2) = 1.0    !Inter-cellular Epiblast cytoplasm-hypoblast cortex
   		rel_strength(1,2,2,2,1) = 1.0   !Inter-cellular Epiblast cortex-hypoblast cortex
-  		rel_strength(2,2,1,1,2) = 5.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-  		rel_strength(2,2,1,2,2) = 5.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cortex
-  		rel_strength(2,2,2,2,2) = 5.0   !Inter-cellular Hypoblast cortex-hypoblast cortex
+  		rel_strength(2,2,1,1,2) = 1.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(2,2,1,2,2) = 1.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cortex
+  		rel_strength(2,2,2,2,2) = 1.0   !Inter-cellular Hypoblast cortex-hypoblast cortex
 
       !		  rel_strength(1,1,2,2,1)	= command_line_argument	!Used in old version
 
       !Variable for inter-cortex potential
-      cortex_constant = 0.01
+      cortex_constant = 0.0001
 
 		  ! fill in transposed values of symmetric matrix (i.e. (i,j,k,l)=(j,i,l,k) )
       r_s_max=0.0 ! calculate maximum matrix entry to rescale dt_amp_max
@@ -217,8 +217,8 @@ module scem_0_input
       dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
 
       ! temporal parameters - all in *seconds*
-      time_max=5*cell_cycle_time ! --> time of simulation in seconds
-      time_out_1=int(time_max)/99 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
+      time_max=1.5*cell_cycle_time ! --> time of simulation in seconds
+      time_out_1=time_max/99.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
 !     time_out_2=cell_cycle_time/100.0 ! --> interval between quantitative data outputs
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities

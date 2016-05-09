@@ -121,7 +121,7 @@ module scem_5_iterate
            if (flag_measure_neighbours.EQ.1) then
              call scem_measure_neighbours
            endif
-           
+
          end if
 
       end do

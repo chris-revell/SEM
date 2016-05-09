@@ -14,7 +14,7 @@ contains
 
   if (flag_measure_neighbours.EQ.1) then
     write(45,"(*(G0,:,1X))") 'set nokey'
-    write(45,"(*(G0,:,1X))") 'set terminal png'
+    write(45,"(*(G0,:,1X))") 'set terminalinal png'
     write(45,"(*(G0,:,1X))") 'set title "Neighbour sorting measurement against time"'
     write(45,"(*(G0,:,1X))") 'set output "'//output_folder//'/system_data/sorting_neighbours.png"'
     write(45,"(*(G0,:,1X))") 'set xlabel "Time /s"'
@@ -27,7 +27,7 @@ contains
   if (flag_measure_radius.EQ.1) then
     write(45,"(*(G0,:,1X))") 'set nokey'
   !  write(45,"(*(G0,:,1X))") 'unset yrange'
-    write(45,"(*(G0,:,1X))") 'set terminal png'
+    write(45,"(*(G0,:,1X))") 'set terminalinal png'
     write(45,"(*(G0,:,1X))") 'set title "Radius sorting measurement against time"'
     write(45,"(*(G0,:,1X))") 'set output "'//output_folder//'/system_data/sorting_radius.png"'
     write(45,"(*(G0,:,1X))") 'set xlabel "Time /s"'
@@ -39,7 +39,7 @@ contains
 
   if (flag_measure.EQ.1) then
     write(45,"(*(G0,:,1X))") 'set nokey'
-    write(45,"(*(G0,:,1X))") 'set terminal png'
+    write(45,"(*(G0,:,1X))") 'set terminalinal png'
     write(45,"(*(G0,:,1X))") 'set title "Element pair sorting measurement against time"'
     write(45,"(*(G0,:,1X))") 'set output "'//output_folder//'/system_data/sorting_element_pairs.png"'
     write(45,"(*(G0,:,1X))") 'set xlabel "Time /s"'
@@ -51,7 +51,7 @@ contains
   endif
 
   if (flag_count_output.EQ.1) then
-    write(45,"(*(G0,:,1X))") 'set term png'
+    write(45,"(*(G0,:,1X))") 'set terminal png'
     write(45,"(*(G0,:,1X))") 'set nokey'
     !  write(45,"(*(G0,:,1X))") 'unset yrange'
     write(45,"(*(G0,:,1X))") 'set title "Number of cells in system against time"'
@@ -63,13 +63,14 @@ contains
   endif
 
   if (flag_volume_output.EQ.1) then
+    write(45,"(*(G0,:,1X))") 'set terminal png'
     write(45,"(*(G0,:,1X))") 'set title "Cell volumes against time"'
     write(45,"(*(G0,:,1X))") 'set key'
     write(45,"(*(G0,:,1X))") 'set xlabel "Time /s"'
     write(45,"(*(G0,:,1X))") 'set ylabel "Volume /?"'
     write(45,"(*(G0,:,1X))") 'set output "'//output_folder//'/system_data/cell_volumes.png"'
-    write(45,'(A69)',advance="no") ' plot "'//output_folder//'/system_data/cell_volumes.txt" using 1:2 '
-    write(45,'(A26)',advance="no") 'title "cell  1" with lines'
+    write(45,'(A68)',advance="no") 'plot "'//output_folder//'/system_data/cell_volumes.txt" using 1:2 '
+    write(45,'(A25)',advance="no") 'title "cell 1" with lines'
     if (nc.GT.1) then
       do n=2, nc
         if (n.LT.9) then
@@ -92,7 +93,7 @@ contains
       enddo
     endif
   end if
-   
+
   end subroutine scem_plotting_commands
 
 end module scem_1_plotting_commands

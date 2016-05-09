@@ -17,9 +17,6 @@ contains
   subroutine scem_cortical_tension_update
 
     integer :: pair_counter
-    integer :: other_element_in_pair1
-    integer :: other_element_in_pair2
-    integer :: is_in_flag
     integer :: c
     real    :: sep_sq
     real*8, dimension(3) :: dx

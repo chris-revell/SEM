@@ -32,7 +32,7 @@ module scem_2_relist
       end if
 
       do n=1,ne
-         ! adding 1 in next statement for more meaningful sector assignment - int() rounds down. 
+         ! adding 1 in next statement for more meaningful sector assignment - int() rounds down.
          ixe(:)=1+int((elements(n)%position(:)+x_cen(:))*recip_sector_size)
          list(n)=head(ixe(1),ixe(2),ixe(3))
          head(ixe(1),ixe(2),ixe(3))=n

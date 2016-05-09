@@ -19,18 +19,18 @@ module scem_2_measure_neighbours
 		integer :: parent_1
 		integer :: parent_2
 		integer :: neighbours_counter
-		integer :: neighbours_counter_final
+!		integer :: neighbours_counter_final
 		integer :: same_fate_counter
 		real	:: sorting_measure
 		integer	:: fate_1
 		integer	:: fate_2
 		integer :: pair_type
-		character(len=1024)		:: vectors_filename
-!  		character(len=1024)		:: vectors_filename_hh
-!    	character(len=1024)		:: vectors_filename_eh
-    	real*8, dimension(3)	:: cell_position1
-    	real*8, dimension(3)	:: cell_position2
-    	real*8, dimension(6)	:: vector					!First 3 elements are x,y,z position of vector, ie halfway point between cells in neighbour pair. Next 3 elements are components of vector itself, ie x,y,z separation of the two cells in the neighbour pair
+!		character(len=1024)		:: vectors_filename
+! 	character(len=1024)		:: vectors_filename_hh
+!  	character(len=1024)		:: vectors_filename_eh
+!  	real*8, dimension(3)	:: cell_position1
+!  	real*8, dimension(3)	:: cell_position2
+!  	real*8, dimension(6)	:: vector					!First 3 elements are x,y,z position of vector, ie halfway point between cells in neighbour pair. Next 3 elements are components of vector itself, ie x,y,z separation of the two cells in the neighbour pair
 
 
 		allocate(neighbours(np,2))
@@ -97,11 +97,11 @@ module scem_2_measure_neighbours
 
 			fate_1 = cells(neighbours(m,1))%fate
 			fate_2 = cells(neighbours(m,2))%fate
-			cell_position1(:)	= cells(neighbours(m,1))%position(:)
-			cell_position2(:)	= cells(neighbours(m,2))%position(:)
 
 !*******************
 !This section is related to neighbour visualisation and probably not necessary any more
+!			cell_position1(:)	= cells(neighbours(m,1))%position(:)
+!			cell_position2(:)	= cells(neighbours(m,2))%position(:)
 !			do i=1, 3
 !				vector(i) = cell_position1(i) + 0.5*(cell_position2(i)-cell_position1(i))
 !			end do
@@ -137,10 +137,10 @@ module scem_2_measure_neighbours
 		close(39)
 !		close(40)
 !		close(41)
-		call flush(39)
+!		call flush(39)
 !		call flush(40)
 !		call flush(41)
-		call flush(38)
+!		call flush(38)
 		deallocate(neighbours)
 
 		end subroutine scem_measure_neighbours

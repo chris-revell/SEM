@@ -17,7 +17,6 @@ module scem_2_polar
 		real*8, dimension(3) :: r_vector
 		real*8							 :: r_squared
 		real*8							 :: cos_theta
-		real*8							 :: tan_phi
 
 		!Loop over all elements in the system
 		do i=1, ne

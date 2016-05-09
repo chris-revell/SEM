@@ -13,7 +13,7 @@ module scem_2_output_povray
 
     subroutine scem_output_povray
 
-      character(len=46)	    :: povray_filename  !Filename for data output
+      character(len=24)	    :: povray_filename  !Filename for data output
       real*8                :: sphere_radius    !Radius of sphere used to represent cell volume in povray visualiation. Calculated from cell volume.
       integer               :: corner_element   !Label of element forming corner of smoothed_triangle
       real*8, dimension(3)  :: corner           !Array to store corner vector used in smoothed_triangle data output
@@ -23,7 +23,7 @@ module scem_2_output_povray
 
       !Create filename for povray output file.
       write(povray_filename,"(A18,I2.2,A4)") "/povray_data/snap_", n_snapshots, ".pov"
-      
+
       !Open file for povray output
       open(unit=42, file=output_folder//povray_filename,status='unknown')
 

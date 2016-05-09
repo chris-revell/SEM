@@ -22,7 +22,7 @@ module scem_2_growth
       real :: rn
       real*8 :: sep_sq
       real*8 :: r_core,phi,theta
-      integer :: n_el_cell_k,nn_old,flag_success,flag_placement
+      integer :: n_el_cell_k,nn_old,flag_success
 
       ! attempt creation of new element in each cell
       ! (use an improved algorithm here? - I think we need to eventually - talk to Mikael Bjorkland?)
