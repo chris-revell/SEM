@@ -68,13 +68,17 @@ module scem_2_measure_radius
 			end if
 		end do
 
-		distance_average1 = distance_sum1/fate_count1
-		distance_average2 = distance_sum2/fate_count2
+		if (fate_count1.EQ.0.OR.fate_count2.EQ.0) then
+			average_difference = 0
+		else
+			distance_average1 = distance_sum1/fate_count1
+			distance_average2 = distance_sum2/fate_count2
+		endif
 
 		average_difference = distance_average1-distance_average2
 
 		write(36,*) real(time), average_difference
-		call flush(36)
+!		call flush(36)
 
 		end subroutine scem_measure_radius
 

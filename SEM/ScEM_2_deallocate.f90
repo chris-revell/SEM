@@ -14,7 +14,8 @@ module scem_2_deallocate
       ! deallocate element and cell data arrays
       deallocate(elements)
       deallocate(cells)
-      deallocate(potential_deriv)
+      deallocate(potential_deriv1)
+      deallocate(potential_deriv2)
       deallocate(xe_compare)
       deallocate(xe_prev)
       deallocate(head)

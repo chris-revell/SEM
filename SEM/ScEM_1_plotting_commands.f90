@@ -14,7 +14,7 @@ contains
 
   if (flag_measure_neighbours.EQ.1) then
     write(45,"(*(G0,:,1X))") 'set nokey'
-    write(45,"(*(G0,:,1X))") 'set terminalinal png'
+    write(45,"(*(G0,:,1X))") 'set terminal png'
     write(45,"(*(G0,:,1X))") 'set title "Neighbour sorting measurement against time"'
     write(45,"(*(G0,:,1X))") 'set output "'//output_folder//'/system_data/sorting_neighbours.png"'
     write(45,"(*(G0,:,1X))") 'set xlabel "Time /s"'
@@ -27,7 +27,7 @@ contains
   if (flag_measure_radius.EQ.1) then
     write(45,"(*(G0,:,1X))") 'set nokey'
   !  write(45,"(*(G0,:,1X))") 'unset yrange'
-    write(45,"(*(G0,:,1X))") 'set terminalinal png'
+    write(45,"(*(G0,:,1X))") 'set terminal png'
     write(45,"(*(G0,:,1X))") 'set title "Radius sorting measurement against time"'
     write(45,"(*(G0,:,1X))") 'set output "'//output_folder//'/system_data/sorting_radius.png"'
     write(45,"(*(G0,:,1X))") 'set xlabel "Time /s"'
@@ -39,7 +39,7 @@ contains
 
   if (flag_measure.EQ.1) then
     write(45,"(*(G0,:,1X))") 'set nokey'
-    write(45,"(*(G0,:,1X))") 'set terminalinal png'
+    write(45,"(*(G0,:,1X))") 'set terminal png'
     write(45,"(*(G0,:,1X))") 'set title "Element pair sorting measurement against time"'
     write(45,"(*(G0,:,1X))") 'set output "'//output_folder//'/system_data/sorting_element_pairs.png"'
     write(45,"(*(G0,:,1X))") 'set xlabel "Time /s"'
