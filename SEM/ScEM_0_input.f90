@@ -82,7 +82,7 @@ module scem_0_input
       flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
-      flag_DIT        = 0 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
+      flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
       !Output control flags
       flag_povray = 1          !switch to turn off povray output entirely
@@ -187,10 +187,10 @@ module scem_0_input
 
 		  rel_strength(1,1,1,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
 		  rel_strength(1,1,1,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cortex
-		  rel_strength(1,1,1,2,2,2) = 1.0  !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex
+		  rel_strength(1,1,1,2,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex
   		rel_strength(1,1,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
   		rel_strength(1,1,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
-  		rel_strength(1,1,2,2,2,2) = 1.0  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
+  		rel_strength(1,1,2,2,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
   		rel_strength(1,2,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
   		rel_strength(1,2,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
   		rel_strength(1,2,2,2,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
@@ -218,7 +218,7 @@ module scem_0_input
       r_s_max = MAXVAL(rel_strength)
 
       !Variable for inter-cortex potential
-      cortex_constant = 0.001
+      cortex_constant = 0.01
 
       dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
 
