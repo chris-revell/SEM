@@ -17,7 +17,7 @@ module scem_0_input
   real*8  :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
 
   ! meaning of parameters given below when assigned values
-  real*8, allocatable, dimension(:,:,:,:,:) :: rel_strength		!For interaction of element a in cell A with element b in cell B argument is (type of cell A, type of cell B, type of element a, type of element b)
+  real*8, allocatable, dimension(:,:,:,:,:,:) :: rel_strength		!For interaction of element a in cell A with element b in cell B argument is (type of cell A, type of cell B, type of element a, type of element b)
   integer :: nx,ny,nz
   integer :: iseed,iloop1,iloop2,iloop3,iloop4,iloop5
   !system switches
@@ -78,7 +78,7 @@ module scem_0_input
       flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
-      flag_background = 3 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
+      flag_background = 2 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
       flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
@@ -96,8 +96,8 @@ module scem_0_input
       flag_volume_output      = 1    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
       flag_measure            = 0    ! Switch to turn off element pair ratio sorting measurement
-      flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
-      flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
+      flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
+      flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
@@ -116,7 +116,7 @@ module scem_0_input
       r_cell=10.0 ! Radial spatial scale of one cell in *microns*
       ! derived quantities
       r_cell_sq=r_cell**2 ! radial scale squared
-      allocate(rel_strength(0:n_c_types,0:n_c_types,0:n_e_types,0:n_e_types,2)) ! allocate rel_strength array
+      allocate(rel_strength(2,0:n_c_types,0:n_c_types,0:n_e_types,0:n_e_types,2)) ! allocate rel_strength array
 
       ! physical parameters
       viscous_timescale_cell=100 ! time scale of viscous relaxation for cell in *seconds*
@@ -134,7 +134,7 @@ module scem_0_input
       epsilon=0.01 ! --> value of potential relative to minimum at r_interaction_max
       n_bins=1024 ! --> number of bins for potential table
       frac_close=0.8 ! --> fraction of equilibrium distance for initialization (< approx 0.85)
-      frac_interaction_max=2.0  !1.8 ! --> fraction of equilibrium distance for maximum interaction range (in window 1.5 to 1.9)
+      frac_interaction_max=1.8  !1.8 ! --> fraction of equilibrium distance for maximum interaction range (in window 1.5 to 1.9)
                                 !     1.5 has sharply contracted potential and efficient
                                 !     1.9 has more relaxed potential, and still reasonably efficient (factor of 2.5 slower)
                                 !     > 1.9 brings in more element interactions, contracting cell, and slowing simulation
@@ -166,7 +166,7 @@ module scem_0_input
 
 
 	    !assign values to relative strength array
-	    rel_strength(:,:,:,:,:)=0.0	!default interactions are zero
+	    rel_strength(:,:,:,:,:,:)=0.0	!default interactions are zero
 		  ! User supplies entries for relative strength "matrix"
 		  ! Fill in values for pairwise interactions (i,j,k,l) with i < = j and k < = l.
 		  ! Algorithm will then automatically fill in values for switching indices i and j, and k and l (tensor is symmetric under flipping of these indices.
@@ -174,50 +174,56 @@ module scem_0_input
 		  !                                                     last index = 1 (intra-cellular interactions)
       !                                                                = 2 (inter-cellular interactions)
 
-		  rel_strength(1,1,1,1,1) = 1.0 	 !Intra-cellular Epiblast cytoplasm-epiblast cytoplasm
-		  rel_strength(1,1,1,2,1) = 1.0	 !Intra-cellular Epiblast cytoplasm-epiblast cortex
-      rel_strength(1,1,2,2,1)	= 1.0   !Intra-cellular Epiblast cortex-epiblast cortex
-		  rel_strength(1,2,1,1,1)	= 0.0	   !Intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
-		  rel_strength(1,2,1,2,1) = 0.0	   !Intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
-		  rel_strength(1,2,2,2,1) = 0.0	   !Intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
-		  rel_strength(2,2,1,1,1) = 1.0	 !Intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-		  rel_strength(2,2,1,2,1) = 1.0	 !Intra-cellular Hypoblast cytoplasm-hypoblast cortex
-		  rel_strength(2,2,2,2,1) = 1.0	 !Intra-cellular Hypoblast cortex-hypoblast cortex
+!     rel_strength(adhesive/repulsive,fate1,fate2,type1,type1,intra/inter)
+		  rel_strength(1,1,1,1,1,1) = 1.0  !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(1,1,1,1,2,1) = 1.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cortex
+      rel_strength(1,1,1,2,2,1)	= 1.0  !Adhesive component, intra-cellular Epiblast cortex-epiblast cortex
+		  rel_strength(1,1,2,1,1,1)	= 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
+		  rel_strength(1,1,2,1,2,1) = 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
+		  rel_strength(1,1,2,2,2,1) = 0.0	 !Adhesive component, intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
+		  rel_strength(1,2,2,1,1,1) = 1.0	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+		  rel_strength(1,2,2,1,2,1) = 1.0	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
+		  rel_strength(1,2,2,2,2,1) = 1.0	 !Adhesive component, intra-cellular Hypoblast cortex-hypoblast cortex
 
-		  rel_strength(1,1,1,1,2) = 1.0    !Inter-cellular Epiblast cytoplasm-epiblast cytoplasm
-		  rel_strength(1,1,1,2,2) = 1.0    !Inter-cellular Epiblast cytoplasm-epiblast cortex
-		  rel_strength(1,1,2,2,2) = 1.0   !Inter-cellular Epiblast cortex-epiblast cortex
-  		rel_strength(1,2,1,1,2) = 1.0    !Inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
-  		rel_strength(1,2,1,2,2) = 1.0    !Inter-cellular Epiblast cytoplasm-hypoblast cortex
-  		rel_strength(1,2,2,2,1) = 1.0   !Inter-cellular Epiblast cortex-hypoblast cortex
-  		rel_strength(2,2,1,1,2) = 1.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-  		rel_strength(2,2,1,2,2) = 1.0    !Inter-cellular Hypoblast cytoplasm-hypoblast cortex
-  		rel_strength(2,2,2,2,2) = 1.0   !Inter-cellular Hypoblast cortex-hypoblast cortex
+		  rel_strength(1,1,1,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(1,1,1,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+		  rel_strength(1,1,1,2,2,2) = 1.0  !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex
+  		rel_strength(1,1,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(1,1,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+  		rel_strength(1,1,2,2,2,2) = 1.0  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
+  		rel_strength(1,2,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(1,2,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+  		rel_strength(1,2,2,2,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
-      !		  rel_strength(1,1,2,2,1)	= command_line_argument	!Used in old version
+      rel_strength(2,1,1,1,1,1) = 1.0  !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(2,1,1,1,2,1) = 1.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cortex
+      rel_strength(2,1,1,2,2,1)	= 1.0  !Repulsive component, intra-cellular Epiblast cortex-epiblast cortex
+		  rel_strength(2,1,2,1,1,1)	= 0.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
+		  rel_strength(2,1,2,1,2,1) = 0.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
+		  rel_strength(2,1,2,2,2,1) = 0.0	 !Repulsive component, intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
+		  rel_strength(2,2,2,1,1,1) = 1.0	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+		  rel_strength(2,2,2,1,2,1) = 1.0	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
+		  rel_strength(2,2,2,2,2,1) = 1.0	 !Repulsive component, intra-cellular Hypoblast cortex-hypoblast cortex
+
+		  rel_strength(2,1,1,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(2,1,1,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+		  rel_strength(2,1,1,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
+  		rel_strength(2,1,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(2,1,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+  		rel_strength(2,1,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
+  		rel_strength(2,2,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(2,2,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+  		rel_strength(2,2,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
+
+      r_s_max = MAXVAL(rel_strength)
 
       !Variable for inter-cortex potential
-      cortex_constant = 0.0001
-
-		  ! fill in transposed values of symmetric matrix (i.e. (i,j,k,l)=(j,i,l,k) )
-      r_s_max=0.0 ! calculate maximum matrix entry to rescale dt_amp_max
-      do iloop1=0,n_c_types
-			  do iloop2=0,n_c_types									!max(0,iloop1-1)
-				  do iloop3=1,n_e_types
-					  do iloop4=1,n_e_types							!max(1,iloop3-1)
-						  do iloop5=1,2
-							  rel_strength(iloop1,iloop2,iloop3,iloop4,iloop5)=rel_strength(iloop2,iloop1,iloop4,iloop3,iloop5)
-							  r_s_max=max(r_s_max,rel_strength(iloop1,iloop2,iloop3,iloop4,iloop5))
-						  end do
-					  end do
-				  end do
-			  end do
-		  end do
+      cortex_constant = 0.001
 
       dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
 
       ! temporal parameters - all in *seconds*
-      time_max=1.5*cell_cycle_time ! --> time of simulation in seconds
+      time_max=1.0*cell_cycle_time ! --> time of simulation in seconds
       time_out_1=time_max/99.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
 !     time_out_2=cell_cycle_time/100.0 ! --> interval between quantitative data outputs
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment

@@ -131,7 +131,12 @@ module scem_2_measure_neighbours
 !*******************
 		end do
 
-		sorting_measure = real(same_fate_counter)/real(neighbours_counter)
+		if (neighbours_counter.EQ.0) then
+			sorting_measure = 0
+		else
+			sorting_measure = real(same_fate_counter)/real(neighbours_counter)
+		endif
+		
 		!Write measurement to file sorting_data_neighbours
 		write(38,*) real(time), sorting_measure
 		close(39)

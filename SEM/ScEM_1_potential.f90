@@ -1,5 +1,5 @@
 ! this module contains the subroutine scem_potential, which creates a table for efficient velocity evaluation
-! the table potential_deriv is constructed, and this, appropriately scaled, will be used for all interactions
+! the table potential_deriv2 is constructed, and this, appropriately scaled, will be used for all interactions
 ! see subroutine scem_integration for implementation
 
 ! T. J Newman, Tempe, July 2010
@@ -19,28 +19,43 @@ module scem_1_potential
       real*8, allocatable, dimension(:) :: r_sq_table
       real*8, allocatable, dimension(:) :: pot_deriv_table
 
-      allocate(potential_deriv(0:n_bins-1,2)) ! potential_deriv is an interpolation table for (1/r)dV/dr            Note n_bins is the number of elements into which the max distance of potential is divided (I think)
+      allocate(potential_deriv1(0:n_bins-1,2)) ! potential_deriv1 is an interpolation table for (1/r)dV_1/dr    Note n_bins is the number of length sections into which the max distance of potential is divided
+      allocate(potential_deriv2(0:n_bins-1,2)) ! potential_deriv2 is an interpolation table for (1/r)dV_2/dr
       allocate(pot_deriv_table(0:n_bins)) ! pot_deriv_table is a local array containing (1/r)dV/dr
       allocate(r_sq_table(0:n_bins)) ! r_sq_table is a local array containing tabulated values of r^2
 
-      ! loop over table bins
+!For attractive potential
       do j=0,n_bins
-         sep_sq=j*d_r_sq ! calculate r^2
-         r_sq_table(j)=sep_sq ! fill r_sq_table
-         factor=exp(rho*(1.0-sep_sq/r_equil_sq)) ! a useful factor for potential evaluation
-         pot_deriv_table(j)=force_amplitude*factor*(factor-1.0) ! fill pot_deriv_table
+         sep_sq=j*d_r_sq                               ! calculate r^2
+         r_sq_table(j)=sep_sq                          ! fill r_sq_table
+         factor=exp(rho*(1.0-sep_sq/r_equil_sq))       ! a useful factor for potential evaluation
+         pot_deriv_table(j)=-force_amplitude*factor ! This is the force applied by the potential.
       end do
 
-      ! loop over bins and use linear interpolation to fill potential_deriv
+      ! loop over bins and use linear interpolation to fill potential_deriv2
+      ! These values are not forces themselves but are used later in a linear interpolation to find forces.
       do j=0,n_bins-1
-         potential_deriv(j,1)=(pot_deriv_table(j+1)-pot_deriv_table(j))*d_r_sq_recip
-         potential_deriv(j,2)=(pot_deriv_table(j)*r_sq_table(j+1)-pot_deriv_table(j+1)*r_sq_table(j))*d_r_sq_recip
+         potential_deriv1(j,1)=(pot_deriv_table(j+1)-pot_deriv_table(j))*d_r_sq_recip
+         potential_deriv1(j,2)=(pot_deriv_table(j)*r_sq_table(j+1)-pot_deriv_table(j+1)*r_sq_table(j))*d_r_sq_recip
       end do
-
       ! rescale force by damping_element to retrieve (what ultimately will be) a velocity
       ! note, for efficiency, this quantity needs to be multiplied by a position vector to yield a true velocity
       ! see scem_2_integration for implementation
-      potential_deriv=potential_deriv/damping_element
+      potential_deriv1=potential_deriv1/damping_element
+
+!For repulsive potential, same as above but with different formula for pot_deriv_table
+      do j=0,n_bins
+         sep_sq=j*d_r_sq                               ! calculate r^2
+         r_sq_table(j)=sep_sq                          ! fill r_sq_table
+         factor=exp(rho*(1.0-sep_sq/r_equil_sq))       ! a useful factor for potential evaluation
+         pot_deriv_table(j)=force_amplitude*factor**2 ! This is the force applied by the potential.
+      end do
+      do j=0,n_bins-1
+         potential_deriv2(j,1)=(pot_deriv_table(j+1)-pot_deriv_table(j))*d_r_sq_recip
+         potential_deriv2(j,2)=(pot_deriv_table(j)*r_sq_table(j+1)-pot_deriv_table(j+1)*r_sq_table(j))*d_r_sq_recip
+      end do
+      potential_deriv2=potential_deriv2/damping_element
+
 
       ! deallocate local arrays
       deallocate(pot_deriv_table)

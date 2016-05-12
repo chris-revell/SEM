@@ -15,7 +15,7 @@ contains
   subroutine scem_near_neighbour_update
 
     real*8, dimension(3) :: dx
-    real*8  :: sep_sq,pot_deriv_interp,fadein_amp,r_s
+    real*8  :: sep_sq,pot_deriv_interp1,pot_deriv_interp2,fadein_amp,r_s1,r_s2
     integer :: bin,index_intra
 
 
@@ -44,13 +44,15 @@ contains
       if (sep_sq.le.r_interaction_max_sq) then !Separation between elements less than maximum range of interaction, so elements can interact.
 
         !This next section applies the standard morse potential between the two elements.
-        fadein_amp  = elements(n)%strength*elements(nn)%strength
-        bin         = int(sep_sq*d_r_sq_recip)
-        r_s         = fadein_amp*rel_strength(cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
-        pot_deriv_interp        = r_s*(sep_sq*potential_deriv(bin,1) + potential_deriv(bin,2))
+        fadein_amp        = elements(n)%strength*elements(nn)%strength
+        bin               = int(sep_sq*d_r_sq_recip)
+        r_s1              = fadein_amp*rel_strength(1,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
+        r_s2              = fadein_amp*rel_strength(2,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
+        pot_deriv_interp1 = r_s1*(sep_sq*potential_deriv1(bin,1) + potential_deriv1(bin,2))
+        pot_deriv_interp2 = r_s2*(sep_sq*potential_deriv2(bin,1) + potential_deriv2(bin,2))
         !Element velocities updated.
-        elements(n)%velocity(:) = elements(n)%velocity(:)+dx(:)*pot_deriv_interp
-        elements(nn)%velocity(:)= elements(nn)%velocity(:)-dx(:)*pot_deriv_interp
+        elements(n)%velocity(:) = elements(n)%velocity(:)+dx(:)*(pot_deriv_interp1 + pot_deriv_interp2)
+        elements(nn)%velocity(:)= elements(nn)%velocity(:)-dx(:)*(pot_deriv_interp1 + pot_deriv_interp2)
 
       endif
     end do
