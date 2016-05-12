@@ -29,8 +29,9 @@ module scem_1_potential
          sep_sq=j*d_r_sq                               ! calculate r^2
          r_sq_table(j)=sep_sq                          ! fill r_sq_table
          factor=exp(rho*(1.0-sep_sq/r_equil_sq))       ! a useful factor for potential evaluation
-         pot_deriv_table(j)=force_amplitude*factor ! This is the force applied by the potential.
+         pot_deriv_table(j)=-force_amplitude*factor ! This is the force applied by the potential.
       end do
+
       ! loop over bins and use linear interpolation to fill potential_deriv2
       ! These values are not forces themselves but are used later in a linear interpolation to find forces.
       do j=0,n_bins-1
@@ -43,12 +44,11 @@ module scem_1_potential
       potential_deriv1=potential_deriv1/damping_element
 
 !For repulsive potential, same as above but with different formula for pot_deriv_table
-      ! loop over table bins
       do j=0,n_bins
          sep_sq=j*d_r_sq                               ! calculate r^2
          r_sq_table(j)=sep_sq                          ! fill r_sq_table
          factor=exp(rho*(1.0-sep_sq/r_equil_sq))       ! a useful factor for potential evaluation
-         pot_deriv_table(j)=-force_amplitude*factor**2 ! This is the force applied by the potential.
+         pot_deriv_table(j)=force_amplitude*factor**2 ! This is the force applied by the potential.
       end do
       do j=0,n_bins-1
          potential_deriv2(j,1)=(pot_deriv_table(j+1)-pot_deriv_table(j))*d_r_sq_recip

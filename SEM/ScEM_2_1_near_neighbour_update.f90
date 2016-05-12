@@ -51,8 +51,8 @@ contains
         pot_deriv_interp1 = r_s1*(sep_sq*potential_deriv1(bin,1) + potential_deriv1(bin,2))
         pot_deriv_interp2 = r_s2*(sep_sq*potential_deriv2(bin,1) + potential_deriv2(bin,2))
         !Element velocities updated.
-        elements(n)%velocity(:) = elements(n)%velocity(:)+dx(:)*(pot_deriv_interp1 - pot_deriv_interp2)
-        elements(nn)%velocity(:)= elements(nn)%velocity(:)-dx(:)*(pot_deriv_interp1 - pot_deriv_interp2)
+        elements(n)%velocity(:) = elements(n)%velocity(:)+dx(:)*(pot_deriv_interp1 + pot_deriv_interp2)
+        elements(nn)%velocity(:)= elements(nn)%velocity(:)-dx(:)*(pot_deriv_interp1 + pot_deriv_interp2)
 
       endif
     end do
