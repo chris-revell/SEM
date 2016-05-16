@@ -23,9 +23,6 @@ module scem_2_integrate
 
       !Update cortex element velocities according to cortex interaction network.
       if (flag_cortex.EQ.1) then
-        if (flag_DIT.EQ.1) then
-          call scem_dit
-        endif
         call scem_cortical_tension_update
       endif
 

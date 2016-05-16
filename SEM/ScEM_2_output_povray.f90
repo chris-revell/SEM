@@ -18,8 +18,6 @@ module scem_2_output_povray
       integer               :: corner_element   !Label of element forming corner of smoothed_triangle
       real*8, dimension(3)  :: corner           !Array to store corner vector used in smoothed_triangle data output
       real*8, dimension(3)  :: normal           !Array to store normal vector used in smoothed_triangle data output
-      integer               :: label1           !Useful for abbreviating long expressions
-      integer               :: label2
 
       !Create filename for povray output file.
       write(povray_filename,"(A18,I2.2,A4)") "/povray_data/snap_", n_snapshots, ".pov"
@@ -139,7 +137,7 @@ module scem_2_output_povray
 
       !Write Delaunay triangulation over surface elements to file in povray "smoothed_triangle"
       !format in order to draw a continuous cell surface.
-      !Colour the smoothed triangles green for epiblast cells, 
+      !Colour the smoothed triangles green for epiblast cells,
       !red for hypoblast cells.
       if (flag_povray_triangles.EQ.1) then
         do i=1, nc                                                !Loop over all cells
