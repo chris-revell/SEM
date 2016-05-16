@@ -51,7 +51,7 @@ contains
 
     do j=1, np_cortex
       if (elements(pairs_cortex(j,1))%DIT_factor.AND.elements(pairs_cortex(j,2))%DIT_factor) then
-        pairs_cortex(j,3) = 2
+        pairs_cortex(j,3) = cells(elements(pairs_cortex(j,1))%parent)%fate
       else
         pairs_cortex(j,3) = 1
       endif

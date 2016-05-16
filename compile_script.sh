@@ -1,6 +1,6 @@
 # script to precompile ScEM modules, compile ScEM master program, and then delete .mod and .o files.
-# Note that the first line must be a command to move to the directory in which the code sits. This is necessary on a Mac but not for Linux.
 
+set -e #Exit script if any compile command fails and returns a non-zero status. 
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/ScEM_0*.f90
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/ScEM_1*.f90
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/ScEM_2*.f90

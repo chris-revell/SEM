@@ -1,6 +1,7 @@
 # Run povray to visualise elements and/or pairs in 100 snapshots of the system.
 #Then run ImageMagick to create an animated gif of the output jpegs.
 
+set -e #Exist script if any of the povray renderings fail. 
 povray snap_00.pov +FJ -D
 povray snap_01.pov +FJ -D
 povray snap_02.pov +FJ -D
@@ -106,4 +107,4 @@ povray snap_99.pov +FJ -D
 convert -delay 15 -loop 0 *.jpg animated.gif
 rm *.jpg
 rm *.pov
-rm visualise_povray_script.sh 
+rm visualise_povray_script.sh
