@@ -3,13 +3,13 @@
 !that acts between near neighbours in this network in order to cover the cell surface with
 !a cortical tension.
 
-module scem_2_1_cortical_tension_update
+module scem_2_2_cortical_tension_update
 
   use scem_0_input
   use scem_0_useful
   use scem_0_arrays
   use scem_1_types
-  use scem_2_DIT
+  use scem_2_1_DIT
 
   implicit none
 
@@ -78,4 +78,4 @@ contains
     end do
 
   end subroutine scem_cortical_tension_update
-end module scem_2_1_cortical_tension_update
+end module scem_2_2_cortical_tension_update

@@ -3,7 +3,7 @@
 !shared with cells of a different fate, and hence change the cortical tension
 !at these interfaces according to the differential interfactial tension hypothesis
 
-module scem_2_DIT
+module scem_2_1_DIT
 
   use scem_0_arrays
   use scem_0_input
@@ -58,4 +58,4 @@ contains
     enddo
 
   end subroutine
-end module scem_2_DIT
+end module scem_2_1_DIT
