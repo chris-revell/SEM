@@ -50,13 +50,9 @@ contains
     enddo
 
     do j=1, np_cortex
-<<<<<<< HEAD:SEM/ScEM_2_DIT.f90
-      if (elements(pairs_cortex(j,1))%DIT_factor.AND.elements(pairs_cortex(j,2))%DIT_factor) then
-        pairs_cortex(j,3) = cells(elements(pairs_cortex(j,1))%parent)%fate
-=======
+!      if (elements(pairs_cortex(j,1))%DIT_factor.AND.elements(pairs_cortex(j,2))%DIT_factor) then
       if (elements(pairs_cortex(j,1))%DIT_factor.OR.elements(pairs_cortex(j,2))%DIT_factor) then
-        pairs_cortex(j,3) = 2
->>>>>>> DIT-povray-colouring:SEM/ScEM_2_1_DIT.f90
+        pairs_cortex(j,3) = cells(elements(pairs_cortex(j,1))%parent)%fate !DIT response equal to fate. Quick and dirty way to give fate dependence.
       else
         pairs_cortex(j,3) = 1
       endif

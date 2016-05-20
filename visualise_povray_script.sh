@@ -1,109 +1,8 @@
 # Run povray to visualise elements and/or pairs in 100 snapshots of the system.
 #Then run ImageMagick to create an animated gif of the output jpegs.
 
-<<<<<<< HEAD
-set -e #Exist script if any of the povray renderings fail. 
-povray snap_00.pov +FJ -D
-povray snap_01.pov +FJ -D
-povray snap_02.pov +FJ -D
-povray snap_03.pov +FJ -D
-povray snap_04.pov +FJ -D
-povray snap_05.pov +FJ -D
-povray snap_06.pov +FJ -D
-povray snap_07.pov +FJ -D
-povray snap_08.pov +FJ -D
-povray snap_09.pov +FJ -D
-povray snap_10.pov +FJ -D
-povray snap_11.pov +FJ -D
-povray snap_12.pov +FJ -D
-povray snap_13.pov +FJ -D
-povray snap_14.pov +FJ -D
-povray snap_15.pov +FJ -D
-povray snap_16.pov +FJ -D
-povray snap_17.pov +FJ -D
-povray snap_18.pov +FJ -D
-povray snap_19.pov +FJ -D
-povray snap_20.pov +FJ -D
-povray snap_21.pov +FJ -D
-povray snap_22.pov +FJ -D
-povray snap_23.pov +FJ -D
-povray snap_24.pov +FJ -D
-povray snap_25.pov +FJ -D
-povray snap_26.pov +FJ -D
-povray snap_27.pov +FJ -D
-povray snap_28.pov +FJ -D
-povray snap_29.pov +FJ -D
-povray snap_30.pov +FJ -D
-povray snap_31.pov +FJ -D
-povray snap_32.pov +FJ -D
-povray snap_33.pov +FJ -D
-povray snap_34.pov +FJ -D
-povray snap_35.pov +FJ -D
-povray snap_36.pov +FJ -D
-povray snap_37.pov +FJ -D
-povray snap_38.pov +FJ -D
-povray snap_39.pov +FJ -D
-povray snap_40.pov +FJ -D
-povray snap_41.pov +FJ -D
-povray snap_42.pov +FJ -D
-povray snap_43.pov +FJ -D
-povray snap_44.pov +FJ -D
-povray snap_45.pov +FJ -D
-povray snap_46.pov +FJ -D
-povray snap_47.pov +FJ -D
-povray snap_48.pov +FJ -D
-povray snap_49.pov +FJ -D
-povray snap_50.pov +FJ -D
-povray snap_51.pov +FJ -D
-povray snap_52.pov +FJ -D
-povray snap_53.pov +FJ -D
-povray snap_54.pov +FJ -D
-povray snap_55.pov +FJ -D
-povray snap_56.pov +FJ -D
-povray snap_57.pov +FJ -D
-povray snap_58.pov +FJ -D
-povray snap_59.pov +FJ -D
-povray snap_60.pov +FJ -D
-povray snap_61.pov +FJ -D
-povray snap_62.pov +FJ -D
-povray snap_63.pov +FJ -D
-povray snap_64.pov +FJ -D
-povray snap_65.pov +FJ -D
-povray snap_66.pov +FJ -D
-povray snap_67.pov +FJ -D
-povray snap_68.pov +FJ -D
-povray snap_69.pov +FJ -D
-povray snap_70.pov +FJ -D
-povray snap_71.pov +FJ -D
-povray snap_72.pov +FJ -D
-povray snap_73.pov +FJ -D
-povray snap_74.pov +FJ -D
-povray snap_75.pov +FJ -D
-povray snap_76.pov +FJ -D
-povray snap_77.pov +FJ -D
-povray snap_78.pov +FJ -D
-povray snap_79.pov +FJ -D
-povray snap_80.pov +FJ -D
-povray snap_81.pov +FJ -D
-povray snap_82.pov +FJ -D
-povray snap_83.pov +FJ -D
-povray snap_84.pov +FJ -D
-povray snap_85.pov +FJ -D
-povray snap_86.pov +FJ -D
-povray snap_87.pov +FJ -D
-povray snap_88.pov +FJ -D
-povray snap_89.pov +FJ -D
-povray snap_90.pov +FJ -D
-povray snap_91.pov +FJ -D
-povray snap_92.pov +FJ -D
-povray snap_93.pov +FJ -D
-povray snap_94.pov +FJ -D
-povray snap_95.pov +FJ -D
-povray snap_96.pov +FJ -D
-povray snap_97.pov +FJ -D
-povray snap_98.pov +FJ -D
-povray snap_99.pov +FJ -D
-=======
+set -e #Exit script if any of the povray renderings fail. 
+
 povray snap_00.pov +Fj -D +H1000 +W1000
 povray snap_01.pov +Fj -D +H1000 +W1000
 povray snap_02.pov +Fj -D +H1000 +W1000
@@ -204,7 +103,6 @@ povray snap_96.pov +Fj -D +H1000 +W1000
 povray snap_97.pov +Fj -D +H1000 +W1000
 povray snap_98.pov +Fj -D +H1000 +W1000
 povray snap_99.pov +Fj -D +H1000 +W1000
->>>>>>> DIT-povray-colouring
 
 #ImageMagick command line input
 convert -delay 15 -loop 0 *.jpg animated.gif
