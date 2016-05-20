@@ -18,8 +18,6 @@ module scem_2_output_povray
       integer               :: corner_element   !Label of element forming corner of smoothed_triangle
       real*8, dimension(3)  :: corner           !Array to store corner vector used in smoothed_triangle data output
       real*8, dimension(3)  :: normal           !Array to store normal vector used in smoothed_triangle data output
-      integer               :: label1           !Useful for abbreviating long expressions
-      integer               :: label2
 
       !Create filename for povray output file.
       write(povray_filename,"(A18,I2.2,A4)") "/povray_data/snap_", n_snapshots, ".pov"
@@ -43,6 +41,9 @@ module scem_2_output_povray
       write(42,*) 'light_source { < 0, 0, -60 > color White }'
       write(42,*)
 
+      !Write element position data to file in Pov-Ray format.
+      !Loop over all elements. Draw a small sphere at the position of each element.
+      !Colour the sphere green for a cytoplasm element; red for a cortex element.
       if (flag_povray_elements.EQ.1) then
         !Draw spheres for all elements of all cells in the system, coloured according to element type
         do i=1, ne
@@ -63,6 +64,11 @@ module scem_2_output_povray
       endif
       write(42,*)
 
+      !Draw pair data to file in Pov-Ray format.
+      !Loop over all pairs in "pairs" array. For each pair,
+      !draw a cylinder between the positions of each element in the pair.
+      !Colour the cyclinder blue for intra-cell interactions,
+      !black for inter-cell interactions.
       if (flag_povray_pairs.EQ.1) then
         !Draw cylinders for inter-element pair interactions. Inter-cell pairs black, intra-cell pairs blue.
         do j=1, np
@@ -70,7 +76,6 @@ module scem_2_output_povray
           n = pairs(j,2)
           k = elements(m)%parent
           l = elements(n)%parent
-
           if (k.NE.l) then !Elements are not in the same cell
             !Inter-cell interactions in black
             write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
@@ -85,22 +90,6 @@ module scem_2_output_povray
                           '> 0.5 texture { pigment { color Black } } } // pair inter cell',&
                           elements(m)%parent, ' , cell',&
                           elements(n)%parent
-
-
-            !Intra-cell cortex pair interactions in red
-  !          elseif((elements(pairs(j,1))%type.EQ.2).AND.(elements(pairs(j,2))%type.EQ.2)) then
-  !            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-  !                          F18.14,A50,I2.2,A8,I2.2)') &
-  !                          ' cylinder {  < ', &
-  !                          elements(pairs(j,1))%position(1), ',', &
-  !                          elements(pairs(j,1))%position(2), ',', &
-  !                          elements(pairs(j,1))%position(3), '>, <', &
-  !                          elements(pairs(j,2))%position(1), ',', &
-  !                          elements(pairs(j,2))%position(2), ',', &
-  !                          elements(pairs(j,2))%position(3), &
-  !                          '> 0.5 texture { pigment { color Red } } } // cell ',&
-  !                          elements(pairs(j,1))%parent, ' , cell ',&
-  !                          elements(pairs(j,2))%parent
           else !Elements are in the same cell
             !All intra-cell interactions in blue
             write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
@@ -120,7 +109,11 @@ module scem_2_output_povray
       endif
       write(42,*)
 
-      !Write cell position data to file in povray format
+      !Write cell position data to file in povray format.
+      !Draw a sphere at the centre of mass of each cell.
+      !Colour the spheres green for epiblast cells,
+      !red for hypoblast cells.
+      !Scale the radius of the sphere with the volume of the cell.
       if (flag_povray_volumes.EQ.1) then
         !Draw spheres for all cells in the system, coloured according to cell type, with transparency set to 0.66 and phong set to 0.8
         do i=1, nc
@@ -142,7 +135,10 @@ module scem_2_output_povray
         write(42,*)
       endif
 
-      !Write cell surface triangles to file in povray smoothed_triangle format
+      !Write Delaunay triangulation over surface elements to file in povray "smoothed_triangle"
+      !format in order to draw a continuous cell surface.
+      !Colour the smoothed triangles green for epiblast cells,
+      !red for hypoblast cells.
       if (flag_povray_triangles.EQ.1) then
         do i=1, nc                                                !Loop over all cells
           do j=1, cells(i)%triplet_count                          !Loop over all delaunay triangles within the cell
@@ -173,49 +169,35 @@ module scem_2_output_povray
       write(42,*) ""
 
       !Write commands to draw Delaunay cortex interactions to file.
+      !Loop over all pairs in pairs_cortex and draw a cylinder between the positions of the two elements in each pair.
+      !Colour the cylinder red for a standard cortex interaction; green if the interaction is altered by DIT.
       if (flag_povray_cortex_pairs.EQ.1) then
-        do i=1, nc  !Loop over all cells
-          do j=1, cells(i)%triplet_count  !Loop over all Delaunay triangles in each cell
-            label1 = cells(i)%triplets(1,j) !Labels for adjacent elements in this triplet of the triangulation
-            label2 = cells(i)%triplets(2,j)
+        do i=1, np_cortex
+          if (pairs_cortex(i,3).EQ.1) then
             write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
                             F18.14,A61,I2.2)') &
                             ' cylinder {  < ', &
-                            elements(label1)%position(1), ',', &
-                            elements(label1)%position(2), ',', &
-                            elements(label1)%position(3), '>, <', &
-                            elements(label2)%position(1), ',', &
-                            elements(label2)%position(2), ',', &
-                            elements(label2)%position(3), &
+                            elements(pairs_cortex(i,1))%position(1), ',', &
+                            elements(pairs_cortex(i,1))%position(2), ',', &
+                            elements(pairs_cortex(i,1))%position(3), '>, <', &
+                            elements(pairs_cortex(i,2))%position(1), ',', &
+                            elements(pairs_cortex(i,2))%position(2), ',', &
+                            elements(pairs_cortex(i,2))%position(3), &
                             '> 0.5 texture { pigment { color Red } } } // cortex pair cell',&
-                            elements(label1)%parent !Both elements are in the same cell so we only need one label
-            label1 = cells(i)%triplets(2,j) !Labels for adjacent elements in this triplet of the triangulation
-            label2 = cells(i)%triplets(3,j)
+                            elements(pairs_cortex(i,1))%parent !Both elements are in the same cell so we only need one label
+          else
             write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                            F18.14,A61,I2.2)') &
+                            F18.14,A63,I2.2)') &
                             ' cylinder {  < ', &
-                            elements(label1)%position(1), ',', &
-                            elements(label1)%position(2), ',', &
-                            elements(label1)%position(3), '>, <', &
-                            elements(label2)%position(1), ',', &
-                            elements(label2)%position(2), ',', &
-                            elements(label2)%position(3), &
-                            '> 0.5 texture { pigment { color Red } } } // cortex pair cell',&
-                            elements(label1)%parent !Both elements are in the same cell so we only need one label
-            label1 = cells(i)%triplets(3,j) !Labels for adjacent elements in this triplet of the triangulation
-            label2 = cells(i)%triplets(1,j)
-            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                            F18.14,A61,I2.2)') &
-                            ' cylinder {  < ', &
-                            elements(label1)%position(1), ',', &
-                            elements(label1)%position(2), ',', &
-                            elements(label1)%position(3), '>, <', &
-                            elements(label2)%position(1), ',', &
-                            elements(label2)%position(2), ',', &
-                            elements(label2)%position(3), &
-                            '> 0.5 texture { pigment { color Red } } } // cortex pair cell',&
-                            elements(label1)%parent !Both elements are in the same cell so we only need one label
-          enddo
+                            elements(pairs_cortex(i,1))%position(1), ',', &
+                            elements(pairs_cortex(i,1))%position(2), ',', &
+                            elements(pairs_cortex(i,1))%position(3), '>, <', &
+                            elements(pairs_cortex(i,2))%position(1), ',', &
+                            elements(pairs_cortex(i,2))%position(2), ',', &
+                            elements(pairs_cortex(i,2))%position(3), &
+                            '> 0.5 texture { pigment { color Green } } } // cortex pair cell',&
+                            elements(pairs_cortex(i,1))%parent !Both elements are in the same cell so we only need one label
+          endif
         enddo
       endif
 

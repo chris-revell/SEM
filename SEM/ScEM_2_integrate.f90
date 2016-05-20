@@ -8,9 +8,9 @@ module scem_2_integrate
   use scem_0_useful
   use scem_1_types
   use scem_2_background
-  use scem_2_DIT
+  use scem_2_1_DIT
   use scem_2_1_near_neighbour_update
-  use scem_2_1_cortical_tension_update
+  use scem_2_2_cortical_tension_update
 
   implicit none
 
@@ -23,9 +23,6 @@ module scem_2_integrate
 
       !Update cortex element velocities according to cortex interaction network.
       if (flag_cortex.EQ.1) then
-        if (flag_DIT.EQ.1) then
-          call scem_dit
-        endif
         call scem_cortical_tension_update
       endif
 

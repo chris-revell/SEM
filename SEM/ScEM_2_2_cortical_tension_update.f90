@@ -3,12 +3,13 @@
 !that acts between near neighbours in this network in order to cover the cell surface with
 !a cortical tension.
 
-module scem_2_1_cortical_tension_update
+module scem_2_2_cortical_tension_update
 
   use scem_0_input
   use scem_0_useful
   use scem_0_arrays
   use scem_1_types
+  use scem_2_1_DIT
 
   implicit none
 
@@ -29,10 +30,8 @@ contains
     enddo
     allocate(pairs_cortex(np_cortex,3))
 
-    !Default setting for the 3rd column of the 2nd dimension of pairs_cortex, updated later in scem_DIT
-    pairs_cortex(:,3)=1
-
     pair_counter=0
+    !Fill pairs_cortex(i,1) and pairs_cortex(i,2) with labels of elements in cortex pairs
     !Loop over all cells
     do c=1, nc
       !Loop over all Delaunay triplets in cell c
@@ -52,6 +51,13 @@ contains
       enddo !End loop over triangles
     enddo !End loop over cells
 
+    !Now that cortex network has been established in pairs_cortex(i,1)
+    !and pairs_cortex(i,2), calculate pairs_cortex(i,3) values
+    if (flag_DIT.EQ.1) then
+      call scem_dit
+    else
+      pairs_cortex(:,3)=1      !Default setting for the 3rd column of the 2nd dimension of pairs_cortex, if not set in scem_DIT
+    endif
 
     !Now update velocities for all pairs in this network.
     do m=1,pair_counter
@@ -72,4 +78,4 @@ contains
     end do
 
   end subroutine scem_cortical_tension_update
-end module scem_2_1_cortical_tension_update
+end module scem_2_2_cortical_tension_update

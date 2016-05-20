@@ -3,7 +3,7 @@
 !shared with cells of a different fate, and hence change the cortical tension
 !at these interfaces according to the differential interfactial tension hypothesis
 
-module scem_2_DIT
+module scem_2_1_DIT
 
   use scem_0_arrays
   use scem_0_input
@@ -50,12 +50,17 @@ contains
     enddo
 
     do j=1, np_cortex
+<<<<<<< HEAD:SEM/ScEM_2_DIT.f90
       if (elements(pairs_cortex(j,1))%DIT_factor.AND.elements(pairs_cortex(j,2))%DIT_factor) then
         pairs_cortex(j,3) = cells(elements(pairs_cortex(j,1))%parent)%fate
+=======
+      if (elements(pairs_cortex(j,1))%DIT_factor.OR.elements(pairs_cortex(j,2))%DIT_factor) then
+        pairs_cortex(j,3) = 2
+>>>>>>> DIT-povray-colouring:SEM/ScEM_2_1_DIT.f90
       else
         pairs_cortex(j,3) = 1
       endif
     enddo
 
   end subroutine
-end module scem_2_DIT
+end module scem_2_1_DIT
