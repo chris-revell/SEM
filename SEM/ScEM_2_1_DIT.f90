@@ -50,7 +50,7 @@ contains
     enddo
 
     do j=1, np_cortex
-      if (elements(pairs_cortex(j,1))%DIT_factor.AND.elements(pairs_cortex(j,2))%DIT_factor) then
+      if (elements(pairs_cortex(j,1))%DIT_factor.OR.elements(pairs_cortex(j,2))%DIT_factor) then
         pairs_cortex(j,3) = 2
       else
         pairs_cortex(j,3) = 1
