@@ -34,7 +34,7 @@ contains
     write(22,*) "flag_cortex     = ",flag_cortex
     write(22,*) "flag_DIT        = ",flag_DIT
 
-    write(22,*) "flag_povray = ",flag_povray
+    write(22,*) "flag_povray     = ",flag_povray
     write(22,*) "  flag_povray_volumes      = ",flag_povray_volumes
     write(22,*) "  flag_povray_elements     = ",flag_povray_elements
     write(22,*) "  flag_povray_pairs        = ",flag_povray_pairs
