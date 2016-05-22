@@ -78,26 +78,26 @@ module scem_0_input
       flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
-      flag_background = 2 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
-      flag_growth     = 0 ! flag_growth = 0 (1) for no growth (growth)
-      flag_division   = 0 ! flag_division = 0 (1) for growth with no cell division (with cell division)
+      flag_background = 3 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
+      flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
+      flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
       flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
       !Output control flags
       flag_povray = 1          !switch to turn off povray output entirely
-        flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
+        flag_povray_volumes      = 1 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 1 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
         flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 1 ! Switch to turn Delaunay cortex interaction on and off
-      flag_count_output       = 0    ! Switch to turn off outputting cell count
+      flag_count_output       = 1    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
-      flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
+      flag_volume_output      = 1    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
-      flag_measure            = 0    ! Switch to turn off element pair ratio sorting measurement
-      flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
-      flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
+      flag_measure            = 1    ! Switch to turn off element pair ratio sorting measurement
+      flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
+      flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
@@ -155,7 +155,7 @@ module scem_0_input
       diff_coeff=0.001 ! --> diffusion coefficient of elements in units of micron^2/s
 
       ! growth parameters
-      cell_cycle_time=4320			!0.5*3600.0 ! --> cell cycle time in seconds
+      cell_cycle_time=43200*5			!0.5*3600.0 ! --> cell cycle time in seconds
       frac_growth=0.9 ! fraction of current cell radius within which new elements may be placed
       frac_placement_min=0.6 ! minimum separation of new element from nearest neighbour, as fraction of r_equil
         ! derived quantities

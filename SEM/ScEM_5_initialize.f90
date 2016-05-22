@@ -6,6 +6,7 @@ module scem_5_initialize
   use scem_0_input
   use scem_0_ran_array
   use scem_0_useful
+  use scem_1_initialconditions
   use scem_1_types
   use scem_2_com
   use scem_2_identity
@@ -65,13 +66,6 @@ module scem_5_initialize
       allocate(pairs(np_size,2))
       !pairs_cortex can only be allocated after volume_calculate has been called because it relies on the Delaunay triangulation.
 
-      ! open/write/close data file for initialization data check
-      open(unit=22,file=output_folder//'/system_data/initialization_data.txt',status='unknown')
-      ! open data file for radius of gyration and center of mass
-!      open(unit=23,file='radius_gyration',status='unknown')
-      ! open data file to log relisting events
-!      open(unit=24,file='relist_log',status='unknown')
-
       if (flag_create.eq.1) then
          call scem_initial_create ! make new initial cell configuration
       else
@@ -99,58 +93,6 @@ module scem_5_initialize
         call scem_cortex
       endif
 
-      ! write/close data file for initialization data check
-      write(22,*)'number of elements = ',ne
-      write(22,*)'number of pairs = ',np
-      write(22,*)'linear size of sector array = ',nx
-      write(22,*)'radius of first cell = ',real(r_cell)
-      write(22,*)'linear sector size = ',real(sector_size)
-      write(22,*)'time = ',real(time)
-      write(22,*)'center of mass = ',real(cells(1)%position(:))
-      write(22,*)'frac_interaction_max = ',frac_interaction_max
-!      write(22,*)'boundary radius = ',r_boundary
-      write(22,*) "Interaction magnitudes"
-      write(22,*) "rel_strength(1,1,1,1,1,1) = 1.0  !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm"
-      write(22,*) "rel_strength(1,1,1,1,2,1) = 1.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cortex"
-      write(22,*) "rel_strength(1,1,1,2,2,1)	= 1.0  !Adhesive component, intra-cellular Epiblast cortex-epiblast cortex"
-      write(22,*) "rel_strength(1,1,2,1,1,1)	= 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm"
-      write(22,*) "rel_strength(1,1,2,1,2,1) = 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cortex"
-      write(22,*) "rel_strength(1,1,2,2,2,1) = 0.0	 !Adhesive component, intra-cellular Epiblast cortex-hypoblast cortex"
-      write(22,*) "rel_strength(1,2,2,1,1,1) = 1.0	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm"
-      write(22,*) "rel_strength(1,2,2,1,2,1) = 1.0	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex"
-      write(22,*) "rel_strength(1,2,2,2,2,1) = 1.0	 !Adhesive component, intra-cellular Hypoblast cortex-hypoblast cortex"
-
-      write(22,*) "rel_strength(1,1,1,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm"
-      write(22,*) "rel_strength(1,1,1,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cortex"
-      write(22,*) "rel_strength(1,1,1,2,2,2) = 1.0  !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex"
-      write(22,*) "rel_strength(1,1,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm"
-      write(22,*) "rel_strength(1,1,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cortex"
-      write(22,*) "rel_strength(1,1,2,2,2,1) = 1.0  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex"
-      write(22,*) "rel_strength(1,2,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm"
-      write(22,*) "rel_strength(1,2,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex"
-      write(22,*) "rel_strength(1,2,2,2,2,2) = 1.0  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex"
-
-      write(22,*) "rel_strength(2,1,1,1,1,1) = 1.0  !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm"
-      write(22,*) "rel_strength(2,1,1,1,2,1) = 1.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cortex"
-      write(22,*) "rel_strength(2,1,1,2,2,1)	= 1.0  !Repulsive component, intra-cellular Epiblast cortex-epiblast cortex"
-      write(22,*) "rel_strength(2,1,2,1,1,1)	= 0.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm"
-      write(22,*) "rel_strength(2,1,2,1,2,1) = 0.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-hypoblast cortex"
-      write(22,*) "rel_strength(2,1,2,2,2,1) = 0.0	 !Repulsive component, intra-cellular Epiblast cortex-hypoblast cortex"
-      write(22,*) "rel_strength(2,2,2,1,1,1) = 1.0	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm"
-      write(22,*) "rel_strength(2,2,2,1,2,1) = 1.0	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex"
-      write(22,*) "rel_strength(2,2,2,2,2,1) = 1.0	 !Repulsive component, intra-cellular Hypoblast cortex-hypoblast cortex"
-
-      write(22,*) "rel_strength(2,1,1,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm"
-      write(22,*) "rel_strength(2,1,1,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex"
-      write(22,*) "rel_strength(2,1,1,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex"
-      write(22,*) "rel_strength(2,1,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm"
-      write(22,*) "rel_strength(2,1,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex"
-      write(22,*) "rel_strength(2,1,2,2,2,1) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex"
-      write(22,*) "rel_strength(2,2,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm"
-      write(22,*) "rel_strength(2,2,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex"
-      write(22,*) "rel_strength(2,2,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex"
-      close(unit=22)
-
 	    ! Calculate initial cell volumes
       call volume_calculate
 
@@ -161,6 +103,8 @@ module scem_5_initialize
       if (flag_povray.EQ.1) then
         call scem_output_povray
       endif
+
+      call scem_initialconditions
 
     end subroutine scem_initialize
 

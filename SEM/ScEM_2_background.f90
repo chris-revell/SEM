@@ -58,7 +58,7 @@ module scem_2_background
     elseif (flag_background.eq.3) then !Spherically symmetric force towards the system origin at all points in the system.
       do n=1, ne
         spherical_radius = DOT_PRODUCT(elements(n)%position,elements(n)%position)
-        elements(n)%velocity(:) = elements(n)%velocity(:) - 0.001*elements(n)%position(:)/spherical_radius !Apply force of 0.001 in the direction anti-parallel to the normalised position of the element.
+        elements(n)%velocity(:) = elements(n)%velocity(:) - 0.0001*elements(n)%position(:)/spherical_radius !Apply force of 0.001 in the direction anti-parallel to the normalised position of the element.
       enddo
     endif
 
