@@ -6,6 +6,7 @@ module scem_2_output_povray
   use scem_0_input
   use scem_0_useful
   use scem_1_types
+  use scem_2_background
 
   implicit none
 
@@ -40,6 +41,12 @@ module scem_2_output_povray
       write(42,*) 'light_source { < 0, 0, 60 > color White }'
       write(42,*) 'light_source { < 0, 0, -60 > color White }'
       write(42,*)
+
+      if (flag_background.EQ.2) then !Draw boundary of spherical background
+        write(42,'(A16,F18.14,A76)') &
+              ' sphere {<0,0,0>', spherical_boundary_radius,&
+              ' texture { pigment { color Blue transmit .8}finish{phong .8} } } // boundary'
+      endif
 
       !Write element position data to file in Pov-Ray format.
       !Loop over all elements. Draw a small sphere at the position of each element.

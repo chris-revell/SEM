@@ -26,7 +26,7 @@ module scem_2_output_final
           write(24,'(3f12.6,i4)')elements(i)%position(:),elements(i)%parent
         end do
       endif
-      
+
       open(unit=25,file=output_folder//'/system_data/end_of_run_data.txt',status='unknown')
       write(25,*)nc
       write(25,*)ne
@@ -43,6 +43,8 @@ module scem_2_output_final
       call scem_plotting_commands
 
       call system('gnuplot -c "'//output_folder//'/system_data/gnuplot_commands_system_plots.gnu"')
+
+!      call system('echo "perl extractor.pl '//output_folder//' "|pbcopy')
 
       write(*,*) "Output folder is:", output_folder
 

@@ -17,7 +17,6 @@ module scem_2_background
     real*8              :: cylindrical_radius  !Radius of element relative to centre of "test tube"
     real*8,dimension(2) :: normalised_2d_position !Normalised x and y coordinates of element
     real*8              :: spherical_radius    !Radius of element relative to centre of spherical background potential well
-    real*8              :: spherical_boundary_radius
     real*8              :: volume_sum
 
 !    for all elements
