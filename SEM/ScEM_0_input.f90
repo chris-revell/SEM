@@ -155,7 +155,7 @@ module scem_0_input
       diff_coeff=0.001 ! --> diffusion coefficient of elements in units of micron^2/s
 
       ! growth parameters
-      cell_cycle_time=43200*5			!0.5*3600.0 ! --> cell cycle time in seconds
+      cell_cycle_time=4320			!0.5*3600.0 ! --> cell cycle time in seconds
       frac_growth=0.9 ! fraction of current cell radius within which new elements may be placed
       frac_placement_min=0.6 ! minimum separation of new element from nearest neighbour, as fraction of r_equil
         ! derived quantities

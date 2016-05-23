@@ -14,16 +14,17 @@
 #   - volume
 #   - triangle
 #   - cortexpair
+#   - colour, eg. Green combined with cortex shows only cortex pairs updated by DIT.
 
 use strict;
 use warnings;
 
-defined($ARGV[0]) or die "No arguments - provide folder name in which to find data and at lease one criterion for extraction";
+defined($ARGV[0]) or die "No arguments - provide folder path in which to find data and at least one criterion for extraction";
 defined($ARGV[1]) or die "Missing second argument - provide at least one criterion for extraction";
 
 my $originalfolder = shift(@ARGV);
 #Create the name of the directory into which data will be written
-my $directoryname = join("_","../data/".$originalfolder."/extracted",@ARGV);
+my $directoryname = join("_",$originalfolder."/extracted",@ARGV);
 
 #Store remaining arguments in @expressions. These are the regular expressions to search for.
 my @expressions = @ARGV;
