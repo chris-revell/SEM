@@ -19,6 +19,13 @@ contains
     write(45,"(*(G0,:,1X))") 'set output "'//output_folder//'/system_data/sorting_neighbours.png"'
     write(45,"(*(G0,:,1X))") 'set xlabel "Time /s"'
     write(45,"(*(G0,:,1X))") 'set ylabel "Ratio of same fate neighbour pairs \nto total number of neighbour pairs"'
+
+    write(45,"(*(G0,:,1X))") 'set arrow 1 from screen 0.77,0.45 to screen 0.77,0.2'
+    write(45,"(*(G0,:,1X))") 'set arrow 2 from screen 0.77,0.55 to screen 0.77,0.8'
+    write(45,"(*(G0,:,1X))") 'set label 2 "Sorting" at screen 0.78, 0.8'
+    write(45,"(*(G0,:,1X))") 'set label 1 "Mixing" at screen 0.78, 0.2'
+    write(45,"(*(G0,:,1X))") 'set rmargin 20'
+
   !  write(45,"(*(G0,:,1X))") 'set yrange [0:1]'
     write(45,"(*(G0,:,1X))") 'plot "'//output_folder//'/system_data/sorting_data_neighbours.txt" with lines'
     write(45,"(*(G0,:,1X))")
@@ -33,6 +40,13 @@ contains
     write(45,"(*(G0,:,1X))") 'set xlabel "Time /s"'
     write(45,'(A51)',advance='no') 'set ylabel "Difference between average radius of \n'
     write(45,"(*(G0,:,1X))") 'cell types relative to system centre of mass"'
+
+    write(45,"(*(G0,:,1X))") 'set arrow 1 from screen 0.77,0.45 to screen 0.77,0.2'
+    write(45,"(*(G0,:,1X))") 'set arrow 2 from screen 0.77,0.55 to screen 0.77,0.8'
+    write(45,"(*(G0,:,1X))") 'set label 2 "Type 2 inwards,\n type 1 outwards" at screen 0.78, 0.8'
+    write(45,"(*(G0,:,1X))") 'set label 1 "Type 2 outwards,\n type 1 inwards" at screen 0.78, 0.2'
+    write(45,"(*(G0,:,1X))") 'set rmargin 20'
+
     write(45,"(*(G0,:,1X))") 'plot "'//output_folder//'/system_data/sorting_data_radius.txt" with lines'
     write(45,"(*(G0,:,1X))")
   endif
@@ -45,6 +59,13 @@ contains
     write(45,"(*(G0,:,1X))") 'set xlabel "Time /s"'
     write(45,'(A47)',advance='no') 'set ylabel "Ratio of same fate element pairs \n'
     write(45,"(*(G0,:,1X))") 'to total number of element pairs"'
+
+    write(45,"(*(G0,:,1X))") 'set arrow 1 from screen 0.77,0.45 to screen 0.77,0.2'
+    write(45,"(*(G0,:,1X))") 'set arrow 2 from screen 0.77,0.55 to screen 0.77,0.8'
+    write(45,"(*(G0,:,1X))") 'set label 2 "Sorting" at screen 0.78, 0.8'
+    write(45,"(*(G0,:,1X))") 'set label 1 "Mixing" at screen 0.78, 0.2'
+    write(45,"(*(G0,:,1X))") 'set rmargin 20'
+
   !  write(45,"(*(G0,:,1X))") 'set yrange [0:1]'
     write(45,"(*(G0,:,1X))") 'plot "'//output_folder//'/system_data/sorting_data.txt" with lines'
     write(45,"(*(G0,:,1X))")

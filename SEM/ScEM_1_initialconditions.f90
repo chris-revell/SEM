@@ -16,9 +16,9 @@ contains
     write(22,*)'initial number of cells    = ',nc
     write(22,*)'initial number of elements = ',ne
     write(22,*)'initial number of pairs    = ',np
-    write(22,*)'time                       = ',real(time)
+    write(22,*)'run time                   = ',time_max
     write(22,*)'cell cycle time            = ',cell_cycle_time
-    write(22,*)'number of cell cycles      = ',real(time)/cell_cycle_time
+    write(22,*)'number of cell cycles      = ',time_max/cell_cycle_time
     write(22,*)'frac_interaction_max       = ',frac_interaction_max
     write(22,*)'ne_cell                    = ',ne_cell
 
