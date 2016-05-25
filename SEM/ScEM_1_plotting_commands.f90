@@ -28,6 +28,14 @@ contains
 
   !  write(45,"(*(G0,:,1X))") 'set yrange [0:1]'
     write(45,"(*(G0,:,1X))") 'plot "'//output_folder//'/system_data/sorting_data_neighbours.txt" with lines'
+
+    write(45,"(*(G0,:,1X))") 'plot "'//output_folder//'/system_data/sorting_data_radius.txt" with lines'
+    write(45,"(*(G0,:,1X))") 'unset label 1'
+    write(45,"(*(G0,:,1X))") 'unset label 2'
+    write(45,"(*(G0,:,1X))") 'unset arrow 1'
+    write(45,"(*(G0,:,1X))") 'unset arrow 2'
+    write(45,"(*(G0,:,1X))") 'unset rmargin'
+
     write(45,"(*(G0,:,1X))")
   endif
 
@@ -48,6 +56,12 @@ contains
     write(45,"(*(G0,:,1X))") 'set rmargin 20'
 
     write(45,"(*(G0,:,1X))") 'plot "'//output_folder//'/system_data/sorting_data_radius.txt" with lines'
+    write(45,"(*(G0,:,1X))") 'unset label 1'
+    write(45,"(*(G0,:,1X))") 'unset label 2'
+    write(45,"(*(G0,:,1X))") 'unset arrow 1'
+    write(45,"(*(G0,:,1X))") 'unset arrow 2'
+    write(45,"(*(G0,:,1X))") 'unset rmargin'
+
     write(45,"(*(G0,:,1X))")
   endif
 
@@ -62,12 +76,20 @@ contains
 
     write(45,"(*(G0,:,1X))") 'set arrow 1 from screen 0.77,0.45 to screen 0.77,0.2'
     write(45,"(*(G0,:,1X))") 'set arrow 2 from screen 0.77,0.55 to screen 0.77,0.8'
-    write(45,"(*(G0,:,1X))") 'set label 2 "Sorting" at screen 0.78, 0.8'
-    write(45,"(*(G0,:,1X))") 'set label 1 "Mixing" at screen 0.78, 0.2'
+    write(45,"(*(G0,:,1X))") 'set label 2 "Mixing" at screen 0.78, 0.8'
+    write(45,"(*(G0,:,1X))") 'set label 1 "Sorting" at screen 0.78, 0.2'
     write(45,"(*(G0,:,1X))") 'set rmargin 20'
 
   !  write(45,"(*(G0,:,1X))") 'set yrange [0:1]'
     write(45,"(*(G0,:,1X))") 'plot "'//output_folder//'/system_data/sorting_data.txt" with lines'
+
+    write(45,"(*(G0,:,1X))") 'plot "'//output_folder//'/system_data/sorting_data_radius.txt" with lines'
+    write(45,"(*(G0,:,1X))") 'unset label 1'
+    write(45,"(*(G0,:,1X))") 'unset label 2'
+    write(45,"(*(G0,:,1X))") 'unset arrow 1'
+    write(45,"(*(G0,:,1X))") 'unset arrow 2'
+    write(45,"(*(G0,:,1X))") 'unset rmargin'
+
     write(45,"(*(G0,:,1X))")
   endif
 
