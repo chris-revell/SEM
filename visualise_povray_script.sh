@@ -106,6 +106,6 @@ povray snap_99.pov +Fj -D +H900 +W1200
 
 #ImageMagick command line input
 convert -delay 15 -loop 0 *.jpg animated.gif
-rm *.jpg
-rm *.pov
-rm visualise_povray_script.sh
+#rm *.jpg
+#rm *.pov
+#rm visualise_povray_script.sh
