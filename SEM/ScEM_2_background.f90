@@ -59,6 +59,26 @@ module scem_2_background
         spherical_radius = DOT_PRODUCT(elements(n)%position,elements(n)%position)
         elements(n)%velocity(:) = elements(n)%velocity(:) - 0.0001*elements(n)%position(:)/spherical_radius !Apply force of 0.001 in the direction anti-parallel to the normalised position of the element.
       enddo
+
+
+
+    elseif (flag_background.eq.4) then
+
+
+      do n=1, ne
+
+        if (elements(n)%position(3).LT.(-0.5*h)) then
+          elements(n)%velocity(3) = elements(n)%velocity(3) + 0.1
+        elseif ()
+
+
+      enddo
+
+
+
+
+
+
     endif
 
   end subroutine
