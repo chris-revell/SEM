@@ -62,6 +62,7 @@ while ($i < 100) {
   print $file_handle_out " camera {\n";
   print $file_handle_out "    location  <500, 0, 0>\n";
   print $file_handle_out "    angle 12\n";
+  print $file_handle_out "    sky <0,0,1>";
   print $file_handle_out "    look_at<0,0,0>}\n";
   print $file_handle_out "";
   print $file_handle_out " light_source { < -60, 60, 0 > color White }\n";

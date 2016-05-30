@@ -47,6 +47,11 @@ module scem_2_output_povray
         write(42,'(A16,F18.14,A76)') &
               ' sphere {<0,0,0>', spherical_boundary_radius,&
               ' texture { pigment { color Blue transmit .8}finish{phong .8} } } // boundary'
+!      elseif (flag_background.EQ.4) then !Draw the spherical cap background
+!        write(42,'(A16,F18.14,A76)') &
+!              ' sphere {<0,0,',-cap_radius,'>',(-cap_radius-h/2.0),&
+!              ' texture { pigment { color Blue transmit .8}finish{phong .8} } } // boundary'        
+
       endif
 
       !Write element position data to file in Pov-Ray format.
