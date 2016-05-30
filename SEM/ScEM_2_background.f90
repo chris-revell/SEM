@@ -69,8 +69,13 @@ module scem_2_background
 
     elseif (flag_background.eq.4) then
 
-      cap_radius = 500
-      h          = 50
+      volume_sum = 0
+      do n=1, nc
+        volume_sum = volume_sum + cells(n)%volume
+      enddo
+
+      cap_radius = (81.0*volume_sum/28.0)**(1.0/3.0)
+      h          = 2.0*cap_radius/3.0
 
       do n=1, ne
 
