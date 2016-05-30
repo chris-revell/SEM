@@ -34,6 +34,7 @@ module scem_2_output_povray
       write(42,*) 'camera {'
       write(42,*) '   location  <500, 0, 0>'
       write(42,*) '   angle 12'
+      write(42,*) '   sky <0,0,1>'
       write(42,*) '   look_at<0,0,0>}'
       write(42,*)
       write(42,*) 'light_source { < -60, 60, 0 > color White }'
