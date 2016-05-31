@@ -18,8 +18,7 @@ module scem_2_background
     real*8              :: spherical_radius    !Radius of element relative to centre of spherical background potential well
     real*8              :: volume_sum
 
-    real*8              :: h !Height of spherical cap boundary.
-    real*8              :: cap_radius
+
     real*8              :: cap_element_radius
     real*8,dimension(3) :: cap_radial_vector
 

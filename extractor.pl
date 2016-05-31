@@ -20,7 +20,7 @@ use strict;
 use warnings;
 
 defined($ARGV[0]) or die "No arguments - provide folder path in which to find data and at least one criterion for extraction";
-defined($ARGV[1]) or die "Missing second argument - provide at least one criterion for extraction";
+defined($ARGV[1]) or die "Missing second argument - provide folder path and at least one criterion for extraction";
 
 my $originalfolder = shift(@ARGV);
 #Create the name of the directory into which data will be written
@@ -53,24 +53,6 @@ while ($i < 100) {
   open(my $file_handle_out, '>', $file_name_out);
   open(my $file_handle_in, '<', $file_name_in) or die "can't open file";
 
-  #Write setup lines to povray file
-  print $file_handle_out " #version 3.5;\n";
-  print $file_handle_out ' #include "colors.inc"', "\n";
-  print $file_handle_out ' #include "textures.inc"', "\n";
-  print $file_handle_out " background {White}\n";
-  print $file_handle_out "";
-  print $file_handle_out " camera {\n";
-  print $file_handle_out "    location  <500, 0, 0>\n";
-  print $file_handle_out "    angle 12\n";
-  print $file_handle_out "    sky <0,0,1>";
-  print $file_handle_out "    look_at<0,0,0>}\n";
-  print $file_handle_out "";
-  print $file_handle_out " light_source { < -60, 60, 0 > color White }\n";
-  print $file_handle_out " light_source { < 60, -60, 0 > color White }\n";
-  print $file_handle_out " light_source { < 0, 0, 60 > color White }\n";
-  print $file_handle_out " light_source { < 0, 0, -60 > color White }\n";
-  print $file_handle_out "";
-
   #For each line of the original povray file, check if it contains all regular
   #expressions specified at command line and if so print the line into the
   #new .pov file.
@@ -80,21 +62,52 @@ while ($i < 100) {
   #If any regular expression is not found, $switch will be set equal to 0 and
   #the line will not be printed.
   while (my $line = <$file_handle_in>) {
-    my $switch = 1;
-    foreach my $expression (@expressions) {
-      if ($line =~ /$expression/) {
-        next; #Do nothing if regular expression is found and move on to next regular expression.
+    if (($line =~ /sphere/) or ($line =~ /cylinder/) or ($line =~ /smooth_/)) {
+      if ($line =~ /boundary/) {
+        print $file_handle_out $line;
       }
       else {
-        $switch=0; #Set $switch to 0 if an expression is not found.
+        my $switch = 1;
+        foreach my $expression (@expressions) {
+          if ($line =~ /$expression/) {
+            next; #Do nothing if regular expression is found and move on to next regular expression.
+          }
+          else {
+            $switch=0; #Set $switch to 0 if an expression is not found.
+          }
+        }
+        if ($switch==1) {
+          print $file_handle_out $line;
+        }
+        else {
+          next;
+        }
       }
     }
-    if ($switch==1) {
+    else {
       print $file_handle_out $line;
     }
-    else {
-      next;
-    }
+
+#    if ($line =~ /boundary/) {
+#      print $file_handle_out $line;
+#    }
+#    else {
+#      my $switch = 1;
+#      foreach my $expression (@expressions) {
+#        if ($line =~ /$expression/) {
+#          next; #Do nothing if regular expression is found and move on to next regular expression.
+#        }
+#        else {
+#          $switch=0; #Set $switch to 0 if an expression is not found.
+#        }
+#      }
+#      if ($switch==1) {
+#        print $file_handle_out $line;
+#      }
+#      else {
+#        next;
+#      }
+#    }
   }
   $i++; #Increment $i to move into next set of data (snapshot)
 }

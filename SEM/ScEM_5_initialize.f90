@@ -13,7 +13,7 @@ module scem_5_initialize
   use scem_2_initial_create
   use scem_2_initial_exist
   use scem_2_output_system
-  use scem_2_output_povray
+!  use scem_2_output_povray
   use scem_2_pairs
   use scem_2_relist
   use scem_4_cortex
@@ -100,9 +100,9 @@ module scem_5_initialize
       call scem_output_system
 
       ! Write element data to files in povray format
-      if (flag_povray.EQ.1) then
-        call scem_output_povray
-      endif
+!      if (flag_povray.EQ.1) then
+!        call scem_output_povray
+!      endif
 
       call scem_initialconditions
 
