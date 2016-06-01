@@ -34,6 +34,7 @@ module scem_2_output_povray
       write(42,*) 'camera {'
       write(42,*) '   location  <500, 0, 0>'
       write(42,*) '   angle 12'
+      write(42,*) '   sky <0,0,1>'
       write(42,*) '   look_at<0,0,0>}'
       write(42,*)
       write(42,*) 'light_source { < -60, 60, 0 > color White }'
@@ -43,9 +44,13 @@ module scem_2_output_povray
       write(42,*)
 
       if (flag_background.EQ.2) then !Draw boundary of spherical background
-        write(42,'(A16,F18.14,A76)') &
+        write(42,'(A16,F18.14,A77)') &
               ' sphere {<0,0,0>', spherical_boundary_radius,&
-              ' texture { pigment { color Blue transmit .8}finish{phong .8} } } // boundary'
+              ' texture { pigment { color Blue transmit .85}finish{phong .8} } } // boundary'
+      elseif (flag_background.EQ.4) then !Draw the spherical cap background
+        write(42,'(A18,F18.14,A2,F18.14,A77)') &
+              ' sphere {<0.2,0.2,',(-cap_radius+h/2.0),'> ',cap_radius,&
+              ' texture { pigment { color Blue transmit .85}finish{phong .8} } } // boundary'
       endif
 
       !Write element position data to file in Pov-Ray format.

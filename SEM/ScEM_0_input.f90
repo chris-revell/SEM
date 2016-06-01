@@ -55,6 +55,9 @@ module scem_0_input
   integer, dimension(4,8,80)        :: bin_contents
   integer, dimension(4,8)           :: bin_counters
 
+  real*8              :: h !Height of spherical cap boundary.
+  real*8              :: cap_radius
+
   contains
 
     subroutine scem_input
@@ -79,7 +82,7 @@ module scem_0_input
       flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
-      flag_background = 2 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
+      flag_background = 4 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
       flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
@@ -156,7 +159,7 @@ module scem_0_input
       diff_coeff=0.001 ! --> diffusion coefficient of elements in units of micron^2/s
 
       ! growth parameters
-      cell_cycle_time=4320*50			!0.5*3600.0 ! --> cell cycle time in seconds
+      cell_cycle_time=4320*10			!0.5*3600.0 ! --> cell cycle time in seconds
       frac_growth=0.9 ! fraction of current cell radius within which new elements may be placed
       frac_placement_min=0.6 ! minimum separation of new element from nearest neighbour, as fraction of r_equil
         ! derived quantities
