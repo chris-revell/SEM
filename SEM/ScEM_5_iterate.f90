@@ -112,16 +112,6 @@ module scem_5_iterate
              call scem_output_povray
            endif
 
-           if (flag_measure.EQ.1) then
-             call scem_measure																!Measure numerical sorting value of system
-           endif
-           if (flag_measure_radius.EQ.1) then
-             call scem_measure_radius
-           endif
-           if (flag_measure_neighbours.EQ.1) then
-             call scem_measure_neighbours
-           endif
-
          end if
 
       end do

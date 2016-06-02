@@ -44,7 +44,7 @@ contains
     write(22,"(*(G0,:,1X))") "flag_fate_output        = ",flag_fate_output
     write(22,"(*(G0,:,1X))") "flag_volume_output      = ",flag_volume_output
     write(22,"(*(G0,:,1X))") "flag_elements_final     = ",flag_elements_final
-    write(22,"(*(G0,:,1X))") "flag_measure            = ",flag_measure
+    write(22,"(*(G0,:,1X))") "flag_measure_interface            = ",flag_measure_interface
     write(22,"(*(G0,:,1X))") "flag_measure_radius     = ",flag_measure_radius
     write(22,"(*(G0,:,1X))") "flag_measure_neighbours = ",flag_measure_neighbours
 
