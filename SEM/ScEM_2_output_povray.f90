@@ -103,19 +103,21 @@ module scem_2_output_povray
                           elements(m)%parent, ' , cell',&
                           elements(n)%parent
           else !Elements are in the same cell
+            CYCLE
             !All intra-cell interactions in blue
-            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                            F18.14,A61,I2.2,A7,I2.2)') &
-                            ' cylinder {  < ', &
-                            elements(pairs(j,1))%position(1), ',', &
-                            elements(pairs(j,1))%position(2), ',', &
-                            elements(pairs(j,1))%position(3), '>, <', &
-                            elements(pairs(j,2))%position(1), ',', &
-                            elements(pairs(j,2))%position(2), ',', &
-                            elements(pairs(j,2))%position(3), &
-                            '> 0.5 texture { pigment { color Blue } } } // pair intra cell',&
-                            elements(pairs(j,1))%parent, ' , cell',&
-                            elements(pairs(j,2))%parent
+!            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
+!                            F18.14,A61,I2.2,A7,I2.2)') &
+!                            ' cylinder {  < ', &
+!                            elements(pairs(j,1))%position(1), ',', &
+!                            elements(pairs(j,1))%position(2), ',', &
+!                            elements(pairs(j,1))%position(3), '>, <', &
+!                            elements(pairs(j,2))%position(1), ',', &
+!                            elements(pairs(j,2))%position(2), ',', &
+!                            elements(pairs(j,2))%position(3), &
+!                            '> 0.5 texture { pigment { color Blue } } } // pair intra cell',&
+!                            elements(pairs(j,1))%parent, ' , cell',&
+!                            elements(pairs(j,2))%parent
+
           endif
         enddo
       endif

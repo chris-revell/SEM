@@ -31,88 +31,93 @@ module scem_5_iterate
       ! iterate system for pre-defined time interval
       do while (time.lt.time_max)
 
-         time=time+dt ! increment time
+        time=time+dt ! increment time
 
-         forall(n=1:ne) xe_prev(n,:)=elements(n)%position(:) ! xe_prev records prior positions of elements
+        forall(n=1:ne) xe_prev(n,:)=elements(n)%position(:) ! xe_prev records prior positions of elements
 
-         ! implement 2nd order Runge-Kutta
-         call scem_integrate ! first integration and increment by half a step
-         forall(n=1:ne) elements(n)%position(:)=elements(n)%position(:)+0.5*dt*elements(n)%velocity(:)
-         forall(n=1:ne) elements(n)%velocity(:)=0.0
-         call scem_integrate ! second integration and increment by a full step
-         forall(n=1:ne) elements(n)%position(:)=xe_prev(n,:)+dt*elements(n)%velocity(:)
-         forall(n=1:ne) elements(n)%velocity(:)=0.0
+        if (nc.EQ.8) then
+          flag_DIT = 1
+!          cortex_constant = 0.0075
+        endif
 
-         ! element diffusion
-         if (flag_diffusion.eq.1) then
-            call scem_diffusion
-         end if
+        ! implement 2nd order Runge-Kutta
+        call scem_integrate ! first integration and increment by half a step
+        forall(n=1:ne) elements(n)%position(:)=elements(n)%position(:)+0.5*dt*elements(n)%velocity(:)
+        forall(n=1:ne) elements(n)%velocity(:)=0.0
+        call scem_integrate ! second integration and increment by a full step
+        forall(n=1:ne) elements(n)%position(:)=xe_prev(n,:)+dt*elements(n)%velocity(:)
+        forall(n=1:ne) elements(n)%velocity(:)=0.0
 
-         !Conserve cell volumes
-         do n=1, nc
-           if (flag_conserve.eq.1) then
-             call volume_conserve(n)
-           endif
-           deallocate(cells(n)%triplets)
-         end do
+        ! element diffusion
+        if (flag_diffusion.eq.1) then
+          call scem_diffusion
+        end if
 
-         ! determine sector relist flag
-         call scem_flag_relist
-         ! if sector relist flag has been triggered, reconstruct sector tables and pair array
-         if (flag_relist.eq.1) then
-            ! re-create sector tables
-            call scem_relist(1)
-            ! locate element pairs
-            call scem_pairs
-         end if
+        !Conserve cell volumes
+        do n=1, nc
+          if (flag_conserve.eq.1) then
+            call volume_conserve(n)
+          endif
+          deallocate(cells(n)%triplets)
+        end do
 
-         ! element/cell age updates
-         call scem_ageing
+        ! determine sector relist flag
+        call scem_flag_relist
+        ! if sector relist flag has been triggered, reconstruct sector tables and pair array
+        if (flag_relist.eq.1) then
+          ! re-create sector tables
+          call scem_relist(1)
+          ! locate element pairs
+          call scem_pairs
+        end if
 
-         ! cell growth
-         if (flag_growth.eq.1) then
-            call scem_growth
-         end if
+        ! element/cell age updates
+        call scem_ageing
 
-         ! cell division
-         if (flag_division.eq.1) then
-            call scem_division
-         end if
+        ! cell growth
+        if (flag_growth.eq.1) then
+          call scem_growth
+        end if
 
-         ! check for resizing of (element,cell,sector) arrays
-         if (flag_growth.eq.1) then
-            call scem_resize
-         end if
+        ! cell division
+        if (flag_division.eq.1) then
+          call scem_division
+        end if
 
-         ! re-calculate center of mass and radius of gyration of each cell
-         call scem_com
+        ! check for resizing of (element,cell,sector) arrays
+        if (flag_growth.eq.1) then
+          call scem_resize
+        end if
 
-         !Determine which elements are now cortex elements
-         if (flag_cortex.EQ.1) then
-           !Find cortex elements
-           call scem_cortex
-         endif
+        ! re-calculate center of mass and radius of gyration of each cell
+        call scem_com
 
-         !Calculate cell volumes
-         call volume_calculate
+        !Determine which elements are now cortex elements
+        if (flag_cortex.EQ.1) then
+        !Find cortex elements
+          call scem_cortex
+        endif
 
-         !Outputting data to file
-         !Only output data at intervals of time_out_1.
-         !time_out_1 = cell_cycle_time/10.0 and is the time interval between data outputs
-         if (mod(time,(time_out_1)).lt.dt) then
+        !Calculate cell volumes
+        call volume_calculate
 
-           !Increment n_snapshots to keep track of how many outputs there have been
-           n_snapshots=n_snapshots+1
+        !Outputting data to file
+        !Only output data at intervals of time_out_1.
+        !time_out_1 = cell_cycle_time/10.0 and is the time interval between data outputs
+        if (mod(time,(time_out_1)).lt.dt) then
 
-           ! write system data to files
-           call scem_output_system
+        !Increment n_snapshots to keep track of how many outputs there have been
+        n_snapshots=n_snapshots+1
 
-           ! Write element data to files in povray format
-           if (flag_povray.EQ.1) then
-             call scem_output_povray
-           endif
+        ! write system data to files
+        call scem_output_system
 
-         end if
+        ! Write element data to files in povray format
+        if (flag_povray.EQ.1) then
+          call scem_output_povray
+        endif
+
+        end if
 
       end do
 

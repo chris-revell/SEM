@@ -37,13 +37,16 @@ contains
       fate_1  = cells(cell_1)%fate
       cell_2  = elements(pairs(j,2))%parent
       fate_2  = cells(cell_2)%fate
-      !Set DIT_factor to be .TRUE. for elements only if both elements are in different cells
-      !and those cells have different fates. This routine naturally excludes elements in the same
-      !cell because in this case the fate will always be the same.
-      if (fate_1.EQ.fate_2) then
-        elements(pairs(j,1))%DIT_factor = .FALSE.
-        elements(pairs(j,2))%DIT_factor = .FALSE.
+      if (cell_1.EQ.cell_2) then
+        !Do nothing for pairs within the same cell
+        CYCLE
+      elseif (fate_1.EQ.fate_2) then
+        elements(pairs(j,1))%DIT_factor = .TRUE.!.FALSE.
+        elements(pairs(j,2))%DIT_factor = .TRUE.!.FALSE.
       else
+        !Set DIT_factor to be .TRUE. for elements only if both elements are in different cells
+        !and those cells have different fates. This routine naturally excludes elements in the same
+        !cell because in this case the fate will always be the same.
         elements(pairs(j,1))%DIT_factor = .TRUE.
         elements(pairs(j,2))%DIT_factor = .TRUE.
       endif
@@ -53,7 +56,8 @@ contains
 !      if (elements(pairs_cortex(j,1))%DIT_factor.AND.elements(pairs_cortex(j,2))%DIT_factor) then
       if (elements(pairs_cortex(j,1))%DIT_factor.OR.elements(pairs_cortex(j,2))%DIT_factor) then
 !        pairs_cortex(j,3) = cells(elements(pairs_cortex(j,1))%parent)%fate**2 !DIT response equal to fate. Quick and dirty way to give fate dependence.
-        pairs_cortex(j,3) = 4 !No fate dependence. 
+!        pairs_cortex(j,3) = 4 !No fate dependence.
+        pairs_cortex(j,3) = 0.5
       else
         pairs_cortex(j,3) = 1
       endif
