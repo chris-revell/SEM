@@ -46,7 +46,11 @@ contains
 
 		!Interface sorting measurement is the ratio of the like-like counter to the total inter-cell counter.
 		!ie the ratio of like-like interface area to total inter-cell interface area.
-		interface_sorting_measurement = real(like_like_count)/real(inter_cell_count)
+		if (inter_cell_count.EQ.0) then
+			interface_sorting_measurement = 0
+		else
+			interface_sorting_measurement = real(like_like_count)/real(inter_cell_count)
+		endif 
 
 		write(35,*) real(time), interface_sorting_measurement			!Print counter to data file for each timestep, normalised by the number of pairs
 !		call flush(35)
