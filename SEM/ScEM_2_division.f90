@@ -70,7 +70,11 @@ module scem_2_division
             !fate_decider is a random number between 0 and 1. If this random number is greater than 0.2
             !then division is symmetric, otherwise it is asymmetric.
             !This models the 80:20 split for symmetric vs asymmetric observed for ICM cell division
-            fate_decider = rng(iseed)
+!            fate_decider = rng(iseed)
+            CALL RANDOM_SEED()
+            CALL RANDOM_NUMBER(fate_decider)
+            open(unit=80, file="RANDOM_NUMBERtest.txt", status='unknown')
+            write(80,*) fate_decider
       			if (fate_decider.GT.0.5) then
       				cells(nc)%fate=cells(k)%fate	!Symmetric division
       			else if (cells(k)%fate.eq.1) then

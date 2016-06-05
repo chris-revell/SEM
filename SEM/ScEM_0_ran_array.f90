@@ -6,7 +6,7 @@ module scem_0_ran_array
 
   ! rng is "ran" fortran 90 random number generator from Numerical Recipes
   real, external :: rng
-  
+
   contains
 
     ! create array of uniform random numbers
@@ -16,12 +16,15 @@ module scem_0_ran_array
       integer :: i,j
 
       do i=1,nrow
-         do j=1,ncol
-            rap(i,j)=rng(iseed)
-         end do
+        do j=1,ncol
+!          rap(i,j)=rng(iseed)
+          CALL RANDOM_SEED()
+          CALL RANDOM_NUMBER(rap(i,j))
+          open(unit=80, file="RANDOM_NUMBERtest.txt", status='unknown')
+          write(80,*) rap(i,j)
+        end do
       end do
-      
+
     end subroutine ran_array
 
 end module scem_0_ran_array
-

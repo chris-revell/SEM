@@ -109,7 +109,7 @@ module scem_0_input
       p3=pi/(3.0*sqrt(2.0)) ! packing fraction in 3D
 
       ! system parameters
-      iseed=-6345 ! initial random number seed, originally -6345
+      iseed=2547    !-6345 ! initial random number seed, originally -6345
       trigger_frac=0.5 ! safety margin for triggering array reallocation
       ! derived quantitites
       dt_amp_max=0.1*(1.0-0.875*flag_create) ! empirically found best values for time step amplitude
@@ -227,7 +227,7 @@ module scem_0_input
       dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
 
       ! temporal parameters - all in *seconds*
-      time_max=4.5*cell_cycle_time ! --> time of simulation in seconds
+      time_max=0.5*cell_cycle_time ! --> time of simulation in seconds
       time_out_1=time_max/99.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
 !     time_out_2=cell_cycle_time/100.0 ! --> interval between quantitative data outputs
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
