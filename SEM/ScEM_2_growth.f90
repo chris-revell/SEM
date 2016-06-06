@@ -4,7 +4,6 @@ module scem_2_growth
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_ran_array
   use scem_0_useful
   use scem_1_types
 
@@ -14,12 +13,9 @@ module scem_2_growth
 
     subroutine scem_growth
 
-!      real, dimension(1,1) :: ra1
-!      real                 :: ra1
-      real, dimension(1,3) :: ra2
-      real*8, dimension(3) :: pos,d_pos,pos_1,pos_2,dx
+      real, dimension(1,3)  :: ra2
+      real*8, dimension(3)  :: pos,d_pos,pos_1,pos_2,dx
       integer, dimension(3) :: ixe
-
       real :: rn
       real*8 :: sep_sq
       real*8 :: r_core,phi,theta
@@ -28,19 +24,15 @@ module scem_2_growth
       ! attempt creation of new element in each cell
       ! (use an improved algorithm here? - I think we need to eventually - talk to Mikael Bjorkland?)
       do k=1,nc
-!        call ran_array(ra1,1,1,iseed) ! retrieve one random number
         CALL RANDOM_SEED()
         CALL RANDOM_NUMBER(rn)
-!        rn=ra1(1,1)
         if (rn.lt.prob_new_element) then			!prob_new_element comes from ScEM_0_input
           flag_success=0
           n_el_cell_k=cells(k)%c_elements(0)
           r_core=frac_growth*cells(k)%rad_gyration ! defining radius of growth core in terms of cell's rad. of gyr.
           do while (flag_success.eq.0) ! attempt placement of new element until successful
-!           call ran_array(ra1,1,1,iseed) ! retrieve one random number
             CALL RANDOM_SEED()
             CALL RANDOM_NUMBER(rn)
-!            rn=ra1(1,1)
             m=1+int(rn*cells(k)%c_elements(0)) ! randomly select an element in cell k
             n=cells(k)%c_elements(m)
             pos(:)=elements(n)%position(:)-cells(k)%position(:)
@@ -48,7 +40,6 @@ module scem_2_growth
             if (rad_sq.lt.r_core**2) then ! check for successful placement of new element within cell core
               flag_success=1
               ne=ne+1
-!              call ran_array(ra2,1,2,iseed) ! retrieve two random numbers for random orientation
               CALL RANDOM_SEED()
               CALL RANDOM_NUMBER(ra2)
               phi=2*pi*ra2(1,1) ! azimuthal angle

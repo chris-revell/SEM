@@ -4,7 +4,6 @@ module scem_2_initial_create
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_ran_array
   use scem_0_useful
   use scem_1_types
 
@@ -34,7 +33,6 @@ module scem_2_initial_create
 
       	do while (icount.lt.ne_cell) ! counts successful establishment of elements
           flag_success=1 ! initialize success flag
-!      	   call ran_array(ra,1,3,iseed) ! retrieve random numbers
           CALL RANDOM_SEED()
           CALL RANDOM_NUMBER(ra)
           pos_1(:)=r_cell*(2*ra(1,:)-1) ! define random position of new element w.r.t. origin

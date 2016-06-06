@@ -4,7 +4,6 @@ module scem_5_initialize
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_ran_array
   use scem_0_useful
   use scem_1_initialconditions
   use scem_1_types

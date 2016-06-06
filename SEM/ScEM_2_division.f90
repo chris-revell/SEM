@@ -4,7 +4,6 @@ module scem_2_division
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_ran_array
   use scem_0_useful
   use scem_1_types
 
@@ -15,13 +14,10 @@ module scem_2_division
 
     subroutine scem_division
 
-      real*8, dimension(3) :: pos,long_axis,relative_pos,x_com
       integer, allocatable, dimension(:) :: c_el_temp1(:),c_el_temp2(:)
-      real :: fate_decider
-      real, external :: rng
-
       integer :: nc_old
-      real*8 :: max_sep,max_sep_old,epsilon
+      real*8, dimension(3) :: pos,long_axis,relative_pos,x_com
+      real*8 :: max_sep,max_sep_old,epsilon,fate_decider
 
       allocate(c_el_temp1(0:4*ne_cell))
       allocate(c_el_temp2(0:4*ne_cell))
@@ -70,10 +66,9 @@ module scem_2_division
             !fate_decider is a random number between 0 and 1. If this random number is greater than 0.2
             !then division is symmetric, otherwise it is asymmetric.
             !This models the 80:20 split for symmetric vs asymmetric observed for ICM cell division
-!            fate_decider = rng(iseed)
             CALL RANDOM_SEED()
-            CALL RANDOM_NUMBER(fate_decider)
-      			if (fate_decider.GT.0.5) then
+            CALL RANDOM_NUMBER(fate_decider) !Fill fate_decider variable with a random number between 0 and 1.
+      			if (fate_decider.GE.0.5) then
       				cells(nc)%fate=cells(k)%fate	!Symmetric division
       			else if (cells(k)%fate.eq.1) then
       					cells(nc)%fate=2			!Asymmetric division where parent cell has type 1

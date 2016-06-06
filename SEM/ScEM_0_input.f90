@@ -19,7 +19,7 @@ module scem_0_input
   ! meaning of parameters given below when assigned values
   real*8, allocatable, dimension(:,:,:,:,:,:) :: rel_strength		!For interaction of element a in cell A with element b in cell B argument is (type of cell A, type of cell B, type of element a, type of element b)
   integer :: nx,ny,nz
-  integer :: iseed,iloop1,iloop2,iloop3,iloop4,iloop5
+  integer :: iloop1,iloop2,iloop3,iloop4,iloop5
   !system switches
   integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve
   integer :: flag_background,flag_cortex,flag_DIT,flag_povray_elements
@@ -109,7 +109,6 @@ module scem_0_input
       p3=pi/(3.0*sqrt(2.0)) ! packing fraction in 3D
 
       ! system parameters
-      iseed=2547    !-6345 ! initial random number seed, originally -6345
       trigger_frac=0.5 ! safety margin for triggering array reallocation
       ! derived quantitites
       dt_amp_max=0.1*(1.0-0.875*flag_create) ! empirically found best values for time step amplitude
