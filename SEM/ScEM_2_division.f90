@@ -73,8 +73,6 @@ module scem_2_division
 !            fate_decider = rng(iseed)
             CALL RANDOM_SEED()
             CALL RANDOM_NUMBER(fate_decider)
-            open(unit=80, file="RANDOM_NUMBERtest.txt", status='unknown')
-            write(80,*) fate_decider
       			if (fate_decider.GT.0.5) then
       				cells(nc)%fate=cells(k)%fate	!Symmetric division
       			else if (cells(k)%fate.eq.1) then
