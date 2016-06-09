@@ -50,10 +50,10 @@ contains
 			interface_sorting_measurement = 0
 		else
 			interface_sorting_measurement = real(like_like_count)/real(inter_cell_count)
-		endif 
+		endif
 
 		write(35,*) real(time), interface_sorting_measurement			!Print counter to data file for each timestep, normalised by the number of pairs
-!		call flush(35)
+
 	end subroutine scem_measure_interface
 
 end module scem_2_measure_interface

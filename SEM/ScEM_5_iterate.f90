@@ -35,10 +35,10 @@ module scem_5_iterate
 
         forall(n=1:ne) xe_prev(n,:)=elements(n)%position(:) ! xe_prev records prior positions of elements
 
-        if (nc.EQ.8) then
-          flag_DIT = 1
+!        if (time.GT.time_max/2.0) then
+!          flag_DIT = 1
 !          cortex_constant = 0.0075
-        endif
+!        endif
 
         ! implement 2nd order Runge-Kutta
         call scem_integrate ! first integration and increment by half a step

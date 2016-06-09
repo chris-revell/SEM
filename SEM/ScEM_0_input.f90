@@ -86,20 +86,20 @@ module scem_0_input
       flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
-      flag_DIT        = 0 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
+      flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
       !Output control flags
       flag_povray = 1          !switch to turn off povray output entirely
         flag_povray_volumes      = 1 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
-        flag_povray_elements     = 1 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
-        flag_povray_pairs        = 1 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
+        flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
+        flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
         flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 1 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 1    ! Switch to turn off outputting cell count
       flag_fate_output        = 1    ! Switch to turn off outputting cell fate data
-      flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
+      flag_volume_output      = 1    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
-      flag_measure_interface  = 0    ! Switch to turn off element pair ratio sorting measurement
+      flag_measure_interface  = 1    ! Switch to turn off element pair ratio sorting measurement
       flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
       flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
 
@@ -178,35 +178,35 @@ module scem_0_input
       !                                                                = 2 (inter-cellular interactions)
 
 !     rel_strength(adhesive/repulsive,fate1,fate2,type1,type1,intra/inter)
-		  rel_strength(1,1,1,1,1,1) = 1.0  !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
-		  rel_strength(1,1,1,1,2,1) = 1.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cortex
-      rel_strength(1,1,1,2,2,1)	= 1.0  !Adhesive component, intra-cellular Epiblast cortex-epiblast cortex
+		  rel_strength(1,1,1,1,1,1) = 0.5  !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(1,1,1,1,2,1) = 0.5	 !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cortex
+      rel_strength(1,1,1,2,2,1)	= 0.5  !Adhesive component, intra-cellular Epiblast cortex-epiblast cortex
 		  rel_strength(1,1,2,1,1,1)	= 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
 		  rel_strength(1,1,2,1,2,1) = 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
 		  rel_strength(1,1,2,2,2,1) = 0.0	 !Adhesive component, intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
-		  rel_strength(1,2,2,1,1,1) = 1.0	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-		  rel_strength(1,2,2,1,2,1) = 1.0	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
-		  rel_strength(1,2,2,2,2,1) = 1.0	 !Adhesive component, intra-cellular Hypoblast cortex-hypoblast cortex
+		  rel_strength(1,2,2,1,1,1) = 0.5	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+		  rel_strength(1,2,2,1,2,1) = 0.5	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
+		  rel_strength(1,2,2,2,2,1) = 0.5	 !Adhesive component, intra-cellular Hypoblast cortex-hypoblast cortex
 
 		  rel_strength(1,1,1,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
 		  rel_strength(1,1,1,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cortex
-		  rel_strength(1,1,1,2,2,2) = 1.0  !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex
+		  rel_strength(1,1,1,2,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex
   		rel_strength(1,1,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
   		rel_strength(1,1,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
-  		rel_strength(1,1,2,2,2,2) = 1.0  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
+  		rel_strength(1,1,2,2,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
   		rel_strength(1,2,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
   		rel_strength(1,2,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
-  		rel_strength(1,2,2,2,2,2) = 1.0  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
+  		rel_strength(1,2,2,2,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
-      rel_strength(2,1,1,1,1,1) = 1.0  !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
-		  rel_strength(2,1,1,1,2,1) = 1.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cortex
-      rel_strength(2,1,1,2,2,1)	= 1.0  !Repulsive component, intra-cellular Epiblast cortex-epiblast cortex
+      rel_strength(2,1,1,1,1,1) = 0.5  !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(2,1,1,1,2,1) = 0.5	 !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cortex
+      rel_strength(2,1,1,2,2,1)	= 0.5  !Repulsive component, intra-cellular Epiblast cortex-epiblast cortex
 		  rel_strength(2,1,2,1,1,1)	= 0.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
 		  rel_strength(2,1,2,1,2,1) = 0.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
 		  rel_strength(2,1,2,2,2,1) = 0.0	 !Repulsive component, intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
-		  rel_strength(2,2,2,1,1,1) = 1.0	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-		  rel_strength(2,2,2,1,2,1) = 1.0	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
-		  rel_strength(2,2,2,2,2,1) = 1.0	 !Repulsive component, intra-cellular Hypoblast cortex-hypoblast cortex
+		  rel_strength(2,2,2,1,1,1) = 0.5	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+		  rel_strength(2,2,2,1,2,1) = 0.5	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
+		  rel_strength(2,2,2,2,2,1) = 0.5	 !Repulsive component, intra-cellular Hypoblast cortex-hypoblast cortex
 
 		  rel_strength(2,1,1,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
 		  rel_strength(2,1,1,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
@@ -226,7 +226,7 @@ module scem_0_input
       dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
 
       ! temporal parameters - all in *seconds*
-      time_max=4.5*cell_cycle_time ! --> time of simulation in seconds
+      time_max=1.0*cell_cycle_time ! --> time of simulation in seconds
       time_out_1=time_max/99.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
 !     time_out_2=cell_cycle_time/100.0 ! --> interval between quantitative data outputs
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment

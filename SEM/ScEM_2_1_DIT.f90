@@ -41,8 +41,8 @@ contains
         !Do nothing for pairs within the same cell
         CYCLE
       elseif (fate_1.EQ.fate_2) then
-        elements(pairs(j,1))%DIT_factor = .TRUE.!.FALSE.
-        elements(pairs(j,2))%DIT_factor = .TRUE.!.FALSE.
+        elements(pairs(j,1))%DIT_factor = .FALSE.
+        elements(pairs(j,2))%DIT_factor = .FALSE.
       else
         !Set DIT_factor to be .TRUE. for elements only if both elements are in different cells
         !and those cells have different fates. This routine naturally excludes elements in the same
