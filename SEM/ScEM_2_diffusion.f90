@@ -18,8 +18,8 @@ module scem_2_diffusion
       real*8 :: amp,arg
 
       do n=1,ne
-         CALL RANDOM_SEED()
          CALL RANDOM_NUMBER(ra)      !Fill array ra with four random numbers and create three Gaussian random variates
+         print*, ra
          amp=sqrt(-2.0*log(ra(1,1)))
          arg=2*pi*ra(1,2)				     !Converts random number to an angle
          gauss(1)=amp*cos(arg)

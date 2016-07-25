@@ -24,15 +24,15 @@ module scem_2_growth
       ! attempt creation of new element in each cell
       ! (use an improved algorithm here? - I think we need to eventually - talk to Mikael Bjorkland?)
       do k=1,nc
-        CALL RANDOM_SEED()
         CALL RANDOM_NUMBER(rn)
+        print*, rn
         if (rn.lt.prob_new_element) then			!prob_new_element comes from ScEM_0_input
           flag_success=0
           n_el_cell_k=cells(k)%c_elements(0)
           r_core=frac_growth*cells(k)%rad_gyration ! defining radius of growth core in terms of cell's rad. of gyr.
           do while (flag_success.eq.0) ! attempt placement of new element until successful
-            CALL RANDOM_SEED()
             CALL RANDOM_NUMBER(rn)
+            print*, rn
             m=1+int(rn*cells(k)%c_elements(0)) ! randomly select an element in cell k
             n=cells(k)%c_elements(m)
             pos(:)=elements(n)%position(:)-cells(k)%position(:)
@@ -40,8 +40,8 @@ module scem_2_growth
             if (rad_sq.lt.r_core**2) then ! check for successful placement of new element within cell core
               flag_success=1
               ne=ne+1
-              CALL RANDOM_SEED()
               CALL RANDOM_NUMBER(ra2)
+              print*, ra2
               phi=2*pi*ra2(1,1) ! azimuthal angle
               theta=acos(2*(ra2(1,2)-0.5)) ! polar angle, appropriately weighted
               d_pos(1)=0.6*r_equil*sin(theta)*cos(phi) ! define random x-position of new element rel. to element n

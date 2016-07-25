@@ -58,9 +58,25 @@ module scem_0_input
   real*8              :: h !Height of spherical cap boundary.
   real*8              :: cap_radius
 
+  integer :: seedarraylength
+  integer, allocatable, dimension(:) :: seed_array
+
   contains
 
     subroutine scem_input
+
+      !To use processor determined random number seed and print that seed
+      call RANDOM_SEED
+      call RANDOM_SEED(size=seedarraylength)
+      allocate(seed_array(seedarraylength))
+      call RANDOM_SEED(get=seed_array)
+      print*, "seed_array", seed_array
+
+      !To use user-defined random number seed
+      !allocate(seed_array(2))
+      !seed_array(1) = 1778472938
+      !seed_array(2) = 498
+      !call RANDOM_SEED(PUT=seed_array)
 
       !Take time when run is initiated
       call SYSTEM_CLOCK(start_time, count_rate)
