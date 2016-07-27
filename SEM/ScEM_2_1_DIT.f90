@@ -57,7 +57,7 @@ contains
       if (elements(pairs_cortex(j,1))%DIT_factor.OR.elements(pairs_cortex(j,2))%DIT_factor) then
 !        pairs_cortex(j,3) = cells(elements(pairs_cortex(j,1))%parent)%fate**2 !DIT response equal to fate. Quick and dirty way to give fate dependence.
 !        pairs_cortex(j,3) = 4 !No fate dependence.
-        pairs_cortex(j,3) = 0.5
+        call get_command_argument(1,pairs_cortex(j,3))
       else
         pairs_cortex(j,3) = 1
       endif
