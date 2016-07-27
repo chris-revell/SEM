@@ -34,7 +34,6 @@ module scem_2_initial_create
       	do while (icount.lt.ne_cell) ! counts successful establishment of elements
           flag_success=1 ! initialize success flag
           CALL RANDOM_NUMBER(ra)
-          print*, ra
           pos_1(:)=r_cell*(2*ra(1,:)-1) ! define random position of new element w.r.t. origin
           if (dim.eq.2) pos_1(3)=0.0 ! collapse third dimension for planar simulations
           rad_sq=dot_product(pos_1,pos_1)

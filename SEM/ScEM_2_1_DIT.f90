@@ -21,6 +21,7 @@ contains
     integer :: cell_2
     integer :: fate_1
     integer :: fate_2
+    character(len=3) :: arg1
 
 
     !For each standard near-neighbour element interaction pair, test to see if the parent
@@ -57,7 +58,8 @@ contains
       if (elements(pairs_cortex(j,1))%DIT_factor.OR.elements(pairs_cortex(j,2))%DIT_factor) then
 !        pairs_cortex(j,3) = cells(elements(pairs_cortex(j,1))%parent)%fate**2 !DIT response equal to fate. Quick and dirty way to give fate dependence.
 !        pairs_cortex(j,3) = 4 !No fate dependence.
-        call get_command_argument(1,pairs_cortex(j,3))
+        call get_command_argument(1,arg1)
+        read(arg1,*) pairs_cortex(j,3)
       else
         pairs_cortex(j,3) = 1
       endif

@@ -67,7 +67,6 @@ module scem_2_division
             !then division is symmetric, otherwise it is asymmetric.
             !This models the 80:20 split for symmetric vs asymmetric observed for ICM cell division
             CALL RANDOM_NUMBER(fate_decider) !Fill fate_decider variable with a random number between 0 and 1.
-            print*, fate_decider
             if (fate_decider.GE.0.5) then
       				cells(nc)%fate=cells(k)%fate	!Symmetric division
       			else if (cells(k)%fate.eq.1) then
