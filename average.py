@@ -1,6 +1,7 @@
 #Python script to calculate statistics for multiple runs of a system
 import os
 import numpy as np
+import matplotlib as pyplot
 from sys import argv
 
 inputfolder = argv[1]
@@ -52,3 +53,9 @@ for i in range(0,nrows):
     outfile_interface.write(str(timeslist[i])+"    "+str(meanlist_interface[i])+'    '+str(stddevlist_interface[i])+'\n')
     outfile_radius.write(str(timeslist[i])+"    "+str(meanlist_radius[i])+'    '+str(stddevlist_radius[i])+'\n')
     outfile_neighbours.write(str(timeslist[i])+"    "+str(meanlist_neighbours[i])+'    '+str(stddevlist_neighbours[i])+'\n')
+
+#***********NOT FINISHED
+#Show plot of data in matplotlib
+pyplot.plot(mean_list)
+pyplot.fill_between(time_list,(mean_list+std_dev_list),(mean_list-std_dev_list), alpha=0.5)
+pyplot.show()
