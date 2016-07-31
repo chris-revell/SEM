@@ -1,7 +1,7 @@
 #Python script to calculate statistics for multiple runs of a system
 import os
 import numpy as np
-import matplotlib as pyplot
+import matplotlib.pyplot as pyplot
 from sys import argv
 
 inputfolder = argv[1]
@@ -54,8 +54,18 @@ for i in range(0,nrows):
     outfile_radius.write(str(timeslist[i])+"    "+str(meanlist_radius[i])+'    '+str(stddevlist_radius[i])+'\n')
     outfile_neighbours.write(str(timeslist[i])+"    "+str(meanlist_neighbours[i])+'    '+str(stddevlist_neighbours[i])+'\n')
 
-#***********NOT FINISHED
 #Show plot of data in matplotlib
-pyplot.plot(mean_list)
-pyplot.fill_between(time_list,(mean_list+std_dev_list),(mean_list-std_dev_list), alpha=0.5)
-pyplot.show()
+pyplot.figure(1)
+pyplot.fill_between(timeslist,(meanlist_interface+stddevlist_interface),(meanlist_interface-stddevlist_interface), alpha=0.5)
+pyplot.plot(timeslist,meanlist_interface)
+pyplot.savefig(os.path.join(inputfolder,'interface.pdf'))
+
+pyplot.figure(2)
+pyplot.fill_between(timeslist,(meanlist_radius+stddevlist_radius),(meanlist_radius-stddevlist_radius), alpha=0.5)
+pyplot.plot(timeslist,meanlist_radius)
+pyplot.savefig(os.path.join(inputfolder,'radius.pdf'))
+
+pyplot.figure(3)
+pyplot.fill_between(timeslist,(meanlist_neighbours+stddevlist_neighbours),(meanlist_neighbours-stddevlist_neighbours), alpha=0.5)
+pyplot.plot(timeslist,meanlist_neighbours)
+pyplot.savefig(os.path.join(inputfolder,'neighbours.pdf'))
