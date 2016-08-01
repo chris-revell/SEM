@@ -12,18 +12,23 @@ if [[ $? -ne 0 ]] ; then
 fi
 #Run program
 #DIT response, mutual adhesion magnitude for one species, stiffness_factor
-./ScEM_master 1.0 0.0 0.5
-./ScEM_master 1.0 0.0 0.5
-./ScEM_master 1.0 0.0 0.5
-./ScEM_master 1.0 0.0 0.5
-./ScEM_master 1.0 0.0 0.5
-./ScEM_master 1.0 5.0 0.5
-./ScEM_master 1.0 5.0 0.5
-./ScEM_master 1.0 5.0 0.5
-./ScEM_master 1.0 5.0 0.5
-./ScEM_master 1.0 5.0 0.5
-./ScEM_master 1.0 10.0 0.5
-./ScEM_master 1.0 10.0 0.5
-./ScEM_master 1.0 10.0 0.5
-./ScEM_master 1.0 10.0 0.5
-./ScEM_master 1.0 10.0 0.5
+./ScEM_master 0.5 0.0 0.25
+./ScEM_master 0.5 0.0 0.25
+./ScEM_master 0.5 0.0 0.25
+./ScEM_master 0.5 0.0 0.25
+./ScEM_master 0.5 0.0 0.25
+./ScEM_master 2.0 0.0 0.25
+./ScEM_master 2.0 0.0 0.25
+./ScEM_master 2.0 0.0 0.25
+./ScEM_master 2.0 0.0 0.25
+./ScEM_master 2.0 0.0 0.25
+./ScEM_master 0.0 0.0 0.25
+./ScEM_master 0.0 0.0 0.25
+./ScEM_master 0.0 0.0 0.25
+./ScEM_master 0.0 0.0 0.25
+./ScEM_master 0.0 0.0 0.25
+./ScEM_master 1.0 0.0 0.25
+./ScEM_master 1.0 0.0 0.25
+./ScEM_master 1.0 0.0 0.25
+./ScEM_master 1.0 0.0 0.25
+./ScEM_master 1.0 0.0 0.25
