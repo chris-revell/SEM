@@ -59,17 +59,16 @@ contains
 !        pairs_cortex(j)%cortex_factor = 4 !No fate dependence.
 
         !Change cortical tension only for one cell type
-        if (cells(pairs_cortex(j)%label1)%fate.EQ.1) then
+        if (cells(elements(pairs_cortex(j)%label1)%parent)%fate.EQ.1) then
           call get_command_argument(1,arg1)
           read(arg1,*) pairs_cortex(j)%cortex_factor
         else
-          pairs_cortex(j)%cortex_factor = 1
+          pairs_cortex(j)%cortex_factor = 1.0
         endif
 
       else
-        pairs_cortex(j)%cortex_factor = 1
+        pairs_cortex(j)%cortex_factor = 1.0
       endif
-      print*, pairs_cortex(j)
     enddo
 
   end subroutine
