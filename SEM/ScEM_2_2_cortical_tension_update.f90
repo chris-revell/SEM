@@ -28,26 +28,26 @@ contains
     do i=1, nc
       np_cortex = np_cortex + 3*cells(i)%triplet_count
     enddo
-    allocate(pairs_cortex(np_cortex,3))
+    allocate(pairs_cortex(np_cortex))
 
     pair_counter=0
-    !Fill pairs_cortex(i,1) and pairs_cortex(i,2) with labels of elements in cortex pairs
+    !Fill pairs_cortex(i)%label1 and pairs_cortex(i)%label2 with labels of elements in cortex pairs
     !Loop over all cells
     do c=1, nc
       !Loop over all Delaunay triplets in cell c
       do j=1, cells(c)%triplet_count
         !Each edge of the Delaunay triangle adds a pair to the pairs_cortex array
         pair_counter = pair_counter+1
-        pairs_cortex(pair_counter,1) = cells(c)%triplets(1,j)   !Use min(cells(c)%triplets(1,j),cells(c)%triplets(2,j)) if we want to ensure that the lowest label comes first.
-        pairs_cortex(pair_counter,2) = cells(c)%triplets(2,j)   !Use max(cells(c)%triplets(1,j),cells(c)%triplets(2,j)) if we want to ensure that the highest label comes second.
+        pairs_cortex(pair_counter)%label1 = cells(c)%triplets(1,j)   !Use min(cells(c)%triplets(1,j),cells(c)%triplets(2,j)) if we want to ensure that the lowest label comes first.
+        pairs_cortex(pair_counter)%label2 = cells(c)%triplets(2,j)   !Use max(cells(c)%triplets(1,j),cells(c)%triplets(2,j)) if we want to ensure that the highest label comes second.
 
         pair_counter = pair_counter+1
-        pairs_cortex(pair_counter,1) = cells(c)%triplets(2,j)
-        pairs_cortex(pair_counter,2) = cells(c)%triplets(3,j)
+        pairs_cortex(pair_counter)%label1 = cells(c)%triplets(2,j)
+        pairs_cortex(pair_counter)%label2 = cells(c)%triplets(3,j)
 
         pair_counter = pair_counter+1
-        pairs_cortex(pair_counter,1) = cells(c)%triplets(3,j)
-        pairs_cortex(pair_counter,2) = cells(c)%triplets(1,j)
+        pairs_cortex(pair_counter)%label1 = cells(c)%triplets(3,j)
+        pairs_cortex(pair_counter)%label2 = cells(c)%triplets(1,j)
       enddo !End loop over triangles
     enddo !End loop over cells
 
@@ -56,13 +56,13 @@ contains
     if (flag_DIT.EQ.1) then
       call scem_dit
     else
-      pairs_cortex(:,3)=1      !Default setting for the 3rd column of the 2nd dimension of pairs_cortex, if not set in scem_DIT
+      pairs_cortex(:)%cortex_factor=1.0      !Default setting for the 3rd column of the 2nd dimension of pairs_cortex, if not set in scem_DIT
     endif
 
     !Now update velocities for all pairs in this network.
     do m=1,pair_counter
-      n=pairs_cortex(m,1)           !n and nn are the global labels of each element in the pair currently under consideration.
-      nn=pairs_cortex(m,2)
+      n=pairs_cortex(m)%label1           !n and nn are the global labels of each element in the pair currently under consideration.
+      nn=pairs_cortex(m)%label2
 
       !Calculate the vector displacement separating elements
 
@@ -73,8 +73,8 @@ contains
 
       !Update element velocities according to interaction potentials with overdamped langevin dynamics
       !Constant force cortex_constant applied.
-      elements(n)%velocity(:) = elements(n)%velocity(:) - dx(:)*cortex_constant*pairs_cortex(m,3)
-      elements(nn)%velocity(:)= elements(nn)%velocity(:)+ dx(:)*cortex_constant*pairs_cortex(m,3)
+      elements(n)%velocity(:) = elements(n)%velocity(:) - dx(:)*cortex_constant*pairs_cortex(m)%cortex_factor
+      elements(nn)%velocity(:)= elements(nn)%velocity(:)+ dx(:)*cortex_constant*pairs_cortex(m)%cortex_factor
     end do
 
   end subroutine scem_cortical_tension_update

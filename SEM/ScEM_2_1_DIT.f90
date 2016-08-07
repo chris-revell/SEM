@@ -53,22 +53,23 @@ contains
     enddo
 
     do j=1, np_cortex
-!      if (elements(pairs_cortex(j,1))%DIT_factor.AND.elements(pairs_cortex(j,2))%DIT_factor) then
-      if (elements(pairs_cortex(j,1))%DIT_factor.OR.elements(pairs_cortex(j,2))%DIT_factor) then
-!        pairs_cortex(j,3) = cells(elements(pairs_cortex(j,1))%parent)%fate**2 !DIT response equal to fate. Quick and dirty way to give fate dependence.
-!        pairs_cortex(j,3) = 4 !No fate dependence.
+!      if (elements(pairs_cortex(j)%label1)%DIT_factor.AND.elements(pairs_cortex(j)%label2)%DIT_factor) then
+      if (elements(pairs_cortex(j)%label1)%DIT_factor.OR.elements(pairs_cortex(j)%label2)%DIT_factor) then
+!        pairs_cortex(j)%cortex_factor = cells(elements(pairs_cortex(j)%label1)%parent)%fate**2 !DIT response equal to fate. Quick and dirty way to give fate dependence.
+!        pairs_cortex(j)%cortex_factor = 4 !No fate dependence.
 
         !Change cortical tension only for one cell type
-        if (cells(pairs_cortex(j,1))%fate.EQ.1) then
+        if (cells(pairs_cortex(j)%label1)%fate.EQ.1) then
           call get_command_argument(1,arg1)
-          read(arg1,*) pairs_cortex(j,3)
+          read(arg1,*) pairs_cortex(j)%cortex_factor
         else
-          pairs_cortex(j,3) = 1
+          pairs_cortex(j)%cortex_factor = 1
         endif
 
       else
-        pairs_cortex(j,3) = 1
+        pairs_cortex(j)%cortex_factor = 1
       endif
+      print*, pairs_cortex(j)
     enddo
 
   end subroutine

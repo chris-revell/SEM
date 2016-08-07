@@ -187,30 +187,30 @@ module scem_2_output_povray
       !Colour the cylinder red for a standard cortex interaction; green if the interaction is altered by DIT.
       if (flag_povray_cortex_pairs.EQ.1) then
         do i=1, np_cortex
-          if (pairs_cortex(i,3).EQ.1) then
+          if (pairs_cortex(i)%cortex_factor.EQ.1) then
             write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
                             F18.14,A61,I2.2)') &
                             ' cylinder {  < ', &
-                            elements(pairs_cortex(i,1))%position(1), ',', &
-                            elements(pairs_cortex(i,1))%position(2), ',', &
-                            elements(pairs_cortex(i,1))%position(3), '>, <', &
-                            elements(pairs_cortex(i,2))%position(1), ',', &
-                            elements(pairs_cortex(i,2))%position(2), ',', &
-                            elements(pairs_cortex(i,2))%position(3), &
+                            elements(pairs_cortex(i)%label1)%position(1), ',', &
+                            elements(pairs_cortex(i)%label1)%position(2), ',', &
+                            elements(pairs_cortex(i)%label1)%position(3), '>, <', &
+                            elements(pairs_cortex(i)%label2)%position(1), ',', &
+                            elements(pairs_cortex(i)%label2)%position(2), ',', &
+                            elements(pairs_cortex(i)%label2)%position(3), &
                             '> 0.5 texture { pigment { color Red } } } // cortex pair cell',&
-                            elements(pairs_cortex(i,1))%parent !Both elements are in the same cell so we only need one label
+                            elements(pairs_cortex(i)%label1)%parent !Both elements are in the same cell so we only need one label
           else
             write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
                             F18.14,A63,I2.2)') &
                             ' cylinder {  < ', &
-                            elements(pairs_cortex(i,1))%position(1), ',', &
-                            elements(pairs_cortex(i,1))%position(2), ',', &
-                            elements(pairs_cortex(i,1))%position(3), '>, <', &
-                            elements(pairs_cortex(i,2))%position(1), ',', &
-                            elements(pairs_cortex(i,2))%position(2), ',', &
-                            elements(pairs_cortex(i,2))%position(3), &
+                            elements(pairs_cortex(i)%label1)%position(1), ',', &
+                            elements(pairs_cortex(i)%label1)%position(2), ',', &
+                            elements(pairs_cortex(i)%label1)%position(3), '>, <', &
+                            elements(pairs_cortex(i)%label2)%position(1), ',', &
+                            elements(pairs_cortex(i)%label2)%position(2), ',', &
+                            elements(pairs_cortex(i)%label2)%position(3), &
                             '> 0.5 texture { pigment { color Green } } } // cortex pair cell',&
-                            elements(pairs_cortex(i,1))%parent !Both elements are in the same cell so we only need one label
+                            elements(pairs_cortex(i)%label1)%parent !Both elements are in the same cell so we only need one label
           endif
         enddo
       endif
