@@ -60,6 +60,8 @@ pyplot.fill_between(timeslist,(meanlist_interface+stddevlist_interface),(meanlis
 pyplot.plot(timeslist,meanlist_interface)
 lims = pyplot.xlim()
 pyplot.axis([0,lims[1],0,1])
+pyplot.xlabel('Time')
+pyplot.ylabel('Ratio of like-like inter-cell interface to \ntotal inter-cell interface')
 pyplot.savefig(os.path.join(inputfolder,'interface.pdf'))
 
 pyplot.figure(2)
@@ -67,6 +69,8 @@ pyplot.fill_between(timeslist,(meanlist_radius+stddevlist_radius),(meanlist_radi
 pyplot.plot(timeslist,meanlist_radius)
 lims = pyplot.xlim()
 pyplot.axis([0,lims[1],-5,5])
+pyplot.xlabel('Time')
+pyplot.ylabel('Difference in average distance from \nsystem centre of mass for two cell types')
 pyplot.savefig(os.path.join(inputfolder,'radius.pdf'))
 
 pyplot.figure(3)
@@ -74,4 +78,6 @@ pyplot.fill_between(timeslist,(meanlist_neighbours+stddevlist_neighbours),(meanl
 pyplot.plot(timeslist,meanlist_neighbours)
 lims = pyplot.xlim()
 pyplot.axis([0,lims[1],0,1])
+pyplot.xlabel('Time')
+pyplot.ylabel('Ratio of like-like inter-cell nearest neighbour pairs to \ntotal number of nearest neighbour pairs')
 pyplot.savefig(os.path.join(inputfolder,'neighbours.pdf'))
