@@ -44,7 +44,7 @@ contains
         !Do nothing for pairs within the same cell
         CYCLE
       elseif (fate_1.EQ.fate_2) then
-        !Set DIT_factor to be .TRUE. for elements only if both elements are in different cells
+        !Set DIT_factor to be .TRUE. for elements only if both elements of the pair are in different cells
         !and those cells have the same fate.
         elements(pairs(j,1))%DIT_factor = .TRUE.
         elements(pairs(j,2))%DIT_factor = .TRUE.

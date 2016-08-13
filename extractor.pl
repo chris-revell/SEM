@@ -25,7 +25,6 @@ defined($ARGV[1]) or die "Missing second argument - provide folder path and at l
 my $originalfolder = shift(@ARGV);
 #Create the name of the directory into which data will be written
 my $directoryname = join("_",$originalfolder."/extracted",@ARGV);
-
 #Store remaining arguments in @expressions. These are the regular expressions to search for.
 my @expressions = @ARGV;
 
@@ -50,8 +49,8 @@ while ($i < 100) {
     $file_name_out = $directoryname."/snap_".$i.".pov";
   }
 
-  open(my $file_handle_out, '>', $file_name_out);
-  open(my $file_handle_in, '<', $file_name_in) or die "can't open file";
+  open(my $file_handle_out, '>', $file_name_out) or die "can't open output data file";
+  open(my $file_handle_in, '<', $file_name_in) or die "can't open input data file";
 
   #For each line of the original povray file, check if it contains all regular
   #expressions specified at command line and if so print the line into the
