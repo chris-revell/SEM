@@ -19,13 +19,12 @@ module scem_2_measure_radius
 		subroutine scem_measure_radius
 
 		integer :: fate_count1
-		integer :: fate_count2
 		real*8	:: cell_distance_squared
+		real*8	:: cell_distance
 		real*8	:: distance_sum1
-		real*8	:: distance_sum2
 		real*8	:: distance_average1
-		real*8	:: distance_average2
-		real*8	:: average_difference
+		real*8	:: normalised_radius
+		real*8	:: max_cell_radius
 		real*8, dimension(3) :: system_COM		!Vector position of system centre of mass
 		real*8, dimension(3) :: cell_vector		!Vector position of cell relative to system centre of mass
 
@@ -39,45 +38,47 @@ module scem_2_measure_radius
 		!would need to subtract position of cell aggregate.
 
 		fate_count1=0
-		fate_count2=0
 		cell_distance_squared=0
 		distance_sum1=0
-		distance_sum2=0
 		distance_average1=0
-		distance_average2=0
+		max_cell_radius=0
 
 		!Need to start by calculating the centre of mass of the system, which can change after each iteration due to cell division/movement.
 		system_COM(:)=0
-		do i=1, nc
-			system_COM(:)=system_COM(:)+cells(i)%position(:)*cells(i)%c_elements(0) !For all cells sum position of cell COM multiplied by number of elements in cell (ie cell "mass")
-		end do
+!		do i=1, nc
+!			system_COM(:)=system_COM(:)+cells(i)%position(:)*cells(i)%c_elements(0) !For all cells sum position of cell COM multiplied by number of elements in cell (ie cell "mass")
+!		end do
+		do i=1, ne
+			system_COM(:)=system_COM+elements(i)%position(:)
+		enddo
 		system_COM(:)=system_COM(:)/ne  !Centre of mass found by dividing sum by total mass, ie total number of elements.
 
 
 		do n=1, nc
-			cell_vector(:)			= cells(n)%position(:)-system_COM(:)						!Vector from system COM to cell
+			!For each cell, calculate distance from the system centre of mass
+			cell_vector(:)				= cells(n)%position(:)-system_COM(:)											!Vector from system COM to cell
 			cell_distance_squared	= cell_vector(1)**2+cell_vector(2)**2+cell_vector(3)**2		!Magnitude of vector, squared
+			cell_distance					= SQRT(cell_distance_squared)
+			!If the radius of this cell exceeds the current max_cell_radius, update max_cell_radius
+			max_cell_radius				= MAX(max_cell_radius, cell_distance_squared)
+
+			!If the cell is of type 1 (epiblast), add its distance to the sum and increment the count
 			if(cells(n)%fate.EQ.1) then
 				fate_count1		= fate_count1+1													!Increment counter for cells of fate 1 by 1
-				distance_sum1	= distance_sum1 + SQRT(cell_distance_squared)					!Increase distance counter for cells of type 1 by magnitude of vector position of cell relative to system COM
-			else
-				if (cells(n)%fate.EQ.2) then
-					fate_count2		= fate_count2+1												!Increment counter for cells of fate 2 by 1
-					distance_sum2	= distance_sum2 + SQRT(cell_distance_squared)				!Increase distance counter for cells of type 2 by magnitude of vector position of cell relative to system COM
-				end if
+				distance_sum1	= distance_sum1 + cell_distance					!Increase distance counter for cells of type 1 by magnitude of vector position of cell relative to system COM
 			end if
 		end do
 
-		if (fate_count1.EQ.0.OR.fate_count2.EQ.0) then
-			average_difference = 0
+		!Divide the distance sum for cell type 1 by the cell count, and normalise by the maximum cell radius
+		!Terms included to prevent division by 0 in the case of 0 cells of type 1.
+		if (fate_count1.EQ.0.OR.max_cell_radius.EQ.0) then
+			normalised_radius = 0
 		else
 			distance_average1 = distance_sum1/fate_count1
-			distance_average2 = distance_sum2/fate_count2
+			normalised_radius = distance_average1/max_cell_radius
 		endif
 
-		average_difference = distance_average1-distance_average2
-
-		write(36,*) real(time), average_difference
+		write(36,*) real(time), normalised_radius
 !		call flush(36)
 
 		end subroutine scem_measure_radius
