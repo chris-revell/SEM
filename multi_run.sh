@@ -11,24 +11,14 @@ if [[ $? -ne 0 ]] ; then
     exit 1
 fi
 #Run program
-#DIT response, mutual adhesion magnitude for one species, stiffness_factor
-./ScEM_master 0.5 0.5 0.25
-./ScEM_master 0.5 0.5 0.25
-./ScEM_master 0.5 0.5 0.25
-./ScEM_master 0.5 0.5 0.25
-./ScEM_master 0.5 0.5 0.25
-./ScEM_master 0.5 1.0 0.25
-./ScEM_master 0.5 1.0 0.25
-./ScEM_master 0.5 1.0 0.25
-./ScEM_master 0.5 1.0 0.25
-./ScEM_master 0.5 1.0 0.25
-./ScEM_master 2.0 0.5 0.25
-./ScEM_master 2.0 0.5 0.25
-./ScEM_master 2.0 0.5 0.25
-./ScEM_master 2.0 0.5 0.25
-./ScEM_master 2.0 0.5 0.25
-./ScEM_master 2.0 1.0 0.25
-./ScEM_master 2.0 1.0 0.25
-./ScEM_master 2.0 1.0 0.25
-./ScEM_master 2.0 1.0 0.25
-./ScEM_master 2.0 1.0 0.25
+#DIT response, mutual adhesion magnitude for one species
+./ScEM_master 0.8 1.0
+./ScEM_master 0.8 1.0
+./ScEM_master 0.8 1.0
+./ScEM_master 0.8 1.0
+./ScEM_master 0.8 1.0 
+./ScEM_master 0.5 1.0
+./ScEM_master 0.5 1.0
+./ScEM_master 0.5 1.0
+./ScEM_master 0.5 1.0
+./ScEM_master 0.5 1.0

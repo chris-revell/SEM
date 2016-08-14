@@ -1,8 +1,8 @@
-           2
-         274
-        8187
- number of cells =            2
- number of elements =          274
- number of element pairs =         8187
- time =    1800.01367    
- com =   0.529886603     -0.753858685       4.38365889    
+           1
+         128
+         604
+ number of cells =            1
+ number of elements =          128
+ number of element pairs =          604
+ time =    43200.03    
+ Time taken for run (seconds):         127
