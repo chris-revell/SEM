@@ -23,7 +23,8 @@ contains
     write(22,"(*(G0,:,1X))")'frac_interaction_max       = ',frac_interaction_max
     write(22,"(*(G0,:,1X))")'ne_cell                    = ',ne_cell
 
-    write(22,"(*(G0,:,1X))")'cortex_constant = ',cortex_constant
+    write(22,"(*(G0,:,1X))")'cortex_constant1 = ',cortex_constant1
+    write(22,"(*(G0,:,1X))")'cortex_constant2 = ',cortex_constant2
 
 
     write(22,"(*(G0,:,1X))") "flag_create     = ",flag_create
