@@ -59,14 +59,16 @@ contains
 !      if (elements(pairs_cortex(j)%label1)%DIT_factor.OR.elements(pairs_cortex(j)%label2)%DIT_factor) then
 
         !Change cortical tension only for one cell type
-        if (cells(elements(pairs_cortex(j)%label1)%parent)%fate.EQ.1) then
-          call get_command_argument(1,arg1)
-          read(arg1,*) pairs_cortex(j)%cortex_factor
-          pairs_cortex(j)%cortex_factor = 0.75*pairs_cortex(j)%cortex_factor
-        else
-          call get_command_argument(1,arg1)
-          read(arg1,*) pairs_cortex(j)%cortex_factor
-        endif
+!        if (cells(elements(pairs_cortex(j)%label1)%parent)%fate.EQ.1) then
+!          call get_command_argument(1,arg1)
+!          read(arg1,*) pairs_cortex(j)%cortex_factor
+!          pairs_cortex(j)%cortex_factor = 0.75*pairs_cortex(j)%cortex_factor
+!        else
+!          call get_command_argument(1,arg1)
+!          read(arg1,*) pairs_cortex(j)%cortex_factor
+!        endif
+      call get_command_argument(1,arg1)
+      read(arg1,*) pairs_cortex(j)%cortex_factor
 
       else
         pairs_cortex(j)%cortex_factor = 1.0
