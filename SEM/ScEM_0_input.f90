@@ -108,7 +108,7 @@ module scem_0_input
       flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
 
       !Output control flags
-      flag_povray = 0          !switch to turn off povray output entirely
+      flag_povray = 1          !switch to turn off povray output entirely
         flag_povray_volumes      = 1 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
@@ -220,7 +220,7 @@ module scem_0_input
   		rel_strength(1,1,2,2,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
   		rel_strength(1,2,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
   		rel_strength(1,2,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
-  		rel_strength(1,2,2,2,2,2) = rel_strength(1,1,1,2,2,2)  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
+  		rel_strength(1,2,2,2,2,2) = rel_strength(1,1,1,2,2,2)/2.0  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
       rel_strength(2,1,1,1,1,1) = 0.25!stiffness_factor  !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
 		  rel_strength(2,1,1,1,2,1) = 0.25!stiffness_factor	 !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cortex

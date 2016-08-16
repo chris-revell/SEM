@@ -12,13 +12,12 @@ if [[ $? -ne 0 ]] ; then
 fi
 #Run program
 #DIT response, mutual adhesion magnitude for one species
-./ScEM_master 0.8 1.0
-./ScEM_master 0.8 1.0
-./ScEM_master 0.8 1.0
-./ScEM_master 0.8 1.0
-./ScEM_master 0.8 1.0 
-./ScEM_master 0.5 1.0
-./ScEM_master 0.5 1.0
-./ScEM_master 0.5 1.0
-./ScEM_master 0.5 1.0
-./ScEM_master 0.5 1.0
+./ScEM_master 0.8 5.0
+./ScEM_master 0.8 5.0
+./ScEM_master 0.8 5.0
+./ScEM_master 0.5 5.0
+./ScEM_master 0.5 5.0
+./ScEM_master 0.5 5.0
+./ScEM_master 0.1 5.0
+./ScEM_master 0.1 5.0
+./ScEM_master 0.1 5.0

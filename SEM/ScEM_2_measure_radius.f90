@@ -49,7 +49,7 @@ module scem_2_measure_radius
 !			system_COM(:)=system_COM(:)+cells(i)%position(:)*cells(i)%c_elements(0) !For all cells sum position of cell COM multiplied by number of elements in cell (ie cell "mass")
 !		end do
 		do i=1, ne
-			system_COM(:)=system_COM+elements(i)%position(:)
+			system_COM(:)=system_COM(:)+elements(i)%position(:)
 		enddo
 		system_COM(:)=system_COM(:)/ne  !Centre of mass found by dividing sum by total mass, ie total number of elements.
 
@@ -60,7 +60,7 @@ module scem_2_measure_radius
 			cell_distance_squared	= cell_vector(1)**2+cell_vector(2)**2+cell_vector(3)**2		!Magnitude of vector, squared
 			cell_distance					= SQRT(cell_distance_squared)
 			!If the radius of this cell exceeds the current max_cell_radius, update max_cell_radius
-			max_cell_radius				= MAX(max_cell_radius, cell_distance_squared)
+			max_cell_radius				= MAX(max_cell_radius, cell_distance)
 
 			!If the cell is of type 1 (epiblast), add its distance to the sum and increment the count
 			if(cells(n)%fate.EQ.1) then
@@ -71,7 +71,9 @@ module scem_2_measure_radius
 
 		!Divide the distance sum for cell type 1 by the cell count, and normalise by the maximum cell radius
 		!Terms included to prevent division by 0 in the case of 0 cells of type 1.
-		if (fate_count1.EQ.0.OR.max_cell_radius.EQ.0) then
+		if (fate_count1.EQ.0) then
+			normalised_radius = 1
+		elseif (max_cell_radius.EQ.0) then
 			normalised_radius = 0
 		else
 			distance_average1 = distance_sum1/fate_count1

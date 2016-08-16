@@ -50,7 +50,8 @@ lims = pyplot.xlim()
 pyplot.axis([0,lims[1],0,1])
 pyplot.legend(loc='best', shadow=True)
 pyplot.xlabel('Time')
-pyplot.ylabel('Difference in average distance from \nsystem centre of mass for two cell types')
+pyplot.ylabel('Average distance of epiblast cells from system centre of mass, normalised by\nmaximum distance of any cell from the centre of mass')
+pyplot.title('Comparison of normalised average distance of epiblast cells from system centre of mass\n between systems with different input parameters')
 pyplot.savefig(os.path.join(outputfolder,'radius.pdf'))
 
 """
