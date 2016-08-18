@@ -55,18 +55,13 @@ contains
     enddo
 
     do j=1, np_cortex
-      if (elements(pairs_cortex(j)%label1)%DIT_factor.AND.elements(pairs_cortex(j)%label2)%DIT_factor) then
-!      if (elements(pairs_cortex(j)%label1)%DIT_factor.OR.elements(pairs_cortex(j)%label2)%DIT_factor) then
-
-        !Change cortical tension only for one cell type
-        if (cells(elements(pairs_cortex(j)%label1)%parent)%fate.EQ.1) then
-          call get_command_argument(1,arg1)
-          read(arg1,*) pairs_cortex(j)%cortex_factor
-          pairs_cortex(j)%cortex_factor = pairs_cortex(j)%cortex_factor
-        else
-          pairs_cortex(j)%cortex_factor = 1.0
-        endif
-
+      if (cells(elements(pairs_cortex(j)%label1)%parent)%fate.EQ.1) then
+          if (elements(pairs_cortex(j)%label1)%DIT_factor.AND.elements(pairs_cortex(j)%label2)%DIT_factor) then
+            call get_command_argument(1,arg1)
+            read(arg1,*) pairs_cortex(j)%cortex_factor
+          else
+            pairs_cortex(j)%cortex_factor = 2.0
+          endif
       else
         pairs_cortex(j)%cortex_factor = 1.0
       endif
