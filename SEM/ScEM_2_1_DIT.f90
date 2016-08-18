@@ -62,10 +62,9 @@ contains
         if (cells(elements(pairs_cortex(j)%label1)%parent)%fate.EQ.1) then
           call get_command_argument(1,arg1)
           read(arg1,*) pairs_cortex(j)%cortex_factor
-          pairs_cortex(j)%cortex_factor = 0.75*pairs_cortex(j)%cortex_factor
+          pairs_cortex(j)%cortex_factor = pairs_cortex(j)%cortex_factor
         else
-          call get_command_argument(1,arg1)
-          read(arg1,*) pairs_cortex(j)%cortex_factor
+          pairs_cortex(j)%cortex_factor = 1.0
         endif
 
       else

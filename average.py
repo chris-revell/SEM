@@ -61,6 +61,8 @@ pyplot.fill_between(timeslist,(meanlist_radius+stddevlist_radius),(meanlist_radi
 pyplot.plot(timeslist,meanlist_radius)
 lims = pyplot.xlim()
 pyplot.axis([0,lims[1],0,1])
+pyplot.axhline(0.75, linestyle='--', color='black')
+pyplot.annotate('Perfectly\nmixed', xy=(lims[1],0.75))
 pyplot.xlabel('Time')
 pyplot.ylabel('Average distance of epiblast cells from system centre of mass, normalised by\nmaximum distance of any cell from the centre of mass')
 pyplot.title('Normalised average distance of epiblast cells from system centre of mass')

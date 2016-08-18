@@ -49,9 +49,11 @@ pyplot.figure(1)
 lims = pyplot.xlim()
 pyplot.axis([0,lims[1],0,1])
 pyplot.legend(loc='best', shadow=True)
+pyplot.axhline(0.75, linestyle='--', color='black')
+pyplot.annotate('Perfectly\nmixed', xy=(lims[1],0.75))
 pyplot.xlabel('Time')
-pyplot.ylabel('Average distance of epiblast cells from system centre of mass, normalised by\nmaximum distance of any cell from the centre of mass')
-pyplot.title('Comparison of normalised average distance of epiblast cells from system centre of mass\n between systems with different input parameters')
+pyplot.ylabel('Average distance of epiblast cells from system centre of mass, \nnormalised bymaximum distance of any cell from the centre of mass')
+pyplot.title('Comparison of normalised average distance of epiblast cells from\n system centre of mass between systems with different input parameters')
 pyplot.savefig(os.path.join(outputfolder,'radius.pdf'))
 
 """
