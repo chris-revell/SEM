@@ -47,7 +47,7 @@ else:
 
 pyplot.figure(1)
 lims = pyplot.xlim()
-pyplot.axis([0,lims[1],0,1])
+pyplot.axis([0,lims[1],0.595,0.905])
 pyplot.legend(loc='best', shadow=True)
 pyplot.axhline(0.75, linestyle='--', color='black')
 pyplot.annotate('Perfectly\nmixed', xy=(lims[1],0.75))
