@@ -26,9 +26,7 @@ module scem_2_integrate
       endif
 
       !Update element velocities according to background potential.
-      if (flag_background.GT.0) then
-        call scem_background
-      end if
+      call scem_background(flag_background)
 
     end subroutine scem_integrate
 
