@@ -17,8 +17,6 @@ module scem_2_background
     real*8,dimension(2) :: normalised_2d_position !Normalised x and y coordinates of element
     real*8              :: spherical_radius    !Radius of element relative to centre of spherical background potential well
     real*8              :: volume_sum
-
-
     real*8              :: cap_element_radius
     real*8,dimension(3) :: cap_radial_vector
 
@@ -50,7 +48,7 @@ module scem_2_background
       do n=1, nc
         volume_sum = volume_sum + cells(n)%volume
       enddo
-      spherical_boundary_radius = ((3.0*volume_sum)/(pi*4.0))**(1.0/3.0) !Boundary radius scales with total system volume
+      spherical_boundary_radius = 1.1*(((3.0*volume_sum)/(pi*4.0))**(1.0/3.0)) !Boundary radius scales with total system volume
       do n=1, ne
         spherical_radius = DOT_PRODUCT(elements(n)%position,elements(n)%position)
         if (spherical_radius.gt.spherical_boundary_radius) then

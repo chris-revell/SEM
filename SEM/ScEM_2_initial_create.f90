@@ -18,6 +18,11 @@ module scem_2_initial_create
       integer :: flag_success,icount_tot
       integer :: f
 
+      WRITE(*,*) "CREATE"
+      nc=1
+      ne=nc*ne_cell
+      np=ne
+
       ! initialize position, label, and age of first cell
       do n=1,nc
 

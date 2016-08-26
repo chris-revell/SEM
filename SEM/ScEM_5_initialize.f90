@@ -29,23 +29,9 @@ module scem_5_initialize
 
       ! initialize numbers of cells, elements, and pairs
       if (flag_create.eq.1) then
-      	 WRITE(*,*) "CREATE"
-         nc=1
-         ne=nc*ne_cell
-         np=ne
+         call scem_initial_create ! make new initial cell configuration
       else
-      	 WRITE(*,*) "READ"
-         open(unit=11,file='config_files/config_data.txt',status='old')
-         read(11,*)nc
-         read(11,*)ne
-         read(11,*)np
-         close(unit=11)
-		 allocate(read_cell_fate(nc))
-         open(unit=12,file='config_files/cell_fate_data.txt',status='old')
-         do n=1, nc
-         	read(12,*)read_cell_fate(n)
-         end do
-         close(unit=12)
+         call scem_initial_exist ! read in data file of existing cell configuration
       end if
       nc_size=4*nc          !These are parameters for array size allocation from ScEM_0_input.f90
       ne_size=4*ne
@@ -64,12 +50,6 @@ module scem_5_initialize
       allocate(list(ne_size))
       allocate(pairs(np_size,2))
       !pairs_cortex can only be allocated after volume_calculate has been called because it relies on the Delaunay triangulation.
-
-      if (flag_create.eq.1) then
-         call scem_initial_create ! make new initial cell configuration
-      else
-         call scem_initial_exist ! read in data file of existing cell configuration
-      end if
 
       ! initialize position vector for center of sector grid
       x_cen(1)=sector_size*int(nx/2)

@@ -11,7 +11,6 @@ module scem_0_useful
   integer :: i,j,k,l,m,n
   integer :: ix,iy,iz,kk,nn
   integer :: icount,icount_p
-  real*8 :: dist_sq,rad_sq
+  real*8  :: dist_sq,rad_sq,fate_decider
 
 end module scem_0_useful
-

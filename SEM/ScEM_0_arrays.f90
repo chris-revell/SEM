@@ -14,7 +14,6 @@ module scem_0_arrays
   integer, allocatable, dimension(:,:,:)	     	:: head
   integer, allocatable, dimension(:)	     		  :: list
   integer, allocatable, dimension(:,:)    			:: pairs
-  integer, allocatable, dimension(:)		      	:: read_cell_fate   !Initial fate of cells read from file
   integer, allocatable, dimension(:,:)		    	:: neighbours
   integer, dimension(4,8)                       :: max_radius_elements  !For use in scem_cortex
 
