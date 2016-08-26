@@ -112,8 +112,8 @@ module scem_0_input
         flag_povray_volumes      = 1 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
-        flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
-        flag_povray_cortex_pairs = 1 ! Switch to turn Delaunay cortex interaction on and off
+        flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
+        flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
@@ -124,7 +124,7 @@ module scem_0_input
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
-      ot=1.0/3.0 ! one thid
+      ot=1.0/3.0 ! one third
       p3=pi/(3.0*sqrt(2.0)) ! packing fraction in 3D
 
       ! system parameters
@@ -222,7 +222,7 @@ module scem_0_input
   		rel_strength(1,1,2,2,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
   		rel_strength(1,2,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
   		rel_strength(1,2,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
-  		rel_strength(1,2,2,2,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
+  		rel_strength(1,2,2,2,2,2) = 1.0  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
       rel_strength(2,1,1,1,1,1) = stiffness_factor  !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
 		  rel_strength(2,1,1,1,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cortex
@@ -247,13 +247,13 @@ module scem_0_input
       r_s_max = MAXVAL(rel_strength)
 
       !Variable for inter-cortex potential
-      cortex_constant1 = 0.005
-      cortex_constant2 = 0.003
+      cortex_constant1 = 0.01
+      cortex_constant2 = 0.01
 
       dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
 
       ! temporal parameters - all in *seconds*
-      time_max=5.5*cell_cycle_time ! --> time of simulation in seconds
+      time_max=1.0*cell_cycle_time ! --> time of simulation in seconds
       time_out_1=time_max/99.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities
