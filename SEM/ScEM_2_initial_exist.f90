@@ -21,6 +21,12 @@ module scem_2_initial_exist
       read(11,*)ne
       read(11,*)np
       close(unit=11)
+      nc_size=4*nc
+      ne_size=4*ne
+      np_size=4*np
+      ! allocate cell and element data arrays
+      allocate(cells(nc_size))
+      allocate(elements(ne_size))
 
       !Set cell fates from file or randomly
       if (flag_randomise.EQ.1) then

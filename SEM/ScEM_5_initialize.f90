@@ -33,13 +33,6 @@ module scem_5_initialize
       else
          call scem_initial_exist ! read in data file of existing cell configuration
       end if
-      nc_size=4*nc          !These are parameters for array size allocation from ScEM_0_input.f90
-      ne_size=4*ne
-      np_size=4*np
-
-      ! allocate cell and element data arrays
-      allocate(cells(nc_size))
-      allocate(elements(ne_size))
 
       ! allocate center of mass, x_prev, and x_compare arrays
       allocate(xe_prev(ne_size,3)) ! x_prev records prior values of positions

@@ -22,6 +22,12 @@ module scem_2_initial_create
       nc=1
       ne=nc*ne_cell
       np=ne
+      nc_size=4*nc
+      ne_size=4*ne
+      np_size=4*np
+      ! allocate cell and element data arrays
+      allocate(cells(nc_size))
+      allocate(elements(ne_size))
 
       ! initialize position, label, and age of first cell
       do n=1,nc

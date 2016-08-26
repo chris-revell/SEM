@@ -101,12 +101,12 @@ module scem_0_input
       flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
-      flag_background = 2 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
+      flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
       flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_cortex     = 1 ! flag_cortex = 1 (0) to identify cortex elements (not identifying cortex elements) MUST ALWAYS BE SWITCHED ON IF VOLUME IS CALCULATED OR ELSE PROGRAM WILL FAIL AT RUN TIME
       flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
-      flag_randomise  = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution 
+      flag_randomise  = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
 
       !Output control flags
       flag_povray = 1          !switch to turn off povray output entirely
@@ -150,7 +150,6 @@ module scem_0_input
       r_cell_sq=r_cell**2 ! radial scale squared
       !*************
 
-      allocate(rel_strength(2,0:n_c_types,0:n_c_types,0:n_e_types,0:n_e_types,2)) ! allocate rel_strength array
 
 
       !*************
@@ -207,7 +206,8 @@ module scem_0_input
                                                 ! note: may need better derivation for this time and relationship to cell_cycle_time
         r_placement_min_sq=(frac_placement_min*r_equil)**2 ! squared minimum distance from new element to nearest neighbour
 
-
+      ! allocate rel_strength array
+      allocate(rel_strength(2,0:n_c_types,0:n_c_types,0:n_e_types,0:n_e_types,2))
 	    !assign values to relative strength array
 	    rel_strength(:,:,:,:,:,:)=0.0	!default interactions are zero
 		  ! User supplies entries for relative strength "matrix"
@@ -269,7 +269,7 @@ module scem_0_input
 
       !Variable for inter-cortex potential
       cortex_constant1 = 0.01
-      cortex_constant2 = 0.01
+      cortex_constant2 = 0.005
 
       dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
                                     ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
