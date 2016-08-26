@@ -17,7 +17,6 @@ module scem_2_initial_exist
       do n=1, nc
 !  	    cells(n)%position(:)=0.0 ! this is the approximate position of first cell - not its center of mass
       	cells(n)%label=n
-      	cells(n)%age=establishment_time
 	  	cells(n)%fate=read_cell_fate(n)
 	  end do
 

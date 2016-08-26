@@ -28,11 +28,6 @@ module scem_2_ageing
          endif
       end do
 
-      ! update age of each cell
-      do k=1,nc
-         cells(k)%age=cells(k)%age+dt
-      end do
-
     end subroutine scem_ageing
 
 end module scem_2_ageing

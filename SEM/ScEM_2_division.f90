@@ -58,8 +58,6 @@ module scem_2_division
                   elements(n)%parent=nc
                end if
             end do
-            cells(k)%age=0.0
-            cells(nc)%age=0.0
             cells(k)%c_elements(:)=c_el_temp1(:)
             cells(nc)%c_elements(:)=c_el_temp2(:)
 

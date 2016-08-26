@@ -23,7 +23,6 @@ module scem_2_initial_create
 
       	cells(n)%position(:)=(n-1)*r_cell/1.732 ! this is the defined position of the cell - not its center of mass. 1.732 is the square root of 3. Creates 2nd cell 2*r_cell away from the first.
       	cells(n)%label=n
-      	cells(n)%age=0.0
       	cells(n)%fate=MOD(n,3)
 
       	! create elements in random positions in cell volume
