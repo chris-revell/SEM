@@ -13,6 +13,9 @@ outputfolder = '../data/compare'
 
 for folder in folderstocompare:
 
+    print("Enter label for data series %s" % folder)
+    series_label = input("-->")
+
     #Split folder path to extract the final component
     components = folder.split('/')
     if folder[-1] == '/':
@@ -31,7 +34,7 @@ for folder in folderstocompare:
     """
 
     pyplot.figure(1)
-    pyplot.plot(radius_array[:,0],radius_array[:,1],label=components[-1])
+    pyplot.plot(radius_array[:,0],radius_array[:,1],label=series_label)
     """
     pyplot.figure(2)
     pyplot.plot(interface_array[:,0],interface_array[:,1],label=components[-1])
