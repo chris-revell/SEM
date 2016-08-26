@@ -130,26 +130,46 @@ module scem_0_input
       ! system parameters
       trigger_frac=0.5 ! safety margin for triggering array reallocation
       ! derived quantitites
+
+
+      !*************
+      !Why *flag_create here?
       dt_amp_max=0.1*(1.0-0.875*flag_create) ! empirically found best values for time step amplitude
+      !*************
 
       ! cell parameters
       n_c_types=2 ! Number of cell types. 1=epliblast, 2=hypoblast
-      n_e_types=2 ! Number of element types. 1=cytoplasm, 2=cortex
+      n_e_types=2 ! Number of element types. 1=cytoplasm, 2=corte
+
+      !*************
+      !r_cell is a general lengthscale to set the equilibrium distance for interactions and the number of sectors.
+      !Do we really need it? can we make do without? Is it needed to give a grounding in real units?
       r_cell=10.0 ! Radial spatial scale of one cell in *microns*
       ! derived quantities
       r_cell_sq=r_cell**2 ! radial scale squared
+      !*************
+
       allocate(rel_strength(2,0:n_c_types,0:n_c_types,0:n_e_types,0:n_e_types,2)) ! allocate rel_strength array
 
+
+      !*************
+      !What do these values actually do?
       ! physical parameters
+      !viscous_timescale_cell used to set timestep length and damping_cell
       viscous_timescale_cell=100 ! time scale of viscous relaxation for cell in *seconds*
+      !elastic_mod_cell used to set spring constant kappa_cell, and hence kappa_element and damping constants damping_cell and damping_element
       elastic_mod_cell=1.0 ! elastic modulus of cell in *kiloPascals*
       ! derived quantities
-      kappa_cell=elastic_mod_cell*r_cell ! effective spring constant for one cell in nanoNewtons/micron
+      kappa_cell=elastic_mod_cell*r_cell ! effective spring constant for one cell in nanoNewtons/micron. Only used in the next line.
       kappa_element=kappa_cell/(ne_cell+0.0)**ot ! effective Hookean spring constant between elements (assuming 3D)
       damping_cell=viscous_timescale_cell*kappa_cell ! effective damping constant for one cell
       damping_element=damping_cell/ne_cell ! effective damping constant for one element
+      !damping_element used in scem_1_potential. potential_deriv1=potential_deriv1/damping_element and potential_deriv2=potential_deriv2/damping_element
+      !Thus the value of damping_element directly affects the velocity given to an element by an interaction. Higher damping_element leads to lower velocities.
+      !*************
 
-      ! interactions
+
+      ! Interactions:
       ! here are parameters for intracellular element interactions
       ! all other pairwise interactions across element types will be scaled using a relative strength matrix
       ! length scales will be kept constant across all element types for the time being
@@ -251,6 +271,7 @@ module scem_0_input
       cortex_constant2 = 0.01
 
       dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
+                                    ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
 
       ! temporal parameters - all in *seconds*
       time_max=1.0*cell_cycle_time ! --> time of simulation in seconds
