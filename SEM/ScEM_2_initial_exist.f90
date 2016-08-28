@@ -13,6 +13,9 @@ module scem_2_initial_exist
 
     subroutine scem_initial_exist
 
+      integer :: epi_counter
+      integer :: hypo_counter
+
       WRITE(*,*) "READ"
 
       !Read number of cells, elements and pairs from config_data.txt
@@ -33,7 +36,12 @@ module scem_2_initial_exist
         !Set fates for initial cells randomly
         do n=1, nc
           CALL RANDOM_NUMBER(fate_decider)
-          if (fate_decider.GE.0.5) then
+          !Ensure that the number of epiblast or hypoblast cannot exceed half the total number of cells (or half+1 if nc is odd)
+          if (epi_counter.GT.(nc/2)) then
+            cells(n)%fate = 2
+          elseif (hypo_counter.GT.(nc/2)) then
+            cells(n)%fate = 1
+          elseif (fate_decider.GE.0.5) then
             cells(n)%fate = 1
           else
             cells(n)%fate = 2

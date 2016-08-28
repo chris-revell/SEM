@@ -41,11 +41,11 @@ while ($i < 100) {
 
   #Define filenames
   if ($i < 10) {
-    $file_name_in = "../data/".$originalfolder."/povray_data/snap_0".$i.".pov";
+    $file_name_in = $originalfolder."/povray_data/snap_0".$i.".pov";
     $file_name_out = $directoryname."/snap_0".$i.".pov";
   }
   else {
-    $file_name_in = "../data/".$originalfolder."/povray_data/snap_".$i.".pov";
+    $file_name_in = $originalfolder."/povray_data/snap_".$i.".pov";
     $file_name_out = $directoryname."/snap_".$i.".pov";
   }
 

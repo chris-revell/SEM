@@ -40,19 +40,18 @@ contains
 
   if (flag_measure_radius.EQ.1) then
     write(45,"(*(G0,:,1X))") 'set nokey'
-  !  write(45,"(*(G0,:,1X))") 'unset yrange'
+    write(45,"(*(G0,:,1X))") 'set yrange [0.55:0.95]'
     write(45,"(*(G0,:,1X))") 'set terminal png'
-    write(45,"(*(G0,:,1X))") 'set title "Radius sorting measurement against time"'
+    write(45,"(*(G0,:,1X))") 'set title "Normalised radius of epiblast against time"'
     write(45,"(*(G0,:,1X))") 'set output "'//output_folder//'/system_data/sorting_radius.png"'
     write(45,"(*(G0,:,1X))") 'set xlabel "Time /s"'
-    write(45,'(A51)',advance='no') 'set ylabel "Difference between average radius of \n'
-    write(45,"(*(G0,:,1X))") 'cell types relative to system centre of mass"'
+    write(45,"(*(G0,:,1X))") 'set ylabel "Normalised radius of epiblast"'
 
-    write(45,"(*(G0,:,1X))") 'set arrow 1 from screen 0.77,0.45 to screen 0.77,0.2'
-    write(45,"(*(G0,:,1X))") 'set arrow 2 from screen 0.77,0.55 to screen 0.77,0.8'
-    write(45,"(*(G0,:,1X))") 'set label 2 "Type 2 inwards,\n type 1 outwards" at screen 0.78, 0.8'
-    write(45,"(*(G0,:,1X))") 'set label 1 "Type 2 outwards,\n type 1 inwards" at screen 0.78, 0.2'
-    write(45,"(*(G0,:,1X))") 'set rmargin 20'
+!    write(45,"(*(G0,:,1X))") 'set arrow 1 from screen 0.77,0.45 to screen 0.77,0.2'
+!    write(45,"(*(G0,:,1X))") 'set arrow 2 from screen 0.77,0.55 to screen 0.77,0.8'
+!    write(45,"(*(G0,:,1X))") 'set label 2 "Type 2 inwards,\n type 1 outwards" at screen 0.78, 0.8'
+!    write(45,"(*(G0,:,1X))") 'set label 1 "Type 2 outwards,\n type 1 inwards" at screen 0.78, 0.2'
+!    write(45,"(*(G0,:,1X))") 'set rmargin 20'
 
     write(45,"(*(G0,:,1X))") 'plot "'//output_folder//'/system_data/sorting_data_radius.txt" with lines'
     write(45,"(*(G0,:,1X))") 'unset label 1'
