@@ -34,19 +34,27 @@ module scem_2_initial_exist
       !Set cell fates from file or randomly
       if (flag_randomise.EQ.1) then
         !Set fates for initial cells randomly
+        epi_counter = 0
+        hypo_counter= 0
         do n=1, nc
           CALL RANDOM_NUMBER(fate_decider)
           !Ensure that the number of epiblast or hypoblast cannot exceed half the total number of cells (or half+1 if nc is odd)
           if (epi_counter.GT.(nc/2)) then
             cells(n)%fate = 2
+            hypo_counter = hypo_counter+1
           elseif (hypo_counter.GT.(nc/2)) then
             cells(n)%fate = 1
+            epi_counter = epi_counter+1
           elseif (fate_decider.GE.0.5) then
             cells(n)%fate = 1
+            epi_counter = epi_counter+1
           else
             cells(n)%fate = 2
+            hypo_counter = hypo_counter+1
           endif
         enddo
+        print*, "epi_counter", epi_counter
+        print*, "hypo_counter", hypo_counter
       else
         !Read fates for initial cells from file cell_fate_data.txt
         open(unit=12,file='config_files/cell_fate_data.txt',status='old')

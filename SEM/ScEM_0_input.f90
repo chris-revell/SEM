@@ -197,7 +197,7 @@ module scem_0_input
       diff_coeff=0.001 ! --> diffusion coefficient of elements in units of micron^2/s
 
       ! growth parameters
-      cell_cycle_time=4*4320			!0.5*3600.0 ! --> cell cycle time in seconds
+      cell_cycle_time=4320			!0.5*3600.0 ! --> cell cycle time in seconds
       frac_growth=0.9 ! fraction of current cell radius within which new elements may be placed
       frac_placement_min=0.6 ! minimum separation of new element from nearest neighbour, as fraction of r_equil
         ! derived quantities
@@ -275,7 +275,7 @@ module scem_0_input
                                     ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
 
       ! temporal parameters - all in *seconds*
-      time_max=1.0*cell_cycle_time ! --> time of simulation in seconds
+      time_max=5.0*cell_cycle_time ! --> time of simulation in seconds
       time_out_1=time_max/99.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities

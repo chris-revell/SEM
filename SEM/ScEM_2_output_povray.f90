@@ -43,7 +43,7 @@ module scem_2_output_povray
       write(42,*) 'light_source { < 0, 0, -60 > color White }'
       write(42,*)
 
-      if (flag_background.EQ.2) then !Draw boundary of spherical background
+      if (flag_background.EQ.1) then !Draw boundary of spherical background
         write(42,'(A16,F18.14,A77)') &
               ' sphere {<0,0,0>', spherical_boundary_radius,&
               ' texture { pigment { color Blue transmit .85}finish{phong .8} } } // boundary'
