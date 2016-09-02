@@ -60,17 +60,17 @@ module scem_2_output_povray
         !Draw spheres for all elements of all cells in the system, coloured according to element type
         do i=1, ne
           if ((elements(i)%type).EQ.1) then
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A60,I2.2)') ' sphere {  < ',&
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A60,I2.2,A6,I1.1)') ' sphere {  < ',&
                 elements(i)%position(1), ',', elements(i)%position(2),',', &
                 elements(i)%position(3),&
                 '> 1.5 texture { pigment { color Green } } } // element, cell',&
-                elements(i)%parent
+                elements(i)%parent, ", fate",cells(elements(i)%parent)%fate
           else
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A58,I2.2)') ' sphere {  < ',&
+            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A58,I2.2,A6,I1.1)') ' sphere {  < ',&
                 elements(i)%position(1), ',', elements(i)%position(2),',', &
                 elements(i)%position(3),&
                 '> 1.5 texture { pigment { color Red } } } // element, cell',&
-                elements(i)%parent
+                elements(i)%parent, ", fate",cells(elements(i)%parent)%fate
           endif
         enddo
       endif
