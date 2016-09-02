@@ -64,6 +64,11 @@ module scem_2_initial_exist
         close(unit=12)
       endif
 
+      !Set cell labels
+      do n=1,nc
+        cells(n)%label = n
+      enddo
+
       !Read element positions and parents from elements_config.txt, and initialise other element parameters accordingly.
       open(unit=12,file='config_files/elements_config.txt',status='old')
       do n=1,ne
