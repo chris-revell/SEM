@@ -16,7 +16,7 @@ for line in file_lines:
         linesegment = line[12:70]
         linesegment = linesegment.replace(" ","")
         xyzlist = linesegment.split(",")
-        if 1.0 > float(xyzlist[2]) > -1.0:
+        if 0.5 > float(xyzlist[2]) > -0.5:
             celllabel = "cell"+line.split("cell")[1][0:2]
             if celllabel in cross_section_cells:
                 pass
@@ -33,7 +33,7 @@ for line in file_lines:
     if "volume" in line:
         celllabel = "cell"+line.split("cell")[1][0:2]
         if celllabel in cross_section_cells:
-            outfile1.write(line.split("transmit")[0]+"}}}")
+            outfile1.write(line)#.split("transmit")[0]+"}}}")
         else:
             pass
     else:
@@ -49,7 +49,7 @@ for line in file_lines:
         linesegment = line[12:70]
         linesegment = linesegment.replace(" ","")
         xyzlist = linesegment.split(",")
-        if 1.0 > float(xyzlist[2]) > -1.0:
+        if 0.5 > float(xyzlist[2]) > -0.5:
             celllabel = "cell"+line.split("cell")[1][0:2]
             if celllabel in cross_section_cells:
                 pass
@@ -66,7 +66,7 @@ for line in file_lines:
     if "volume" in line:
         celllabel = "cell"+line.split("cell")[1][0:2]
         if celllabel in cross_section_cells:
-            outfile2.write(line.split("transmit")[0]+"}}}")
+            outfile2.write(line)#.split("transmit")[0]+"}}}")
         else:
             pass
     else:
