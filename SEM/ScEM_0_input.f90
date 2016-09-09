@@ -94,10 +94,6 @@ module scem_0_input
 
 	    n_snapshots = 0
 
-!   Below used when cortical tension was specified at the command line.
-!      CALL get_command_argument(1, arg)
-!      read (arg,*) command_line_argument
-
       flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
