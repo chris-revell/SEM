@@ -1,6 +1,8 @@
-          11
-        2087
-       18057
- number of cells =           11
- number of elements =         2087
- number of element pairs =        18057
+          12
+        2094
+       14321
+ number of cells =           12
+ number of elements =         2094
+ number of element pairs =        14321
+ time =    172.8454    
+ Time taken for run (seconds):          25
