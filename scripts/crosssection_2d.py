@@ -3,12 +3,19 @@ from sys import argv
 import matplotlib.pyplot as plt
 
 importfolderpath = os.path.join(argv[1],"povray_data")
+outputfolderpath = os.path.join(argv[1],"cross_section")
+if os.path.exists(outputfolderpath):
+    pass
+else:
+    os.mkdir(outputfolderpath)
 
 #Find all files in the povray data folder of the run directory passed at the command line
 datafiles = [f for f in os.listdir(importfolderpath) if os.path.isfile(os.path.join(importfolderpath, f)) and f[-4:]=='.pov']
 figurecount = 1
 for f in datafiles:
-    plt.figure(figurecount)
+
+    fig = plt.figure(figurecount)
+    ax1 = fig.add_subplot(111)
     plt.axis([-30,30,-30,30])
     #Open files and read lines
     infile = open(os.path.join(importfolderpath,f),"r")
@@ -32,8 +39,7 @@ for f in datafiles:
                     pass
                 else:
                     cross_section_cells.append(celllabel)
-    xlist = []
-    ylist = []
+
     for line in file_lines:
         if "volume" in line:
             cell_label_section = (line.split("cell")[1]).strip()
@@ -42,19 +48,19 @@ for f in datafiles:
                 linesegments = line.split("<")
                 linesegments2 = linesegments[1].split(">")
                 xystringlist = linesegments2[0].split(",")
-                xlist.append(float(xyzstringlist[0]))
-                ylist.append(float(xyzstringlist[1]))
                 #Next, extract the cell fate from the remainder of the line, and use this to determine the colour of the point in the scatter plot.
                 cell_fate_section = linesegments2[1].split("color ")[1]
                 cellfate = cell_fate_section.split(" ")[0]
                 if cellfate == "Green":
-                    plt.scatter(xlist,ylist,c="g",marker="o")#,markersize=20)
+                    ax1.plot(float(xystringlist[0]),float(xystringlist[1]),"go",markersize=20)
                 else:
-                    plt.scatter(xlist,ylist,c="r",marker="o")#,markersize=20)
+                    ax1.plot(float(xystringlist[0]),float(xystringlist[1]),"ro",markersize=20)
             else:
                 pass
         else:
             pass
-    plt.savefig(str(figurecount)+".png")
+    plt.savefig(os.path.join(outputfolderpath,("%03d" % figurecount)+".png"))
     plt.close(figurecount)
     figurecount=figurecount+1
+
+os.system("convert -delay 15 -loop 0 "+outputfolderpath+"/*.png "+outputfolderpath+"/animated2d.gif")
