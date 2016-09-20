@@ -37,4 +37,4 @@ for f in datafiles:
     outfile.close()
 
 
-copy("visualise_povray_script.sh", outputfolderpath)
+copy("scripts/visualise_povray_script.sh", outputfolderpath)
