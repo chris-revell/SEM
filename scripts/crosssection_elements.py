@@ -4,7 +4,10 @@ from shutil import copy
 
 importfolderpath = os.path.join(argv[1],"povray_data")
 outputfolderpath = os.path.join(argv[1],"cross_section")
-os.mkdir(outputfolderpath)
+if os.path.exists(outputfolderpath):
+    pass
+else:
+    os.mkdir(outputfolderpath)
 
 #Find all files in the povray data folder of the run directory passed at the command line
 datafiles = [f for f in os.listdir(importfolderpath) if os.path.isfile(os.path.join(importfolderpath, f)) and f[-4:]=='.pov']

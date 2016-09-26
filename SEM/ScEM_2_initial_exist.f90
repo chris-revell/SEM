@@ -39,10 +39,10 @@ module scem_2_initial_exist
         do n=1, nc
           CALL RANDOM_NUMBER(fate_decider)
           !Ensure that the number of epiblast or hypoblast cannot exceed half the total number of cells (or half+1 if nc is odd)
-          if (epi_counter.GT.(nc/2)) then
+          if (epi_counter.GE.(nc/2)) then
             cells(n)%fate = 2
             hypo_counter = hypo_counter+1
-          elseif (hypo_counter.GT.(nc/2)) then
+          elseif (hypo_counter.GE.(nc/2)) then
             cells(n)%fate = 1
             epi_counter = epi_counter+1
           elseif (fate_decider.GE.0.5) then

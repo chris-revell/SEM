@@ -5,6 +5,9 @@ import numpy as np
 from sys import argv
 import os
 
+if len(argv) < 3:
+    exit("Please provide at least 2 datasets to compare")
+
 #Folders in which data to compare can be found are given at command line and transfered to "folderstocompare" list
 folderstocompare = argv[1:]
 
@@ -39,7 +42,7 @@ for folder in folderstocompare:
     #pyplot.plot(interface_array[:,0],interface_array[:,1],label=components[-1])
 
     pyplot.figure(3)
-    pyplot.plot(neighbours_array[:,0],neighbours_array[:,1],label=components[-1])
+    pyplot.plot(neighbours_array[:,0],neighbours_array[:,1],label=series_label)
 
 
 if os.path.exists(outputfolder):
@@ -49,7 +52,7 @@ else:
 
 pyplot.figure(1)
 lims = pyplot.xlim()
-pyplot.axis([0,lims[1],0.595,0.905])
+pyplot.axis([0,lims[1],0.5,1])
 pyplot.legend(loc='best', shadow=True)
 pyplot.axhline(0.75, linestyle='--', color='black')
 pyplot.annotate('Perfectly\nmixed', xy=(lims[1],0.75))
@@ -68,7 +71,7 @@ pyplot.savefig(os.path.join(outputfolder,'interface.pdf'))
 """
 pyplot.figure(3)
 lims = pyplot.xlim()
-pyplot.axis([0,lims[1],0,1])
+pyplot.axis([0,lims[1],0.4,0.6])
 pyplot.legend(loc='best', shadow=True)
 pyplot.xlabel('Time')
 pyplot.ylabel('Ratio of like-like inter-cell nearest neighbour pairs to \ntotal number of nearest neighbour pairs')
