@@ -63,4 +63,4 @@ for f in datafiles:
     plt.close(figurecount)
     figurecount=figurecount+1
 
-os.system("convert -delay 15 -loop 0 "+outputfolderpath+"/*.png "+outputfolderpath+"/animated2d.gif")
+os.system("convert -delay 25 -loop 0 "+outputfolderpath+"/*.png "+outputfolderpath+"/animated2d.gif")
