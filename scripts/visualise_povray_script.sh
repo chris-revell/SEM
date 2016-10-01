@@ -5,9 +5,9 @@ set -e #Exit script if any of the povray renderings fail.
 
 #Run povray on all data files
 for i in $(ls); do
-  if [ ${i:0:1} == "s"]
+  if [ ${i: -4:4} == ".pov" ]
   then
-    povray snap_00.pov +Fj -D +H900 +W1200
+    povray $i +Fj -D +H900 +W1200
   fi
 done
 

@@ -14,8 +14,8 @@ module scem_1_types
     integer :: parent    ! the cell label to which the element belongs
     integer :: stage     ! (0) (1) (2) representing (fading in) (steady-state) (fading out)
     integer :: type      ! element type - e.g. cytoplasm (1), cortex (2)
+    integer :: DIT_factor! Factor for adjusting inter-element interactions according to differential adhesion hypothesis.
     real*8  :: age       ! element age (an internal clock for each element)
-    logical :: DIT_factor! Factor for adjusting inter-element interactions according to differential adhesion hypothesis.
     real*8  :: strength  ! a linear measure of presence/age for elements of status=0 (fading in)
     real*8, dimension(3) :: position ! element's position in absolute frame
     real*8, dimension(3) :: velocity ! element's instanteous velocity

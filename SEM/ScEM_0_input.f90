@@ -61,8 +61,10 @@ module scem_0_input
   integer :: seedarraylength
   integer, allocatable, dimension(:) :: seed_array
 
-  character(len=3) :: arg2!,arg4
+  character(len=3) :: arg1!,arg4
   real*8 :: stiffness_factor
+
+  real*8,dimension(2,0:2) :: DIT_response
 
   contains
 
@@ -232,8 +234,8 @@ module scem_0_input
 
 		  rel_strength(1,1,1,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
 		  rel_strength(1,1,1,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cortex
-      call get_command_argument(2,arg2)
-      read(arg2,*) rel_strength(1,1,1,2,2,2)  !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex
+      call get_command_argument(1,arg1)
+      read(arg1,*) rel_strength(1,1,1,2,2,2)  !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex
   		rel_strength(1,1,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
   		rel_strength(1,1,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
   		rel_strength(1,1,2,2,2,2) = 3.0  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
@@ -266,6 +268,13 @@ module scem_0_input
       !Variable for inter-cortex potential
       cortex_constant1 = 0.1
       cortex_constant2 = 0.1
+
+      DIT_response(1,0) = 3.0 !Epiblast external system surface DIT response factor
+      DIT_response(1,1) = 0.1 !Epiblast homotypic interface DIT response factor
+      DIT_response(1,2) = 3.0 !Epiblast heterotypic interface DIT response factor
+      DIT_response(2,0) = 0.3 !Primitive endoderm external system surface DIT response factor
+      DIT_response(2,1) = 1.0 !Primitive endoderm homotypic interface DIT response factor
+      DIT_response(2,2) = 3.0 !Primitive endoderm heterotypic interface DIT response factor
 
       dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
                                     ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
