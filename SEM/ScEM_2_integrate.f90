@@ -21,9 +21,7 @@ module scem_2_integrate
       call scem_near_neighbour_update
 
       !Update cortex element velocities according to cortex interaction network.
-      if (flag_cortex.EQ.1) then
-        call scem_cortical_tension_update
-      endif
+      call scem_cortical_tension_update
 
       !Update element velocities according to background potential.
       call scem_background(flag_background)

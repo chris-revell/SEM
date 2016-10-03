@@ -93,10 +93,7 @@ module scem_5_iterate
         call scem_com
 
         !Determine which elements are now cortex elements
-        if (flag_cortex.EQ.1) then
-        !Find cortex elements
-          call scem_cortex
-        endif
+        call scem_cortex
 
         !Calculate cell volumes
         call volume_calculate

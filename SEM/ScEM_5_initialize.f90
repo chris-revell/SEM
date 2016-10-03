@@ -60,10 +60,8 @@ module scem_5_initialize
       ! calculate initial center of mass and radius of gyration of cell(s)
       call scem_com
 
-      if (flag_cortex.EQ.1) then
-        !Find cortex elements
-        call scem_cortex
-      endif
+      !Find cortex elements
+      call scem_cortex
 
 	    ! Calculate initial cell volumes
       call volume_calculate
