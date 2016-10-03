@@ -10,4 +10,4 @@ if [[ $? -ne 0 ]] ; then
     exit 1
 fi
 #Run program
-./ScEM_master
+nohup caffeinate -id ./ScEM_master 0.3 3.0

@@ -1,5 +1,5 @@
 !C.K. Revell November 2015
-!Module containint subroutine scem_dit to work out which interfaces of a cell are
+!Module containing subroutine scem_dit to work out which interfaces of a cell are
 !shared with cells of a different fate, and hence change the cortical tension
 !at these interfaces according to the differential interfactial tension hypothesis
 

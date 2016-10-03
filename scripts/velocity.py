@@ -90,6 +90,10 @@ for j in range(1,len(datafiles)):
     epi_average_speeds[j-1] = mean(epi_velocities.values())
     pre_average_speeds[j-1] = mean(pre_velocities.values())
 
-plt.plot(epi_average_speeds,color="g")
-plt.plot(pre_average_speeds,color="r")
-plt.show()
+plt.plot(epi_average_speeds,color="g", label="Epiblast")
+plt.plot(pre_average_speeds,color="r", label="Primitive endoderm")
+plt.legend(loc='best', shadow=True)
+plt.xlabel('Time')
+plt.ylabel("Average speed of cell type radially away from centre of mass")
+plt.title("Average speed of each cell type radially away from\n the centre of mass of that cell type")
+plt.savefig(os.path.join(argv[1],"velocity.png"))

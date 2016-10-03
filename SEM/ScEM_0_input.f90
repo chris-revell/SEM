@@ -78,7 +78,7 @@ module scem_0_input
       flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
-      flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
+      flag_background = 2 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
       flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
@@ -102,7 +102,7 @@ module scem_0_input
       !Simulation control parameters
       stiffness_factor  = 1.0
       cell_cycle_time   = 4*4320 !3600.0 ! --> cell cycle time in seconds 4320
-      n_cellcycles      = 2.0
+      n_cellcycles      = 1.0
       epi_adhesion      = 3.0
       hypo_adhesion     = 3.0
       epi_hypo_adhesion = 3.0

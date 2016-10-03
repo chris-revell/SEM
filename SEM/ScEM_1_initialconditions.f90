@@ -22,11 +22,10 @@ contains
     write(22,"(*(G0,:,1X))")'number of cell cycles      = ',n_cellcycles
     write(22,"(*(G0,:,1X))")'frac_interaction_max       = ',frac_interaction_max
     write(22,"(*(G0,:,1X))")'elements per cell          = ',ne_cell
-
+    write(22,"(*(G0,:,1X))") ""
     write(22,"(*(G0,:,1X))")'cortex_constant1 = ',cortex_constant1
     write(22,"(*(G0,:,1X))")'cortex_constant2 = ',cortex_constant2
-
-
+    write(22,"(*(G0,:,1X))") ""
     write(22,"(*(G0,:,1X))") "flag_create     = ",flag_create
     write(22,"(*(G0,:,1X))") "flag_diffusion  = ",flag_diffusion
     write(22,"(*(G0,:,1X))") "flag_conserve   = ",flag_conserve
@@ -34,7 +33,7 @@ contains
     write(22,"(*(G0,:,1X))") "flag_growth     = ",flag_growth
     write(22,"(*(G0,:,1X))") "flag_division   = ",flag_division
     write(22,"(*(G0,:,1X))") "flag_DIT        = ",flag_DIT
-
+    write(22,"(*(G0,:,1X))") ""
     write(22,"(*(G0,:,1X))") "flag_povray     = ",flag_povray
     write(22,"(*(G0,:,1X))") "  flag_povray_volumes      = ",flag_povray_volumes
     write(22,"(*(G0,:,1X))") "  flag_povray_elements     = ",flag_povray_elements
@@ -48,18 +47,19 @@ contains
     write(22,"(*(G0,:,1X))") "flag_measure_interface            = ",flag_measure_interface
     write(22,"(*(G0,:,1X))") "flag_measure_radius     = ",flag_measure_radius
     write(22,"(*(G0,:,1X))") "flag_measure_neighbours = ",flag_measure_neighbours
-
+    write(22,"(*(G0,:,1X))") ""
     write(22,"(*(G0,:,1X))") "stiffness_factor  = ",stiffness_factor
     write(22,"(*(G0,:,1X))") "epi_adhesion      = ",epi_adhesion
     write(22,"(*(G0,:,1X))") "hypo_adhesion     = ",hypo_adhesion
     write(22,"(*(G0,:,1X))") "epi_hypo_adhesion = ",epi_hypo_adhesion
+    write(22,"(*(G0,:,1X))") ""
     write(22,"(*(G0,:,1X))") "DIT_response(1,0) = ",DIT_response(1,0)," (Epiblast external system surface DIT response factor)"
     write(22,"(*(G0,:,1X))") "DIT_response(1,1) = ",DIT_response(1,1)," (Epiblast homotypic interface DIT response factor)"
     write(22,"(*(G0,:,1X))") "DIT_response(1,2) = ",DIT_response(1,2)," (Epiblast heterotypic interface DIT response factor)"
     write(22,"(*(G0,:,1X))") "DIT_response(2,0) = ",DIT_response(2,0)," (Primitive endoderm external system surface DIT response factor)"
     write(22,"(*(G0,:,1X))") "DIT_response(2,1) = ",DIT_response(2,1)," (Primitive endoderm homotypic interface DIT response factor)"
     write(22,"(*(G0,:,1X))") "DIT_response(2,2) = ",DIT_response(2,2)," (Primitive endoderm heterotypic interface DIT response factor)"
-
+    write(22,"(*(G0,:,1X))") ""
     write(22,"(*(G0,:,1X))") "Nearest neighour interaction magnitudes"
     write(22,"(*(G0,:,1X))") "rel_strength(1,1,1,1,1,1) = ",rel_strength(1,1,1,1,1,1)," (Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm)"
     write(22,"(*(G0,:,1X))") "rel_strength(1,1,1,1,2,1) = ",rel_strength(1,1,1,1,2,1)," (Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cortex)"
