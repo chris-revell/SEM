@@ -6,7 +6,6 @@ module scem_2_output_system
   use scem_0_input
   use scem_0_useful
   use scem_1_types
-  use scem_2_measure_interface
   use scem_2_measure_radius
   use scem_2_measure_neighbours
 
@@ -50,10 +49,6 @@ module scem_2_output_system
         endif
 
         !Sorting measurements
-        if (flag_measure_interface.EQ.1) then
-          call scem_measure_interface
-        endif
-
         if (flag_measure_radius.EQ.1) then
           call scem_measure_radius
         endif
