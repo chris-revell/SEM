@@ -7,7 +7,7 @@ set -e #Exit script if any of the povray renderings fail.
 for i in $(ls); do
   if [ ${i: -4:4} == ".pov" ]
   then
-    povray $i +Fj -D +H900 +W1200
+    caffeinate -im povray $i +Fj -D +H900 +W1200
   fi
 done
 
@@ -15,7 +15,7 @@ done
 for i in $(ls); do
   if [ ${i: -4:4} == ".jpg" ]
   then
-    convert $i -shave 150x0 $i
+    caffeinate -im convert $i -shave 150x0 $i
   fi
 done
 
