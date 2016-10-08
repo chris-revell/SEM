@@ -67,6 +67,7 @@ module scem_2_initial_exist
       !Set cell labels
       do n=1,nc
         cells(n)%label = n
+        cells(n)%age=establishment_time
       enddo
 
       !Read element positions and parents from elements_config.txt, and initialise other element parameters accordingly.

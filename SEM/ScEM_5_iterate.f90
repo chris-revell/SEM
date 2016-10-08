@@ -71,7 +71,7 @@ module scem_5_iterate
           call scem_pairs
         end if
 
-        ! element age updates
+        ! element and cell age updates
         call scem_ageing
 
         ! cell growth

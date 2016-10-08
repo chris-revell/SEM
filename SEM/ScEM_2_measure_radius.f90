@@ -45,9 +45,6 @@ module scem_2_measure_radius
 
 		!Need to start by calculating the centre of mass of the system, which can change after each iteration due to cell division/movement.
 		system_COM(:)=0
-!		do i=1, nc
-!			system_COM(:)=system_COM(:)+cells(i)%position(:)*cells(i)%c_elements(0) !For all cells sum position of cell COM multiplied by number of elements in cell (ie cell "mass")
-!		end do
 		do i=1, ne
 			system_COM(:)=system_COM(:)+elements(i)%position(:)
 		enddo
@@ -81,7 +78,6 @@ module scem_2_measure_radius
 		endif
 
 		write(36,*) real(time), normalised_radius
-!		call flush(36)
 
 		end subroutine scem_measure_radius
 

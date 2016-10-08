@@ -26,6 +26,7 @@ module scem_1_types
   type cell
     integer  :: label        ! identifier for cell in question
     real*8   :: rad_gyration ! radius of gyration of the cell
+    real*8   :: age          ! cell age
     real*8, dimension(3)            :: position   ! cell's center of mass position in absolute frame
     integer, dimension(0:4*ne_cell) :: c_elements ! cell's register of internal elements
                                                  ! zero entry gives number of elements in cell
