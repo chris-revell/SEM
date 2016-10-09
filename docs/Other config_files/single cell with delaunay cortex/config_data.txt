@@ -1,0 +1,8 @@
+           1
+         128
+         604
+ number of cells =            1
+ number of elements =          128
+ number of element pairs =          604
+ time =    43200.03    
+ Time taken for run (seconds):         127
