@@ -78,10 +78,10 @@ module scem_0_input
       flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
-      flag_background = 2 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
+      flag_background = 0 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
       flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
-      flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
+      flag_DIT        = 0 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
       flag_randomise  = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
 
       !Output control switches
@@ -100,11 +100,11 @@ module scem_0_input
 
       !Simulation control parameters
       stiffness_factor  = 1.0
-      cell_cycle_time   = 4*4320 !3600.0 ! --> cell cycle time in seconds 4320
+      cell_cycle_time   = 3600.0 ! --> cell cycle time in seconds 4320
       n_cellcycles      = 1.0
       epi_adhesion      = 3.0
-      hypo_adhesion     = 3.0
-      epi_hypo_adhesion = 3.0
+      hypo_adhesion     = 0.0
+      epi_hypo_adhesion = 0.0
       DIT_response(1,0) = 2.0 !Epiblast external system surface DIT response factor
       DIT_response(1,1) = 0.3 !Epiblast homotypic interface DIT response factor
       DIT_response(1,2) = 2.0 !Epiblast heterotypic interface DIT response factor

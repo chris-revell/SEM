@@ -28,6 +28,11 @@ module scem_2_com
         end do
         x_com(:)=x_com(:)/cells(k)%c_elements(0)
         cells(k)%position(:)=x_com(:)
+
+        if (time.EQ.0) then
+          cells(k)%original_position(:) = x_com(:)
+        endif
+
         ! calculate radius of gyration
         rog=0.0
         do m=1,cells(k)%c_elements(0)

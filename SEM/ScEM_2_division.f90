@@ -77,6 +77,22 @@ module scem_2_division
 
             cells(nc)%label=nc
 
+            !Calculate the centres of mass of the two new daughter cells and store in the original_position component of the cells data type
+            x_com(:)=0.0
+            do m=1,cells(k)%c_elements(0)
+              n=cells(k)%c_elements(m)
+              x_com(:)=x_com(:)+elements(n)%position(:)
+            end do
+            x_com(:)=x_com(:)/cells(k)%c_elements(0)
+            cells(k)%original_position(:)=x_com(:)
+            x_com(:)=0.0
+            do m=1,cells(nc)%c_elements(0)
+              n=cells(nc)%c_elements(m)
+              x_com(:)=x_com(:)+elements(n)%position(:)
+            end do
+            x_com(:)=x_com(:)/cells(nc)%c_elements(0)
+            cells(nc)%original_position(:)=x_com(:)
+
          end if
       end do
 

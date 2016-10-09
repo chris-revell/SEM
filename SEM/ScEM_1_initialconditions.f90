@@ -11,7 +11,7 @@ contains
 
   subroutine scem_initialconditions
 
-    open(unit=22,file=output_folder//'/system_data/initial_conditions.txt',status='unknown')
+    open(unit=22,file=output_folder//'/initial_conditions.txt',status='unknown')
 
     write(22,"(*(G0,:,1X))")'random number seed         = ',seed_array
     write(22,"(*(G0,:,1X))")'initial number of cells    = ',nc
