@@ -1,0 +1,27 @@
+List of file numbers in SEM code
+
+21 = elements
+22 = initialization_data
+23 =
+24 = elements_final
+25 = end_of_run_data
+26 = cell_fate_data_final
+27 = cell_volumes.txt
+28 =
+29 = snapshot_data.txt
+30 =
+31 = potential_data.txt
+32 = potential_function
+33 =
+34 = sorting_data_type_radius1
+35 = sorting_data_type_radius2
+36 = sorting_data_radius
+37 = cell_count
+38 = sorting_data_neighbours
+39 = neighbour_vectors_xx
+40 = sorting_displacement1
+41 = sorting_displacement2
+42 = povray_elements_xx.pov
+43 = povray_cells_xx.pov
+44 = povray_pairs_xx.pov
+45 = gnuplot_commands_system_plots.gnu

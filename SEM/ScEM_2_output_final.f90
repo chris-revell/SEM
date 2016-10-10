@@ -40,7 +40,7 @@ module scem_2_output_final
       close(unit=25)
 
       write(*,*) "Output folder is:", output_folder
-
+      call system("echo 'python3 scripts/SEM_plotter.py "//output_folder//"'\n")
       call system("python3 scripts/SEM_plotter.py "//output_folder//"\n")
 
     end subroutine scem_output_final

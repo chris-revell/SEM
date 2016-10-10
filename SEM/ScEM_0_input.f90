@@ -22,7 +22,7 @@ module scem_0_input
   integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve
   integer :: flag_background,flag_DIT,flag_povray_elements, flag_randomise
   integer :: flag_povray_pairs,flag_povray_volumes,flag_povray,flag_povray_triangles,flag_povray_cortex_pairs
-  integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_radius
+  integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_radius,flag_measure_type_radius
   integer :: flag_measure_neighbours,flag_measure_displacement,flag_elements_final
   integer :: flag_relist ! flag triggering relist of sector assignments
   !Variables for initiating randoms number sequence
@@ -98,6 +98,7 @@ module scem_0_input
       flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
       flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
       flag_measure_displacement=1    ! Switch to turn off displacement sorting measurement
+      flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
 
       !Simulation control parameters
       stiffness_factor  = 1.0
