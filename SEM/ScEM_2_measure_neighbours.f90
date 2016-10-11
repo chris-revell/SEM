@@ -35,7 +35,7 @@ module scem_2_measure_neighbours
 
 		allocate(neighbours(np,2))
 
-		open(unit=38,file=output_folder//'/system_data/sorting_data_neighbours.txt', status='unknown')
+		open(unit=36,file=output_folder//'/sorting_data/sorting_data_neighbours.txt', status='unknown')
 
 		neighbours_counter=0
 		sorting_count=0
@@ -113,7 +113,7 @@ module scem_2_measure_neighbours
 		endif
 
 		!Write measurement to file sorting_data_neighbours
-		write(38,*) real(time), sorting_measure
+		write(36,*) real(time), sorting_measure
 
 		deallocate(neighbours)
 

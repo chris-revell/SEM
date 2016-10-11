@@ -7,9 +7,6 @@ module scem_2_1_near_neighbour_update
   use scem_1_potential
   use scem_1_types
 
-
-
-
 contains
 
   subroutine scem_near_neighbour_update

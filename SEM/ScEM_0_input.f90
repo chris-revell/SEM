@@ -138,6 +138,7 @@ module scem_0_input
       output_folder = "../data/"//date_of_run//"_"//time_of_run
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
+      call system("mkdir "//output_folder//"/sorting_data")
       call system("mkdir "//output_folder//"/povray_data")
 
       ! numerical constants

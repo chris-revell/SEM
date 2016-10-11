@@ -16,8 +16,8 @@ contains
     real*8, dimension(3) :: displacement_vector
     real*8 :: displacement
 
-    open(unit=40, file=output_folder//"/system_data/sorting_data_displacement1.txt", status="unknown", position="append")
-    open(unit=41, file=output_folder//"/system_data/sorting_data_displacement2.txt", status="unknown", position="append")
+    open(unit=41, file=output_folder//"/sorting_data/sorting_data_displacement1.txt", status="unknown", position="append")
+    open(unit=42, file=output_folder//"/sorting_data/sorting_data_displacement2.txt", status="unknown", position="append")
 
     do n=1, nc
 
@@ -26,9 +26,9 @@ contains
       displacement = SQRT(dist_sq)
 
       if (cells(n)%fate.EQ.1) then
-        write(40,*) MIN(cells(n)%age,time), displacement
-      else
         write(41,*) MIN(cells(n)%age,time), displacement
+      else
+        write(42,*) MIN(cells(n)%age,time), displacement
       endif
 
     enddo

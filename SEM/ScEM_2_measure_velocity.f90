@@ -14,8 +14,7 @@
 !    real*8 :: distance_from_COM
 !    real*8 ::
 
-!    open(unit=39,file=output_folder//'/system_data/sorting_data_velocity.txt', status='unknown')
+!    open(unit=37,file=output_folder//'/sorting_data/sorting_data_velocity1.txt', status='unknown')
+!    open(unit=38,file=output_folder//'/sorting_data/sorting_data_velocity2.txt', status='unknown')
 
-    !Find unit vector from type COM to cell. Project cell velocity along unit vector?
-    !Still needs cell velocities. Apply to element velocities?
-    !Or somehow store set of previous
+!    do n=1, ne

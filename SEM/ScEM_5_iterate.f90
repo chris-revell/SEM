@@ -35,18 +35,12 @@ module scem_5_iterate
 
         forall(n=1:ne) xe_prev(n,:)=elements(n)%position(:) ! xe_prev records prior positions of elements
 
-!        if (time.GT.time_max/2.0) then
-!          flag_DIT = 1
-!          cortex_constant = 0.0075
-!        endif
-
         ! implement 2nd order Runge-Kutta
         call scem_integrate ! first integration and increment by half a step
         forall(n=1:ne) elements(n)%position(:)=elements(n)%position(:)+0.5*dt*elements(n)%velocity(:)
         forall(n=1:ne) elements(n)%velocity(:)=0.0
         call scem_integrate ! second integration and increment by a full step
         forall(n=1:ne) elements(n)%position(:)=xe_prev(n,:)+dt*elements(n)%velocity(:)
-        forall(n=1:ne) elements(n)%velocity(:)=0.0
 
         ! element diffusion
         if (flag_diffusion.eq.1) then
@@ -102,25 +96,19 @@ module scem_5_iterate
         !Only output data at intervals of time_out_1.
         !time_out_1 = cell_cycle_time/10.0 and is the time interval between data outputs
         if (mod(time,(time_out_1)).lt.dt) then
-
-        !Increment n_snapshots to keep track of how many outputs there have been
-        n_snapshots=n_snapshots+1
-
-        ! write system data to files
-        call scem_output_system
-
-        ! Write element data to files in povray format
-        if (flag_povray.EQ.1) then
-          call scem_output_povray
-        endif
-
+          !Increment n_snapshots to keep track of how many outputs there have been
+          n_snapshots=n_snapshots+1
+          ! write system data to files
+          call scem_output_system
+          ! Write element data to files in povray format
+          if (flag_povray.EQ.1) then
+            call scem_output_povray
+          endif
         end if
 
-      end do
+        forall(n=1:ne) elements(n)%velocity(:)=0.0
 
-      ! close data files
-      close(unit=21)
-      close(unit=23)
+      end do
 
     end subroutine scem_iterate
 

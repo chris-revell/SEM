@@ -7,7 +7,7 @@ import os.path
 if len(argv) < 2:
     exit("Error: Provide data folder")
 
-inputfolder = os.path.join(argv[1],"system_data")
+inputfolder = os.path.join(argv[1],"sorting_data")
 
 if os.path.exists(os.path.join(inputfolder,"sorting_data_displacement1.txt")):
     if os.path.exists(os.path.join(inputfolder,"sorting_data_displacement2.txt")):
@@ -59,11 +59,35 @@ if os.path.exists(os.path.join(inputfolder,"sorting_data_type_radius1.txt")):
         data_type_radius2 = np.genfromtxt(os.path.join(inputfolder,"sorting_data_type_radius2.txt"))
         plt.figure(4)
         ax1 = plt.subplot(111)
-        ax1.set_title("Distance of cells of each type from the centre of mass of that type against time")
+        ax1.set_title("Distance of cells of each type from the centre \nof mass of that type against time")
         ax1.set_xlabel("Time /s")
         ax1.set_ylabel("Distance /??")
-        #ax1.set_xlim([0,np.amax(data_radius[:,0])])
-        #ax1.set_ylim([np.amin(data_radius[:,1]),np.amax(data_radius[:,1])])
-        ax1.scatter(data_type_radius1[:,0],data_type_radius2[:,1],color="Green")
+        ax1.scatter(data_type_radius1[:,0],data_type_radius1[:,1],color="Green")
         ax1.scatter(data_type_radius2[:,0],data_type_radius2[:,1],color="Red")
         plt.savefig(os.path.join(inputfolder,"sorting_type_radius.pdf"))
+
+if os.path.exists(os.path.join(inputfolder,"sorting_data_velocitytime1.txt")):
+    if os.path.exists(os.path.join(inputfolder,"sorting_data_velocitytime2.txt")):
+        data_velocitytime1 = np.genfromtxt(os.path.join(inputfolder,"sorting_data_velocitytime1.txt"))
+        data_velocitytime2 = np.genfromtxt(os.path.join(inputfolder,"sorting_data_velocitytime2.txt"))
+        plt.figure(5)
+        ax1 = plt.subplot(111)
+        ax1.set_title("Velocity of cells of each type away from the centre\n of mass of that cell type against time")
+        ax1.set_xlabel("Time /s")
+        ax1.set_ylabel("Velocity /??")
+        ax1.scatter(data_velocitytime1[:,0],data_velocitytime1[:,1],color="Green")
+        ax1.scatter(data_velocitytime2[:,0],data_velocitytime2[:,1],color="Red")
+        plt.savefig(os.path.join(inputfolder,"sorting_velocitytime.pdf"))
+
+if os.path.exists(os.path.join(inputfolder,"sorting_data_velocityradius1.txt")):
+    if os.path.exists(os.path.join(inputfolder,"sorting_data_velocityradius2.txt")):
+        data_velocityradius1 = np.genfromtxt(os.path.join(inputfolder,"sorting_data_velocityradius1.txt"))
+        data_velocityradius2 = np.genfromtxt(os.path.join(inputfolder,"sorting_data_velocityradius2.txt"))
+        plt.figure(6)
+        ax1 = plt.subplot(111)
+        ax1.set_title("Velocity of cells of each type away from the centre of mass of\n that cell type against distance from centre of mass")
+        ax1.set_xlabel("Distance from centre of mass /??")
+        ax1.set_ylabel("Velocity /??")
+        ax1.scatter(data_velocityradius1[:,0],data_velocityradius1[:,1],color="Green")
+        ax1.scatter(data_velocityradius2[:,0],data_velocityradius2[:,1],color="Red")
+        plt.savefig(os.path.join(inputfolder,"sorting_velocityradius.pdf"))
