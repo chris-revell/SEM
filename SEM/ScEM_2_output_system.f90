@@ -10,6 +10,7 @@ module scem_2_output_system
   use scem_2_measure_neighbours
   use scem_2_measure_displacement
   use scem_2_measure_type_radius
+  use scem_2_measure_velocity
 
   implicit none
 
@@ -65,7 +66,11 @@ module scem_2_output_system
 
         if (flag_measure_type_radius.EQ.1) then
           call scem_measure_type_radius
-        endif 
+        endif
+
+        if (flag_measure_velocity.EQ.1) then
+          call scem_measure_velocity
+        endif
 
     end subroutine scem_output_system
 

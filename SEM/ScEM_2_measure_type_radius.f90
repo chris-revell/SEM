@@ -22,6 +22,7 @@ contains
     open(unit=34, file=output_folder//"/sorting_data/sorting_data_type_radius1.txt", status="unknown", position="append")
     open(unit=35, file=output_folder//"/sorting_data/sorting_data_type_radius2.txt", status="unknown", position="append")
 
+    !Calculate centres of mass for each cell type
     epi_com(:) = 0
     pre_com(:) = 0
     epi_count  = 0

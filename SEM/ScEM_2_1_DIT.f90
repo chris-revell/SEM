@@ -22,6 +22,8 @@ contains
     integer :: fate_1
     integer :: fate_2
 
+    
+
     !For each standard near-neighbour element interaction pair, test to see if the parent
     !cells of the two elements in the pair are of the same fate.
     !If the fates of the two cells are the same, we can update the "DIT_factor"

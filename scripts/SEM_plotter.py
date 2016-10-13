@@ -14,7 +14,7 @@ if os.path.exists(os.path.join(inputfolder,"sorting_data_displacement1.txt")):
         data_displacement1 = np.genfromtxt(os.path.join(inputfolder,"sorting_data_displacement1.txt"))
         data_displacement2 = np.genfromtxt(os.path.join(inputfolder,"sorting_data_displacement2.txt"))
         plt.figure(1)
-        ax1 = plt.subplot(111)
+        ax1 = plt.subplot(211)
         ax1.set_title("Distance from original position against time\n for all cells in system")
         ax1.set_xlabel("Time /s")
         ax1.set_ylabel("Distance /??")
@@ -27,6 +27,17 @@ if os.path.exists(os.path.join(inputfolder,"sorting_data_displacement1.txt")):
         ax1.scatter(data_displacement1[:,0],data_displacement1[:,1],color="Green")
         ax1.scatter(data_displacement2[:,0],data_displacement2[:,1],color="Red")
         plt.savefig(os.path.join(inputfolder,"sorting_displacement.pdf"))
+        ax2 = plt.subplot(212)
+        #ax2.set_title("Distance from original position against time\n for all cells in system")
+        ax2.set_xlabel("Time /s")
+        ax2.set_ylabel("log(Distance)")
+        ax2.scatter(data_displacement1[:,0],data_displacement1[:,1],color="Green",s=4)
+        ax2.scatter(data_displacement2[:,0],data_displacement2[:,1],color="Red",s=4)
+        ax2.set_yscale("log", nonposy="clip")
+        ax2.set_xscale("log", nonposx="clip")
+        ax2.set_xlim(xmin=1)
+        ax2.set_aspect("equal")
+        plt.savefig(os.path.join(inputfolder,"sorting_displacement.pdf"))
 
 if os.path.exists(os.path.join(inputfolder,"sorting_data_neighbours.txt")):
     data_neighbours = np.genfromtxt(os.path.join(inputfolder,"sorting_data_neighbours.txt"))
@@ -37,7 +48,10 @@ if os.path.exists(os.path.join(inputfolder,"sorting_data_neighbours.txt")):
     ax1.set_ylabel("Ratio of like-like neighbour pairs")
     ax1.set_xlim([0,np.amax(data_neighbours[:,0])])
     ax1.set_ylim([np.amin(data_neighbours[:,1]),np.amax(data_neighbours[:,1])])
+    m,b = np.polyfit(data_neighbours[:,0], data_neighbours[:,1], 1)
     ax1.scatter(data_neighbours[:,0],data_neighbours[:,1])
+    x = data_neighbours[:,0]
+    #ax1.plot(x, m*x+b,'g-',lw=10)
     plt.savefig(os.path.join(inputfolder,"sorting_neighbours.pdf"))
 
 if os.path.exists(os.path.join(inputfolder,"sorting_data_radius.txt")):
@@ -50,7 +64,10 @@ if os.path.exists(os.path.join(inputfolder,"sorting_data_radius.txt")):
     ax1.axhline(y=0.75,color="black",ls="--")
     ax1.set_xlim([0,np.amax(data_radius[:,0])])
     ax1.set_ylim([np.amin(data_radius[:,1]),np.amax(data_radius[:,1])])
+    m,b = np.polyfit(data_radius[:,0], data_radius[:,1], 1)
     ax1.scatter(data_radius[:,0],data_radius[:,1])
+    x = data_radius[:,0]
+    #ax1.plot(x, m*x+b,'g-',lw=10)
     plt.savefig(os.path.join(inputfolder,"sorting_radius.pdf"))
 
 if os.path.exists(os.path.join(inputfolder,"sorting_data_type_radius1.txt")):
@@ -62,8 +79,15 @@ if os.path.exists(os.path.join(inputfolder,"sorting_data_type_radius1.txt")):
         ax1.set_title("Distance of cells of each type from the centre \nof mass of that type against time")
         ax1.set_xlabel("Time /s")
         ax1.set_ylabel("Distance /??")
-        ax1.scatter(data_type_radius1[:,0],data_type_radius1[:,1],color="Green")
-        ax1.scatter(data_type_radius2[:,0],data_type_radius2[:,1],color="Red")
+        #ax1.set_xlim(xmin=0)
+        m,b = np.polyfit(data_type_radius1[:,0], data_type_radius1[:,1], 1)
+        ax1.scatter(data_type_radius1[:,0],data_type_radius1[:,1],color="Green",s=4,alpha=0.5)
+        x = data_type_radius1[:,0]
+        #ax1.plot(x, m*x+b,'g-',lw=10)
+        m,b = np.polyfit(data_type_radius2[:,0], data_type_radius2[:,1], 1)
+        ax1.scatter(data_type_radius2[:,0],data_type_radius2[:,1],color="Red",s=4,alpha=0.5)
+        x = data_type_radius2[:,0]
+        #ax1.plot(x, m*x+b,'r-',lw=10)
         plt.savefig(os.path.join(inputfolder,"sorting_type_radius.pdf"))
 
 if os.path.exists(os.path.join(inputfolder,"sorting_data_velocitytime1.txt")):
@@ -72,11 +96,18 @@ if os.path.exists(os.path.join(inputfolder,"sorting_data_velocitytime1.txt")):
         data_velocitytime2 = np.genfromtxt(os.path.join(inputfolder,"sorting_data_velocitytime2.txt"))
         plt.figure(5)
         ax1 = plt.subplot(111)
+        #ax1.set_xlim(xmin=0)
         ax1.set_title("Velocity of cells of each type away from the centre\n of mass of that cell type against time")
         ax1.set_xlabel("Time /s")
         ax1.set_ylabel("Velocity /??")
-        ax1.scatter(data_velocitytime1[:,0],data_velocitytime1[:,1],color="Green")
-        ax1.scatter(data_velocitytime2[:,0],data_velocitytime2[:,1],color="Red")
+        m,b = np.polyfit(data_velocitytime1[:,0], data_velocitytime1[:,1], 1)
+        ax1.scatter(data_velocitytime1[:,0],data_velocitytime1[:,1],color="Green",alpha=0.5)
+        x = data_velocitytime1[:,0]
+        #ax1.plot(x, m*x+b,'g-',lw=10)
+        m,b = np.polyfit(data_velocitytime2[:,0], data_velocitytime2[:,1], 1)
+        ax1.scatter(data_velocitytime2[:,0],data_velocitytime2[:,1],color="Red",alpha=0.5)
+        x = data_velocitytime2[:,0]
+        #ax1.plot(x, m*x+b,'g-',lw=10)
         plt.savefig(os.path.join(inputfolder,"sorting_velocitytime.pdf"))
 
 if os.path.exists(os.path.join(inputfolder,"sorting_data_velocityradius1.txt")):
@@ -85,9 +116,16 @@ if os.path.exists(os.path.join(inputfolder,"sorting_data_velocityradius1.txt")):
         data_velocityradius2 = np.genfromtxt(os.path.join(inputfolder,"sorting_data_velocityradius2.txt"))
         plt.figure(6)
         ax1 = plt.subplot(111)
+        #ax1.set_xlim(xmin=0)
         ax1.set_title("Velocity of cells of each type away from the centre of mass of\n that cell type against distance from centre of mass")
         ax1.set_xlabel("Distance from centre of mass /??")
         ax1.set_ylabel("Velocity /??")
-        ax1.scatter(data_velocityradius1[:,0],data_velocityradius1[:,1],color="Green")
-        ax1.scatter(data_velocityradius2[:,0],data_velocityradius2[:,1],color="Red")
+        m,b = np.polyfit(data_velocityradius1[:,0], data_velocityradius1[:,1], 1)
+        ax1.scatter(data_velocityradius1[:,0],data_velocityradius1[:,1],color="Green",s=2,marker="x",alpha=0.5)
+        x = data_velocityradius1[:,0]
+        #ax1.plot(x, m*x+b,'g-',lw=10)
+        m,b = np.polyfit(data_velocityradius2[:,0], data_velocityradius2[:,1], 1)
+        ax1.scatter(data_velocityradius2[:,0],data_velocityradius2[:,1],color="Red",s=2,marker="x",alpha=0.5)
+        x = data_velocityradius2[:,0]
+        #ax1.plot(x, m*x+b,'g-',lw=10)
         plt.savefig(os.path.join(inputfolder,"sorting_velocityradius.pdf"))
