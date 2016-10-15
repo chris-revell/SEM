@@ -9,23 +9,19 @@ module scem_2_measure_neighbours
 
 	implicit none
 
-	contains
+contains
 
-		subroutine scem_measure_neighbours
+	subroutine scem_measure_neighbours
 
-		integer :: sorting_count
-		integer :: dummy_parent_1
-		integer :: dummy_parent_2
-		integer :: parent_1
-		integer :: parent_2
-		integer :: neighbours_counter
-		integer :: same_fate_counter
-		real	:: sorting_measure
-		integer	:: fate_1
-		integer	:: fate_2
-		integer :: pair_type
+		integer :: parent1
+		integer :: parent2
+		integer	:: fate1
+		integer	:: fate2
+		integer, dimension(2,2) 						 :: neighbour_counts
+		logical, allocatable, dimension(:,:) :: neighbours
 
-		allocate(neighbours(np,2))
+		!Set neighbours array to have the same number of rows and columns as cells in the system.
+		allocate(neighbours(nc,nc))
 
 		if (randomising) then
 			open(unit=36,file=output_folder//'/randomised_data/sorting_data_neighbours.txt', status='unknown')
@@ -33,86 +29,39 @@ module scem_2_measure_neighbours
 			open(unit=36,file=output_folder//'/sorting_data/sorting_data_neighbours.txt', status='unknown')
 		endif
 
-		neighbours_counter=0
-		sorting_count=0
-
-		!First of all need to create nearest neighbour array from pairs array.
-		!neighbours(:,:) array defined in ScEM_0_arrays.f90.
-		!Takes the same form as pairs(:,:) ie first argument is label of pair, then 2nd argument is 1 or 2, which give the integer labels of the first and second cell in the neighbour pair.
-		!Neighbours array allocated in scem_initialize
-
-		!Start by looking at all element-element interaction pairs
+		!Start by looking at all element-element interaction pairs.
+		!If a pair acts between elements in cells of different parents i and j where i=!j,
+		!set neighbours(i,j) = .TRUE.
+		neighbours(:,:) = .FALSE.
 		do n=1, np
 			!Find labels of parent cells for elements in interaction pair
-			dummy_parent_1 = elements(pairs(n,1))%parent
-			dummy_parent_2 = elements(pairs(n,2))%parent
+			parent1 = elements(pairs(n,1))%parent
+			parent2 = elements(pairs(n,2))%parent
+			if (parent1.NE.parent2) then
+				neighbours(parent1,parent2) = .TRUE.
+			endif
+		enddo
+		!neighbours(i,j) = .TRUE. for any i,j where cell i and cell j are nearest neighbours.
 
-			if (dummy_parent_1.NE.dummy_parent_2) then
+		!Use neighbours array to sum epi-epi, pre-pre and epi-pre nearest neighbour cell pairs
+		neighbour_counts(:,:) = 0
+		do i=1,nc
+			do j=i+1,nc
+				if (neighbours(i,j)) then
+					fate1 = cells(i)%fate
+					fate2 = cells(j)%fate
+					neighbour_counts(fate1,fate2) = neighbour_counts(fate1,fate2) + 1
+				endif
+			enddo
+		enddo
+		!neighbour_counts(i,j) now equals the total number of nearest neighbour pairs containing a cell of fate i and a cell of fate j
+		!Need to sum neighbour_counts(1,2) + neighbour_counts(2,1) to obtain unlike pair count.
 
-				!Ensure parent_2>parent_1 for ease of manipulation later
-				if (dummy_parent_1.GT.dummy_parent_2) then
-					parent_1=dummy_parent_2
-					parent_2=dummy_parent_1
-				else
-					parent_1=dummy_parent_1
-					parent_2=dummy_parent_2
-				end if
-
-				!Following procedure avoids including A-B pair more than once.
-				!Only need to do this once there are other components in neighbours array, hence only if neighbours_counter.GT.0
-				if (neighbours_counter.GT.0) then
-					do m=1, neighbours_counter
-						if ((neighbours(m,1).EQ.parent_1).AND.(neighbours(m,2).EQ.parent_2)) then		!For all existing components of neighbours array, check that the neighbour pair you are about to add has not already been added
-							GO TO 60																	!If they are the same then skip the procedure of adding this pair to the array.
-						end if
-					end do
-				end if
-
-				neighbours_counter=neighbours_counter+1		!Increment counter that records number of components in neighbours array.
-				neighbours(neighbours_counter,1)=parent_1	!Set neighbours array components to labels of parent cells.
-				neighbours(neighbours_counter,2)=parent_2
-			else
-				GO TO 60
-			end if
-		60	CONTINUE
-		end do
-
-		!At this point we have a nearest neighbour array with no redundancy, as required.
-
-		!Now calculate proportion of near neighbours that are of the same type
-		same_fate_counter=0
-		do m=1, neighbours_counter
-
-			fate_1 = cells(neighbours(m,1))%fate
-			fate_2 = cells(neighbours(m,2))%fate
-
-			if (fate_1.EQ.fate_2) then
-				same_fate_counter = same_fate_counter+1
-			end if
-
-			if (fate_1.eq.fate_2) then
-				if (fate_1.eq.1) then
-					pair_type = 1
-				else
-					pair_type = 2
-				end if
-			else
-				pair_type = 3
-			end if
-
-		end do
-
-		if (neighbours_counter.EQ.0) then
-			sorting_measure = 0
-		else
-			sorting_measure = real(same_fate_counter)/real(neighbours_counter)
-		endif
-
-		!Write measurement to file sorting_data_neighbours
-		write(36,*) real(time), sorting_measure
+		!Write measurements to file sorting_data_neighbours
+		write(36,*) time, neighbour_counts(1,1), neighbour_counts(2,2), (neighbour_counts(1,2)+neighbour_counts(2,1))
 
 		deallocate(neighbours)
 
-		end subroutine scem_measure_neighbours
+	end subroutine scem_measure_neighbours
 
 end module scem_2_measure_neighbours
