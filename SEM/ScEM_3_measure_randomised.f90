@@ -20,17 +20,27 @@ contains
 
   subroutine scem_measure_randomised
 
-    integer,allocatable,dimension(:) :: stored_fates
+
 
     randomising = .TRUE.
 
     !Store current system state
-    allocate(stored_fates(nc))
+    !reallocate stored_fates array only if the number of cells in the system has increased.   
+    if (allocated(stored_fates)) then
+				if (nc.GT.SIZE(stored_fates)) then
+					deallocate(stored_fates)
+					allocate(stored_fates(nc))
+				endif
+		else
+			!Array has not yet been allocated (ie, this is the start of the simulation)
+			allocate(stored_fates(nc))
+		endif
     do n=1,nc
       stored_fates(n) = cells(n)%fate
     enddo
 
-    do i=1, 100 !This should probably be nc! but even for 12 cells that ends up being over 4000 possibilities
+
+    do i=1, 10 !This should probably be nc! but even for 12 cells that ends up being over 4000 possibilities
       do n=1,nc
         CALL RANDOM_NUMBER(fate_decider)
         if (fate_decider.GE.0.5) then

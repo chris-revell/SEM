@@ -23,14 +23,14 @@ contains
 		!Set neighbours array to have the same number of rows and columns as cells in the system.
 		!Only need to reallcate the size of neighbours array if the number of elements in the system has increased, or if it has not yet been allocated in the first place
 		if (allocated(neighbours)) then
-				if (nc.GT.SIZE(neighbours,DIM=1))
+				if (nc.GT.SIZE(neighbours,DIM=1)) then
 					deallocate(neighbours)
 					allocate(neighbours(nc,nc))
 				endif
 		else
 			!Array has not yet been allocated (ie, this is the start of the simulation)
 			allocate(neighbours(nc,nc))
-		endif 
+		endif
 
 		if (randomising) then
 			open(unit=36,file=output_folder//'/randomised_data/sorting_data_neighbours.txt', status='unknown')

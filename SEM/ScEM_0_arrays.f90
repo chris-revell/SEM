@@ -16,5 +16,6 @@ module scem_0_arrays
   integer, allocatable, dimension(:,:)    			:: pairs
   integer, allocatable, dimension(:,:)		    	:: neighbours
   integer, dimension(4,8)                       :: max_radius_elements  !For use in scem_cortex
+  integer,allocatable,dimension(:)              :: stored_fates  !For use in scem_measure_randomised
 
 end module scem_0_arrays

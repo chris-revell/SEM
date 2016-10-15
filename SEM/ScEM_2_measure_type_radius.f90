@@ -41,8 +41,12 @@ contains
         pre_com(:) = pre_com(:) + elements(n)%position(:)
       endif
     enddo
-    epi_com(:) = epi_com(:)/pre_count
-    pre_com(:) = pre_com(:)/pre_count
+    if (epi_count.GT.0) then
+      epi_com(:) = epi_com(:)/epi_count
+    endif
+    if (pre_count.GT.0) then
+      pre_com(:) = pre_com(:)/pre_count
+    endif
 
     do n=1, nc
       if (cells(n)%fate.EQ.1) then

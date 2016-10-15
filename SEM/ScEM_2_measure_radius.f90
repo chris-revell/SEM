@@ -1,4 +1,4 @@
-!Module to calculate the radius of each epiblast cell from the system centre of mass, normliased by the maximum radius of any cell in the system. 
+!Module to calculate the radius of each epiblast cell from the system centre of mass, normliased by the maximum radius of any cell in the system.
 !C.K.Revell, November 2013, Updated October 2016
 
 module scem_2_measure_radius
@@ -33,12 +33,13 @@ contains
 		system_COM(:)=system_COM(:)/ne  !Centre of mass found by dividing sum by total mass, ie total number of elements.
 
 		!Find the max cell radius of the whole system
+		max_cell_radius = 0
 		do n=1, nc
 			!For each cell, calculate distance from the system centre of mass
 			cell_vector(:)				= cells(n)%position(:)-system_COM(:)		!Vector from system COM to cell
 			dist_sq								= DOT_PRODUCT(cell_vector,cell_vector)	!Magnitude of vector, squared
 			!If the radius of this cell exceeds the current max_cell_radius, update max_cell_radius
-			max_cell_radius				= MAX(max_cell_radius, SQRT(cell_distance_squared))
+			max_cell_radius				= MAX(max_cell_radius, SQRT(dist_sq))
 		end do
 
 		!Normalise radii of epiblast cells with max_cell_radius and write to file.
