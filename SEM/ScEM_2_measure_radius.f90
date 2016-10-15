@@ -28,8 +28,11 @@ module scem_2_measure_radius
 		real*8, dimension(3) :: system_COM		!Vector position of system centre of mass
 		real*8, dimension(3) :: cell_vector		!Vector position of cell relative to system centre of mass
 
-
-		open(unit=28,file=output_folder//'/sorting_data/sorting_data_radius.txt', status='unknown')
+		if (randomising) then
+			open(unit=35,file=output_folder//'/randomised_data/sorting_data_radius.txt', status='unknown')
+		else
+			open(unit=35,file=output_folder//'/sorting_data/sorting_data_radius.txt', status='unknown')
+		endif
 
 		!For now we will assume (0,0,0) is the centre of the cell aggregate.
 		!Therefore no need to identify centre of mass of aggregate.
@@ -77,7 +80,7 @@ module scem_2_measure_radius
 			normalised_radius = distance_average1/max_cell_radius
 		endif
 
-		write(28,*) real(time), normalised_radius
+		write(35,*) real(time), normalised_radius
 
 		end subroutine scem_measure_radius
 

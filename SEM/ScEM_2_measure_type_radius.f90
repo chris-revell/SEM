@@ -16,11 +16,15 @@ contains
     real*8, dimension(3) :: epi_com
     real*8, dimension(3) :: pre_com
     real*8, dimension(3) :: displacement
-    real*8               :: velocity
     integer              :: parent_fate,epi_count,pre_count
 
-    open(unit=34, file=output_folder//"/sorting_data/sorting_data_type_radius1.txt", status="unknown", position="append")
-    open(unit=35, file=output_folder//"/sorting_data/sorting_data_type_radius2.txt", status="unknown", position="append")
+    if (randomising) then
+      open(unit=33, file=output_folder//"/randomised_data/sorting_data_type_radius1.txt", status="unknown", position="append")
+      open(unit=34, file=output_folder//"/randomised_data/sorting_data_type_radius2.txt", status="unknown", position="append")
+    else
+      open(unit=33, file=output_folder//"/sorting_data/sorting_data_type_radius1.txt", status="unknown", position="append")
+      open(unit=34, file=output_folder//"/sorting_data/sorting_data_type_radius2.txt", status="unknown", position="append")
+    endif
 
     !Calculate centres of mass for each cell type
     epi_com(:) = 0
@@ -44,36 +48,11 @@ contains
       if (cells(n)%fate.EQ.1) then
         displacement(:) = cells(n)%position(:) - epi_com(:)
         dist_sq = DOT_PRODUCT(displacement,displacement)
-        write(34,*) time, SQRT(dist_sq)
+        write(33,*) time, SQRT(dist_sq)
       else
         displacement(:) = cells(n)%position(:) - epi_com(:)
         dist_sq = DOT_PRODUCT(displacement,displacement)
-        write(35,*) time, SQRT(dist_sq)
-      endif
-    enddo
-
-
-
-    open(unit=37,file=output_folder//'/sorting_data/sorting_data_velocitytime1.txt', status='unknown', position="append")
-    open(unit=38,file=output_folder//'/sorting_data/sorting_data_velocitytime2.txt', status='unknown', position="append")
-    open(unit=39,file=output_folder//'/sorting_data/sorting_data_velocityradius1.txt', status='unknown', position="append")
-    open(unit=40,file=output_folder//'/sorting_data/sorting_data_velocityradius2.txt', status='unknown', position="append")
-    do n=1, ne
-      parent_fate = cells(elements(n)%parent)%fate
-      if (parent_fate.EQ.1) then
-        displacement(:) = elements(n)%position(:) - epi_COM(:)
-        dist_sq = DOT_PRODUCT(displacement,displacement)
-        displacement = displacement/SQRT(dist_sq) !Unit vector from COM to element
-        velocity = DOT_PRODUCT(displacement,elements(n)%velocity)
-        write(37,*) time, velocity
-        write(39,*) SQRT(dist_sq), velocity
-      else
-        displacement(:) = elements(n)%position(:) - pre_COM(:)
-        dist_sq = DOT_PRODUCT(displacement,displacement)
-        displacement = displacement/SQRT(dist_sq) !Unit vector from COM to element
-        velocity = DOT_PRODUCT(displacement,elements(n)%velocity)
-        write(38,*) time, velocity
-        write(40,*) SQRT(dist_sq), velocity
+        write(34,*) time, SQRT(dist_sq)
       endif
     enddo
 

@@ -19,23 +19,19 @@ module scem_2_measure_neighbours
 		integer :: parent_1
 		integer :: parent_2
 		integer :: neighbours_counter
-!		integer :: neighbours_counter_final
 		integer :: same_fate_counter
 		real	:: sorting_measure
 		integer	:: fate_1
 		integer	:: fate_2
 		integer :: pair_type
-!		character(len=1024)		:: vectors_filename
-! 	character(len=1024)		:: vectors_filename_hh
-!  	character(len=1024)		:: vectors_filename_eh
-!  	real*8, dimension(3)	:: cell_position1
-!  	real*8, dimension(3)	:: cell_position2
-!  	real*8, dimension(6)	:: vector					!First 3 elements are x,y,z position of vector, ie halfway point between cells in neighbour pair. Next 3 elements are components of vector itself, ie x,y,z separation of the two cells in the neighbour pair
-
 
 		allocate(neighbours(np,2))
 
-		open(unit=36,file=output_folder//'/sorting_data/sorting_data_neighbours.txt', status='unknown')
+		if (randomising) then
+			open(unit=36,file=output_folder//'/randomised_data/sorting_data_neighbours.txt', status='unknown')
+		else
+			open(unit=36,file=output_folder//'/sorting_data/sorting_data_neighbours.txt', status='unknown')
+		endif
 
 		neighbours_counter=0
 		sorting_count=0
@@ -43,7 +39,7 @@ module scem_2_measure_neighbours
 		!First of all need to create nearest neighbour array from pairs array.
 		!neighbours(:,:) array defined in ScEM_0_arrays.f90.
 		!Takes the same form as pairs(:,:) ie first argument is label of pair, then 2nd argument is 1 or 2, which give the integer labels of the first and second cell in the neighbour pair.
-		!NB neighbours array allocated in scem_initialize
+		!Neighbours array allocated in scem_initialize
 
 		!Start by looking at all element-element interaction pairs
 		do n=1, np

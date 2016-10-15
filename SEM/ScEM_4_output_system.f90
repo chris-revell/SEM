@@ -1,6 +1,6 @@
 ! T. J Newman, Tempe, July 2010
 
-module scem_2_output_system
+module scem_4_output_system
 
   use scem_0_arrays
   use scem_0_input
@@ -10,7 +10,8 @@ module scem_2_output_system
   use scem_2_measure_neighbours
   use scem_2_measure_displacement
   use scem_2_measure_type_radius
-  use scem_2_measure_velocity
+  use scem_2_measure_surface
+  use scem_3_measure_randomised
 
   implicit none
 
@@ -18,17 +19,10 @@ module scem_2_output_system
 
     subroutine scem_output_system
 
-        !Calculate time expired so far
-        call SYSTEM_CLOCK(current_time)
-        total_system_time = (current_time-start_time)/count_rate
-
-        !Write system progress update to the command line.
-        write(*,*) real(time),total_system_time,ne,nc,np,n_snapshots !Old version: real(time),ne,nc,ne_size,nc_size,np,np_size,nx,ny,nz,n_snapshots
-
         !Print time and cell count to cell_count file to allow cell count to be plotted against time
         if (flag_count_output.EQ.1) then
-          open(unit=37,file=output_folder//'/system_data/cell_count.txt', status='unknown')
-      	  write(37,*) real(time), nc
+          open(unit=28,file=output_folder//'/system_data/cell_count.txt', status='unknown')
+      	  write(28,*) real(time), nc
         endif
 
         !Write cell fate data at each snapshot to file
@@ -68,10 +62,14 @@ module scem_2_output_system
           call scem_measure_type_radius
         endif
 
-        if (flag_measure_velocity.EQ.1) then
-          call scem_measure_velocity
+        if (flag_measure_surface.EQ.1) then
+          call scem_measure_surface
+        endif
+
+        if (flag_measure_randomised.EQ.1) then
+          call scem_measure_randomised
         endif
 
     end subroutine scem_output_system
 
-end module scem_2_output_system
+end module scem_4_output_system

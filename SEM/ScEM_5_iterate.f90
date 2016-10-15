@@ -13,7 +13,7 @@ module scem_5_iterate
   use scem_2_flag_relist
   use scem_2_growth
   use scem_2_integrate
-  use scem_2_output_system
+  use scem_4_output_system
   use scem_2_output_povray
   use scem_2_pairs
   use scem_2_relist
@@ -93,13 +93,22 @@ module scem_5_iterate
         call volume_calculate
 
         !Outputting data to file
-        !Only output data at intervals of time_out_1.
-        !time_out_1 = cell_cycle_time/10.0 and is the time interval between data outputs
-        if (mod(time,(time_out_1)).lt.dt) then
-          !Increment n_snapshots to keep track of how many outputs there have been
-          n_snapshots=n_snapshots+1
+        !Only output measurement data at intervals of time_out_2
+        if (mod(time,(time_out_2)).lt.dt) then
           ! write system data to files
           call scem_output_system
+        endif
+
+        !Only graphical output data at intervals of time_out_1.
+        if (mod(time,(time_out_1)).lt.dt) then
+          !Calculate time expired so far
+          call SYSTEM_CLOCK(current_time)
+          total_system_time = (current_time-start_time)/count_rate
+          !Write system progress update to the command line.
+          write(*,*) real(time),total_system_time,ne,nc,np,n_snapshots !Old version: real(time),ne,nc,ne_size,nc_size,np,np_size,nx,ny,nz,n_snapshots
+
+          !Increment n_snapshots to keep track of how many outputs there have been
+          n_snapshots=n_snapshots+1
           ! Write element data to files in povray format
           if (flag_povray.EQ.1) then
             call scem_output_povray

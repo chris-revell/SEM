@@ -22,8 +22,6 @@ contains
     integer :: fate_1
     integer :: fate_2
 
-    
-
     !For each standard near-neighbour element interaction pair, test to see if the parent
     !cells of the two elements in the pair are of the same fate.
     !If the fates of the two cells are the same, we can update the "DIT_factor"
@@ -72,7 +70,7 @@ contains
           endif
         else
         !DIT response for primitive endoderm (type 2) cells
-          if (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.1) then
+          if (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.0) then
             !Response at external surface of the system
             pairs_cortex(j)%cortex_factor = DIT_response(2,0)
           elseif (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.1) then

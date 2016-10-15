@@ -23,7 +23,8 @@ module scem_0_input
   integer :: flag_background,flag_DIT,flag_povray_elements, flag_randomise
   integer :: flag_povray_pairs,flag_povray_volumes,flag_povray,flag_povray_triangles,flag_povray_cortex_pairs
   integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_radius,flag_measure_type_radius
-  integer :: flag_measure_neighbours,flag_measure_displacement,flag_measure_velocity,flag_elements_final
+  integer :: flag_measure_neighbours,flag_measure_displacement,flag_measure_surface,flag_elements_final
+  integer :: flag_measure_randomised
   integer :: flag_relist ! flag triggering relist of sector assignments
   !Variables for initiating randoms number sequence
   integer :: seedarraylength
@@ -44,7 +45,7 @@ module scem_0_input
   real*8  :: cell_cycle_time,rate_new_element,establishment_time,prob_new_element,frac_growth
   real*8  :: frac_placement_min,r_placement_min_sq
   real*8  :: buffer_frac,buffer_size,buffer_size_sq,sector_size,sector_size_sq,recip_sector_size
-  real*8  :: time,time_out_1,time_max,dt,dt_amp_max,r_s_max
+  real*8  :: time,time_out_1,time_out_2,time_max,dt,dt_amp_max,r_s_max
   real*8  :: trigger_frac
   !Variables for cell behaviour
   real*8 :: stiffness_factor
@@ -68,6 +69,8 @@ module scem_0_input
   real*8 :: h !Height of spherical cap boundary.
   real*8 :: cap_radius
   real*8 :: spherical_boundary_radius
+
+  logical :: randomising
 !**********
 
   contains
@@ -81,7 +84,7 @@ module scem_0_input
       flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
       flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
-      flag_DIT        = 0 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
+      flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
       flag_randomise  = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
 
       !Output control switches
@@ -99,23 +102,24 @@ module scem_0_input
       flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
       flag_measure_displacement=1    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
-      flag_measure_velocity   = 1    ! Switch to turn off velocity sorting measurement 
+      flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
+      flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comprison
 
       !Simulation control parameters
       stiffness_factor  = 1.0
       cell_cycle_time   = 4*4320 ! --> cell cycle time in seconds 4320
       n_cellcycles      = 1.0
       epi_adhesion      = 3.0
-      hypo_adhesion     = 0.0
-      epi_hypo_adhesion = 0.0
-      cortex_constant1 = 0.1
-      cortex_constant2 = 0.1
-      DIT_response(1,0) = 2.0 !Epiblast external system surface DIT response factor
-      DIT_response(1,1) = 0.3 !Epiblast homotypic interface DIT response factor
-      DIT_response(1,2) = 2.0 !Epiblast heterotypic interface DIT response factor
+      hypo_adhesion     = 0.5
+      epi_hypo_adhesion = 0.5
+      cortex_constant1  = 0.1
+      cortex_constant2  = 0.1
+      DIT_response(1,0) = 1.0 !Epiblast external system surface DIT response factor
+      DIT_response(1,1) = 1.0 !Epiblast homotypic interface DIT response factor
+      DIT_response(1,2) = 1.0 !Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0 !Primitive endoderm external system surface DIT response factor
       DIT_response(2,1) = 1.0 !Primitive endoderm homotypic interface DIT response factor
-      DIT_response(2,2) = 2.0 !Primitive endoderm heterotypic interface DIT response factor
+      DIT_response(2,2) = 1.0 !Primitive endoderm heterotypic interface DIT response factor
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
 
@@ -143,6 +147,11 @@ module scem_0_input
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/sorting_data")
       call system("mkdir "//output_folder//"/povray_data")
+      if (flag_measure_randomised.EQ.1) then
+        call system("mkdir "//output_folder//"/randomised_data")
+      endif
+
+      randomising = .FALSE.
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
@@ -264,6 +273,7 @@ module scem_0_input
       ! temporal parameters - all in *seconds*
       time_max=n_cellcycles*cell_cycle_time ! --> time of simulation in seconds
       time_out_1=time_max/99.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
+      time_out_2=time_out_1/10 ! --> interval between measurement data outputs. Set so that system is measured 10x more frequently than graphical outputs.
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities
         diff_amp=sqrt(dt*diff_coeff) ! amplitude of noise in diffusion term

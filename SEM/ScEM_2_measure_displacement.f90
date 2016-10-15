@@ -16,8 +16,13 @@ contains
     real*8, dimension(3) :: displacement_vector
     real*8 :: displacement
 
-    open(unit=41, file=output_folder//"/sorting_data/sorting_data_displacement1.txt", status="unknown", position="append")
-    open(unit=42, file=output_folder//"/sorting_data/sorting_data_displacement2.txt", status="unknown", position="append")
+    if (randomising) then
+      open(unit=41, file=output_folder//"/randomised_data/sorting_data_displacement1.txt", status="unknown", position="append")
+      open(unit=42, file=output_folder//"/randomised_data/sorting_data_displacement2.txt", status="unknown", position="append")
+    else
+      open(unit=41, file=output_folder//"/sorting_data/sorting_data_displacement1.txt", status="unknown", position="append")
+      open(unit=42, file=output_folder//"/sorting_data/sorting_data_displacement2.txt", status="unknown", position="append")
+    endif
 
     do n=1, nc
 
