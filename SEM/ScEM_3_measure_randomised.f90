@@ -20,12 +20,11 @@ contains
 
   subroutine scem_measure_randomised
 
-
-
+    !Set randomising = .TRUE. in order to divert output from measurement subroutines to randomised data files.
     randomising = .TRUE.
 
     !Store current system state
-    !reallocate stored_fates array only if the number of cells in the system has increased.   
+    !reallocate stored_fates array only if the number of cells in the system has increased.
     if (allocated(stored_fates)) then
 				if (nc.GT.SIZE(stored_fates)) then
 					deallocate(stored_fates)

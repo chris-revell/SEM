@@ -60,6 +60,7 @@ contains
       write(43,*) time, epi_out, pre_out
     endif
 
+    close(43)
 
   end subroutine scem_measure_surface
 end module ScEM_2_measure_surface

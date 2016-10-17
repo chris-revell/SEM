@@ -106,18 +106,18 @@ module scem_0_input
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comprison
 
       !Simulation control parameters
-      stiffness_factor  = 1.0
+      stiffness_factor  = 0.2
       cell_cycle_time   = 4*4320 ! --> cell cycle time in seconds 4320
       n_cellcycles      = 1.0
       epi_adhesion      = 3.0
-      hypo_adhesion     = 0.5
-      epi_hypo_adhesion = 0.5
+      hypo_adhesion     = 3.0
+      epi_hypo_adhesion = 3.0
       cortex_constant1  = 0.1
       cortex_constant2  = 0.1
-      DIT_response(1,0) = 1.0 !Epiblast external system surface DIT response factor
-      DIT_response(1,1) = 1.0 !Epiblast homotypic interface DIT response factor
-      DIT_response(1,2) = 1.0 !Epiblast heterotypic interface DIT response factor
-      DIT_response(2,0) = 1.0 !Primitive endoderm external system surface DIT response factor
+      DIT_response(1,0) = 2.0 !Epiblast external system surface DIT response factor
+      DIT_response(1,1) = 0.5 !Epiblast homotypic interface DIT response factor
+      DIT_response(1,2) = 2.0 !Epiblast heterotypic interface DIT response factor
+      DIT_response(2,0) = 0.5 !Primitive endoderm external system surface DIT response factor
       DIT_response(2,1) = 1.0 !Primitive endoderm homotypic interface DIT response factor
       DIT_response(2,2) = 1.0 !Primitive endoderm heterotypic interface DIT response factor
 

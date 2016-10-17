@@ -33,9 +33,9 @@ contains
 		endif
 
 		if (randomising) then
-			open(unit=36,file=output_folder//'/randomised_data/sorting_data_neighbours.txt', status='unknown')
+			open(unit=36,file=output_folder//'/randomised_data/sorting_data_neighbours.txt',status='unknown',position="append")
 		else
-			open(unit=36,file=output_folder//'/sorting_data/sorting_data_neighbours.txt', status='unknown')
+			open(unit=36,file=output_folder//'/sorting_data/sorting_data_neighbours.txt',status='unknown',position="append")
 		endif
 
 		!Start by looking at all element-element interaction pairs.
@@ -70,6 +70,7 @@ contains
 		write(36,*) time, neighbour_counts(1,1), neighbour_counts(2,2), (neighbour_counts(1,2)+neighbour_counts(2,1))
 
 		deallocate(neighbours)
+		close(36)
 
 	end subroutine scem_measure_neighbours
 

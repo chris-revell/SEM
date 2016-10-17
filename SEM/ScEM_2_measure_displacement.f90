@@ -38,6 +38,9 @@ contains
 
     enddo
 
+    close(41)
+    close(42)
+
   end subroutine scem_measure_displacement
 
 end module scem_2_measure_displacement
