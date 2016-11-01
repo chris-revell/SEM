@@ -52,11 +52,11 @@ contains
       if (cells(n)%fate.EQ.1) then
         displacement(:) = cells(n)%position(:) - epi_com(:)
         dist_sq = DOT_PRODUCT(displacement,displacement)
-        write(33,*) time, SQRT(dist_sq)
+        write(33,*) time, SQRT(dist_sq), cells(n)%age
       else
         displacement(:) = cells(n)%position(:) - epi_com(:)
         dist_sq = DOT_PRODUCT(displacement,displacement)
-        write(34,*) time, SQRT(dist_sq)
+        write(34,*) time, SQRT(dist_sq), cells(n)%age
       endif
     enddo
 
