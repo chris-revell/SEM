@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sys import argv,exit
 import os.path
+from scipy.stats import binned_statistic
 
 if len(argv) < 2:
     exit("Error: Provide data folder")
@@ -170,7 +171,18 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_type_radius1.tx
         plt.tight_layout()
         plt.savefig(os.path.join(inputfolder_sorting,"sorting_type_radius.pdf"))
 
-        figure(5)
+        plt.figure(5)
+        ax1 = plt.subplot(111)
+        statistic,bin_edges,binnumber = binned_statistic(data_type_radius1[:,2],data_type_radius1[:,1],bins=100)
+        ax1.plot((bin_edges[0:100]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Green",linewidth=5)
+        statistic,bin_edges,binnumber = binned_statistic(data_type_radius2[:,2],data_type_radius2[:,1],bins=100)
+        ax1.plot((bin_edges[0:100]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Red",linewidth=5)
+        ax1.set_title("Mean distance of cells of each type from centre \nof mass of that type against age of cell")
+        ax1.set_xlabel("Age of cell /s")
+        ax1.set_ylabel("Mean distance from centre of mass")
+        plt.savefig(os.path.join(inputfolder_sorting,"sorting_data_type_radius_against_age.pdf"))
+
+
 
 if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_surface.txt")):
     data_surface = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_surface.txt"))
@@ -258,123 +270,104 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius1
     if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius2.txt")):
         data_type_radius1 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_type_radius1.txt"))
         data_type_radius2 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_type_radius2.txt"))
-        plt.figure(10)
-        ax1 = plt.subplot(111)
+        plt.figure(4)
+        ax1 = plt.subplot(211)
         ax1.set_title("Distance of cells of each type from the centre \nof mass of that type against time")
         ax1.set_xlabel("Time /s")
         ax1.set_ylabel("Distance /??")
         ax1.set_xlim([0,np.amax(data_type_radius1[:,0])])
-        m,b = np.polyfit(data_type_radius1[:,0], data_type_radius1[:,1], 1)
+        #m,b = np.polyfit(data_type_radius1[:,0], data_type_radius1[:,1], 1)
         ax1.scatter(data_type_radius1[:,0],data_type_radius1[:,1],color="Green",s=4,alpha=0.5,label="Epiblast")
-        x = data_type_radius1[:,0]
-        ax1.plot(x, m*x+b,'g-',lw=5)
-        m,b = np.polyfit(data_type_radius2[:,0], data_type_radius2[:,1], 1)
+        #x = data_type_radius1[:,0]
+        #ax1.plot(x, m*x+b,'g-',lw=5)
+        #m,b = np.polyfit(data_type_radius2[:,0], data_type_radius2[:,1], 1)
         ax1.scatter(data_type_radius2[:,0],data_type_radius2[:,1],color="Red",s=4,alpha=0.5,label="PrE")
-        x = data_type_radius2[:,0]
-        ax1.plot(x, m*x+b,'r-',lw=5)
+        #x = data_type_radius2[:,0]
+        #ax1.plot(x, m*x+b,'r-',lw=5)
         ax1.legend(loc='best', shadow=True)
+
+        ax2 = plt.subplot(212)
+        averaged_datax = []
+        averaged_datay = []
+        count = 0
+        for i in range (0, np.shape(data_type_radius1)[0]):
+        	if data_type_radius1[i,0] in averaged_datax:
+        		pass
+        	else:
+        		meansum = 0
+        		count2 = 0
+        		for j in range (0, np.shape(data_type_radius1)[0]):
+        			if data_type_radius1[j,0] == data_type_radius1[i,0]:
+        				meansum = meansum + data_type_radius1[j,1]
+        				count2 = count2 + 1
+        			else:
+        				pass
+        		averaged_datax.append(data_type_radius1[i,0])
+        		averaged_datay.append(meansum/count2)
+        	count = count + 1
+        ax2.scatter(averaged_datax,averaged_datay,color="Green")
+
+        averaged_datax = []
+        averaged_datay = []
+        count = 0
+        for i in range (0, np.shape(data_type_radius2)[0]):
+        	if data_type_radius2[i,0] in averaged_datax:
+        		pass
+        	else:
+        		meansum = 0
+        		count2 = 0
+        		for j in range (0, np.shape(data_type_radius2)[0]):
+        			if data_type_radius2[j,0] == data_type_radius2[i,0]:
+        				meansum = meansum + data_type_radius2[j,1]
+        				count2 = count2 + 1
+        			else:
+        				pass
+        		averaged_datax.append(data_type_radius2[i,0])
+        		averaged_datay.append(meansum/count2)
+        	count = count + 1
+        ax2.scatter(averaged_datax,averaged_datay,color="Red")
+        ax2.set_xlabel("Time /s")
+        ax2.set_ylabel("Distance /??")
+        ax2.set_title("Mean distance of each cell type from the centre \nof mass of that type against time")
+        ax2.set_xlim([0,max(averaged_datax)])
+
+        plt.tight_layout()
         plt.savefig(os.path.join(inputfolder_randomised,"sorting_type_radius.pdf"))
 
+        plt.figure(5)
+        ax1 = plt.subplot(111)
+        statistic,bin_edges,binnumber = binned_statistic(data_type_radius1[:,2],data_type_radius1[:,1],bins=100)
+        ax1.plot((bin_edges[0:100]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Green",linewidth=5)
+        statistic,bin_edges,binnumber = binned_statistic(data_type_radius2[:,2],data_type_radius2[:,1],bins=100)
+        ax1.plot((bin_edges[0:100]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Red",linewidth=5)
+        ax1.set_title("Mean distance of cells of each type from centre \nof mass of that type against age of cell")
+        ax1.set_xlabel("Age of cell /s")
+        ax1.set_ylabel("Mean distance from centre of mass")
+        plt.savefig(os.path.join(inputfolder_randomised,"sorting_data_type_radius_against_age.pdf"))
+
 if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_surface.txt")):
-    data_surface = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_surface.txt"))
+    data_surface_randomised = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_surface.txt"))
     plt.figure(11)
-    ax1=plt.subplot(111)
+    ax1=plt.subplot(211)
     ax1.set_title("Proportion of system's external surface\noccupied by each cell type")
     ax1.set_xlabel("Time /s")
     ax1.set_ylabel("Proportion of surface")
-    ax1.set_xlim([0,np.amax(data_surface[:,0])])
+    ax1.set_xlim([0,np.amax(data_surface_randomised[:,0])])
     ax1.set_ylim([0,1])
-    ax1.scatter(data_surface[:,0],data_surface[:,1],color="Green",label="Epiblast")
-    ax1.scatter(data_surface[:,0],data_surface[:,2],color="Red",label="PrE")
+    ax1.scatter(data_surface_randomised[:,0],data_surface_randomised[:,1],color="Green",label="Epiblast")
+    ax1.scatter(data_surface_randomised[:,0],data_surface_randomised[:,2],color="Red",label="PrE")
     ax1.legend(loc='best', shadow=True)
+
+    ax2 = plt.subplot(212)
+    ax2.set_title("Mean of randomised systems")
+    ax2.set_xlabel("Time /s")
+    ax2.set_ylabel("Proportion of surface")
+    ax2.set_xlim([0,np.amax(data_surface_randomised[:,0])])
+    ax2.set_ylim([0,1])
+    statistic,bin_edges,binnumber = binned_statistic(data_surface_randomised[:,0],data_surface_randomised[:,1],bins=100)
+    ax2.plot((bin_edges[0:100]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Green",linewidth=5,linestyle="--",label="Randomised Epi")
+    statistic,bin_edges,binnumber = binned_statistic(data_surface_randomised[:,0],data_surface_randomised[:,2],bins=100)
+    ax2.plot((bin_edges[0:100]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Red",linewidth=5,linestyle="--",label="Randomised PrE")
+    ax2.scatter(data_surface[:,0],data_surface[:,1],color="Green",label="Epiblast")
+    ax2.scatter(data_surface[:,0],data_surface[:,2],color="Red",label="PrE")
     plt.savefig(os.path.join(inputfolder_randomised,"sorting_surface.pdf"))
-
-
-
-
-
-
-
-
-
-
-
-"""
-if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_velocitytime1.txt")):
-    if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_velocitytime2.txt")):
-        data_velocitytime1 = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_velocitytime1.txt"))
-        data_velocitytime2 = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_velocitytime2.txt"))
-        plt.figure(5)
-        ax1 = plt.subplot(111)
-        ax1.set_title("Velocity of cells of each type away from the centre\n of mass of that cell type against time")
-        ax1.set_xlabel("Time /s")
-        ax1.set_ylabel("Velocity /??")
-        m,b = np.polyfit(data_velocitytime1[:,0], data_velocitytime1[:,1], 1)
-        ax1.scatter(data_velocitytime1[:,0],data_velocitytime1[:,1],color="Green",alpha=0.5)
-        x = data_velocitytime1[:,0]
-        ax1.plot(x, m*x+b,'g-',lw=5)
-        m,b = np.polyfit(data_velocitytime2[:,0], data_velocitytime2[:,1], 1)
-        ax1.scatter(data_velocitytime2[:,0],data_velocitytime2[:,1],color="Red",alpha=0.5)
-        x = data_velocitytime2[:,0]
-        ax1.plot(x, m*x+b,'g-',lw=5)
-        plt.savefig(os.path.join(inputfolder_sorting,"sorting_velocitytime.pdf"))
-
-if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_velocityradius1.txt")):
-    if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_velocityradius2.txt")):
-        data_velocityradius1 = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_velocityradius1.txt"))
-        data_velocityradius2 = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_velocityradius2.txt"))
-        plt.figure(6)
-        ax1 = plt.subplot(111)
-        ax1.set_title("Velocity of cells of each type away from the centre of mass of\n that cell type against distance from centre of mass")
-        ax1.set_xlabel("Distance from centre of mass /??")
-        ax1.set_ylabel("Velocity /??")
-        m,b = np.polyfit(data_velocityradius1[:,0], data_velocityradius1[:,1], 1)
-        ax1.scatter(data_velocityradius1[:,0],data_velocityradius1[:,1],color="Green",s=2,marker="x",alpha=0.5,label="Epiblast")
-        x = data_velocityradius1[:,0]
-        ax1.plot(x, m*x+b,'g-',lw=5)
-        m,b = np.polyfit(data_velocityradius2[:,0], data_velocityradius2[:,1], 1)
-        ax1.scatter(data_velocityradius2[:,0],data_velocityradius2[:,1],color="Red",s=2,marker="x",alpha=0.5,label="PrE")
-        x = data_velocityradius2[:,0]
-        ax1.plot(x, m*x+b,'g-',lw=5)
-        plt.savefig(os.path.join(inputfolder_sorting,"sorting_velocityradius.pdf"))
-
-
-
-if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_velocitytime1.txt")):
-    if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_velocitytime2.txt")):
-        data_velocitytime1 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_velocitytime1.txt"))
-        data_velocitytime2 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_velocitytime2.txt"))
-        plt.figure(5)
-        ax1 = plt.subplot(111)
-        ax1.set_title("Velocity of cells of each type away from the centre\n of mass of that cell type against time")
-        ax1.set_xlabel("Time /s")
-        ax1.set_ylabel("Velocity /??")
-        m,b = np.polyfit(data_velocitytime1[:,0], data_velocitytime1[:,1], 1)
-        ax1.scatter(data_velocitytime1[:,0],data_velocitytime1[:,1],color="Green",alpha=0.5)
-        x = data_velocitytime1[:,0]
-        ax1.plot(x, m*x+b,'g-',lw=5)
-        m,b = np.polyfit(data_velocitytime2[:,0], data_velocitytime2[:,1], 1)
-        ax1.scatter(data_velocitytime2[:,0],data_velocitytime2[:,1],color="Red",alpha=0.5)
-        x = data_velocitytime2[:,0]
-        ax1.plot(x, m*x+b,'g-',lw=5)
-        plt.savefig(os.path.join(inputfolder_randomised,"sorting_velocitytime.pdf"))
-
-if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_velocityradius1.txt")):
-    if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_velocityradius2.txt")):
-        data_velocityradius1 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_velocityradius1.txt"))
-        data_velocityradius2 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_velocityradius2.txt"))
-        plt.figure(6)
-        ax1 = plt.subplot(111)
-        ax1.set_title("Velocity of cells of each type away from the centre of mass of\n that cell type against distance from centre of mass")
-        ax1.set_xlabel("Distance from centre of mass /??")
-        ax1.set_ylabel("Velocity /??")
-        m,b = np.polyfit(data_velocityradius1[:,0], data_velocityradius1[:,1], 1)
-        ax1.scatter(data_velocityradius1[:,0],data_velocityradius1[:,1],color="Green",s=2,marker="x",alpha=0.5,label="Epiblast")
-        x = data_velocityradius1[:,0]
-        ax1.plot(x, m*x+b,'g-',lw=5)
-        m,b = np.polyfit(data_velocityradius2[:,0], data_velocityradius2[:,1], 1)
-        ax1.scatter(data_velocityradius2[:,0],data_velocityradius2[:,1],color="Red",s=2,marker="x",alpha=0.5,label="PrE")
-        x = data_velocityradius2[:,0]
-        ax1.plot(x, m*x+b,'g-',lw=5)
-        plt.savefig(os.path.join(inputfolder_randomised,"sorting_velocityradius.pdf"))
-"""
