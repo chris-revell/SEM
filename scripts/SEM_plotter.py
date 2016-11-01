@@ -170,9 +170,11 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_type_radius1.tx
         plt.tight_layout()
         plt.savefig(os.path.join(inputfolder_sorting,"sorting_type_radius.pdf"))
 
+        figure(5)
+
 if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_surface.txt")):
     data_surface = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_surface.txt"))
-    plt.figure(7)
+    plt.figure(6)
     ax1=plt.subplot(111)
     ax1.set_title("Proportion of system's external surface\noccupied by each cell type")
     ax1.set_xlabel("Time /s")
@@ -190,7 +192,7 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_displacement
     if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_displacement2.txt")):
         data_displacement1 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_displacement1.txt"))
         data_displacement2 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_displacement2.txt"))
-        plt.figure(1)
+        plt.figure(7)
         ax1 = plt.subplot(211)
         ax1.set_title("Distance from original position against time\n for all cells in system")
         ax1.set_xlabel("Time /s")
@@ -217,7 +219,7 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_displacement
 
 if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_neighbours.txt")):
     data_neighbours = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_neighbours.txt"))
-    plt.figure(2)
+    plt.figure(8)
     ax1 = plt.subplot(111)
     ax1.set_title("Number of cell neighbour pairs against time")
     ax1.set_xlabel("Time /s")
@@ -238,7 +240,7 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_neighbours.t
 
 if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_radius.txt")):
     data_radius = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_radius.txt"))
-    plt.figure(3)
+    plt.figure(9)
     ax1 = plt.subplot(111)
     ax1.set_title("Normalised radius of epiblast cells from system \n centre of mass against time")
     ax1.set_xlabel("Time /s")
@@ -256,7 +258,7 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius1
     if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius2.txt")):
         data_type_radius1 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_type_radius1.txt"))
         data_type_radius2 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_type_radius2.txt"))
-        plt.figure(4)
+        plt.figure(10)
         ax1 = plt.subplot(111)
         ax1.set_title("Distance of cells of each type from the centre \nof mass of that type against time")
         ax1.set_xlabel("Time /s")
@@ -275,7 +277,7 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius1
 
 if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_surface.txt")):
     data_surface = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_surface.txt"))
-    plt.figure(7)
+    plt.figure(11)
     ax1=plt.subplot(111)
     ax1.set_title("Proportion of system's external surface\noccupied by each cell type")
     ax1.set_xlabel("Time /s")
