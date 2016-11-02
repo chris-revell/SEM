@@ -17,8 +17,8 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_displacement1.t
         data_displacement2 = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_displacement2.txt"))
         plt.figure(1)
         ax1 = plt.subplot(211)
-        ax1.set_title("Distance from original position against time\n for all cells in system")
-        ax1.set_xlabel("Time /s")
+        ax1.set_title("Distance from original position against cell age\n for all cells in system")
+        ax1.set_xlabel("Cell age /s")
         ax1.set_ylabel("Distance /??")
         xmax1 = np.amax(data_displacement1[:,0])
         xmax2 = np.amax(data_displacement2[:,0])
@@ -30,15 +30,17 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_displacement1.t
         ax1.scatter(data_displacement2[:,0],data_displacement2[:,1],color="Red",label="PrE",s=2)
         ax1.legend(loc='best', shadow=True)
         ax2 = plt.subplot(212)
-        ax2.set_xlabel("Time /s")
+        ax2.set_xlabel("log(Cell age)")
         ax2.set_ylabel("log(Distance)")
         ax2.scatter(data_displacement1[:,0],data_displacement1[:,1],color="Green",label="Epiblast",s=2)
         ax2.scatter(data_displacement2[:,0],data_displacement2[:,1],color="Red",label="PrE",s=2)
-        ax2.set_yscale("log", nonposy="clip")
-        ax2.set_xscale("log", nonposx="clip")
-        ax2.set_xlim([1,max(xmax1,xmax2)])
+        ax2.set_yscale("log")
+        ax2.set_xscale("log")
+        ax2.set_xlim([0.1,max(xmax1,xmax2)])
+        ax2.set_ylim([0.1,max(ymax1,ymax2)])
         ax2.set_aspect("equal")
         ax2.legend(loc='best', shadow=True)
+        ax2.set_title("log(Distance from original position) against log(age) for all cells in the system")
         plt.tight_layout()
         plt.savefig(os.path.join(inputfolder_sorting,"sorting_displacement.pdf"))
 
@@ -124,49 +126,14 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_type_radius1.tx
         ax1.legend(loc='best', shadow=True)
 
         ax2 = plt.subplot(212)
-        averaged_datax = []
-        averaged_datay = []
-        count = 0
-        for i in range (0, np.shape(data_type_radius1)[0]):
-        	if data_type_radius1[i,0] in averaged_datax:
-        		pass
-        	else:
-        		meansum = 0
-        		count2 = 0
-        		for j in range (0, np.shape(data_type_radius1)[0]):
-        			if data_type_radius1[j,0] == data_type_radius1[i,0]:
-        				meansum = meansum + data_type_radius1[j,1]
-        				count2 = count2 + 1
-        			else:
-        				pass
-        		averaged_datax.append(data_type_radius1[i,0])
-        		averaged_datay.append(meansum/count2)
-        	count = count + 1
-        ax2.scatter(averaged_datax,averaged_datay,color="Green")
-
-        averaged_datax = []
-        averaged_datay = []
-        count = 0
-        for i in range (0, np.shape(data_type_radius2)[0]):
-        	if data_type_radius2[i,0] in averaged_datax:
-        		pass
-        	else:
-        		meansum = 0
-        		count2 = 0
-        		for j in range (0, np.shape(data_type_radius2)[0]):
-        			if data_type_radius2[j,0] == data_type_radius2[i,0]:
-        				meansum = meansum + data_type_radius2[j,1]
-        				count2 = count2 + 1
-        			else:
-        				pass
-        		averaged_datax.append(data_type_radius2[i,0])
-        		averaged_datay.append(meansum/count2)
-        	count = count + 1
-        ax2.scatter(averaged_datax,averaged_datay,color="Red")
+        statistic,bin_edges,binnumber = binned_statistic(data_type_radius1[:,0],data_type_radius1[:,1],bins=200)
+        ax2.plot((bin_edges[0:200]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Green",linewidth=3,label="Epiblast")
+        statistic,bin_edges,binnumber = binned_statistic(data_type_radius2[:,0],data_type_radius2[:,1],bins=200)
+        ax2.plot((bin_edges[0:200]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Red",linewidth=3,label="PrE")
         ax2.set_xlabel("Time /s")
         ax2.set_ylabel("Distance /??")
         ax2.set_title("Mean distance of each cell type from the centre \nof mass of that type against time")
-        ax2.set_xlim([0,max(averaged_datax)])
+        ax2.legend(loc='best', shadow=True)
 
         plt.tight_layout()
         plt.savefig(os.path.join(inputfolder_sorting,"sorting_type_radius.pdf"))
@@ -180,9 +147,7 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_type_radius1.tx
         ax1.set_title("Mean distance of cells of each type from centre \nof mass of that type against age of cell")
         ax1.set_xlabel("Age of cell /s")
         ax1.set_ylabel("Mean distance from centre of mass")
-        plt.savefig(os.path.join(inputfolder_sorting,"sorting_data_type_radius_against_age.pdf"))
-
-
+        plt.savefig(os.path.join(inputfolder_sorting,"sorting_type_radius_against_age.pdf"))
 
 if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_surface.txt")):
     data_surface = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_surface.txt"))
@@ -226,6 +191,7 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_displacement
         ax2.set_xscale("log", nonposx="clip")
         ax2.set_xlim(xmin=1)
         ax2.set_aspect("equal")
+        ax2.set_title("Log(Distance from original position) agaisnt\nlog(time) for all cells in system")
         plt.tight_layout()
         plt.savefig(os.path.join(inputfolder_randomised,"sorting_displacement.pdf"))
 
@@ -270,7 +236,7 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius1
     if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius2.txt")):
         data_type_radius1 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_type_radius1.txt"))
         data_type_radius2 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_type_radius2.txt"))
-        plt.figure(4)
+        plt.figure(10)
         ax1 = plt.subplot(211)
         ax1.set_title("Distance of cells of each type from the centre \nof mass of that type against time")
         ax1.set_xlabel("Time /s")
@@ -287,54 +253,19 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius1
         ax1.legend(loc='best', shadow=True)
 
         ax2 = plt.subplot(212)
-        averaged_datax = []
-        averaged_datay = []
-        count = 0
-        for i in range (0, np.shape(data_type_radius1)[0]):
-        	if data_type_radius1[i,0] in averaged_datax:
-        		pass
-        	else:
-        		meansum = 0
-        		count2 = 0
-        		for j in range (0, np.shape(data_type_radius1)[0]):
-        			if data_type_radius1[j,0] == data_type_radius1[i,0]:
-        				meansum = meansum + data_type_radius1[j,1]
-        				count2 = count2 + 1
-        			else:
-        				pass
-        		averaged_datax.append(data_type_radius1[i,0])
-        		averaged_datay.append(meansum/count2)
-        	count = count + 1
-        ax2.scatter(averaged_datax,averaged_datay,color="Green")
-
-        averaged_datax = []
-        averaged_datay = []
-        count = 0
-        for i in range (0, np.shape(data_type_radius2)[0]):
-        	if data_type_radius2[i,0] in averaged_datax:
-        		pass
-        	else:
-        		meansum = 0
-        		count2 = 0
-        		for j in range (0, np.shape(data_type_radius2)[0]):
-        			if data_type_radius2[j,0] == data_type_radius2[i,0]:
-        				meansum = meansum + data_type_radius2[j,1]
-        				count2 = count2 + 1
-        			else:
-        				pass
-        		averaged_datax.append(data_type_radius2[i,0])
-        		averaged_datay.append(meansum/count2)
-        	count = count + 1
-        ax2.scatter(averaged_datax,averaged_datay,color="Red")
+        statistic,bin_edges,binnumber = binned_statistic(data_type_radius1[:,0],data_type_radius1[:,1],bins=200)
+        ax2.plot((bin_edges[0:200]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Green",linewidth=3,label="Epiblast")
+        statistic,bin_edges,binnumber = binned_statistic(data_type_radius2[:,0],data_type_radius2[:,1],bins=200)
+        ax2.plot((bin_edges[0:200]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Red",linewidth=3,label="PrE")
         ax2.set_xlabel("Time /s")
         ax2.set_ylabel("Distance /??")
         ax2.set_title("Mean distance of each cell type from the centre \nof mass of that type against time")
-        ax2.set_xlim([0,max(averaged_datax)])
+        ax2.legend(loc='best', shadow=True)
 
         plt.tight_layout()
         plt.savefig(os.path.join(inputfolder_randomised,"sorting_type_radius.pdf"))
 
-        plt.figure(5)
+        plt.figure(11)
         ax1 = plt.subplot(111)
         statistic,bin_edges,binnumber = binned_statistic(data_type_radius1[:,2],data_type_radius1[:,1],bins=100)
         ax1.plot((bin_edges[0:100]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Green",linewidth=5)
@@ -343,11 +274,11 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius1
         ax1.set_title("Mean distance of cells of each type from centre \nof mass of that type against age of cell")
         ax1.set_xlabel("Age of cell /s")
         ax1.set_ylabel("Mean distance from centre of mass")
-        plt.savefig(os.path.join(inputfolder_randomised,"sorting_data_type_radius_against_age.pdf"))
+        plt.savefig(os.path.join(inputfolder_randomised,"sorting_type_radius_against_age.pdf"))
 
 if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_surface.txt")):
     data_surface_randomised = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_surface.txt"))
-    plt.figure(11)
+    plt.figure(12)
     ax1=plt.subplot(211)
     ax1.set_title("Proportion of system's external surface\noccupied by each cell type")
     ax1.set_xlabel("Time /s")
@@ -367,7 +298,9 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_surface.txt"
     statistic,bin_edges,binnumber = binned_statistic(data_surface_randomised[:,0],data_surface_randomised[:,1],bins=100)
     ax2.plot((bin_edges[0:100]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Green",linewidth=5,linestyle="--",label="Randomised Epi")
     statistic,bin_edges,binnumber = binned_statistic(data_surface_randomised[:,0],data_surface_randomised[:,2],bins=100)
-    ax2.plot((bin_edges[0:100]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Red",linewidth=5,linestyle="--",label="Randomised PrE")
+    ax2.plot((bin_edges[0:100]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Red",linewidth=3,label="Randomised PrE")
     ax2.scatter(data_surface[:,0],data_surface[:,1],color="Green",label="Epiblast")
     ax2.scatter(data_surface[:,0],data_surface[:,2],color="Red",label="PrE")
+    ax2.legend(loc='best', shadow=True)
+    plt.tight_layout()
     plt.savefig(os.path.join(inputfolder_randomised,"sorting_surface.pdf"))

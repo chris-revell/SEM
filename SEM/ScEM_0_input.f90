@@ -103,38 +103,38 @@ module scem_0_input
       flag_measure_displacement=1    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
-      flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comprison
+      flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comprison
 
       !Simulation control parameters
       stiffness_factor  = 0.2
-      cell_cycle_time   = 4*4320 ! --> cell cycle time in seconds 4320
+      cell_cycle_time   = 4*4320! Cell cycle time in seconds
       n_cellcycles      = 1.0
-      epi_adhesion      = 3.0
-      hypo_adhesion     = 1.0
-      epi_hypo_adhesion = 1.0
-      cortex_constant1  = 0.1
-      cortex_constant2  = 0.1
-      DIT_response(1,0) = 1.0 !Epiblast external system surface DIT response factor
-      DIT_response(1,1) = 0.2 !Epiblast homotypic interface DIT response factor
-      DIT_response(1,2) = 1.0 !Epiblast heterotypic interface DIT response factor
-      DIT_response(2,0) = 0.2 !Primitive endoderm external system surface DIT response factor
-      DIT_response(2,1) = 1.0 !Primitive endoderm homotypic interface DIT response factor
-      DIT_response(2,2) = 1.0 !Primitive endoderm heterotypic interface DIT response factor
+      epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
+      hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
+      epi_hypo_adhesion = 1.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
+      cortex_constant1  = 0.1   ! Magnitude of baseline cortical tension in epiblasts
+      cortex_constant2  = 0.1   ! Magnitude of baseline cortical tension in primitive endoderm
+      DIT_response(1,0) = 1.0   ! Epiblast external system surface DIT response factor
+      DIT_response(1,1) = 0.2   ! Epiblast homotypic interface DIT response factor
+      DIT_response(1,2) = 1.0   ! Epiblast heterotypic interface DIT response factor
+      DIT_response(2,0) = 0.2   ! Primitive endoderm external system surface DIT response factor
+      DIT_response(2,1) = 1.0   ! Primitive endoderm homotypic interface DIT response factor
+      DIT_response(2,2) = 1.0   ! Primitive endoderm heterotypic interface DIT response factor
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
 
       !To use processor determined random number seed and print that seed
-      !call RANDOM_SEED
-      !call RANDOM_SEED(size=seedarraylength)
-      !allocate(seed_array(seedarraylength))
-      !call RANDOM_SEED(get=seed_array)
-      !print*, "seed_array", seed_array
+        call RANDOM_SEED
+        call RANDOM_SEED(size=seedarraylength)
+        allocate(seed_array(seedarraylength))
+        call RANDOM_SEED(get=seed_array)
+        print*, "seed_array", seed_array
 
       !To use user-defined random number seed:
-        allocate(seed_array(2))
-        seed_array(1) = 1591826533
-        seed_array(2) = 497
-        call RANDOM_SEED(PUT=seed_array)
+        !allocate(seed_array(2))
+        !seed_array(1) = 1591826533
+        !seed_array(2) = 497
+        1call RANDOM_SEED(PUT=seed_array)
 
       !Take time when run is initiated
       call SYSTEM_CLOCK(start_time, count_rate)
