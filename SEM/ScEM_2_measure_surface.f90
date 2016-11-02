@@ -13,10 +13,15 @@ contains
 
   subroutine scem_measure_surface
 
-    integer :: epi_count
-    integer :: pre_count
-    real*8  :: epi_out
-    real*8  :: pre_out
+    integer :: factor1,factor2,factor3
+    real*8 :: epi_area
+    real*8 :: pre_area
+    real*8 :: epi_out
+    real*8 :: pre_out
+    real*8 :: area
+    real*8, dimension(3) :: a
+    real*8, dimension(3) :: b
+    real*8, dimension(3) :: c
 
     if (randomising) then
       open(unit=43,file=output_folder//"/randomised_data/sorting_data_surface.txt",status="unknown",position="append")
@@ -24,43 +29,50 @@ contains
       open(unit=43,file=output_folder//"/sorting_data/sorting_data_surface.txt",status="unknown",position="append")
     endif
 
-    epi_count = 0
-    pre_count = 0
+    epi_area = 0
+    pre_area = 0
 
-    !Much of the following code mirrors a similar block in scem_dit
-    do j=1, np_cortex
-      if (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.elements(pairs_cortex(j)%label2)%DIT_factor) then
-        !Interface defined where both elements have the same DIT_factor value
-        if (cells(elements(pairs_cortex(j)%label1)%parent)%fate.EQ.1) then
-        !Surface of an epiblast cell
-          if (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.0) then
-            !External surface of the system
-            epi_count = epi_count + 1
+    do i=1, nc
+      do j=1, cells(i)%triplet_count
+        factor1 = elements(cells(i)%triplets(1,j))%DIT_factor
+        factor2 = elements(cells(i)%triplets(2,j))%DIT_factor
+        factor3 = elements(cells(i)%triplets(3,j))%DIT_factor
+
+        if ((factor1.EQ.0).AND.(factor2.EQ.0).AND.(factor3.EQ.0)) then
+          !If all 3 elements in a triplet have DIT_factor.EQ.0, then this triplet is on the external system surface
+          a = elements(cells(i)%triplets(1,j))%position - elements(cells(i)%triplets(2,j))%position
+          b = elements(cells(i)%triplets(1,j))%position - elements(cells(i)%triplets(3,j))%position
+          c = cross_product(a,b)
+          area = 0.5*DOT_PRODUCT(c,c)
+          if (cells(i)%fate.EQ.1) then
+            epi_area = epi_area + area
           else
-            CYCLE
+            pre_area = pre_area + 0.5*DOT_PRODUCT(c,c)
           endif
         else
-        !Surface of a PrE cell
-          if (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.0) then
-            !External surface of the system
-            pre_count = pre_count + 1
-          else
-            CYCLE
-          endif
+          CYCLE
         endif
-      else
-        !Not at interface
-        CYCLE
-      endif
+      enddo
     enddo
 
-    if (epi_count.GT.0.AND.pre_count.GT.0) then
-      epi_out = real(epi_count)/real(epi_count+pre_count)
-      pre_out = real(pre_count)/real(epi_count+pre_count)
+    if (epi_area.GT.0.AND.pre_area.GT.0) then
+      epi_out = real(epi_area)/real(epi_area+pre_area)
+      pre_out = real(pre_area)/real(epi_area+pre_area)
       write(43,*) time, epi_out, pre_out
     endif
 
     close(43)
 
   end subroutine scem_measure_surface
+
+  function cross_product(vector1,vector2)
+    real*8, dimension(3), intent(in) :: vector1
+    real*8, dimension(3), intent(in) :: vector2
+    real*8, dimension(3) :: cross_product
+
+    cross_product(1) = vector1(2)*vector2(3)-vector1(3)*vector2(2)
+    cross_product(2) = vector1(3)*vector2(1)-vector1(1)*vector2(3)
+    cross_product(3) = vector1(1)*vector2(2)-vector1(2)*vector2(1)
+  end function cross_product
+
 end module ScEM_2_measure_surface
