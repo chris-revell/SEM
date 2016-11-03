@@ -15,7 +15,7 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_displacement1.t
     if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_displacement2.txt")):
         data_displacement1 = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_displacement1.txt"))
         data_displacement2 = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_displacement2.txt"))
-        plt.figure(1)
+        fig1 = plt.figure()
         ax1 = plt.subplot(211)
         ax1.set_title("Distance from original position against cell age\n for all cells in system")
         ax1.set_xlabel("Cell age /s")
@@ -32,21 +32,23 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_displacement1.t
         ax2 = plt.subplot(212)
         ax2.set_xlabel("log(Cell age)")
         ax2.set_ylabel("log(Distance)")
-        ax2.scatter(data_displacement1[:,0],data_displacement1[:,1],color="Green",label="Epiblast",s=2)
-        ax2.scatter(data_displacement2[:,0],data_displacement2[:,1],color="Red",label="PrE",s=2)
+        ax2.set_title("log(Distance from original position) against \nlog(age) for all cells in the system")
+        statistic,bin_edges,binnumber = binned_statistic(data_displacement1[:,0],data_displacement1[:,1],bins=200)
+        ax2.plot((bin_edges[0:200]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Green",linewidth=3,label="Epiblast")
+        statistic,bin_edges,binnumber = binned_statistic(data_displacement2[:,0],data_displacement2[:,1],bins=200)
+        ax2.plot((bin_edges[0:200]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Red",linewidth=3,label="Primitive Endoderm")
         ax2.set_yscale("log")
         ax2.set_xscale("log")
         ax2.set_xlim([0.1,max(xmax1,xmax2)])
         ax2.set_ylim([0.1,max(ymax1,ymax2)])
         ax2.set_aspect("equal")
         ax2.legend(loc='best', shadow=True)
-        ax2.set_title("log(Distance from original position) against log(age) for all cells in the system")
-        plt.tight_layout()
-        plt.savefig(os.path.join(inputfolder_sorting,"sorting_displacement.pdf"))
+        fig1.set_tight_layout(True)
+        fig1.savefig(os.path.join(inputfolder_sorting,"sorting_displacement.pdf"))
 
 if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_neighbours.txt")):
     data_neighbours = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_neighbours.txt"))
-    plt.figure(2)
+    fig2 = plt.figure()
     ax1 = plt.subplot(111)
     ax1.set_title("Number of cell neighbour pairs against time")
     ax1.set_xlabel("Time /s")
@@ -78,11 +80,11 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_neighbours.txt"
         ax1.scatter(data_neighbours_randomised[:,0],data_neighbours_randomised[:,3],color="Blue",label="Randomised Epi-PrE",marker="x")
 
     ax1.legend(loc='best', shadow=True)
-    plt.savefig(os.path.join(inputfolder_sorting,"sorting_neighbours.pdf"))
+    fig2.savefig(os.path.join(inputfolder_sorting,"sorting_neighbours.pdf"))
 
 if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_radius.txt")):
     data_radius = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_radius.txt"))
-    plt.figure(3)
+    fig3 = plt.figure()
     ax1 = plt.subplot(111)
     ax1.set_title("Average normalised radius of epiblast cells against time")
     ax1.set_xlabel("Time /s")
@@ -103,13 +105,13 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_radius.txt")):
         ax1.scatter(data_radius_randomised[:,0],data_radius_randomised[:,1],color="Red",label="Randomised",marker="x",alpha=0.5)
 
     ax1.legend(loc='best', shadow=True)
-    plt.savefig(os.path.join(inputfolder_sorting,"sorting_radius.pdf"))
+    fig3.savefig(os.path.join(inputfolder_sorting,"sorting_radius.pdf"))
 
 if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_type_radius1.txt")):
     if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_type_radius2.txt")):
         data_type_radius1 = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_type_radius1.txt"))
         data_type_radius2 = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_type_radius2.txt"))
-        plt.figure(4)
+        fig4 = plt.figure()
         ax1 = plt.subplot(211)
         ax1.set_title("Distance of cells of each type from the centre \nof mass of that type against time")
         ax1.set_xlabel("Time /s")
@@ -135,10 +137,10 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_type_radius1.tx
         ax2.set_title("Mean distance of each cell type from the centre \nof mass of that type against time")
         ax2.legend(loc='best', shadow=True)
 
-        plt.tight_layout()
-        plt.savefig(os.path.join(inputfolder_sorting,"sorting_type_radius.pdf"))
+        fig4.set_tight_layout(True)
+        fig4.savefig(os.path.join(inputfolder_sorting,"sorting_type_radius.pdf"))
 
-        plt.figure(5)
+        fig5 = plt.figure()
         ax1 = plt.subplot(111)
         statistic,bin_edges,binnumber = binned_statistic(data_type_radius1[:,2],data_type_radius1[:,1],bins=100)
         ax1.plot((bin_edges[0:100]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Green",linewidth=5)
@@ -147,11 +149,11 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_type_radius1.tx
         ax1.set_title("Mean distance of cells of each type from centre \nof mass of that type against age of cell")
         ax1.set_xlabel("Age of cell /s")
         ax1.set_ylabel("Mean distance from centre of mass")
-        plt.savefig(os.path.join(inputfolder_sorting,"sorting_type_radius_against_age.pdf"))
+        fig5.savefig(os.path.join(inputfolder_sorting,"sorting_type_radius_against_age.pdf"))
 
 if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_surface.txt")):
     data_surface = np.genfromtxt(os.path.join(inputfolder_sorting,"sorting_data_surface.txt"))
-    plt.figure(6)
+    fig6 = plt.figure()
     ax1=plt.subplot(111)
     ax1.set_title("Proportion of system's external surface\noccupied by each cell type")
     ax1.set_xlabel("Time /s")
@@ -161,7 +163,7 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_surface.txt")):
     ax1.scatter(data_surface[:,0],data_surface[:,1],color="Green",label="Epiblast")
     ax1.scatter(data_surface[:,0],data_surface[:,2],color="Red",label="PrE")
     ax1.legend(loc='best', shadow=True)
-    plt.savefig(os.path.join(inputfolder_sorting,"sorting_surface.pdf"))
+    fig6.savefig(os.path.join(inputfolder_sorting,"sorting_surface.pdf"))
 
 
 #Everything below plots the randomised data
@@ -169,7 +171,7 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_displacement
     if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_displacement2.txt")):
         data_displacement1 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_displacement1.txt"))
         data_displacement2 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_displacement2.txt"))
-        plt.figure(7)
+        fig7 = plt.figure()
         ax1 = plt.subplot(211)
         ax1.set_title("Distance from original position against time\n for all cells in system")
         ax1.set_xlabel("Time /s")
@@ -192,12 +194,12 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_displacement
         ax2.set_xlim(xmin=1)
         ax2.set_aspect("equal")
         ax2.set_title("Log(Distance from original position) agaisnt\nlog(time) for all cells in system")
-        plt.tight_layout()
-        plt.savefig(os.path.join(inputfolder_randomised,"sorting_displacement.pdf"))
+        fig7.set_tight_layout(True)
+        fig7.savefig(os.path.join(inputfolder_randomised,"sorting_displacement.pdf"))
 
 if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_neighbours.txt")):
     data_neighbours = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_neighbours.txt"))
-    plt.figure(8)
+    fig8 = plt.figure()
     ax1 = plt.subplot(111)
     ax1.set_title("Number of cell neighbour pairs against time")
     ax1.set_xlabel("Time /s")
@@ -214,11 +216,11 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_neighbours.t
     m,b = np.polyfit(data_neighbours[:,0], data_neighbours[:,1], 1)
     ax1.scatter(data_neighbours[:,0],data_neighbours[:,3],color="Blue",label="Epi-PrE")
     ax1.plot(x, m*x+b,'-',lw=5,color="Blue")
-    plt.savefig(os.path.join(inputfolder_randomised,"sorting_neighbours.pdf"))
+    fig8.savefig(os.path.join(inputfolder_randomised,"sorting_neighbours.pdf"))
 
 if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_radius.txt")):
     data_radius = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_radius.txt"))
-    plt.figure(9)
+    fig9 = plt.figure()
     ax1 = plt.subplot(111)
     ax1.set_title("Normalised radius of epiblast cells from system \n centre of mass against time")
     ax1.set_xlabel("Time /s")
@@ -230,13 +232,13 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_radius.txt")
     ax1.scatter(data_radius[:,0],data_radius[:,1],color="Blue")
     x = data_radius[:,0]
     ax1.plot(x, m*x+b,'g-',lw=5,color="Blue")
-    plt.savefig(os.path.join(inputfolder_randomised,"sorting_radius.pdf"))
+    fig9.savefig(os.path.join(inputfolder_randomised,"sorting_radius.pdf"))
 
 if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius1.txt")):
     if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius2.txt")):
         data_type_radius1 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_type_radius1.txt"))
         data_type_radius2 = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_type_radius2.txt"))
-        plt.figure(10)
+        fig10 = plt.figure()
         ax1 = plt.subplot(211)
         ax1.set_title("Distance of cells of each type from the centre \nof mass of that type against time")
         ax1.set_xlabel("Time /s")
@@ -262,10 +264,10 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius1
         ax2.set_title("Mean distance of each cell type from the centre \nof mass of that type against time")
         ax2.legend(loc='best', shadow=True)
 
-        plt.tight_layout()
-        plt.savefig(os.path.join(inputfolder_randomised,"sorting_type_radius.pdf"))
+        fig10.set_tight_layout(True)
+        fig10.savefig(os.path.join(inputfolder_randomised,"sorting_type_radius.pdf"))
 
-        plt.figure(11)
+        fig11 = plt.figure()
         ax1 = plt.subplot(111)
         statistic,bin_edges,binnumber = binned_statistic(data_type_radius1[:,2],data_type_radius1[:,1],bins=100)
         ax1.plot((bin_edges[0:100]+(bin_edges[1]-bin_edges[0])/2.0),statistic,color="Green",linewidth=5)
@@ -274,11 +276,11 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_type_radius1
         ax1.set_title("Mean distance of cells of each type from centre \nof mass of that type against age of cell")
         ax1.set_xlabel("Age of cell /s")
         ax1.set_ylabel("Mean distance from centre of mass")
-        plt.savefig(os.path.join(inputfolder_randomised,"sorting_type_radius_against_age.pdf"))
+        fig11.savefig(os.path.join(inputfolder_randomised,"sorting_type_radius_against_age.pdf"))
 
 if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_surface.txt")):
     data_surface_randomised = np.genfromtxt(os.path.join(inputfolder_randomised,"sorting_data_surface.txt"))
-    plt.figure(12)
+    fig12 = plt.figure()
     ax1=plt.subplot(211)
     ax1.set_title("Proportion of system's external surface\noccupied by each cell type")
     ax1.set_xlabel("Time /s")
@@ -302,5 +304,5 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_surface.txt"
     ax2.scatter(data_surface[:,0],data_surface[:,1],color="Green",label="Epiblast")
     ax2.scatter(data_surface[:,0],data_surface[:,2],color="Red",label="PrE")
     ax2.legend(loc='best', shadow=True)
-    plt.tight_layout()
-    plt.savefig(os.path.join(inputfolder_randomised,"sorting_surface.pdf"))
+    fig12.set_tight_layout(True)
+    fig12.savefig(os.path.join(inputfolder_randomised,"sorting_surface.pdf"))
