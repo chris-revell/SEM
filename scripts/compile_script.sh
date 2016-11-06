@@ -18,7 +18,6 @@ ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/a
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/left_module.f90
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/trmesh_module.f90
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/trlist2_module.f90
-ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/volume_calculate_module.f90
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/volume_conserve_module.f90
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/ScEM_3*.f90
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/ScEM_4*.f90

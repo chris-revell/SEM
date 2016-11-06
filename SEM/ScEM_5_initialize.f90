@@ -16,7 +16,7 @@ module scem_5_initialize
   use scem_2_pairs
   use scem_2_relist
   use scem_4_cortex
-  use volume_calculate_module
+  use scem_volume_calculate
 
   implicit none
 
@@ -42,7 +42,7 @@ module scem_5_initialize
       allocate(head(nx,ny,nz))
       allocate(list(ne_size))
       allocate(pairs(np_size,2))
-      !pairs_cortex can only be allocated after volume_calculate has been called because it relies on the Delaunay triangulation.
+      !pairs_cortex can only be allocated after scem_volume_calculate has been called because it relies on the Delaunay triangulation.
 
       ! initialize position vector for center of sector grid
       x_cen(1)=sector_size*int(nx/2)
@@ -64,7 +64,9 @@ module scem_5_initialize
       call scem_cortex
 
 	    ! Calculate initial cell volumes
-      call volume_calculate
+      if (flag_conserve.EQ.1.OR.flag_volume_output.EQ.1) then
+        call scem_volume_calculate
+      endif
 
       ! write initial system data to file
       call scem_output_system

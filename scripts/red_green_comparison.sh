@@ -1,3 +1,4 @@
+#!/bin/bash
 #Script that takes a data folder as a command line argument and creates the comparison gif for that folder
 
 perl scripts/extractor.pl $1 Green triangle

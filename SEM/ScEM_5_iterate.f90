@@ -19,7 +19,7 @@ module scem_5_iterate
   use scem_2_relist
   use scem_2_resize
   use scem_4_cortex
-  use volume_calculate_module
+  use scem_volume_calculate
   use volume_conserve_module
 
   implicit none
@@ -48,12 +48,9 @@ module scem_5_iterate
         end if
 
         !Conserve cell volumes
-        do n=1, nc
-          if (flag_conserve.eq.1) then
-            call volume_conserve(n)
-          endif
-          deallocate(cells(n)%triplets)
-        end do
+        if (flag_conserve.eq.1) then
+          call volume_conserve
+        endif
 
         ! determine sector relist flag
         call scem_flag_relist
@@ -90,7 +87,7 @@ module scem_5_iterate
         call scem_cortex
 
         !Calculate cell volumes
-        call volume_calculate
+        call scem_volume_calculate
 
         !Outputting data to file
         !Only output measurement data at intervals of time_out_2

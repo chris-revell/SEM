@@ -8,6 +8,7 @@ module scem_4_cortex
 	use scem_0_useful
 	use scem_1_types
 	use scem_2_polar
+	use scem_3_delaunay
 
 	implicit none
 
@@ -135,6 +136,9 @@ module scem_4_cortex
 		!Should now have specified the type of all elements in all cells
 		!Elements set to be of cortex type if their radius exceeds 80% of the max radius in that bin
 		!and the max radius of that bin exceeds 50% of the max radius for the whole cell
+
+		!Perform delaunay triangulation over the newly allocated set of cortex elements. 
+		call scem_delaunay
 
 		end subroutine scem_cortex
 
