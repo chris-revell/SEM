@@ -53,11 +53,7 @@ contains
 
     !Now that cortex network has been established in pairs_cortex(i,1)
     !and pairs_cortex(i,2), calculate pairs_cortex(i,3) values
-    if (flag_DIT.EQ.1) then
-      call scem_dit
-    else
-      pairs_cortex(:)%cortex_factor=1.0      !Default setting for the 3rd column of the 2nd dimension of pairs_cortex, if not set in scem_DIT
-    endif
+    call scem_dit
 
     !Now update velocities for all pairs in this network.
     do m=1,pair_counter

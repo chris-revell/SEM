@@ -69,7 +69,6 @@ contains
 		!Write measurements to file sorting_data_neighbours
 		write(36,*) time, neighbour_counts(1,1), neighbour_counts(2,2), (neighbour_counts(1,2)+neighbour_counts(2,1))
 
-		deallocate(neighbours)
 		close(36)
 
 	end subroutine scem_measure_neighbours

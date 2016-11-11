@@ -11,8 +11,7 @@ module scem_4_volume_conserve
 
 	contains
 
-		subroutine volume_conserve(c)
-
+		subroutine scem_volume_conserve
 			integer															::	c
 			real*8, allocatable, dimension(:)		::	P_1				!Array of all dimensions of positions of all elements in cell after displacement by external forces, given in format (x1,y1,z1,x2,y2,z2...). Allocated with dimension 3n where n is the number of elements in the cell.
 			real*8, allocatable, dimension(:)		::	P_2				!Array of all dimensions of positions of all elements in cell after volume conservation
@@ -152,5 +151,5 @@ module scem_4_volume_conserve
 
 			enddo
 
-		end subroutine volume_conserve
+		end subroutine scem_volume_conserve
 end module scem_4_volume_conserve

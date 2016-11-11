@@ -9,7 +9,7 @@ module scem_2_background
 
   implicit none
 
-  contains
+contains
 
   subroutine scem_background(n)
     integer:: n

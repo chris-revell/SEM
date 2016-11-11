@@ -165,7 +165,6 @@ if os.path.exists(os.path.join(inputfolder_sorting,"sorting_data_surface.txt")):
     ax1.legend(loc='best', shadow=True)
     fig6.savefig(os.path.join(inputfolder_sorting,"sorting_surface.pdf"))
 
-
 #Everything below plots the randomised data
 if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_displacement1.txt")):
     if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_displacement2.txt")):
@@ -311,3 +310,18 @@ if os.path.exists(os.path.join(inputfolder_randomised,"sorting_data_surface.txt"
     ax2.legend(loc='best', shadow=True)
     fig12.set_tight_layout(True)
     fig12.savefig(os.path.join(inputfolder_randomised,"sorting_surface.pdf"))
+
+"""
+#Finally, plot cell volumes
+if os.path.exists(os.path.join(argv[1],"system_data/cell_volumes.txt")):
+    volume_data = np.genfromtxt(os.path.join(argv[1],"system_data/cell_volumes.txt"))
+    fig13 = plt.figure()
+    ax1=plt.subplot(111)
+    ax1.set_title("Cell volumes against time")
+    ax1.set_xlabel("Time /s")
+    ax1.set_ylabel("Cell volume")
+    for i in range(1,np.shape(volume_data)[1]):
+        ax1.plot(volune_data[:,0],volume_data[:,i],label="Cell "+str(i))
+    ax1.legend(loc='best', shadow=True)
+    fig13.savefig(os.path.join(argv[1],"system_data/cell_volumes.pdf"))
+"""

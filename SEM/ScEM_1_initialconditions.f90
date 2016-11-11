@@ -32,7 +32,6 @@ contains
     write(22,"(*(G0,:,1X))") "flag_background = ",flag_background
     write(22,"(*(G0,:,1X))") "flag_growth     = ",flag_growth
     write(22,"(*(G0,:,1X))") "flag_division   = ",flag_division
-    write(22,"(*(G0,:,1X))") "flag_DIT        = ",flag_DIT
     write(22,"(*(G0,:,1X))") ""
     write(22,"(*(G0,:,1X))") "flag_povray     = ",flag_povray
     write(22,"(*(G0,:,1X))") "  flag_povray_volumes      = ",flag_povray_volumes

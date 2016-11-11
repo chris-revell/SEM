@@ -20,7 +20,7 @@ module scem_0_input
   integer :: iloop1,iloop2,iloop3,iloop4,iloop5
   !System switches
   integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve
-  integer :: flag_background,flag_DIT,flag_povray_elements, flag_randomise
+  integer :: flag_background,flag_povray_elements, flag_randomise
   integer :: flag_povray_pairs,flag_povray_volumes,flag_povray,flag_povray_triangles,flag_povray_cortex_pairs
   integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_radius,flag_measure_type_radius
   integer :: flag_measure_neighbours,flag_measure_displacement,flag_measure_surface,flag_elements_final
@@ -64,13 +64,12 @@ module scem_0_input
   character(len=21):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
   character(len=3) :: arg1!,arg4
+  logical :: randomising
 
 !**********
   real*8 :: h !Height of spherical cap boundary.
   real*8 :: cap_radius
   real*8 :: spherical_boundary_radius
-
-  logical :: randomising
 !**********
 
   contains
@@ -84,13 +83,12 @@ module scem_0_input
       flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
       flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
-      flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
       flag_randomise  = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
 
       !Output control switches
       flag_povray = 1                !switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
-        flag_povray_elements     = 1 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
+        flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
         flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
@@ -100,26 +98,26 @@ module scem_0_input
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
       flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
       flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
-      flag_measure_displacement=1    ! Switch to turn off displacement sorting measurement
+      flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
-      flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comprison
+      flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comprison
 
       !Simulation control parameters
-      stiffness_factor  = 0.2
+      stiffness_factor  = 1.0
       cell_cycle_time   = 4*4320! Cell cycle time in seconds
       n_cellcycles      = 1.0
-      epi_adhesion      = 1.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
-      hypo_adhesion     = 1.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
-      epi_hypo_adhesion = 1.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
+      epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
+      hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
+      epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
       cortex_constant1  = 0.1   ! Magnitude of baseline cortical tension in epiblasts
       cortex_constant2  = 0.1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0   ! Epiblast external system surface DIT response factor
       DIT_response(1,1) = 0.2   ! Epiblast homotypic interface DIT response factor
-      DIT_response(1,2) = 1.0   ! Epiblast heterotypic interface DIT response factor
+      DIT_response(1,2) = 2.0   ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 0.2   ! Primitive endoderm external system surface DIT response factor
       DIT_response(2,1) = 1.0   ! Primitive endoderm homotypic interface DIT response factor
-      DIT_response(2,2) = 1.0   ! Primitive endoderm heterotypic interface DIT response factor
+      DIT_response(2,2) = 2.0   ! Primitive endoderm heterotypic interface DIT response factor
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
 
@@ -134,7 +132,7 @@ module scem_0_input
         !allocate(seed_array(2))
         !seed_array(1) = 1591826533
         !seed_array(2) = 497
-        1call RANDOM_SEED(PUT=seed_array)
+        !call RANDOM_SEED(PUT=seed_array)
 
       !Take time when run is initiated
       call SYSTEM_CLOCK(start_time, count_rate)
