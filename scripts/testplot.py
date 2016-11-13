@@ -8,26 +8,46 @@ datafolders = [os.path.join(argv[1],f) for f in os.listdir(argv[1]) if os.path.i
 
 
 #Import data
+#Check if type radius data exists in first run folder. If so, import it and create arrays combined_typeradius1 and combined_typeradius2 to contain data from all runs.
 print(os.path.join(datafolders[0],"sorting_data/sorting_data_type_radius1.txt"))
 if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_radius1.txt")):
     combined_typeradius1 = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/sorting_data_type_radius1.txt"))
     combined_typeradius2 = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/sorting_data_type_radius2.txt"))
 
+#Check if surface data exists in first run folder. If so, import it and create arrays combined_typeradius1 and combined_typeradius2 to contain data from all runs.
 if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_surface.txt")):
     combined_surface = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/sorting_data_surface.txt"))
+
+#Check if randomised data exists, and if so import it into arrays for combining with other runs
+if os.path.exists(os.path.join(datafolders[0],"randomised_data/sorting_data_surface.txt")):
+    combined_random_typeradius1 = np.genfromtxt(os.path.join(datafolders[0],"randomised_data/sorting_data_type_radius1.txt"))
+    combined_random_typeradius2 = np.genfromtxt(os.path.join(datafolders[0],"randomised_data/sorting_data_type_radius2.txt"))
+
+if os.path.exists(os.path.join(datafolders[0],"randomised_data/sorting_data_surface.txt")):
+    combined_random_surface = np.genfromtxt(os.path.join(datafolders[0],"randomised_data/sorting_data_surface.txt"))
+
+#Data from the first run folder has now been imported, so it can be removed from the list of data folders
 del(datafolders[0])
 
-if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_radius1.txt")):
+#Import data from remaining folders
+if combined_typeradius1 in dir():
     for i in datafolders:
         data1 = np.genfromtxt(os.path.join(i,"sorting_data/sorting_data_type_radius1.txt"))
         data2 = np.genfromtxt(os.path.join(i,"sorting_data/sorting_data_type_radius2.txt"))
         combined_typeradius1 = np.vstack((combined_typeradius1,data1))
         combined_typeradius2 = np.vstack((combined_typeradius2,data2))
 
-if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_surface.txt")):
+if combined_surface in dir():
     for i in datafolders:
         data = np.genfromtxt(os.path.join(i,"sorting_data/sorting_data_type_radius1.txt"))
         combined_surface = np.vstack((combined_surface,data))
+
+if combined_random_typeradius1 in dir():
+    for i in datafolders:
+        data1 = np.genfromtxt(os.path.join(i,"randomised_data/sorting_data_type_radius1.txt"))
+        data2 = np.genfromtxt(os.path.join(i,"randomised_data/sorting_data_type_radius2.txt"))
+        combined_random_typeradius1 = np.vstack((combined_random_typeradius1,data1))
+        combined_random_typeradius2 = np.vstack((combined_random_typeradius2,data2))
 
 
 fig1 = plt.figure()
