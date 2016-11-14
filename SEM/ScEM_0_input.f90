@@ -101,10 +101,10 @@ module scem_0_input
       flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
-      flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comprison
+      flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comprison
 
       !Simulation control parameters
-      stiffness_factor  = 1.0
+      stiffness_factor  = 2.0
       cell_cycle_time   = 4*4320! Cell cycle time in seconds
       n_cellcycles      = 1.0
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
