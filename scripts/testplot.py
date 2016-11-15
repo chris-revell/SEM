@@ -22,7 +22,11 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_surface
     combined_surface = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/sorting_data_surface.txt"))
     for i in range(1,len(datafolders)):
         data = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/sorting_data_type_radius1.txt"))
+        print(np.amax(data[:,0]))
         combined_surface = np.vstack((combined_surface,data))
+
+print(np.amax(combined_surface[:,2]))
+
 
 #Check if randomised data exists, and if so import it into arrays for combining with other runs
 if os.path.exists(os.path.join(datafolders[0],"randomised_data/sorting_data_type_radius1.txt")):
@@ -74,7 +78,7 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_ra
     ax2.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean2,yerr=(tr_time_std2,tr_time_std2),color="Red",ls="none")
     ax2.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+100),tr_time_mean1,color="Green",label="Epi")
     ax2.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean2,color="Red",label="PrE")
-    ax2.set_title("Mean distance of cells of each type from centre of mass \nof that type against simulation run time, averaged over "+str(len(datafolders))+" runs")
+    ax2.set_title("Mean distance of cells of each type from centre of mass of that type against\n simulation run time, averaged over "+str(len(datafolders))+" runs")
     ax2.set_xlabel("Simulation run time")
     ax2.set_ylabel("Distance from centre of mass")
     ax2.set_xlim(xmin=-100)
@@ -99,7 +103,7 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_ra
         ax3.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_age_mean2-tr_age_random_mean2,color="Red",label="PrE")
         ax3.set_title("Mean distance of cells of each type from centre of mass of that type against cell age,\n averaged over "+str(len(datafolders))+" runs and normalised by randomised measurements")
         ax3.set_xlabel("Age of cell")
-        ax3.set_ylabel("Distance from centre of mass relative to randomised system")
+        ax3.set_ylabel("Distance from centre of mass \nrelative to randomised system")
         ax3.set_xlim(xmin=-100)
         ax3.legend(loc='best', shadow=True)
         fig3.set_tight_layout(True)
@@ -120,7 +124,7 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_ra
         ax4.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean2-tr_time_random_mean2,color="Red",label="PrE")
         ax4.set_title("Mean distance of cells of each type from centre of mass of that type against simulation run time,\n averaged over "+str(len(datafolders))+" runs and normalised by randomised measurements")
         ax4.set_xlabel("Simulation run time")
-        ax4.set_ylabel("Distance from centre of mass relative to randomised system")
+        ax4.set_ylabel("Distance from centre of mass \nrelative to randomised system")
         ax4.set_xlim(xmin=-100)
         ax4.legend(loc='best', shadow=True)
         fig4.set_tight_layout(True)
@@ -163,7 +167,7 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_surface
         ax6.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),surface_mean2-surface_random_mean2,yerr=(surface_std2,surface_std2),color="Red",ls="none")
         ax6.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+100),surface_mean1-surface_random_mean1,color="Green",label="Epi")
         ax6.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),surface_mean2-surface_random_mean2,color="Red",label="PrE")
-        ax6.set_title("Proportion of external system surface occupied by each cell type,\n averaged over "+str(len(datafolders))+" runs and normalised by randomised measurements")
+        ax6.set_title("Proportion of external system surface occupied by each cell type, averaged\n over "+str(len(datafolders))+" runs and normalised by randomised measurements")
         ax6.set_xlabel("Time")
         ax6.set_ylabel("Proportion of external surface")
         ax6.set_xlim(xmin=-100)
