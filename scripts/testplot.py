@@ -21,12 +21,8 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_ra
 if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_surface.txt")):
     combined_surface = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/sorting_data_surface.txt"))
     for i in range(1,len(datafolders)):
-        data = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/sorting_data_type_radius1.txt"))
-        print(np.amax(data[:,0]))
+        data = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/sorting_data_surface.txt"))
         combined_surface = np.vstack((combined_surface,data))
-
-print(np.amax(combined_surface[:,2]))
-
 
 #Check if randomised data exists, and if so import it into arrays for combining with other runs
 if os.path.exists(os.path.join(datafolders[0],"randomised_data/sorting_data_type_radius1.txt")):
@@ -41,7 +37,7 @@ if os.path.exists(os.path.join(datafolders[0],"randomised_data/sorting_data_type
 if os.path.exists(os.path.join(datafolders[0],"randomised_data/sorting_data_surface.txt")):
     combined_random_surface = np.genfromtxt(os.path.join(datafolders[0],"randomised_data/sorting_data_surface.txt"))
     for i in range(1,len(datafolders)):
-        data = np.genfromtxt(os.path.join(datafolders[i],"randomised_data/sorting_data_type_radius1.txt"))
+        data = np.genfromtxt(os.path.join(datafolders[i],"randomised_data/sorting_data_surface.txt"))
         combined_surface = np.vstack((combined_random_surface,data))
 
 
@@ -66,6 +62,7 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_ra
     ax1.legend(loc='best', shadow=True)
     fig1.set_tight_layout(True)
     fig1.savefig(os.path.join(argv[1],"radius_age.pdf"))
+    np.savetxt(os.path.join(argv[1],"radius_age.txt"),np.stack(((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_age_mean1,tr_age_std1,tr_age_mean2,tr_age_std2),axis=1))
 
     #Type radius against simulation time
     tr_time_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_typeradius1[:,0],combined_typeradius1[:,1],bins=5)
@@ -85,6 +82,7 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_ra
     ax2.legend(loc='best', shadow=True)
     fig2.set_tight_layout(True)
     fig2.savefig(os.path.join(argv[1],"radius_time.pdf"))
+    np.savetxt(os.path.join(argv[1],"radius_time.txt"),np.stack(((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean1,tr_time_std1,tr_time_mean2,tr_time_std2),axis=1))
 
     #As above, normalised against randomised data
     if os.path.exists(os.path.join(datafolders[0],"randomised_data/sorting_data_type_radius1.txt")):
@@ -108,6 +106,7 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_ra
         ax3.legend(loc='best', shadow=True)
         fig3.set_tight_layout(True)
         fig3.savefig(os.path.join(argv[1],"radius_age_random.pdf"))
+        np.savetxt(os.path.join(argv[1],"surface_random.txt"),np.stack(((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_age_mean1-tr_age_random_mean1,tr_age_std1,tr_age_mean2-tr_age_random_mean2,tr_age_std2),axis=1))
 
         #Type radius against simulation run time
         tr_time_random_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius1[:,0],combined_random_typeradius1[:,1],bins=5)
@@ -129,6 +128,7 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_ra
         ax4.legend(loc='best', shadow=True)
         fig4.set_tight_layout(True)
         fig4.savefig(os.path.join(argv[1],"radius_time_random.pdf"))
+        np.savetxt(os.path.join(argv[1],"surface_random.txt"),np.stack(((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean1-tr_time_random_mean1,tr_time_std1,tr_time_mean2-tr_time_random_mean2,tr_time_std2),axis=1))
 
 
 #Average surface data into 5 bins over all runs and plot
@@ -148,9 +148,11 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_surface
     ax5.set_xlabel("Time")
     ax5.set_ylabel("Proportion of external surface")
     ax5.set_xlim(xmin=-100)
+    ax5.set_ylim([0,1])
     ax5.legend(loc='best', shadow=True)
     fig5.set_tight_layout(True)
     fig5.savefig(os.path.join(argv[1],"surface.pdf"))
+    np.savetxt(os.path.join(argv[1],"surface.txt"),np.stack(((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),surface_mean1,surface_std1,surface_mean2,surface_std2),axis=1))
 
     #As above, normalised against randomised data
     if os.path.exists(os.path.join(datafolders[0],"randomised_data/sorting_data_surface.txt")):
@@ -171,9 +173,11 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_surface
         ax6.set_xlabel("Time")
         ax6.set_ylabel("Proportion of external surface")
         ax6.set_xlim(xmin=-100)
+        ax6.set_ylim([-0.5,0.5])
         ax6.legend(loc='best', shadow=True)
         fig6.set_tight_layout(True)
         fig6.savefig(os.path.join(argv[1],"surface_random.pdf"))
+        np.savetxt(os.path.join(argv[1],"surface_random.txt"),np.stack(((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),surface_mean1-surface_random_mean1,surface_std1,surface_mean2-surface_random_mean2,surface_std2),axis=1))
 
 
 

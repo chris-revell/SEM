@@ -38,7 +38,7 @@ contains
         factor2 = elements(cells(i)%triplets(2,j))%DIT_factor
         factor3 = elements(cells(i)%triplets(3,j))%DIT_factor
 
-        if ((factor1.EQ.0).OR.(factor2.EQ.0).OR.(factor3.EQ.0)) then
+        if ((factor1.EQ.0).AND.(factor2.EQ.0).AND.(factor3.EQ.0)) then
           !If all 3 elements in a triplet have DIT_factor.EQ.0, then this triplet is on the external system surface
           a = elements(cells(i)%triplets(1,j))%position - elements(cells(i)%triplets(2,j))%position
           b = elements(cells(i)%triplets(1,j))%position - elements(cells(i)%triplets(3,j))%position
