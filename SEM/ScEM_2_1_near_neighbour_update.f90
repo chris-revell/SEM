@@ -6,15 +6,18 @@ module scem_2_1_near_neighbour_update
 
   use scem_1_potential
   use scem_1_types
+  use scem_2_1_decouple_adhesion
 
 contains
 
   subroutine scem_near_neighbour_update
 
     real*8, dimension(3) :: dx
-    real*8  :: sep_sq,pot_deriv_interp1,pot_deriv_interp2,fadein_amp,r_s1,r_s2
+    real*8  :: sep_sq,pot_deriv_interp1,pot_deriv_interp2,fadein_amp,r_s1,r_s2,adhesion_factor_applied
     integer :: bin,index_intra
 
+    !Change adhesion magnitudes to account for local surface element density
+    call scem_decouple_adhesion
 
     do m=1,np
 
@@ -45,12 +48,20 @@ contains
         bin               = int(sep_sq*d_r_sq_recip)
         r_s1              = fadein_amp*rel_strength(1,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
         r_s2              = fadein_amp*rel_strength(2,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
-        pot_deriv_interp1 = r_s1*(sep_sq*potential_deriv1(bin,1) + potential_deriv1(bin,2))
+
+        adhesion_factor_applied = elements(n)%adhesion_factor*elements(nn)%adhesion_factor      !MIN(elemens(n)%adhesion_factor,elements(nn)%adhesion_factor)
+        if (index_intra.EQ.1) then
+          !Both elements are in the same cell, so no adhesion_factor should be applied to attractive component
+          pot_deriv_interp1 = r_s1*(sep_sq*potential_deriv1(bin,1) + potential_deriv1(bin,2))
+        else
+          !Elements are in different cells, and thus an adhesion_factor should be applied to attractive component
+          pot_deriv_interp1 = r_s1*adhesion_factor_applied*(sep_sq*potential_deriv1(bin,1) + potential_deriv1(bin,2))
+        endif
         pot_deriv_interp2 = r_s2*(sep_sq*potential_deriv2(bin,1) + potential_deriv2(bin,2))
+
         !Element velocities updated.
         elements(n)%velocity(:) = elements(n)%velocity(:)+dx(:)*(pot_deriv_interp1 + pot_deriv_interp2)
         elements(nn)%velocity(:)= elements(nn)%velocity(:)-dx(:)*(pot_deriv_interp1 + pot_deriv_interp2)
-
       endif
     end do
 

@@ -34,8 +34,8 @@ contains
         pre_com(:) = pre_com(:) + elements(n)%position(:)
       endif
     enddo
-    epi_com(:) = epi_com(:)/pre_count
-    pre_com(:) = pre_com(:)/pre_count
+    if (epi_count.GT.0) epi_com(:) = epi_com(:)/pre_count
+    if (pre_count.GT.0) pre_com(:) = pre_com(:)/pre_count
 
     if (randomising) then
       open(unit=37,file=output_folder//'/randomised_data/sorting_data_velocity1.txt', status='unknown', position="append")
