@@ -24,7 +24,7 @@ contains
     do i=1,ne
       elements(ne)%adhesion_factor=1
     enddo
-    open(unit=40,file=output_folder//"/decoupling.txt",status='unknown',position='append')
+!    open(unit=40,file=output_folder//"/decoupling.txt",status='unknown',position='append')
     do i=1, nc
       do j=1, cells(i)%cortex_elements(0)
         element_label = cells(i)%cortex_elements(j)
@@ -45,8 +45,8 @@ contains
           endif
         enddo
         !adhesion_factor for this element updated according to the local area around the element.
-        elements(element_label)%adhesion_factor = 1.0/local_area !Might be worth introducing a constant here so that the adhesion magnitude in scem_input can be maintained as a nice number
-        write(40,*) elements(element_label)%DIT_factor, elements(element_label)%adhesion_factor
+        elements(element_label)%adhesion_factor = local_area !Might be worth introducing a constant here so that the adhesion magnitude in scem_input can be maintained as a nice number
+!        write(40,*) elements(element_label)%DIT_factor, elements(element_label)%adhesion_factor
       enddo
     enddo
 

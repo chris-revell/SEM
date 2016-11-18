@@ -49,7 +49,7 @@ contains
         r_s1              = fadein_amp*rel_strength(1,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
         r_s2              = fadein_amp*rel_strength(2,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
 
-        adhesion_factor_applied = elements(n)%adhesion_factor*elements(nn)%adhesion_factor      !MIN(elemens(n)%adhesion_factor,elements(nn)%adhesion_factor)
+        adhesion_factor_applied = MIN(elements(n)%adhesion_factor,elements(nn)%adhesion_factor)/3.684      !elements(n)%adhesion_factor*elements(nn)%adhesion_factor
         if (index_intra.EQ.1) then
           !Both elements are in the same cell, so no adhesion_factor should be applied to attractive component
           pot_deriv_interp1 = r_s1*(sep_sq*potential_deriv1(bin,1) + potential_deriv1(bin,2))

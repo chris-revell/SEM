@@ -34,7 +34,7 @@ contains
         pre_com(:) = pre_com(:) + elements(n)%position(:)
       endif
     enddo
-    if (epi_count.GT.0) epi_com(:) = epi_com(:)/pre_count
+    if (epi_count.GT.0) epi_com(:) = epi_com(:)/epi_count
     if (pre_count.GT.0) pre_com(:) = pre_com(:)/pre_count
 
     if (randomising) then
