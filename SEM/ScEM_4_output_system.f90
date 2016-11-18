@@ -11,6 +11,7 @@ module scem_4_output_system
   use scem_2_measure_displacement
   use scem_2_measure_type_radius
   use scem_2_measure_surface
+  use scem_2_measure_velocity
   use scem_3_measure_randomised
 
   implicit none
@@ -68,6 +69,10 @@ module scem_4_output_system
 
         if (flag_measure_randomised.EQ.1) then
           call scem_measure_randomised
+        endif
+
+        if (flag_measure_velocity.EQ.1) then 
+          call scem_measure_velocity
         endif
 
     end subroutine scem_output_system

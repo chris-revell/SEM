@@ -13,6 +13,7 @@ module scem_3_measure_randomised
   use scem_2_measure_displacement
   use scem_2_measure_type_radius
   use scem_2_measure_surface
+  use scem_2_measure_velocity
 
   implicit none
 
@@ -66,6 +67,9 @@ contains
       if (flag_measure_surface.EQ.1) then
         call scem_measure_surface
       endif
+      if (flag_measure_velocity.EQ.1) then
+        call scem_measure_velocity
+      endif 
 
     enddo
 
