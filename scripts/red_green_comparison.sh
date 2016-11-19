@@ -12,6 +12,6 @@ for i in $(ls $1/extracted_Green_triangle); do
   montage -geometry 600x -tile 3x1 $1/extracted_triangle/$i $1/extracted_Green_triangle/$i $1/extracted_Red_triangle/$i $1/red_green_comparison/$i
 done
 #convert -delay 20 -loop 0 red_green_comparison/*.jpg red_green_comparison/red_green_comparison.gif
-rm $1/extracted_Green_triangle
-rm $1/extracted_Red_triangle
-rm $1/extracted_triangle
+rm -r $1/extracted_Green_triangle
+rm -r $1/extracted_Red_triangle
+rm -r $1/extracted_triangle
