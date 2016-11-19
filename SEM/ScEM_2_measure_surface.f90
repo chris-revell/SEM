@@ -43,11 +43,11 @@ contains
           a = elements(cells(i)%triplets(1,j))%position - elements(cells(i)%triplets(2,j))%position
           b = elements(cells(i)%triplets(1,j))%position - elements(cells(i)%triplets(3,j))%position
           c = cross_product(a,b)
-          area = 0.5*DOT_PRODUCT(c,c)
+          area = 0.5*SQRT(DOT_PRODUCT(c,c)) !0.5*|axb|
           if (cells(i)%fate.EQ.1) then
             epi_area = epi_area + area
           else
-            pre_area = pre_area + 0.5*DOT_PRODUCT(c,c)
+            pre_area = pre_area + area
           endif
         else
           CYCLE
