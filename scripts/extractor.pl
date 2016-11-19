@@ -111,4 +111,4 @@ while ($i < 100) {
   $i++; #Increment $i to move into next set of data (snapshot)
 }
 
-system "cp scripts/visualise_povray_script.sh ".$directoryname
+#system "cp scripts/visualise_povray_script.sh ".$directoryname
