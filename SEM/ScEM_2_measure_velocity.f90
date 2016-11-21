@@ -38,11 +38,11 @@ contains
     if (pre_count.GT.0) pre_com(:) = pre_com(:)/pre_count
 
     if (randomising) then
-      open(unit=37,file=output_folder//'/randomised_data/sorting_data_velocity1.txt', status='unknown', position="append")
-      open(unit=38,file=output_folder//'/randomised_data/sorting_data_velocity2.txt', status='unknown', position="append")
+      open(unit=37,file=output_folder//'/randomised_data/velocity1.txt', status='unknown', position="append")
+      open(unit=38,file=output_folder//'/randomised_data/velocity2.txt', status='unknown', position="append")
     else
-      open(unit=37,file=output_folder//'/sorting_data/sorting_data_velocity1.txt', status='unknown', position="append")
-      open(unit=38,file=output_folder//'/sorting_data/sorting_data_velocity2.txt', status='unknown', position="append")
+      open(unit=37,file=output_folder//'/sorting_data/velocity1.txt', status='unknown', position="append")
+      open(unit=38,file=output_folder//'/sorting_data/velocity2.txt', status='unknown', position="append")
     endif
 
     do n=1, ne

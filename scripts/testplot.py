@@ -8,41 +8,41 @@ datafolders = [os.path.join(argv[1],f) for f in os.listdir(argv[1]) if os.path.i
 
 #Import data
 #Check if type radius data exists in first run folder. If so, import it and create arrays combined_typeradius1 and combined_typeradius2 to contain data from all runs.
-if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_radius1.txt")):
-    combined_typeradius1 = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/sorting_data_type_radius1.txt"))
-    combined_typeradius2 = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/sorting_data_type_radius2.txt"))
+if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
+    combined_typeradius1 = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/type_radius1.txt"))
+    combined_typeradius2 = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/type_radius2.txt"))
     for i in range(1,len(datafolders)):
-        data1 = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/sorting_data_type_radius1.txt"))
-        data2 = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/sorting_data_type_radius2.txt"))
+        data1 = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/type_radius1.txt"))
+        data2 = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/type_radius2.txt"))
         combined_typeradius1 = np.vstack((combined_typeradius1,data1))
         combined_typeradius2 = np.vstack((combined_typeradius2,data2))
 
 #Check if surface data exists in first run folder. If so, import it and create arrays combined_typeradius1 and combined_typeradius2 to contain data from all runs.
-if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_surface.txt")):
-    combined_surface = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/sorting_data_surface.txt"))
+if os.path.exists(os.path.join(datafolders[0],"sorting_data/surface.txt")):
+    combined_surface = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/surface.txt"))
     for i in range(1,len(datafolders)):
-        data = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/sorting_data_surface.txt"))
+        data = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/surface.txt"))
         combined_surface = np.vstack((combined_surface,data))
 
 #Check if randomised data exists, and if so import it into arrays for combining with other runs
-if os.path.exists(os.path.join(datafolders[0],"randomised_data/sorting_data_type_radius1.txt")):
-    combined_random_typeradius1 = np.genfromtxt(os.path.join(datafolders[0],"randomised_data/sorting_data_type_radius1.txt"))
-    combined_random_typeradius2 = np.genfromtxt(os.path.join(datafolders[0],"randomised_data/sorting_data_type_radius2.txt"))
+if os.path.exists(os.path.join(datafolders[0],"randomised_data/type_radius1.txt")):
+    combined_random_typeradius1 = np.genfromtxt(os.path.join(datafolders[0],"randomised_data/type_radius1.txt"))
+    combined_random_typeradius2 = np.genfromtxt(os.path.join(datafolders[0],"randomised_data/type_radius2.txt"))
     for i in range(1,len(datafolders)):
-        data1 = np.genfromtxt(os.path.join(datafolders[i],"randomised_data/sorting_data_type_radius1.txt"))
-        data2 = np.genfromtxt(os.path.join(datafolders[i],"randomised_data/sorting_data_type_radius2.txt"))
+        data1 = np.genfromtxt(os.path.join(datafolders[i],"randomised_data/type_radius1.txt"))
+        data2 = np.genfromtxt(os.path.join(datafolders[i],"randomised_data/type_radius2.txt"))
         combined_random_typeradius1 = np.vstack((combined_random_typeradius1,data1))
         combined_random_typeradius2 = np.vstack((combined_random_typeradius2,data2))
 
-if os.path.exists(os.path.join(datafolders[0],"randomised_data/sorting_data_surface.txt")):
-    combined_random_surface = np.genfromtxt(os.path.join(datafolders[0],"randomised_data/sorting_data_surface.txt"))
+if os.path.exists(os.path.join(datafolders[0],"randomised_data/surface.txt")):
+    combined_random_surface = np.genfromtxt(os.path.join(datafolders[0],"randomised_data/surface.txt"))
     for i in range(1,len(datafolders)):
-        data = np.genfromtxt(os.path.join(datafolders[i],"randomised_data/sorting_data_surface.txt"))
+        data = np.genfromtxt(os.path.join(datafolders[i],"randomised_data/surface.txt"))
         combined_surface = np.vstack((combined_random_surface,data))
 
 
 #Average type radius data into 5 bins over all runs and plot
-if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_radius1.txt")):
+if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
 
     #Type radius against age of cell
     tr_age_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_typeradius1[:,2],combined_typeradius1[:,1],bins=5)
@@ -85,7 +85,7 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_ra
     np.savetxt(os.path.join(argv[1],"radius_time.txt"),np.stack(((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean1,tr_time_std1,tr_time_mean2,tr_time_std2),axis=1))
 
     #As above, normalised against randomised data
-    if os.path.exists(os.path.join(datafolders[0],"randomised_data/sorting_data_type_radius1.txt")):
+    if os.path.exists(os.path.join(datafolders[0],"randomised_data/type_radius1.txt")):
         #Type radius against cell age:
         tr_age_random_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius1[:,2],combined_random_typeradius1[:,1],bins=5)
         tr_age_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius2[:,2],combined_random_typeradius2[:,1],bins=5)
@@ -132,7 +132,7 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_type_ra
 
 
 #Average surface data into 5 bins over all runs and plot
-if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_surface.txt")):
+if os.path.exists(os.path.join(datafolders[0],"sorting_data/surface.txt")):
 
     surface_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_surface[:,0],combined_surface[:,1],bins=5)
     surface_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_surface[:,0],combined_surface[:,2],bins=5)
@@ -155,7 +155,7 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/sorting_data_surface
     np.savetxt(os.path.join(argv[1],"surface.txt"),np.stack(((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),surface_mean1,surface_std1,surface_mean2,surface_std2),axis=1))
 
     #As above, normalised against randomised data
-    if os.path.exists(os.path.join(datafolders[0],"randomised_data/sorting_data_surface.txt")):
+    if os.path.exists(os.path.join(datafolders[0],"randomised_data/surface.txt")):
         #Type radius against cell age:
         surface_random_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_surface[:,0],combined_random_surface[:,1],bins=5)
         surface_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_surface[:,0],combined_random_surface[:,2],bins=5)

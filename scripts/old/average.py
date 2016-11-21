@@ -10,7 +10,7 @@ datafolders = [f for f in os.listdir(inputfolder) if os.path.isdir(os.path.join(
 print(datafolders)
 
 #Find the number of timesteps - nrows - in the datafiles, and store the set of times in timeslist
-testfile = open(os.path.join(inputfolder,datafolders[0],"sorting_data","sorting_data_radius.txt"),'r')
+testfile = open(os.path.join(inputfolder,datafolders[0],"sorting_data","radius.txt"),'r')
 nrows = 0
 timeslist = []
 for line in testfile:
@@ -26,7 +26,7 @@ datastore_neighbours = np.zeros((nrows,len(datafolders)))
 
 for i in range(0,len(datafolders)):
 
-    filename_radius = os.path.join(inputfolder,datafolders[i],"sorting_data","sorting_data_radius.txt")
+    filename_radius = os.path.join(inputfolder,datafolders[i],"sorting_data","radius.txt")
     importarray_radius = np.genfromtxt(filename_radius, dtype=float, usecols=range(1,2))
     datastore_radius[:,i] = importarray_radius
     """
@@ -34,7 +34,7 @@ for i in range(0,len(datafolders)):
     importarray_interface = np.genfromtxt(filename_interface, dtype=float, usecols=range(1,2))
     datastore_interface[:,i] = importarray_interface
     """
-    filename_neighbours = os.path.join(inputfolder,datafolders[i],"sorting_data","sorting_data_neighbours.txt")
+    filename_neighbours = os.path.join(inputfolder,datafolders[i],"sorting_data","neighbours.txt")
     importarray_neighbours = np.genfromtxt(filename_neighbours, dtype=float, usecols=range(1,2))
     datastore_neighbours[:,i] = importarray_neighbours
 

@@ -33,9 +33,9 @@ contains
 		endif
 
 		if (randomising) then
-			open(unit=36,file=output_folder//'/randomised_data/sorting_data_neighbours.txt',status='unknown',position="append")
+			open(unit=36,file=output_folder//'/randomised_data/neighbours.txt',status='unknown',position="append")
 		else
-			open(unit=36,file=output_folder//'/sorting_data/sorting_data_neighbours.txt',status='unknown',position="append")
+			open(unit=36,file=output_folder//'/sorting_data/neighbours.txt',status='unknown',position="append")
 		endif
 
 		!Start by looking at all element-element interaction pairs.

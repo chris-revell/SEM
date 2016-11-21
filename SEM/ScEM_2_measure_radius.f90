@@ -20,9 +20,9 @@ contains
 		real*8, dimension(3) :: cell_vector		!Vector position of cell relative to system centre of mass
 
 		if (randomising) then
-			open(unit=35,file=output_folder//'/randomised_data/sorting_data_radius.txt',status='unknown',position="append")
+			open(unit=35,file=output_folder//'/randomised_data/radius.txt',status='unknown',position="append")
 		else
-			open(unit=35,file=output_folder//'/sorting_data/sorting_data_radius.txt', status='unknown',position="append")
+			open(unit=35,file=output_folder//'/sorting_data/radius.txt', status='unknown',position="append")
 		endif
 
 		!Need to start by calculating the centre of mass of the system, which can change after each iteration due to cell movement.

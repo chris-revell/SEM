@@ -19,11 +19,11 @@ contains
     integer              :: parent_fate,epi_count,pre_count
 
     if (randomising) then
-      open(unit=33, file=output_folder//"/randomised_data/sorting_data_type_radius1.txt", status="unknown", position="append")
-      open(unit=34, file=output_folder//"/randomised_data/sorting_data_type_radius2.txt", status="unknown", position="append")
+      open(unit=33, file=output_folder//"/randomised_data/type_radius1.txt", status="unknown", position="append")
+      open(unit=34, file=output_folder//"/randomised_data/type_radius2.txt", status="unknown", position="append")
     else
-      open(unit=33, file=output_folder//"/sorting_data/sorting_data_type_radius1.txt", status="unknown", position="append")
-      open(unit=34, file=output_folder//"/sorting_data/sorting_data_type_radius2.txt", status="unknown", position="append")
+      open(unit=33, file=output_folder//"/sorting_data/type_radius1.txt", status="unknown", position="append")
+      open(unit=34, file=output_folder//"/sorting_data/type_radius2.txt", status="unknown", position="append")
     endif
 
     !Calculate centres of mass for each cell type

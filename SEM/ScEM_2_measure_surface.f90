@@ -24,9 +24,9 @@ contains
     real*8, dimension(3) :: c
 
     if (randomising) then
-      open(unit=43,file=output_folder//"/randomised_data/sorting_data_surface.txt",status="unknown",position="append")
+      open(unit=43,file=output_folder//"/randomised_data/surface.txt",status="unknown",position="append")
     else
-      open(unit=43,file=output_folder//"/sorting_data/sorting_data_surface.txt",status="unknown",position="append")
+      open(unit=43,file=output_folder//"/sorting_data/surface.txt",status="unknown",position="append")
     endif
 
     epi_area = 0
