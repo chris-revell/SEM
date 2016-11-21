@@ -99,14 +99,14 @@ module scem_0_input
       flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
       flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
       flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
-      flag_measure_type_radius= 0    ! Switch to turn off type radius sorting measurement
-      flag_measure_surface    = 0    ! Switch to turn off surface sorting measurement
+      flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
+      flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
       flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comprison
 
       !Simulation control parameters
-      stiffness_factor  = 1.0
-      cell_cycle_time   = 1500 ! Cell cycle time in seconds
+      stiffness_factor  = 0.25
+      cell_cycle_time   = 15000 ! Cell cycle time in seconds
       n_cellcycles      = 2.0
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
@@ -114,11 +114,11 @@ module scem_0_input
       cortex_constant1  = 0.1   ! Magnitude of baseline cortical tension in epiblasts
       cortex_constant2  = 0.1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0   ! Epiblast external system surface DIT response factor
-      DIT_response(1,1) = 0.5   ! Epiblast homotypic interface DIT response factor
-      DIT_response(1,2) = 1.0   ! Epiblast heterotypic interface DIT response factor
+      DIT_response(1,1) = 0.4   ! Epiblast homotypic interface DIT response factor
+      DIT_response(1,2) = 2.0   ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0   ! Primitive endoderm external system surface DIT response factor
-      DIT_response(2,1) = 0.5   ! Primitive endoderm homotypic interface DIT response factor
-      DIT_response(2,2) = 1.0   ! Primitive endoderm heterotypic interface DIT response factor
+      DIT_response(2,1) = 0.6   ! Primitive endoderm homotypic interface DIT response factor
+      DIT_response(2,2) = 2.0   ! Primitive endoderm heterotypic interface DIT response factor
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
 
