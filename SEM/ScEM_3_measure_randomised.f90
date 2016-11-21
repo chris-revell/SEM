@@ -64,12 +64,13 @@ contains
       if (flag_measure_type_radius.EQ.1) then
         call scem_measure_type_radius
       endif
-      if (flag_measure_surface.EQ.1) then
-        call scem_measure_surface
-      endif
+!No need to randomise surface measurement since this measurement is naturally normalised to 0.5      
+!      if (flag_measure_surface.EQ.1) then
+!        call scem_measure_surface
+!      endif
       if (flag_measure_velocity.EQ.1) then
         call scem_measure_velocity
-      endif 
+      endif
 
     enddo
 

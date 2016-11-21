@@ -86,7 +86,7 @@ module scem_0_input
       flag_randomise  = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
 
       !Output control switches
-      flag_povray = 1                !switch to turn off povray output entirely
+      flag_povray = 1                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
@@ -96,9 +96,9 @@ module scem_0_input
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
-      flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
-      flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
-      flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
+      flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
+      flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
+      flag_measure_displacement=1    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 1    ! Switch to turn off velocity measurement
@@ -106,8 +106,8 @@ module scem_0_input
 
       !Simulation control parameters
       stiffness_factor  = 1.0
-      cell_cycle_time   = 15000 ! Cell cycle time in seconds
-      n_cellcycles      = 2.0
+      cell_cycle_time   = 150 ! Cell cycle time in seconds
+      n_cellcycles      = 0.5
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       hypo_adhesion     = 1.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_hypo_adhesion = 1.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
