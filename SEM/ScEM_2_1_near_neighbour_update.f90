@@ -44,11 +44,13 @@ contains
       if (sep_sq.le.r_interaction_max_sq) then !Separation between elements less than maximum range of interaction, so elements can interact.
 
         !This next section applies the standard morse potential between the two elements.
-        fadein_amp        = elements(n)%strength*elements(nn)%strength
-        bin               = int(sep_sq*d_r_sq_recip)
-        r_s1              = fadein_amp*rel_strength(1,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
-        r_s2              = fadein_amp*rel_strength(2,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
+        fadein_amp = elements(n)%strength*elements(nn)%strength
+        bin        = int(sep_sq*d_r_sq_recip)
+        r_s1       = fadein_amp*rel_strength(1,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
+        r_s2       = fadein_amp*rel_strength(2,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
 
+        !Calculate an adhesion factor to apply from the adhesion factors of the two cells in this pair, and the normalisation factor needed to recover natural number adhesion magnitudes.
+        !The exact form of this calculation might need a little more thought and justification in future. Should it be the product of two factors, their mean, or the minimum of the two?
         adhesion_factor_applied = MIN(elements(n)%adhesion_factor,elements(nn)%adhesion_factor)/2.24!3.684      !elements(n)%adhesion_factor*elements(nn)%adhesion_factor
         if (index_intra.EQ.1) then
           !Both elements are in the same cell, so no adhesion_factor should be applied to attractive component
