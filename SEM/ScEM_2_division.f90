@@ -65,17 +65,13 @@ module scem_2_division
             !then division is symmetric, otherwise it is asymmetric.
             !This models the 80:20 split for symmetric vs asymmetric observed for ICM cell division
             CALL RANDOM_NUMBER(fate_decider) !Fill fate_decider variable with a random number between 0 and 1.
-            if (cells(k)%fate.EQ.1) then
-              !Epiblast division
-              if (fate_decider.GE.0.5) then
-        				cells(nc)%fate=1	!Symmetric division
-        			else
-        				cells(nc)%fate=2			!Asymmetric division where parent cell has type 1
-        			end if
+            if (fate_decider.GE.0.5) then
+              cells(nc)%fate=cells(k)%fate	!Symmetric division
+            elseif (cells(k)%fate.eq.1) then
+              cells(nc)%fate=2			!Asymmetric division where parent cell has type 1
             else
-              !Primitive endoderm division
-              cells(nc)%fate=2
-            endif
+              cells(nc)%fate=1			!Asymmetric division where parent cell has type 2
+            end if
 
             cells(nc)%label=nc
 
