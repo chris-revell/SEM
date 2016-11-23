@@ -106,7 +106,7 @@ module scem_0_input
 
       !Simulation control parameters
       stiffness_factor  = 0.25
-      cell_cycle_time   = 15000 ! Cell cycle time in seconds
+      cell_cycle_time   = 5000 ! Cell cycle time in seconds
       n_cellcycles      = 2.0
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)

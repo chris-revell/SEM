@@ -2,11 +2,11 @@
 !Module to update element velocities according to standard near-neighbour morse potential interactions
 !Contains subroutine scem_near_neighbour_update that performs local calculations to update the global velocities
 !that are then passed on to other routines by scem_integrate.
-module scem_2_1_near_neighbour_update
+module scem_3_near_neighbour_update
 
   use scem_1_potential
   use scem_1_types
-  use scem_2_1_decouple_adhesion
+  use scem_2_decouple_adhesion
 
 contains
 
@@ -68,4 +68,4 @@ contains
     end do
 
   end subroutine scem_near_neighbour_update
-end module scem_2_1_near_neighbour_update
+end module scem_3_near_neighbour_update

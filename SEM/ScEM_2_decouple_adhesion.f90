@@ -1,7 +1,7 @@
 !Module to decouple adhesion magnitude from changes in local element density caused by differential interfacial tension
 ! CK Revell, November 2016
 
-module scem_2_1_decouple_adhesion
+module scem_2_decouple_adhesion
 
   use scem_0_input
   use scem_0_useful
@@ -62,4 +62,4 @@ contains
     cross_product(3) = vector1(1)*vector2(2)-vector1(2)*vector2(1)
   end function cross_product
 
-end module scem_2_1_decouple_adhesion
+end module scem_2_decouple_adhesion

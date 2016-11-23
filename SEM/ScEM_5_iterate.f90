@@ -12,7 +12,7 @@ module scem_5_iterate
   use scem_2_division
   use scem_2_flag_relist
   use scem_2_growth
-  use scem_2_integrate
+  use scem_4_integrate
   use scem_4_output_system
   use scem_2_output_povray
   use scem_2_pairs

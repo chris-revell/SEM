@@ -162,7 +162,7 @@ ScEM_2_initial_exist.f90	Contains subroutine
 \b elements_config 
 \b0 and initialising remaining "cell" data structure data.\
 \
-ScEM_2_integrate.f90	The SEM exhibits over-damped Langevin dynamics [32]. In order to update the system for every time step, a module exists that per- forms an integration method for all element pairs in the system (taken from the pairs array as described above) to solve the Langevin equation and calculate the instantaneous velocity for each element, given the potential interac- tions with its neighbours. These instantaneous velocities are then used to update the element positions by a 2nd order Runge-Kutta method. Contains a secondary section to include interactions with substrate if flag_substrate is equal to 1. 11/07/2013 - arguments of rel_strength used in integration algorithm changed to reflect possible variation in cell type. Substrate interaction section commented out for now. \
+scem_4_integrate.f90	The SEM exhibits over-damped Langevin dynamics [32]. In order to update the system for every time step, a module exists that per- forms an integration method for all element pairs in the system (taken from the pairs array as described above) to solve the Langevin equation and calculate the instantaneous velocity for each element, given the potential interac- tions with its neighbours. These instantaneous velocities are then used to update the element positions by a 2nd order Runge-Kutta method. Contains a secondary section to include interactions with substrate if flag_substrate is equal to 1. 11/07/2013 - arguments of rel_strength used in integration algorithm changed to reflect possible variation in cell type. Substrate interaction section commented out for now. \
 \
 \
 \
