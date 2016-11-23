@@ -3,6 +3,8 @@
 ! significantly revised, September 2010
 ! center of mass and radius of gyration incorporated into 'cells' data structure
 
+! Calculates centres of mass for each cell type.
+
 module scem_2_com
 
   use scem_0_arrays
@@ -16,8 +18,10 @@ module scem_2_com
 
     subroutine scem_com
 
+      real*8, dimension(3) :: pre_com, epi_com
       real*8, dimension(3) :: x_com,dx
-      real*8 :: rog
+      real*8               :: rog
+      integer              :: parent_fate,epi_count,pre_count
 
       do k=1,nc
         ! calculate center of mass
@@ -43,6 +47,27 @@ module scem_2_com
         rog=sqrt(rog/cells(k)%c_elements(0))
         cells(k)%rad_gyration=rog
       end do
+
+
+      ! If needed for measurements, calculate centres of mass for each cell type
+      if (flag_measure_velocity.EQ.1.OR.flag_measure_type_radius.EQ.1) then
+        epi_com(:) = 0
+        pre_com(:) = 0
+        epi_count  = 0
+        pre_count  = 0
+        do n=1, ne
+          parent_fate = cells(elements(n)%parent)%fate
+          if (parent_fate.EQ.1) then
+            epi_count = epi_count + 1
+            epi_com(:) = epi_com(:) + elements(n)%position(:)
+          else
+            pre_count = pre_count + 1
+            pre_com(:) = pre_com(:) + elements(n)%position(:)
+          endif
+        enddo
+        if (epi_count.GT.0) epi_com(:) = epi_com(:)/epi_count
+        if (pre_count.GT.0) pre_com(:) = pre_com(:)/pre_count
+      endif
 
     end subroutine scem_com
 
