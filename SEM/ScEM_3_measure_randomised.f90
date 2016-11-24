@@ -6,7 +6,6 @@ module scem_3_measure_randomised
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
   use scem_2_measure_radius
   use scem_2_measure_neighbours
@@ -20,6 +19,9 @@ module scem_3_measure_randomised
 contains
 
   subroutine scem_measure_randomised
+
+    integer :: n,i
+    real*8  :: fate_decider
 
     !Set randomising = .TRUE. in order to divert output from measurement subroutines to randomised data files.
     randomising = .TRUE.
@@ -39,8 +41,9 @@ contains
       stored_fates(n) = cells(n)%fate
     enddo
 
-
+    print*, "marker2"
     do i=1, 10 ! 10 seems to be an adequate number of tests, but could make it smaller to speed up the program
+
       do n=1,nc
         CALL RANDOM_NUMBER(fate_decider)
         if (fate_decider.GE.0.5) then
@@ -60,7 +63,6 @@ contains
       if (flag_measure_type_radius.EQ.1)  call scem_measure_type_radius
 
 !      if (flag_measure_velocity.EQ.1)     call scem_measure_velocity
-
 
     enddo
 

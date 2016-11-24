@@ -4,7 +4,6 @@ module scem_2_measure_neighbours
 
 	use scem_0_input
 	use scem_0_arrays
-	use scem_0_useful
 	use scem_1_types
 
 	implicit none
@@ -13,11 +12,10 @@ contains
 
 	subroutine scem_measure_neighbours
 
-		integer :: parent1
-		integer :: parent2
-		integer	:: fate1
-		integer	:: fate2
-		integer, dimension(2,2) 						 :: neighbour_counts
+		integer 								:: parent1,parent2
+		integer									:: fate1,fate2
+		integer									:: i,j,n
+		integer, dimension(2,2) :: neighbour_counts
 
 		!Allocate neighbours array defined in scem_0_arrays
 		!Set neighbours array to have the same number of rows and columns as cells in the system.

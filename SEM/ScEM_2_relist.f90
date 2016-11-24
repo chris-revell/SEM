@@ -4,7 +4,6 @@ module scem_2_relist
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
 
   implicit none
@@ -13,7 +12,9 @@ module scem_2_relist
 
     ! re-initialize ihead and recreate linked lists
     subroutine scem_relist(il)
-      integer, intent(in) :: il
+
+      integer, intent(in)   :: il
+      integer               :: n
       integer, dimension(3) :: ixe
 
       if (il.eq.1) then

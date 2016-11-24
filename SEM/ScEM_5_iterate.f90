@@ -4,7 +4,6 @@ module scem_5_iterate
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
   use scem_2_ageing
   use scem_2_com
@@ -27,6 +26,8 @@ module scem_5_iterate
 contains
 
   subroutine scem_iterate
+
+    integer :: n
 
     ! iterate system for pre-defined time interval
     do while (time.LT.time_max)

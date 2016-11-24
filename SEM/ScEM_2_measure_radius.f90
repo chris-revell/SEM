@@ -5,7 +5,6 @@ module scem_2_measure_radius
 
 	use scem_0_input
 	use scem_0_arrays
-	use scem_0_useful
 	use scem_1_types
 
 	implicit none
@@ -14,6 +13,8 @@ contains
 
 	subroutine scem_measure_radius
 
+		integer :: i,n
+		real*8	:: dist
 		real*8	:: normalised_radius
 		real*8	:: max_cell_radius
 		real*8, dimension(3) :: system_COM		!Vector position of system centre of mass
@@ -37,9 +38,9 @@ contains
 		do n=1, nc
 			!For each cell, calculate distance from the system centre of mass
 			cell_vector(:)				= cells(n)%position(:)-system_COM(:)		!Vector from system COM to cell
-			dist_sq								= DOT_PRODUCT(cell_vector,cell_vector)	!Magnitude of vector, squared
+			dist									= SQRT(DOT_PRODUCT(cell_vector,cell_vector))	!Magnitude of vector, squared
 			!If the radius of this cell exceeds the current max_cell_radius, update max_cell_radius
-			max_cell_radius				= MAX(max_cell_radius, SQRT(dist_sq))
+			max_cell_radius				= MAX(max_cell_radius, dist)
 		end do
 
 		!Normalise radii of epiblast cells with max_cell_radius and write to file.
@@ -47,8 +48,12 @@ contains
 			if (cells(n)%fate.EQ.1) then
 				!For each cell, calculate distance from the system centre of mass
 				cell_vector(:)		= cells(n)%position(:)-system_COM(:)		!Vector from system COM to cell
-				dist_sq						= DOT_PRODUCT(cell_vector,cell_vector)	!Magnitude of vector, squared
-				normalised_radius	= SQRT(dist_sq)/max_cell_radius
+				dist							= SQRT(DOT_PRODUCT(cell_vector,cell_vector))	!Magnitude of vector, squared
+				if (max_cell_radius.GT.0) then
+					normalised_radius	= dist/max_cell_radius
+				else
+					normalised_radius = 0
+				endif
 				write(35,*) time, normalised_radius
 			endif
 		end do

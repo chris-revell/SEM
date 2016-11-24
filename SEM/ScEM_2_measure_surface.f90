@@ -4,7 +4,6 @@
 module ScEM_2_measure_surface
 
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
 
   implicit none
@@ -13,12 +12,13 @@ contains
 
   subroutine scem_measure_surface
 
-    integer :: factor1,factor2,factor3
-    real*8 :: epi_area
-    real*8 :: pre_area
-    real*8 :: epi_out
-    real*8 :: pre_out
-    real*8 :: area
+    integer              :: i,j
+    integer              :: factor1,factor2,factor3
+    real*8               :: epi_area
+    real*8               :: pre_area
+    real*8               :: epi_out
+    real*8               :: pre_out
+    real*8               :: area
     real*8, dimension(3) :: a
     real*8, dimension(3) :: b
     real*8, dimension(3) :: c

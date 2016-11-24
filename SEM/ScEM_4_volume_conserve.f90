@@ -4,7 +4,6 @@
 module scem_4_volume_conserve
 
 	use scem_0_arrays
-	use scem_0_useful
 	use scem_1_types
 
 	implicit none
@@ -12,7 +11,7 @@ module scem_4_volume_conserve
 	contains
 
 		subroutine scem_volume_conserve
-			integer															::	c
+			integer															::	c,i,j,k,l
 			real*8, allocatable, dimension(:)		::	P_1				!Array of all dimensions of positions of all elements in cell after displacement by external forces, given in format (x1,y1,z1,x2,y2,z2...). Allocated with dimension 3n where n is the number of elements in the cell.
 			real*8, allocatable, dimension(:)		::	P_2				!Array of all dimensions of positions of all elements in cell after volume conservation
 			real*8, allocatable, dimension(:)		::	D					!Vector in 3n space that will move system from P_1 to P_2. D is proportional to the gradient of the surface of constant volume at point P_2.

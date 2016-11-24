@@ -4,7 +4,6 @@ module scem_5_initialize
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_initialconditions
   use scem_1_types
   use scem_2_com
@@ -67,14 +66,12 @@ module scem_5_initialize
       if (flag_conserve.EQ.1.OR.flag_volume_output.EQ.1) then
         call scem_volume_calculate
       endif
-
+      print*, "marker0"
       ! write initial system data to file
       call scem_output_system
-
+      print*, "marker2"
       ! Write element data to files in povray format
-      if (flag_povray.EQ.1) then
-        call scem_output_povray
-      endif
+      if (flag_povray.EQ.1) call scem_output_povray
 
       call scem_initialconditions
 

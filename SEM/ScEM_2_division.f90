@@ -4,9 +4,7 @@ module scem_2_division
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
-
 
   implicit none
 
@@ -18,6 +16,8 @@ module scem_2_division
       integer :: nc_old
       real*8, dimension(3) :: pos,long_axis,relative_pos,x_com
       real*8 :: max_sep,max_sep_old,epsilon
+      integer :: i,j,k,m,n,nn
+      real*8  :: fate_decider
 
       allocate(c_el_temp1(0:4*ne_cell))
       allocate(c_el_temp2(0:4*ne_cell))

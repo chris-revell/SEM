@@ -6,7 +6,6 @@
 module scem_3_cortical_tension_update
 
   use scem_0_input
-  use scem_0_useful
   use scem_0_arrays
   use scem_1_types
   use scem_2_DIT
@@ -18,7 +17,7 @@ contains
   subroutine scem_cortical_tension_update
 
     integer :: pair_counter
-    integer :: c
+    integer :: c,i,j,m,n,nn
     real    :: sep_sq
     real*8, dimension(3) :: dx
 

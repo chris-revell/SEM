@@ -4,7 +4,6 @@ module scem_2_output_povray
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
   use scem_2_background
 
@@ -14,9 +13,10 @@ module scem_2_output_povray
 
     subroutine scem_output_povray
 
-      character(len=24)	    :: povray_filename  !Filename for data output
-      real*8                :: sphere_radius    !Radius of sphere used to represent cell volume in povray visualiation. Calculated from cell volume.
+      integer               :: i,j,k,l,m,n
       integer               :: corner_element   !Label of element forming corner of smoothed_triangle
+      real*8                :: sphere_radius    !Radius of sphere used to represent cell volume in povray visualiation. Calculated from cell volume.
+      character(len=24)	    :: povray_filename  !Filename for data output
       real*8, dimension(3)  :: corner           !Array to store corner vector used in smoothed_triangle data output
       real*8, dimension(3)  :: normal           !Array to store normal vector used in smoothed_triangle data output
 

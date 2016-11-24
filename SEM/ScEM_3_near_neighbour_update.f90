@@ -12,9 +12,10 @@ contains
 
   subroutine scem_near_neighbour_update
 
-    real*8, dimension(3) :: dx
-    real*8  :: sep_sq,pot_deriv_interp1,pot_deriv_interp2,fadein_amp,r_s1,r_s2,adhesion_factor_applied
+    integer :: m,n,nn,k,kk
     integer :: bin,index_intra
+    real*8  :: sep_sq,pot_deriv_interp1,pot_deriv_interp2,fadein_amp,r_s1,r_s2,adhesion_factor_applied
+    real*8, dimension(3) :: dx
 
     !Change adhesion magnitudes to account for local surface element density
     call scem_decouple_adhesion

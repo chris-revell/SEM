@@ -3,7 +3,6 @@
 module scem_3_delaunay
 
   use scem_0_input
-  use scem_0_useful
   use scem_0_arrays
   use scem_1_types
   use trmesh_module
@@ -15,6 +14,7 @@ contains
 
   subroutine scem_delaunay
 
+    integer                               :: i,j,k
     real*8, allocatable, dimension(:)			:: x					!Position data for cortex elements relative to COM and normalised to unit sphere
     real*8, allocatable, dimension(:)			:: y					!Position data for cortex elements relative to COM and normalised to unit sphere
     real*8, allocatable, dimension(:)			:: z					!Position data for cortex elements relative to COM and normalised to unit sphere

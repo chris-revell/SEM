@@ -7,7 +7,6 @@ module scem_0_input
   implicit none
 
   !System parameters and constants
-  integer, parameter :: dim=3 !Number of spatial dimensions
   integer, parameter :: ne_cell=128 !Number of elements per cell
   integer :: ne,nc,np !Numbers of elements, cells, and element pairs
   integer :: ne_size,nc_size,np_size,np_cortex !Parameters for array size allocations
@@ -77,7 +76,7 @@ module scem_0_input
     subroutine scem_input
 
       !Simulation control switches
-      flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
+      flag_create     = 1 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
@@ -288,9 +287,7 @@ module scem_0_input
         recip_sector_size=1.0/sector_size ! calculate reciprocal of sector size for efficiency
         nx=8*(2+int(4*r_cell/sector_size)) ! --> number of sectors in x direction
         ny=nx ! --> isotropic choice
-        if (dim.eq.3) nz=nx ! --> isotropic choice in 3D
-        if (dim.eq.2) nz=1 ! --> a single layer of sectors for 2D simulations
-
+        nz=nx ! --> isotropic choice in 3D
 
 !************
 !These might be better off elsewhere
