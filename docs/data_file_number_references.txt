@@ -18,7 +18,7 @@ List of file numbers in SEM code
 36 = sorting_data_neighbours
 37 = sorting_data_velocity1
 38 = sorting_data_velocity2
-39 =
+39 = com 
 40 =
 41 = sorting_displacement1
 42 = sorting_displacement2

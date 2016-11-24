@@ -12,6 +12,7 @@ module scem_4_output_system
   use scem_2_measure_type_radius
   use scem_2_measure_surface
   use scem_2_measure_velocity
+  use scem_2_measure_com
   use scem_3_measure_randomised
 
   implicit none
@@ -58,6 +59,8 @@ module scem_4_output_system
         if (flag_measure_randomised.EQ.1)   call scem_measure_randomised
 
         if (flag_measure_velocity.EQ.1)     call scem_measure_velocity
+
+        if (flag_measure_com.EQ.1)          call scem_measurem_com
 
     end subroutine scem_output_system
 

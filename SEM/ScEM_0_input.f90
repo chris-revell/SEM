@@ -24,7 +24,7 @@ module scem_0_input
   integer :: flag_povray_pairs,flag_povray_volumes,flag_povray,flag_povray_triangles,flag_povray_cortex_pairs
   integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_radius,flag_measure_type_radius
   integer :: flag_measure_neighbours,flag_measure_displacement,flag_measure_surface,flag_elements_final
-  integer :: flag_measure_randomised,flag_measure_velocity
+  integer :: flag_measure_randomised,flag_measure_velocity,flag_measure_com
   integer :: flag_relist ! flag triggering relist of sector assignments
   !Variables for initiating randoms number sequence
   integer :: seedarraylength
@@ -102,6 +102,7 @@ module scem_0_input
       flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 1    ! Switch to turn off velocity measurement
+      flag_measure_com        = 1
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
