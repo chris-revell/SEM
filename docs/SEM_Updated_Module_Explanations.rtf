@@ -175,12 +175,12 @@ ScEM_2_output_final.f90	Writes positions of all elements to an output file "
 ScEM_2_output.f90		Prints element positions and the label of the cell from which each element comes to a file named "
 \b elements
 \b0 " for all elements in the system, followed by 2 blank lines. This is repeated after time steps of length 
-\b time_out_1
+\b output_interval
 \b0  so as to take snapshots of the system rather than print too much data. So "
 \b elements
 \b0 " contains a complete snapshot of the system at each sampling time step, with each time step separated by 2 blank lines. At the same time the subroutine prints: time, ne, nc, ne_size, nc_size, nx, ny, nz to the command line at intervals of 
 \b time_out_2
-\b0 . In the original code, time_out_2=10*time_out_1=cell_cycle_time/100. Finally for every time step of time_out_1, the subroutine creates or updates files for each cell. These files are called "fort.(30+k)" where k is the label for the cell. So for example the positions of all the elements in cell 1 are contained within file fort.31. These files are created or updated as necessary at every time step as the program runs. 25/05/13 - added a line to increment 
+\b0 . In the original code, time_out_2=10*output_interval=cell_cycle_time/100. Finally for every time step of output_interval, the subroutine creates or updates files for each cell. These files are called "fort.(30+k)" where k is the label for the cell. So for example the positions of all the elements in cell 1 are contained within file fort.31. These files are created or updated as necessary at every time step as the program runs. 25/05/13 - added a line to increment 
 \b n_snapshots
 \b0  with every call of scem_output, and print n_snapshots to the command line with the other data. This allows us to see how many times the system data is printed to the data file "elements". The subroutine now also creates a file called 
 \b snapshot_data

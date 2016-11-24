@@ -11,11 +11,13 @@ module scem_0_arrays
   real*8, dimension(3)							            :: x_cen
   real*8, allocatable, dimension(:,:)			      :: xe_compare
   real*8, allocatable, dimension(:,:)			      :: xe_prev
+  real*8, dimension(3)                          :: pre_com, epi_com
   integer, allocatable, dimension(:,:,:)	     	:: head
   integer, allocatable, dimension(:)	     		  :: list
   integer, allocatable, dimension(:,:)    			:: pairs
   integer, allocatable, dimension(:,:)		    	:: neighbours
   integer, dimension(4,8)                       :: max_radius_elements  !For use in scem_cortex
   integer,allocatable,dimension(:)              :: stored_fates  !For use in scem_measure_randomised
+
 
 end module scem_0_arrays

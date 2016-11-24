@@ -26,6 +26,15 @@ module scem_2_output_final
         end do
       endif
 
+      !Write cell fate data to file
+      if (flag_fate_output.EQ.1) then
+        open(unit=26,file=output_folder//'/system_data/cell_fate_data_final.txt', status='unknown')
+        do n=1, nc
+          write(26,*) cells(n)%fate
+        end do
+        close(unit=26)
+      endif
+
       open(unit=25,file=output_folder//'/system_data/end_of_run_data.txt',status='unknown')
       write(25,*)nc
       write(25,*)ne

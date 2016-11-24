@@ -20,19 +20,17 @@ module scem_4_output_system
 
     subroutine scem_output_system
 
+        !Calculate time expired so far
+        call SYSTEM_CLOCK(current_time)
+        total_system_time = (current_time-start_time)/count_rate
+
+        !Write system progress update to the command line.
+        write(*,*) real(time),total_system_time,ne,nc,np,n_snapshots
+
         !Print time and cell count to cell_count file to allow cell count to be plotted against time
         if (flag_count_output.EQ.1) then
           open(unit=28,file=output_folder//'/system_data/cell_count.txt', status='unknown')
       	  write(28,*) real(time), nc
-        endif
-
-        !Write cell fate data at each snapshot to file
-        if (flag_fate_output.EQ.1) then
-          open(unit=26,file=output_folder//'/system_data/cell_fate_data_final.txt', status='unknown')
-          do n=1, nc
-            write(26,*) cells(n)%fate
-          end do
-          close(unit=26)
         endif
 
         !Write cell volume data to file
@@ -47,33 +45,19 @@ module scem_4_output_system
         endif
 
         !Sorting measurements
-        if (flag_measure_radius.EQ.1) then
-          call scem_measure_radius
-        endif
+        if (flag_measure_radius.EQ.1)       call scem_measure_radius
 
-        if (flag_measure_neighbours.EQ.1) then
-          call scem_measure_neighbours
-        endif
+        if (flag_measure_neighbours.EQ.1)   call scem_measure_neighbours
 
-        if (flag_measure_displacement.EQ.1) then
-          call scem_measure_displacement
-        endif
+        if (flag_measure_displacement.EQ.1) call scem_measure_displacement
 
-        if (flag_measure_type_radius.EQ.1) then
-          call scem_measure_type_radius
-        endif
+        if (flag_measure_type_radius.EQ.1)  call scem_measure_type_radius
 
-        if (flag_measure_surface.EQ.1) then
-          call scem_measure_surface
-        endif
+        if (flag_measure_surface.EQ.1)      call scem_measure_surface
 
-        if (flag_measure_randomised.EQ.1) then
-          call scem_measure_randomised
-        endif
+        if (flag_measure_randomised.EQ.1)   call scem_measure_randomised
 
-        if (flag_measure_velocity.EQ.1) then 
-          call scem_measure_velocity
-        endif
+        if (flag_measure_velocity.EQ.1)     call scem_measure_velocity
 
     end subroutine scem_output_system
 

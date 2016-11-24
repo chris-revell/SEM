@@ -45,7 +45,7 @@ module scem_0_input
   real*8  :: cell_cycle_time,rate_new_element,establishment_time,prob_new_element,frac_growth
   real*8  :: frac_placement_min,r_placement_min_sq
   real*8  :: buffer_frac,buffer_size,buffer_size_sq,sector_size,sector_size_sq,recip_sector_size
-  real*8  :: time,time_out_1,time_out_2,time_max,dt,dt_amp_max,r_s_max
+  real*8  :: time,output_interval,time_max,dt,dt_amp_max,r_s_max
   real*8  :: trigger_frac
   !Variables for cell behaviour
   real*8 :: stiffness_factor
@@ -102,12 +102,12 @@ module scem_0_input
       flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 1    ! Switch to turn off velocity measurement
-      flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comprison
+      flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
       stiffness_factor  = 0.25
-      cell_cycle_time   = 5000 ! Cell cycle time in seconds
-      n_cellcycles      = 2.0
+      cell_cycle_time   = 500 ! Cell cycle time in seconds
+      n_cellcycles      = 0.5
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
@@ -271,8 +271,7 @@ module scem_0_input
 
       ! temporal parameters - all in *seconds*
       time_max=n_cellcycles*cell_cycle_time ! --> time of simulation in seconds
-      time_out_1=time_max/99.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
-      time_out_2=time_out_1/10 ! --> interval between measurement data outputs. Set so that system is measured 10x more frequently than graphical outputs.
+      output_interval=time_max/99.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities
         diff_amp=sqrt(dt*diff_coeff) ! amplitude of noise in diffusion term

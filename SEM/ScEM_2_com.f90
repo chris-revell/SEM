@@ -18,7 +18,6 @@ module scem_2_com
 
     subroutine scem_com
 
-      real*8, dimension(3) :: pre_com, epi_com
       real*8, dimension(3) :: x_com,dx
       real*8               :: rog
       integer              :: parent_fate,epi_count,pre_count

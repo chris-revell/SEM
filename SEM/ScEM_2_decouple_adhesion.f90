@@ -50,7 +50,7 @@ contains
       enddo
     enddo
 
-  end subroutine
+  end subroutine scem_decouple_adhesion
 
   function cross_product(vector1,vector2)
     real*8, dimension(3), intent(in) :: vector1

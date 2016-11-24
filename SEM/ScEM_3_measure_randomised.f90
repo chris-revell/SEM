@@ -40,7 +40,7 @@ contains
     enddo
 
 
-    do i=1, 10 !This should probably be nc! but even for 12 cells that ends up being over 4000 possibilities
+    do i=1, 10 ! 10 seems to be an adequate number of tests, but could make it smaller to speed up the program
       do n=1,nc
         CALL RANDOM_NUMBER(fate_decider)
         if (fate_decider.GE.0.5) then
@@ -50,27 +50,17 @@ contains
         endif
       enddo
 
-      !Perform sorting measurements on newly randomised system
-      !Sorting measurements
-      if (flag_measure_radius.EQ.1) then
-        call scem_measure_radius
-      endif
-      if (flag_measure_neighbours.EQ.1) then
-        call scem_measure_neighbours
-      endif
-      if (flag_measure_displacement.EQ.1) then
-        call scem_measure_displacement
-      endif
-      if (flag_measure_type_radius.EQ.1) then
-        call scem_measure_type_radius
-      endif
-!No need to randomise surface measurement since this measurement is naturally normalised to 0.5      
-!      if (flag_measure_surface.EQ.1) then
-!        call scem_measure_surface
-!      endif
-      if (flag_measure_velocity.EQ.1) then
-        call scem_measure_velocity
-      endif
+      !Perform sorting measurements on newly randomised system. Randomised measurements not required for velocity or surface measurements.
+      if (flag_measure_radius.EQ.1)       call scem_measure_radius
+
+      if (flag_measure_neighbours.EQ.1)   call scem_measure_neighbours
+
+      if (flag_measure_displacement.EQ.1) call scem_measure_displacement
+
+      if (flag_measure_type_radius.EQ.1)  call scem_measure_type_radius
+
+!      if (flag_measure_velocity.EQ.1)     call scem_measure_velocity
+
 
     enddo
 
@@ -80,8 +70,6 @@ contains
     enddo
 
     randomising = .FALSE.
-
-    deallocate(stored_fates)
 
   end subroutine scem_measure_randomised
 end module scem_3_measure_randomised

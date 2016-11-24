@@ -5,8 +5,8 @@ module scem_2_measure_type_radius
 
   use scem_0_useful
   use scem_0_input
+  use scem_0_arrays
   use scem_1_types
-  use scem_2_com
 
   implicit none
 
