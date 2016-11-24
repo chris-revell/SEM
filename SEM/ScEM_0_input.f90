@@ -95,19 +95,19 @@ module scem_0_input
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
-      flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
-      flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
-      flag_measure_displacement=1    ! Switch to turn off displacement sorting measurement
+      flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
+      flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
+      flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 1    ! Switch to turn off velocity measurement
-      flag_measure_com        = 1
+      flag_measure_com        = 0
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
       stiffness_factor  = 0.25
-      cell_cycle_time   = 500 ! Cell cycle time in seconds
-      n_cellcycles      = 0.5
+      cell_cycle_time   = 10000 ! Cell cycle time in seconds
+      n_cellcycles      = 6.0
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm

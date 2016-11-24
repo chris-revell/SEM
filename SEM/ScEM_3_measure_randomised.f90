@@ -41,7 +41,7 @@ contains
       stored_fates(n) = cells(n)%fate
     enddo
 
-    print*, "marker2"
+    
     do i=1, 10 ! 10 seems to be an adequate number of tests, but could make it smaller to speed up the program
 
       do n=1,nc

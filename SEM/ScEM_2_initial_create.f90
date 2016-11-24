@@ -82,7 +82,7 @@ contains
 
   	end do
 
-    write(*,*)"Created cell 1 with ", icount, " elements."
+    write(*,*)"Created 1 cell with ", icount, " elements."
 
   end subroutine scem_initial_create
 
