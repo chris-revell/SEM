@@ -28,15 +28,34 @@ contains
   subroutine scem_iterate
 
     integer :: n
+    integer :: epi_counter
+    integer :: hypo_counter
+    real*8  :: fate_decider
 
     ! iterate system for pre-defined time interval
     do while (time.LT.time_max)
 
       if (intro.AND.nc.GE.nc_initial) then
-        call scem_output_system
-        if (flag_povray.EQ.1) call scem_output_povray
-        intro = .FALSE.
         write(*,*) "Grew intro system to",nc_initial,"cells. Initiating simulation parameters."
+        intro = .FALSE.
+        !Set fates for initial cells randomly
+        epi_counter = 0
+        hypo_counter= 0
+        do n=1, nc
+          CALL RANDOM_NUMBER(fate_decider)
+          !Ensure that the number of epiblast or hypoblast cannot exceed half the total number of cells (or half+1 if nc is odd)
+          if (fate_decider.GE.0.5) then
+            cells(n)%fate = 1
+            epi_counter = epi_counter+1
+          else
+            cells(n)%fate = 2
+            hypo_counter = hypo_counter+1
+          endif
+        enddo
+        print*, "Initial number of epiblasts:", epi_counter
+        print*, "Initial number of hypoblasts:", hypo_counter
+        call scem_output_system
+        if (flag_povray.EQ.1) call scem_output_povray        
       endif
 
       if (.NOT.intro) time=time+dt ! increment time
@@ -88,7 +107,7 @@ contains
       if (flag_conserve.EQ.1.OR.flag_volume_output.EQ.1) call scem_volume_calculate
 
       !Outputting data to file at intervals of output_interval.
-      if (nc.GE.nc_initial.AND.mod(time,(output_interval)).LT.dt) then
+      if (mod(time,(output_interval)).LT.dt.AND..NOT.intro) then
         n_snapshots=n_snapshots+1
         call scem_output_system
         if (flag_povray.EQ.1) call scem_output_povray
