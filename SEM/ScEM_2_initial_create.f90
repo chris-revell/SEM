@@ -19,6 +19,8 @@ contains
     real, dimension(3)   :: ra
     logical              :: success
 
+    intro = .TRUE.
+
     WRITE(*,*) "CREATE"
     nc=1
     ne=nc*ne_cell

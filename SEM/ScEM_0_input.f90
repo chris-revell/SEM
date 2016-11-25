@@ -11,10 +11,12 @@ module scem_0_input
   integer :: ne,nc,np !Numbers of elements, cells, and element pairs
   integer :: ne_size,nc_size,np_size,np_cortex !Parameters for array size allocations
   integer :: n_c_types,n_e_types
+  integer :: nc_initial                        !Number of cells at which to start measuring system when greating system de novo
   integer :: n_bins
   integer :: n_snapshots		!Number of system snapshots outputted to file "elements"
   real*8  :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
   real*8, allocatable, dimension(:,:,:,:,:,:) :: rel_strength		!For interaction of element a in cell A with element b in cell B argument is (type of cell A, type of cell B, type of element a, type of element b)
+  real*8, allocatable, dimension(:,:,:,:,:,:) :: intro_rel_strength
   integer :: nx,ny,nz
   integer :: iloop1,iloop2,iloop3,iloop4,iloop5
   !System switches
@@ -64,6 +66,7 @@ module scem_0_input
   !Variables defined for command line input
   character(len=3) :: arg1!,arg4
   logical :: randomising
+  logical :: intro
 
 !**********
   real*8 :: h !Height of spherical cap boundary.
@@ -105,9 +108,10 @@ module scem_0_input
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
+      nc_initial        = 12
       stiffness_factor  = 0.25
       cell_cycle_time   = 10000 ! Cell cycle time in seconds
-      n_cellcycles      = 6.0
+      n_cellcycles      = 2.0
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
@@ -294,6 +298,47 @@ module scem_0_input
       cap_radius                = 0
       n_snapshots = 0
 !************
+
+      allocate(intro_rel_strength(2,0:n_c_types,0:n_c_types,0:n_e_types,0:n_e_types,2))
+      intro_rel_strength(1,1,1,1,1,1) = stiffness_factor  !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+      intro_rel_strength(1,1,1,1,2,1) = stiffness_factor	 !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cortex
+      intro_rel_strength(1,1,1,2,2,1)	= stiffness_factor  !Adhesive component, intra-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(1,1,2,1,1,1)	= 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(1,1,2,1,2,1) = 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(1,1,2,2,2,1) = 0.0	 !Adhesive component, intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(1,2,2,1,1,1) = stiffness_factor	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(1,2,2,1,2,1) = stiffness_factor	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
+      intro_rel_strength(1,2,2,2,2,1) = stiffness_factor	 !Adhesive component, intra-cellular Hypoblast cortex-hypoblast cortex
+
+      intro_rel_strength(1,1,1,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+      intro_rel_strength(1,1,1,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+      intro_rel_strength(1,1,1,2,2,2) = epi_adhesion !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(1,1,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(1,1,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+      intro_rel_strength(1,1,2,2,2,2) = epi_adhesion  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
+      intro_rel_strength(1,2,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(1,2,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+      intro_rel_strength(1,2,2,2,2,2) = epi_adhesion  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
+
+      intro_rel_strength(2,1,1,1,1,1) = stiffness_factor  !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+      intro_rel_strength(2,1,1,1,2,1) = stiffness_factor	!Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cortex
+      intro_rel_strength(2,1,1,2,2,1)	= stiffness_factor  !Repulsive component, intra-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(2,1,2,1,1,1)	= 0.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(2,1,2,1,2,1) = 0.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(2,1,2,2,2,1) = 0.0	 !Repulsive component, intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(2,2,2,1,1,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(2,2,2,1,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
+      intro_rel_strength(2,2,2,2,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cortex-hypoblast cortex
+
+      intro_rel_strength(2,1,1,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+      intro_rel_strength(2,1,1,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+      intro_rel_strength(2,1,1,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(2,1,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(2,1,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+      intro_rel_strength(2,1,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
+      intro_rel_strength(2,2,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(2,2,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+      intro_rel_strength(2,2,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
     end subroutine scem_input
 

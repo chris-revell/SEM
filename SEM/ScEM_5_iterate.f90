@@ -32,7 +32,14 @@ contains
     ! iterate system for pre-defined time interval
     do while (time.LT.time_max)
 
-      time=time+dt ! increment time
+      if (intro.AND.nc.GE.nc_initial) then
+        call scem_output_system
+        if (flag_povray.EQ.1) call scem_output_povray
+        intro = .FALSE.
+        write(*,*) "Grew intro system to",nc_initial,"cells. Initiating simulation parameters."
+      endif
+
+      if (.NOT.intro) time=time+dt ! increment time
 
       forall(n=1:ne) xe_prev(n,:)=elements(n)%position(:) ! xe_prev records prior positions of elements
 
@@ -81,7 +88,7 @@ contains
       if (flag_conserve.EQ.1.OR.flag_volume_output.EQ.1) call scem_volume_calculate
 
       !Outputting data to file at intervals of output_interval.
-      if (mod(time,(output_interval)).LT.dt) then
+      if (nc.GE.nc_initial.AND.mod(time,(output_interval)).LT.dt) then
         n_snapshots=n_snapshots+1
         call scem_output_system
         if (flag_povray.EQ.1) call scem_output_povray

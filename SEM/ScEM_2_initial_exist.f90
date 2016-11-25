@@ -18,6 +18,8 @@ module scem_2_initial_exist
       integer :: hypo_counter
       real*8  :: fate_decider
 
+      intro = .FALSE.
+
       WRITE(*,*) "READ"
 
       !Read number of cells, elements and pairs from config_data.txt
