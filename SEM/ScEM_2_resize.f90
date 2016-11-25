@@ -20,8 +20,8 @@ module scem_2_resize
       real*8, allocatable, dimension(:,:) :: xe_prev_temp
       integer, allocatable, dimension(:) :: list_temp
       real*8 :: x_max,y_max,z_max
-
-	  !When the number of elements in the system exceeds half of the dimension size of the elements array (ne_size) then arrays are reallocated
+      
+	    !When the number of elements in the system exceeds half of the dimension size of the elements array (ne_size) then arrays are reallocated
       if (ne.gt.trigger_frac*ne_size) then
          allocate(elements_temp(ne_size))
          allocate(xe_prev_temp(ne_size,3))

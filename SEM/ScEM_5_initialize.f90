@@ -50,6 +50,7 @@ module scem_5_initialize
 
       ! create initial values for sector arrays
       call scem_relist(0)
+      
       ! locate element pairs
       call scem_pairs
 
@@ -69,7 +70,7 @@ module scem_5_initialize
 
       ! write initial system data to file
       call scem_output_system
-      
+
       ! Write element data to files in povray format
       if (flag_povray.EQ.1) call scem_output_povray
 

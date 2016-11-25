@@ -160,8 +160,7 @@ module scem_0_input
       ! system parameters
       trigger_frac=0.5 ! safety margin for triggering array reallocation
       ! derived quantitites
-        !Why *flag_create here?
-      dt_amp_max=0.1*(1.0-0.875*flag_create) ! empirically found best values for time step amplitude
+      dt_amp_max=0.1
       ! cell parameters
       n_c_types=2 ! Number of cell types. 1=epiblast, 2=hypoblast
       n_e_types=2 ! Number of element types. 1=cytoplasm, 2=cortex

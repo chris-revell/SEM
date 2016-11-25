@@ -22,7 +22,7 @@ contains
     WRITE(*,*) "CREATE"
     nc=1
     ne=nc*ne_cell
-    np=ne
+    np=4*ne
     nc_size=4*nc
     ne_size=4*ne
     np_size=4*np
