@@ -37,17 +37,10 @@ contains
   	cells(1)%label=1
     cells(1)%age=0.0
     cells(1)%fate=1
-!      CALL RANDOM_NUMBER(fate_decider)
-!      if (fate_decider.GE.0.5) then
-!        cells(1)%fate=1
-!      else
-!        cells(1)%fate=2
-!      endif
-
 
     !Add elements to cell:
     icount=0		!counts elements placed for this cell
-  	do while (icount.lt.ne_cell)
+  	do while (icount.lt.1.8*ne_cell)
 
       ! Define random position of new element. Adjust random numbers to be between plus or minus 1 by subtracting 1 and doubling.
       CALL RANDOM_NUMBER(ra)

@@ -55,7 +55,7 @@ contains
         print*, "Initial number of epiblasts:", epi_counter
         print*, "Initial number of hypoblasts:", hypo_counter
         call scem_output_system
-        if (flag_povray.EQ.1) call scem_output_povray        
+        if (flag_povray.EQ.1) call scem_output_povray
       endif
 
       if (.NOT.intro) time=time+dt ! increment time
