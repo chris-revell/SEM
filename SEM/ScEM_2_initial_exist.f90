@@ -17,6 +17,7 @@ module scem_2_initial_exist
       integer :: epi_counter
       integer :: hypo_counter
       real*8  :: fate_decider
+      logical :: fatesnotbalanced
 
       intro = .FALSE.
 
@@ -53,7 +54,7 @@ module scem_2_initial_exist
             endif
           enddo
           if (epi_counter.EQ.hypo_counter) fatesnotbalanced = .FALSE.
-        enddo 
+        enddo
         print*, "epi_counter", epi_counter
         print*, "hypo_counter", hypo_counter
       else
