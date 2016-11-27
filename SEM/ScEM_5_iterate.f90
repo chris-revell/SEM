@@ -31,6 +31,7 @@ contains
     integer :: epi_counter
     integer :: hypo_counter
     real*8  :: fate_decider
+    logical :: fatesnotbalanced
 
     ! iterate system for pre-defined time interval
     do while (time.LT.time_max)
@@ -41,17 +42,20 @@ contains
         !Set fates for initial cells randomly
         epi_counter = 0
         hypo_counter= 0
-        do n=1, nc
-          CALL RANDOM_NUMBER(fate_decider)
-          !Ensure that the number of epiblast or hypoblast cannot exceed half the total number of cells (or half+1 if nc is odd)
-          if (fate_decider.GE.0.5) then
-            cells(n)%fate = 1
-            epi_counter = epi_counter+1
-          else
-            cells(n)%fate = 2
-            hypo_counter = hypo_counter+1
-          endif
-        enddo
+        fatesnotbalanced = .TRUE.
+        do while (fatesnotbalanced)
+          do n=1, nc
+            CALL RANDOM_NUMBER(fate_decider)
+            if (fate_decider.GE.0.5) then
+              cells(n)%fate = 1
+              epi_counter = epi_counter+1
+            else
+              cells(n)%fate = 2
+              hypo_counter = hypo_counter+1
+            endif
+          enddo
+          if (epi_counter.EQ.hypo_counter) fatesnotbalanced = .FALSE.
+        enddo 
         print*, "Initial number of epiblasts:", epi_counter
         print*, "Initial number of hypoblasts:", hypo_counter
         call scem_output_system
