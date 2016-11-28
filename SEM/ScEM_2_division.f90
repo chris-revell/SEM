@@ -28,7 +28,11 @@ module scem_2_division
 
       do k=1,nc_old
          if (cells(k)%c_elements(0).ge.2*ne_cell) then
+
             nc=nc+1
+
+            if (intro) write(*,'(I2)',advance='no') nc
+
             do i=2,cells(k)%c_elements(0)
                n=cells(k)%c_elements(i)
                do j=1,i-1
