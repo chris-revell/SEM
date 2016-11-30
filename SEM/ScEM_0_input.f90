@@ -7,15 +7,16 @@ module scem_0_input
   implicit none
 
   !System parameters and constants
-  integer, parameter :: dim=3 !Number of spatial dimensions
   integer, parameter :: ne_cell=128 !Number of elements per cell
   integer :: ne,nc,np !Numbers of elements, cells, and element pairs
   integer :: ne_size,nc_size,np_size,np_cortex !Parameters for array size allocations
   integer :: n_c_types,n_e_types
+  integer :: nc_initial                        !Number of cells at which to start measuring system when greating system de novo
   integer :: n_bins
   integer :: n_snapshots		!Number of system snapshots outputted to file "elements"
   real*8  :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
   real*8, allocatable, dimension(:,:,:,:,:,:) :: rel_strength		!For interaction of element a in cell A with element b in cell B argument is (type of cell A, type of cell B, type of element a, type of element b)
+  real*8, allocatable, dimension(:,:,:,:,:,:) :: intro_rel_strength
   integer :: nx,ny,nz
   integer :: iloop1,iloop2,iloop3,iloop4,iloop5
   !System switches
@@ -65,6 +66,7 @@ module scem_0_input
   !Variables defined for command line input
   character(len=3) :: arg1!,arg4
   logical :: randomising
+  logical :: intro
 
 !**********
   real*8 :: h !Height of spherical cap boundary.
@@ -77,7 +79,7 @@ module scem_0_input
     subroutine scem_input
 
       !Simulation control switches
-      flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
+      flag_create     = 1 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
@@ -96,19 +98,20 @@ module scem_0_input
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
-      flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
-      flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
-      flag_measure_displacement=1    ! Switch to turn off displacement sorting measurement
+      flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
+      flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
+      flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 1    ! Switch to turn off velocity measurement
-      flag_measure_com        = 1
+      flag_measure_com        = 0
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
+      nc_initial        = 12
       stiffness_factor  = 0.25
-      cell_cycle_time   = 500 ! Cell cycle time in seconds
-      n_cellcycles      = 0.5
+      cell_cycle_time   = 10000 ! Cell cycle time in seconds
+      n_cellcycles      = 2.0
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
@@ -161,8 +164,7 @@ module scem_0_input
       ! system parameters
       trigger_frac=0.5 ! safety margin for triggering array reallocation
       ! derived quantitites
-        !Why *flag_create here?
-      dt_amp_max=0.1*(1.0-0.875*flag_create) ! empirically found best values for time step amplitude
+      dt_amp_max=0.1
       ! cell parameters
       n_c_types=2 ! Number of cell types. 1=epiblast, 2=hypoblast
       n_e_types=2 ! Number of element types. 1=cytoplasm, 2=cortex
@@ -288,9 +290,7 @@ module scem_0_input
         recip_sector_size=1.0/sector_size ! calculate reciprocal of sector size for efficiency
         nx=8*(2+int(4*r_cell/sector_size)) ! --> number of sectors in x direction
         ny=nx ! --> isotropic choice
-        if (dim.eq.3) nz=nx ! --> isotropic choice in 3D
-        if (dim.eq.2) nz=1 ! --> a single layer of sectors for 2D simulations
-
+        nz=nx ! --> isotropic choice in 3D
 
 !************
 !These might be better off elsewhere
@@ -298,6 +298,47 @@ module scem_0_input
       cap_radius                = 0
       n_snapshots = 0
 !************
+
+      allocate(intro_rel_strength(2,0:n_c_types,0:n_c_types,0:n_e_types,0:n_e_types,2))
+      intro_rel_strength(1,1,1,1,1,1) = stiffness_factor  !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+      intro_rel_strength(1,1,1,1,2,1) = stiffness_factor	 !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cortex
+      intro_rel_strength(1,1,1,2,2,1)	= stiffness_factor  !Adhesive component, intra-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(1,1,2,1,1,1)	= 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(1,1,2,1,2,1) = 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(1,1,2,2,2,1) = 0.0	 !Adhesive component, intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(1,2,2,1,1,1) = stiffness_factor	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(1,2,2,1,2,1) = stiffness_factor	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
+      intro_rel_strength(1,2,2,2,2,1) = stiffness_factor	 !Adhesive component, intra-cellular Hypoblast cortex-hypoblast cortex
+
+      intro_rel_strength(1,1,1,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+      intro_rel_strength(1,1,1,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+      intro_rel_strength(1,1,1,2,2,2) = 1.0 !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(1,1,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(1,1,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+      intro_rel_strength(1,1,2,2,2,2) = 1.0  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
+      intro_rel_strength(1,2,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(1,2,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+      intro_rel_strength(1,2,2,2,2,2) = 1.0  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
+
+      intro_rel_strength(2,1,1,1,1,1) = stiffness_factor  !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+      intro_rel_strength(2,1,1,1,2,1) = stiffness_factor	!Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cortex
+      intro_rel_strength(2,1,1,2,2,1)	= stiffness_factor  !Repulsive component, intra-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(2,1,2,1,1,1)	= 0.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(2,1,2,1,2,1) = 0.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(2,1,2,2,2,1) = 0.0	 !Repulsive component, intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(2,2,2,1,1,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(2,2,2,1,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
+      intro_rel_strength(2,2,2,2,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cortex-hypoblast cortex
+
+      intro_rel_strength(2,1,1,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+      intro_rel_strength(2,1,1,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+      intro_rel_strength(2,1,1,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(2,1,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(2,1,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+      intro_rel_strength(2,1,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
+      intro_rel_strength(2,2,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(2,2,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+      intro_rel_strength(2,2,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
     end subroutine scem_input
 

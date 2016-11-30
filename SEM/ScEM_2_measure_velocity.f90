@@ -3,7 +3,6 @@
 
 module scem_2_measure_velocity
 
-  use scem_0_useful
   use scem_0_input
   use scem_0_arrays
   use scem_1_types
@@ -14,9 +13,9 @@ contains
 
   subroutine scem_measure_velocity
 
+    integer              :: parent_fate,n
     real*8, dimension(3) :: displacement
     real*8               :: radialvelocity,radius,parent_age
-    integer              :: parent_fate
 
     if (randomising) then
       open(unit=37,file=output_folder//'/randomised_data/velocity1.txt', status='unknown', position="append")

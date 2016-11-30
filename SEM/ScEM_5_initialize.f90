@@ -4,7 +4,6 @@ module scem_5_initialize
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_initialconditions
   use scem_1_types
   use scem_2_com
@@ -16,7 +15,7 @@ module scem_5_initialize
   use scem_2_pairs
   use scem_2_relist
   use scem_4_cortex
-  use scem_4_volume_calculate
+  use scem_1_volume_calculate
 
   implicit none
 
@@ -51,6 +50,7 @@ module scem_5_initialize
 
       ! create initial values for sector arrays
       call scem_relist(0)
+
       ! locate element pairs
       call scem_pairs
 
@@ -69,12 +69,10 @@ module scem_5_initialize
       endif
 
       ! write initial system data to file
-      call scem_output_system
+      if (.NOT.intro) call scem_output_system
 
       ! Write element data to files in povray format
-      if (flag_povray.EQ.1) then
-        call scem_output_povray
-      endif
+      if ((flag_povray.EQ.1).AND.(.NOT.intro)) call scem_output_povray
 
       call scem_initialconditions
 

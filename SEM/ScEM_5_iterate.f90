@@ -4,7 +4,6 @@ module scem_5_iterate
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
   use scem_2_ageing
   use scem_2_com
@@ -17,8 +16,8 @@ module scem_5_iterate
   use scem_2_relist
   use scem_2_resize
   use scem_4_cortex
-  use scem_4_volume_calculate
-  use scem_4_volume_conserve
+  use scem_1_volume_calculate
+  use scem_1_volume_conserve
   use scem_4_integrate
   use scem_4_output_system
 
@@ -28,10 +27,46 @@ contains
 
   subroutine scem_iterate
 
+    integer :: n
+    integer :: epi_counter
+    integer :: hypo_counter
+    real*8  :: fate_decider
+    logical :: fatesnotbalanced
+
     ! iterate system for pre-defined time interval
     do while (time.LT.time_max)
 
-      time=time+dt ! increment time
+      if (intro.AND.nc.GE.nc_initial) then
+        write(*,'(A20,I2,A41)') "Grew intro system to",nc_initial," cells. Initiating simulation parameters."
+        intro = .FALSE.
+        !Set fates for initial cells randomly
+        fatesnotbalanced = .TRUE.
+        do while (fatesnotbalanced)
+          epi_counter = 0
+          hypo_counter= 0
+          do n=1, nc
+            CALL RANDOM_NUMBER(fate_decider)
+            if (fate_decider.GE.0.5) then
+              cells(n)%fate = 1
+              epi_counter = epi_counter+1
+            else
+              cells(n)%fate = 2
+              hypo_counter = hypo_counter+1
+            endif
+          enddo
+          if (MOD(nc,2).EQ.0) then
+            if (epi_counter.EQ.hypo_counter) fatesnotbalanced = .FALSE.
+          else
+            if (ABS(epi_counter-hypo_counter).EQ.1) fatesnotbalanced = .FALSE.
+          endif
+        enddo
+        write(*,'(A29,I2)') "Initial number of epiblasts: ", epi_counter
+        write(*,'(A30,I2)') "Initial number of hypoblasts: ", hypo_counter
+        call scem_output_system
+        if (flag_povray.EQ.1) call scem_output_povray
+      endif
+
+      if (.NOT.intro) time=time+dt ! increment time
 
       forall(n=1:ne) xe_prev(n,:)=elements(n)%position(:) ! xe_prev records prior positions of elements
 
@@ -80,7 +115,7 @@ contains
       if (flag_conserve.EQ.1.OR.flag_volume_output.EQ.1) call scem_volume_calculate
 
       !Outputting data to file at intervals of output_interval.
-      if (mod(time,(output_interval)).LT.dt) then
+      if (mod(time,(output_interval)).LT.dt.AND..NOT.intro) then
         n_snapshots=n_snapshots+1
         call scem_output_system
         if (flag_povray.EQ.1) call scem_output_povray

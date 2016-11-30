@@ -9,7 +9,6 @@ module scem_2_DIT
   use scem_0_input
   use scem_1_types
 
-
   implicit none
 
 contains

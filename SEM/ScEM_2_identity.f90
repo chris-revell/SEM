@@ -6,7 +6,6 @@ module scem_2_identity
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
 
   implicit none
@@ -15,6 +14,7 @@ module scem_2_identity
 
     subroutine scem_identity
 
+      integer :: n,k
       integer, allocatable, dimension(:) :: counter
 
       allocate(counter(nc))
@@ -37,5 +37,5 @@ module scem_2_identity
       deallocate(counter)
 
     end subroutine scem_identity
-    
+
 end module scem_2_identity

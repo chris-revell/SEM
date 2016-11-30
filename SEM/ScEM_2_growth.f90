@@ -4,7 +4,6 @@ module scem_2_growth
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
 
   implicit none
@@ -13,13 +12,13 @@ module scem_2_growth
 
     subroutine scem_growth
 
-      real, dimension(1,3)  :: ra2
-      real*8, dimension(3)  :: pos,d_pos,pos_1,pos_2,dx
+      integer               :: m,n,nn,k,ix,iy,iz
+      integer               :: n_el_cell_k,nn_old,flag_success
+      real*8                :: sep_sq,r_core,phi,theta,rad_sq
+      real                  :: rn
       integer, dimension(3) :: ixe
-      real :: rn
-      real*8 :: sep_sq
-      real*8 :: r_core,phi,theta
-      integer :: n_el_cell_k,nn_old,flag_success
+      real, dimension(2)    :: ra2
+      real*8, dimension(3)  :: pos,d_pos,pos_1,pos_2,dx
 
       ! attempt creation of new element in each cell
       ! (use an improved algorithm here? - I think we need to eventually - talk to Mikael Bjorkland?)
@@ -39,12 +38,11 @@ module scem_2_growth
               flag_success=1
               ne=ne+1
               CALL RANDOM_NUMBER(ra2)
-              phi=2*pi*ra2(1,1) ! azimuthal angle
-              theta=acos(2*(ra2(1,2)-0.5)) ! polar angle, appropriately weighted
+              phi=2*pi*ra2(1) ! azimuthal angle
+              theta=acos(2*(ra2(2)-0.5)) ! polar angle, appropriately weighted
               d_pos(1)=0.6*r_equil*sin(theta)*cos(phi) ! define random x-position of new element rel. to element n
               d_pos(2)=0.6*r_equil*sin(theta)*sin(phi) ! define random y-position of new element rel. to element n
               d_pos(3)=0.6*r_equil*cos(theta) ! define random z-position of new element rel. to element n
-              if (dim.eq.2) d_pos(3)=0.0 ! collapse third dimension for planar simulations
               elements(ne)%label=ne
               elements(ne)%parent=k
               elements(ne)%stage=0

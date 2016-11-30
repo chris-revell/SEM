@@ -1,11 +1,10 @@
 !CK Revell January 2015
 !Module for computing the volume of a cell in a particle based model from the boundary elements and centre of mass.
 
-module scem_4_volume_calculate
+module scem_1_volume_calculate
 
 	use scem_0_input
 	use scem_0_arrays
-	use scem_0_useful
 	use scem_1_types
 
 	implicit none
@@ -14,6 +13,7 @@ module scem_4_volume_calculate
 
 		subroutine scem_volume_calculate
 
+			integer																:: i,j
 			real*8																:: volume_cell			!Total volume of the cell
 			real*8																:: volume_triplet		!Volume of tetrahedron formed by a given surface element triplet
 			real*8, dimension(3)									:: P
@@ -49,4 +49,4 @@ module scem_4_volume_calculate
 			end do
 
 		end subroutine scem_volume_calculate
-end module scem_4_volume_calculate
+end module scem_1_volume_calculate

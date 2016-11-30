@@ -4,7 +4,6 @@ module scem_2_pairs
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
 
   implicit none
@@ -13,11 +12,12 @@ module scem_2_pairs
 
     subroutine scem_pairs
 
-      real*8, dimension(3) :: dx,pos_1,pos_2
-      real*8 :: sep_sq
-      integer, allocatable, dimension(:,:) :: pairs_temp
+      integer               :: icount,n,nn,ix,iy,iz
+      integer               :: np_size_trigger
+      real*8                :: sep_sq
       integer, dimension(3) :: ixe
-      integer :: np_size_trigger
+      real*8, dimension(3)  :: dx,pos_1,pos_2
+      integer, allocatable, dimension(:,:) :: pairs_temp
 
       icount=0
       pairs(:,:)=0

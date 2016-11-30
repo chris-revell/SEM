@@ -4,7 +4,6 @@
 module scem_2_decouple_adhesion
 
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
 
   implicit none
@@ -13,7 +12,7 @@ contains
 
   subroutine scem_decouple_adhesion
 
-    integer :: element_label,t1,t2,t3
+    integer :: element_label,t1,t2,t3,i,j,k
     real*8  :: local_area
     real*8, dimension(3)  :: a,b,c
 

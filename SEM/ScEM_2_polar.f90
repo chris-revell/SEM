@@ -3,7 +3,6 @@
 !Converts element positions of a specified cell into spherical polar coordinates
 module scem_2_polar
 
-	use scem_0_useful
 	use scem_0_arrays
 	use scem_0_input
 	use scem_1_types
@@ -14,9 +13,10 @@ module scem_2_polar
 
 		subroutine scem_polar
 
-		real*8, dimension(3) :: r_vector
+		integer							 :: i
 		real*8							 :: r_squared
 		real*8							 :: cos_theta
+		real*8, dimension(3) :: r_vector
 
 		!Loop over all elements in the system
 		do i=1, ne

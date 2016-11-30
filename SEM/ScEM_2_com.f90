@@ -9,7 +9,7 @@ module scem_2_com
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
+
   use scem_1_types
 
   implicit none
@@ -21,6 +21,7 @@ module scem_2_com
       real*8, dimension(3) :: x_com,dx
       real*8               :: rog
       integer              :: parent_fate,epi_count,pre_count
+      integer              :: k,m,n
 
       do k=1,nc
         ! calculate center of mass

@@ -6,7 +6,6 @@
 module scem_3_cortical_tension_update
 
   use scem_0_input
-  use scem_0_useful
   use scem_0_arrays
   use scem_1_types
   use scem_2_DIT
@@ -18,7 +17,7 @@ contains
   subroutine scem_cortical_tension_update
 
     integer :: pair_counter
-    integer :: c
+    integer :: c,i,j,m,n,nn
     real    :: sep_sq
     real*8, dimension(3) :: dx
 
@@ -53,7 +52,7 @@ contains
 
     !Now that cortex network has been established in pairs_cortex(i,1)
     !and pairs_cortex(i,2), calculate pairs_cortex(i,3) values
-    call scem_dit
+    if (.NOT.intro) call scem_dit
 
     !Now update velocities for all pairs in this network.
     do m=1,pair_counter
@@ -68,7 +67,10 @@ contains
 
       !Update element velocities according to interaction potentials with overdamped langevin dynamics
       !Constant force cortex_constant1 or cortex_constant2 applied depending on fate of cell that contains pair.
-      if (cells(elements(n)%parent)%fate.EQ.1) then
+      if (intro) then
+        elements(n)%velocity(:) = elements(n)%velocity(:) - dx(:)*cortex_constant1
+        elements(nn)%velocity(:)= elements(nn)%velocity(:)+ dx(:)*cortex_constant1
+      elseif(cells(elements(n)%parent)%fate.EQ.1) then
         elements(n)%velocity(:) = elements(n)%velocity(:) - dx(:)*cortex_constant1*pairs_cortex(m)%cortex_factor
         elements(nn)%velocity(:)= elements(nn)%velocity(:)+ dx(:)*cortex_constant1*pairs_cortex(m)%cortex_factor
       else

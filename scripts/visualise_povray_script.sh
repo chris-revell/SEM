@@ -7,8 +7,7 @@ set -e #Exit script if any of the povray renderings fail.
 for i in $(ls $1); do
   if [ ${i: -4:4} == ".pov" ]
   then
-    povray $1/$i +FJ Output_File_Name=$1/${i:0:7}".jpg" -D +H900 +W1200
-    #rm ${i:0:7}".jpg"
+    povray $1/$i +FJ Output_File_Name=$1/${i:0:7}".jpg" -D +H900 +W1200 >/dev/null 2>&1
   fi
 done
 

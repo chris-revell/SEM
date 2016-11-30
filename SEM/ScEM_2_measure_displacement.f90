@@ -3,7 +3,6 @@
 
 module scem_2_measure_displacement
 
-  use scem_0_useful
   use scem_0_input
   use scem_1_types
 
@@ -13,8 +12,9 @@ contains
 
   subroutine scem_measure_displacement
 
+    integer :: n
+    real*8  :: displacement
     real*8, dimension(3) :: displacement_vector
-    real*8 :: displacement
 
     if (randomising) then
       open(unit=41, file=output_folder//"/randomised_data/displacement1.txt", status="unknown", position="append")
@@ -27,8 +27,7 @@ contains
     do n=1, nc
 
       displacement_vector(:) = cells(n)%position(:) - cells(n)%original_position(:)
-      dist_sq = DOT_PRODUCT(displacement_vector,displacement_vector)
-      displacement = SQRT(dist_sq)
+      displacement = (DOT_PRODUCT(displacement_vector,displacement_vector))
 
       if (cells(n)%fate.EQ.1) then
         write(41,*) MIN(cells(n)%age,time), displacement

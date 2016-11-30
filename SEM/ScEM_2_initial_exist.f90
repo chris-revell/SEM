@@ -4,7 +4,7 @@ module scem_2_initial_exist
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
+
   use scem_1_types
 
   implicit none
@@ -13,8 +13,13 @@ module scem_2_initial_exist
 
     subroutine scem_initial_exist
 
+      integer :: n
       integer :: epi_counter
       integer :: hypo_counter
+      real*8  :: fate_decider
+      logical :: fatesnotbalanced
+
+      intro = .FALSE.
 
       WRITE(*,*) "READ"
 
@@ -36,22 +41,19 @@ module scem_2_initial_exist
         !Set fates for initial cells randomly
         epi_counter = 0
         hypo_counter= 0
-        do n=1, nc
-          CALL RANDOM_NUMBER(fate_decider)
-          !Ensure that the number of epiblast or hypoblast cannot exceed half the total number of cells (or half+1 if nc is odd)
-          if (epi_counter.GE.(nc/2)) then
-            cells(n)%fate = 2
-            hypo_counter = hypo_counter+1
-          elseif (hypo_counter.GE.(nc/2)) then
-            cells(n)%fate = 1
-            epi_counter = epi_counter+1
-          elseif (fate_decider.GE.0.5) then
-            cells(n)%fate = 1
-            epi_counter = epi_counter+1
-          else
-            cells(n)%fate = 2
-            hypo_counter = hypo_counter+1
-          endif
+        fatesnotbalanced = .TRUE.
+        do while (fatesnotbalanced)
+          do n=1, nc
+            CALL RANDOM_NUMBER(fate_decider)
+            if (fate_decider.GE.0.5) then
+              cells(n)%fate = 1
+              epi_counter = epi_counter+1
+            else
+              cells(n)%fate = 2
+              hypo_counter = hypo_counter+1
+            endif
+          enddo
+          if (epi_counter.EQ.hypo_counter) fatesnotbalanced = .FALSE.
         enddo
         print*, "epi_counter", epi_counter
         print*, "hypo_counter", hypo_counter
