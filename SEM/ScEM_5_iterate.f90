@@ -68,15 +68,29 @@ contains
 
       if (.NOT.intro) time=time+dt ! increment time
 
+      !$omp parallel &
+      !$omp shared (xe_prev,ne,elements) &
+      !$omp private (n)
+      !$omp workshare
       forall(n=1:ne) xe_prev(n,:)=elements(n)%position(:) ! xe_prev records prior positions of elements
-
+      !$omp end workshare
       ! implement 2nd order Runge-Kutta
+      !$omp single
       call scem_integrate ! first integration and increment by half a step
+      !$omp end single
+      !$omp workshare
       forall(n=1:ne) elements(n)%position(:)=elements(n)%position(:)+0.5*dt*elements(n)%velocity(:)
       forall(n=1:ne) elements(n)%velocity(:)=0.0
+      !$omp end workshare
+      !$omp single
       call scem_integrate ! second integration and increment by a full step
+      !$omp end single
+      !$omp workshare
       forall(n=1:ne) elements(n)%position(:)=xe_prev(n,:)+dt*elements(n)%velocity(:)
+      !$omp end workshare
 
+
+      !$omp single
       ! element diffusion
       if (flag_diffusion.eq.1) call scem_diffusion
 
@@ -120,8 +134,12 @@ contains
         call scem_output_system
         if (flag_povray.EQ.1) call scem_output_povray
       end if
+      !$omp end single 
 
+      !$omp workshare
       forall(n=1:ne) elements(n)%velocity(:)=0.0
+      !$omp endworkshare
+      !$omp end parallel
 
     end do
 
