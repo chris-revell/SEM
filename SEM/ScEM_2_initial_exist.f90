@@ -39,10 +39,10 @@ module scem_2_initial_exist
       !Set cell fates from file or randomly
       if (flag_randomise.EQ.1) then
         !Set fates for initial cells randomly
-        epi_counter = 0
-        hypo_counter= 0
         fatesnotbalanced = .TRUE.
         do while (fatesnotbalanced)
+          epi_counter = 0
+          hypo_counter= 0
           do n=1, nc
             CALL RANDOM_NUMBER(fate_decider)
             if (fate_decider.GE.0.5) then
@@ -53,7 +53,11 @@ module scem_2_initial_exist
               hypo_counter = hypo_counter+1
             endif
           enddo
-          if (epi_counter.EQ.hypo_counter) fatesnotbalanced = .FALSE.
+          if (MOD(nc,2).EQ.0) then
+            if (epi_counter.EQ.hypo_counter) fatesnotbalanced = .FALSE.
+          else
+            if (ABS(epi_counter-hypo_counter).EQ.1) fatesnotbalanced = .FALSE.
+          endif
         enddo
         print*, "epi_counter", epi_counter
         print*, "hypo_counter", hypo_counter
