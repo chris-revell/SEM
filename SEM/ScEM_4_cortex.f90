@@ -47,6 +47,11 @@ module scem_4_cortex
 			bin_counters(:,:) = 0
 			bin_contents(:,:,:) = 0
 
+
+			!$omp parallel &
+			!$omp shared (cells,elements,i,bin_contents) &
+			!$omp private (l,j,k)
+			!$omp do reduction (+ : bin_counters)
 			do l=1, cells(i)%c_elements(0)				!Loop over all elements in the cell
 
 				element_label = cells(i)%c_elements(l)
@@ -70,7 +75,10 @@ module scem_4_cortex
 				bin_counters(j,k)=bin_counters(j,k)+1
 				bin_contents(j,k,bin_counters(j,k))=element_label
 			end do !End loop over all elements in the cell.
+			!$omp end do
+			!$omp end parallel
 
+			!TO DO parallelise the next sections as well? 
 
 			!At this stage we have an array containing a list of which elements lie in each bin
 			!Next step is to determine which element in each bin has the greatest radius.
