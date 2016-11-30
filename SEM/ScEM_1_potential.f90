@@ -8,14 +8,15 @@ module scem_1_potential
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
 
   implicit none
 
   contains
 
     subroutine scem_potential
-      real*8 :: sep_sq,factor
+
+      integer :: j
+      real*8  :: sep_sq,factor
       real*8, allocatable, dimension(:) :: r_sq_table
       real*8, allocatable, dimension(:) :: pot_deriv_table
 

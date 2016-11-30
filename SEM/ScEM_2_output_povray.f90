@@ -4,7 +4,6 @@ module scem_2_output_povray
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
   use scem_2_background
 
@@ -14,9 +13,10 @@ module scem_2_output_povray
 
     subroutine scem_output_povray
 
-      character(len=24)	    :: povray_filename  !Filename for data output
-      real*8                :: sphere_radius    !Radius of sphere used to represent cell volume in povray visualiation. Calculated from cell volume.
+      integer               :: i,j,k,l,m,n
       integer               :: corner_element   !Label of element forming corner of smoothed_triangle
+      real*8                :: sphere_radius    !Radius of sphere used to represent cell volume in povray visualiation. Calculated from cell volume.
+      character(len=24)	    :: povray_filename  !Filename for data output
       real*8, dimension(3)  :: corner           !Array to store corner vector used in smoothed_triangle data output
       real*8, dimension(3)  :: normal           !Array to store normal vector used in smoothed_triangle data output
 
@@ -24,31 +24,31 @@ module scem_2_output_povray
       write(povray_filename,"(A18,I2.2,A4)") "/povray_data/snap_", n_snapshots, ".pov"
 
       !Open file for povray output
-      open(unit=42, file=output_folder//povray_filename,status='unknown')
+      open(unit=30, file=output_folder//povray_filename,status='unknown')
 
-      write(42,*) '#version 3.5;'
-      write(42,*) '#include "colors.inc"'
-      write(42,*) '#include "textures.inc"'
-      write(42,*) 'background {White}'
-      write(42,*)
-      write(42,*) 'camera {'
-      write(42,*) '   location  <500, 0, 0>'
-      write(42,*) '   angle 12'
-      write(42,*) '   sky <0,0,1>'
-      write(42,*) '   look_at<0,0,0>}'
-      write(42,*)
-      write(42,*) 'light_source { < -60, 60, 0 > color White }'
-      write(42,*) 'light_source { < 60, -60, 0 > color White }'
-      write(42,*) 'light_source { < 0, 0, 60 > color White }'
-      write(42,*) 'light_source { < 0, 0, -60 > color White }'
-      write(42,*)
+      write(30,*) '#version 3.5;'
+      write(30,*) '#include "colors.inc"'
+      write(30,*) '#include "textures.inc"'
+      write(30,*) 'background {White}'
+      write(30,*)
+      write(30,*) 'camera {'
+      write(30,*) '   location  <500, 0, 0>'
+      write(30,*) '   angle 12'
+      write(30,*) '   sky <0,0,1>'
+      write(30,*) '   look_at<0,0,0>}'
+      write(30,*)
+      write(30,*) 'light_source { < -60, 60, 0 > color White }'
+      write(30,*) 'light_source { < 60, -60, 0 > color White }'
+      write(30,*) 'light_source { < 0, 0, 60 > color White }'
+      write(30,*) 'light_source { < 0, 0, -60 > color White }'
+      write(30,*)
 
       if (flag_background.EQ.1) then !Draw boundary of spherical background
-        write(42,'(A16,F18.14,A77)') &
+        write(30,'(A16,F18.14,A77)') &
               ' sphere {<0,0,0>', spherical_boundary_radius,&
               ' texture { pigment { color Blue transmit .85}finish{phong .8} } } // boundary'
       elseif (flag_background.EQ.4) then !Draw the spherical cap background
-        write(42,'(A18,F18.14,A2,F18.14,A77)') &
+        write(30,'(A18,F18.14,A2,F18.14,A77)') &
               ' sphere {<0.2,0.2,',(-cap_radius+h/2.0),'> ',cap_radius,&
               ' texture { pigment { color Blue transmit .85}finish{phong .8} } } // boundary'
       endif
@@ -60,13 +60,13 @@ module scem_2_output_povray
         !Draw spheres for all elements of all cells in the system, coloured according to element type
         do i=1, ne
           if ((elements(i)%type).EQ.1) then
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A60,I2.2,A6,I1.1)') ' sphere {  < ',&
+            write(30,'(A12,F18.14,A2,F18.14,A2,F18.14,A60,I2.2,A6,I1.1)') ' sphere {  < ',&
                 elements(i)%position(1), ',', elements(i)%position(2),',', &
                 elements(i)%position(3),&
                 '> 1.5 texture { pigment { color Green } } } // element, cell',&
                 elements(i)%parent, ", fate",cells(elements(i)%parent)%fate
           else
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A58,I2.2,A6,I1.1)') ' sphere {  < ',&
+            write(30,'(A12,F18.14,A2,F18.14,A2,F18.14,A58,I2.2,A6,I1.1)') ' sphere {  < ',&
                 elements(i)%position(1), ',', elements(i)%position(2),',', &
                 elements(i)%position(3),&
                 '> 1.5 texture { pigment { color Red } } } // element, cell',&
@@ -74,7 +74,7 @@ module scem_2_output_povray
           endif
         enddo
       endif
-      write(42,*)
+      write(30,*)
 
       !Draw pair data to file in Pov-Ray format.
       !Loop over all pairs in "pairs" array. For each pair,
@@ -90,7 +90,7 @@ module scem_2_output_povray
           l = elements(n)%parent
           if (k.NE.l) then !Elements are not in the same cell
             !Inter-cell interactions in black
-            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
+            write(30,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
                           F18.14,A62,I2.2,A7,I2.2)') &
                           ' cylinder {  < ', &
                           elements(m)%position(1), ',', &
@@ -105,7 +105,7 @@ module scem_2_output_povray
           else !Elements are in the same cell
             CYCLE
             !All intra-cell interactions in blue
-!            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
+!            write(30,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
 !                            F18.14,A61,I2.2,A7,I2.2)') &
 !                            ' cylinder {  < ', &
 !                            elements(pairs(j,1))%position(1), ',', &
@@ -121,7 +121,7 @@ module scem_2_output_povray
           endif
         enddo
       endif
-      write(42,*)
+      write(30,*)
 
       !Write cell position data to file in povray format.
       !Draw a sphere at the centre of mass of each cell.
@@ -133,20 +133,20 @@ module scem_2_output_povray
         do i=1, nc
           sphere_radius = (3.0*cells(i)%volume/(pi*4.0))**(1.0/3.0)     !Radius is cube root of (3*volume/4pi)
           if ((cells(i)%fate).EQ.1) then
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A81,I2.2)') &
+            write(30,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A81,I2.2)') &
                   ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
                   ',', cells(i)%position(3), '> ', sphere_radius,&
                   ' texture { pigment { color Green transmit .66}finish{phong .8} } } // volume cell', &
                   cells(i)%label
           else
-            write(42,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A79,I2.2)') &
+            write(30,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A79,I2.2)') &
                   ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
                   ',', cells(i)%position(3), '> ', sphere_radius,&
                   ' texture { pigment { color Red transmit .66}finish{phong .8} } } // volume cell', &
                   cells(i)%label
           endif
         enddo
-        write(42,*)
+        write(30,*)
       endif
 
       !Write Delaunay triangulation over surface elements to file in povray "smoothed_triangle"
@@ -156,31 +156,31 @@ module scem_2_output_povray
       if (flag_povray_triangles.EQ.1) then
         do i=1, nc                                                !Loop over all cells
           do j=1, cells(i)%triplet_count                          !Loop over all delaunay triangles within the cell
-            write(42,'(A17)',advance='no') "smooth_triangle {"    !Begin writing data structure for smoothed triangle for each delaunay triangle
+            write(30,'(A17)',advance='no') "smooth_triangle {"    !Begin writing data structure for smoothed triangle for each delaunay triangle
             do k=1, 3                                             !Loop over all element in Delaunay triangle
               corner_element = cells(i)%triplets(k,j)
               corner(:) = elements(corner_element)%position(:)    !Calculate corner and normal for the element
               normal(:) = corner(:)-cells(i)%position(:)
-              write(42,'(A1,F18.14,A1,F18.14,A1,F18.14,A2)',advance='no') "<", &
+              write(30,'(A1,F18.14,A1,F18.14,A1,F18.14,A2)',advance='no') "<", &
                   corner(1), ',', corner(2), ',', corner(3), '>,'  !Write corner and normal to file
-              write(42,'(A1,F18.14,A1,F18.14,A1,F18.14,A1)',advance='no') "<", &
+              write(30,'(A1,F18.14,A1,F18.14,A1,F18.14,A1)',advance='no') "<", &
                   normal(1), ',', normal(2), ',', normal(3), '>'
               if (k.LT.3) then
-                write(42,'(A1)',advance='no') ","
+                write(30,'(A1)',advance='no') ","
               else
                 EXIT
               endif
             enddo
-            write(42,"(A23)",advance='no') " texture{pigment{color "
+            write(30,"(A23)",advance='no') " texture{pigment{color "
             if (cells(i)%fate.EQ.1) then
-              write(42,'(A25,I2.2)') "Green}}} // triangle cell", cells(i)%label
+              write(30,'(A25,I2.2)') "Green}}} // triangle cell", cells(i)%label
             else
-              write(42,'(A23,I2.2)') "Red}}} // triangle cell", cells(i)%label
+              write(30,'(A23,I2.2)') "Red}}} // triangle cell", cells(i)%label
             endif
           enddo
         enddo
       endif
-      write(42,*) ""
+      write(30,*) ""
 
       !Write commands to draw Delaunay cortex interactions to file.
       !Loop over all pairs in pairs_cortex and draw a cylinder between the positions of the two elements in each pair.
@@ -188,7 +188,7 @@ module scem_2_output_povray
       if (flag_povray_cortex_pairs.EQ.1) then
         do i=1, np_cortex
           if (pairs_cortex(i)%cortex_factor.EQ.1) then
-            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
+            write(30,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
                             F18.14,A61,I2.2)') &
                             ' cylinder {  < ', &
                             elements(pairs_cortex(i)%label1)%position(1), ',', &
@@ -200,7 +200,7 @@ module scem_2_output_povray
                             '> 0.5 texture { pigment { color Red } } } // cortex pair cell',&
                             elements(pairs_cortex(i)%label1)%parent !Both elements are in the same cell so we only need one label
           else
-            write(42,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
+            write(30,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
                             F18.14,A63,I2.2)') &
                             ' cylinder {  < ', &
                             elements(pairs_cortex(i)%label1)%position(1), ',', &
@@ -215,7 +215,7 @@ module scem_2_output_povray
         enddo
       endif
 
-      close(unit=42)
+      close(unit=30)
 
     end subroutine scem_output_povray
 

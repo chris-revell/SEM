@@ -7,23 +7,25 @@ module scem_0_input
   implicit none
 
   !System parameters and constants
-  integer, parameter :: dim=3 !Number of spatial dimensions
   integer, parameter :: ne_cell=128 !Number of elements per cell
   integer :: ne,nc,np !Numbers of elements, cells, and element pairs
   integer :: ne_size,nc_size,np_size,np_cortex !Parameters for array size allocations
   integer :: n_c_types,n_e_types
+  integer :: nc_initial                        !Number of cells at which to start measuring system when greating system de novo
   integer :: n_bins
   integer :: n_snapshots		!Number of system snapshots outputted to file "elements"
   real*8  :: r_inflex ! inflexion point of potential - calculated in scem_inflexion module
   real*8, allocatable, dimension(:,:,:,:,:,:) :: rel_strength		!For interaction of element a in cell A with element b in cell B argument is (type of cell A, type of cell B, type of element a, type of element b)
+  real*8, allocatable, dimension(:,:,:,:,:,:) :: intro_rel_strength
   integer :: nx,ny,nz
   integer :: iloop1,iloop2,iloop3,iloop4,iloop5
   !System switches
   integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve
-  integer :: flag_background,flag_DIT,flag_povray_elements, flag_randomise
+  integer :: flag_background,flag_povray_elements, flag_randomise
   integer :: flag_povray_pairs,flag_povray_volumes,flag_povray,flag_povray_triangles,flag_povray_cortex_pairs
-  integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_interface,flag_measure_radius
-  integer :: flag_measure_neighbours,flag_elements_final
+  integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_radius,flag_measure_type_radius
+  integer :: flag_measure_neighbours,flag_measure_displacement,flag_measure_surface,flag_elements_final
+  integer :: flag_measure_randomised,flag_measure_velocity,flag_measure_com
   integer :: flag_relist ! flag triggering relist of sector assignments
   !Variables for initiating randoms number sequence
   integer :: seedarraylength
@@ -44,7 +46,7 @@ module scem_0_input
   real*8  :: cell_cycle_time,rate_new_element,establishment_time,prob_new_element,frac_growth
   real*8  :: frac_placement_min,r_placement_min_sq
   real*8  :: buffer_frac,buffer_size,buffer_size_sq,sector_size,sector_size_sq,recip_sector_size
-  real*8  :: time,time_out_1,time_max,dt,dt_amp_max,r_s_max
+  real*8  :: time,output_interval,time_max,dt,dt_amp_max,r_s_max
   real*8  :: trigger_frac
   !Variables for cell behaviour
   real*8 :: stiffness_factor
@@ -63,6 +65,8 @@ module scem_0_input
   character(len=21):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
   character(len=3) :: arg1!,arg4
+  logical :: randomising
+  logical :: intro
 
 !**********
   real*8 :: h !Height of spherical cap boundary.
@@ -75,57 +79,64 @@ module scem_0_input
     subroutine scem_input
 
       !Simulation control switches
-      flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
+      flag_create     = 1 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
-      flag_background = 2 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
+      flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
       flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
-      flag_DIT        = 1 ! flag_DIT = 1 (0) for differential interfacial tension (no differential interfacial tension)
       flag_randomise  = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
 
       !Output control switches
-      flag_povray = 1                !switch to turn off povray output entirely
-        flag_povray_volumes      = 1 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
-        flag_povray_elements     = 1 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
+      flag_povray = 1                ! Switch to turn off povray output entirely
+        flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
+        flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
         flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
-      flag_fate_output        = 1    ! Switch to turn off outputting cell fate data
-      flag_volume_output      = 1    ! Switch to turn off outputting cell volume data
-      flag_elements_final     = 1    ! Switch to turn off outputting elements_final data file.
-      flag_measure_interface  = 0    ! Switch to turn off element pair ratio sorting measurement
-      flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
-      flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
+      flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
+      flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
+      flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
+      flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
+      flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
+      flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
+      flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
+      flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
+      flag_measure_velocity   = 1    ! Switch to turn off velocity measurement
+      flag_measure_com        = 0
+      flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
-      stiffness_factor  = 1.0
-      cell_cycle_time   = 4*4320 !3600.0 ! --> cell cycle time in seconds 4320
-      n_cellcycles      = 1.0
-      epi_adhesion      = 3.0
-      hypo_adhesion     = 3.0
-      epi_hypo_adhesion = 3.0
-      DIT_response(1,0) = 2.0 !Epiblast external system surface DIT response factor
-      DIT_response(1,1) = 0.3 !Epiblast homotypic interface DIT response factor
-      DIT_response(1,2) = 2.0 !Epiblast heterotypic interface DIT response factor
-      DIT_response(2,0) = 1.0 !Primitive endoderm external system surface DIT response factor
-      DIT_response(2,1) = 1.0 !Primitive endoderm homotypic interface DIT response factor
-      DIT_response(2,2) = 2.0 !Primitive endoderm heterotypic interface DIT response factor
+      nc_initial        = 12
+      stiffness_factor  = 0.25
+      cell_cycle_time   = 10000 ! Cell cycle time in seconds
+      n_cellcycles      = 2.0
+      epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
+      hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
+      epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
+      cortex_constant1  = 0.1   ! Magnitude of baseline cortical tension in epiblasts
+      cortex_constant2  = 0.1   ! Magnitude of baseline cortical tension in primitive endoderm
+      DIT_response(1,0) = 1.0   ! Epiblast external system surface DIT response factor
+      DIT_response(1,1) = 0.4   ! Epiblast homotypic interface DIT response factor
+      DIT_response(1,2) = 2.0   ! Epiblast heterotypic interface DIT response factor
+      DIT_response(2,0) = 1.0   ! Primitive endoderm external system surface DIT response factor
+      DIT_response(2,1) = 0.7   ! Primitive endoderm homotypic interface DIT response factor
+      DIT_response(2,2) = 2.0   ! Primitive endoderm heterotypic interface DIT response factor
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
 
       !To use processor determined random number seed and print that seed
-      call RANDOM_SEED
-      call RANDOM_SEED(size=seedarraylength)
-      allocate(seed_array(seedarraylength))
-      call RANDOM_SEED(get=seed_array)
-      print*, "seed_array", seed_array
+        call RANDOM_SEED
+        call RANDOM_SEED(size=seedarraylength)
+        allocate(seed_array(seedarraylength))
+        call RANDOM_SEED(get=seed_array)
+        print*, "seed_array", seed_array
 
       !To use user-defined random number seed:
         !allocate(seed_array(2))
-        !seed_array(1) = 1778472938
-        !seed_array(2) = 498
+        !seed_array(1) = 1591826533
+        !seed_array(2) = 497
         !call RANDOM_SEED(PUT=seed_array)
 
       !Take time when run is initiated
@@ -137,7 +148,13 @@ module scem_0_input
       output_folder = "../data/"//date_of_run//"_"//time_of_run
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
+      call system("mkdir "//output_folder//"/sorting_data")
       call system("mkdir "//output_folder//"/povray_data")
+      if (flag_measure_randomised.EQ.1) then
+        call system("mkdir "//output_folder//"/randomised_data")
+      endif
+
+      randomising = .FALSE.
 
       ! numerical constants
       pi=4.0*atan(1.0) ! pi
@@ -147,8 +164,7 @@ module scem_0_input
       ! system parameters
       trigger_frac=0.5 ! safety margin for triggering array reallocation
       ! derived quantitites
-        !Why *flag_create here?
-      dt_amp_max=0.1*(1.0-0.875*flag_create) ! empirically found best values for time step amplitude
+      dt_amp_max=0.1
       ! cell parameters
       n_c_types=2 ! Number of cell types. 1=epiblast, 2=hypoblast
       n_e_types=2 ! Number of element types. 1=cytoplasm, 2=cortex
@@ -253,16 +269,12 @@ module scem_0_input
 
       r_s_max = MAXVAL(rel_strength)
 
-      !Variable for inter-cortex potential
-      cortex_constant1 = 0.1
-      cortex_constant2 = 0.1
-
       dt_amp_max=dt_amp_max/r_s_max ! rescale dt by largest interaction strength to ensure stable integration
                                     ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
 
       ! temporal parameters - all in *seconds*
       time_max=n_cellcycles*cell_cycle_time ! --> time of simulation in seconds
-      time_out_1=time_max/99.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
+      output_interval=time_max/99.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities
         diff_amp=sqrt(dt*diff_coeff) ! amplitude of noise in diffusion term
@@ -278,9 +290,7 @@ module scem_0_input
         recip_sector_size=1.0/sector_size ! calculate reciprocal of sector size for efficiency
         nx=8*(2+int(4*r_cell/sector_size)) ! --> number of sectors in x direction
         ny=nx ! --> isotropic choice
-        if (dim.eq.3) nz=nx ! --> isotropic choice in 3D
-        if (dim.eq.2) nz=1 ! --> a single layer of sectors for 2D simulations
-
+        nz=nx ! --> isotropic choice in 3D
 
 !************
 !These might be better off elsewhere
@@ -288,6 +298,47 @@ module scem_0_input
       cap_radius                = 0
       n_snapshots = 0
 !************
+
+      allocate(intro_rel_strength(2,0:n_c_types,0:n_c_types,0:n_e_types,0:n_e_types,2))
+      intro_rel_strength(1,1,1,1,1,1) = stiffness_factor  !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+      intro_rel_strength(1,1,1,1,2,1) = stiffness_factor	 !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cortex
+      intro_rel_strength(1,1,1,2,2,1)	= stiffness_factor  !Adhesive component, intra-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(1,1,2,1,1,1)	= 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(1,1,2,1,2,1) = 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(1,1,2,2,2,1) = 0.0	 !Adhesive component, intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(1,2,2,1,1,1) = stiffness_factor	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(1,2,2,1,2,1) = stiffness_factor	 !Adhesive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
+      intro_rel_strength(1,2,2,2,2,1) = stiffness_factor	 !Adhesive component, intra-cellular Hypoblast cortex-hypoblast cortex
+
+      intro_rel_strength(1,1,1,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+      intro_rel_strength(1,1,1,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+      intro_rel_strength(1,1,1,2,2,2) = 1.0 !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(1,1,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(1,1,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+      intro_rel_strength(1,1,2,2,2,2) = 1.0  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
+      intro_rel_strength(1,2,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(1,2,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+      intro_rel_strength(1,2,2,2,2,2) = 1.0  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
+
+      intro_rel_strength(2,1,1,1,1,1) = stiffness_factor  !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+      intro_rel_strength(2,1,1,1,2,1) = stiffness_factor	!Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cortex
+      intro_rel_strength(2,1,1,2,2,1)	= stiffness_factor  !Repulsive component, intra-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(2,1,2,1,1,1)	= 0.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(2,1,2,1,2,1) = 0.0	 !Repulsive component, intra-cellular Epiblast cytoplasm-hypoblast cortex. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(2,1,2,2,2,1) = 0.0	 !Repulsive component, intra-cellular Epiblast cortex-hypoblast cortex. Set to zero but shouldn't happen anyway.
+      intro_rel_strength(2,2,2,1,1,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(2,2,2,1,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
+      intro_rel_strength(2,2,2,2,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cortex-hypoblast cortex
+
+      intro_rel_strength(2,1,1,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+      intro_rel_strength(2,1,1,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+      intro_rel_strength(2,1,1,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(2,1,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(2,1,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+      intro_rel_strength(2,1,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
+      intro_rel_strength(2,2,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+      intro_rel_strength(2,2,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+      intro_rel_strength(2,2,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
     end subroutine scem_input
 

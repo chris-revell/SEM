@@ -4,22 +4,21 @@
 set -e #Exit script if any of the povray renderings fail.
 
 #Run povray on all data files
-for i in $(ls); do
+for i in $(ls $1); do
   if [ ${i: -4:4} == ".pov" ]
   then
-    povray $i +Fj -D +H900 +W1200
+    povray $1/$i +FJ Output_File_Name=$1/${i:0:7}".jpg" -D +H900 +W1200 >/dev/null 2>&1
   fi
 done
 
 #ImageMagick command line input
-for i in $(ls); do
+for i in $(ls $1); do
   if [ ${i: -4:4} == ".jpg" ]
   then
-    convert $i -shave 150x0 $i
+    convert $1/$i -shave 150x0 $1/$i
   fi
 done
 
-#convert -delay 15 -loop 0 *.jpg animated.gif
-#rm *.jpg
-rm *.pov
-rm visualise_povray_script.sh
+#convert -delay 15 -loop 0 $1/*.jpg $1/animated.gif
+#rm $1/*.jpg
+rm $1/*.pov

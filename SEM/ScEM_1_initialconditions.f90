@@ -11,7 +11,7 @@ contains
 
   subroutine scem_initialconditions
 
-    open(unit=22,file=output_folder//'/system_data/initial_conditions.txt',status='unknown')
+    open(unit=22,file=output_folder//'/initial_conditions.txt',status='unknown')
 
     write(22,"(*(G0,:,1X))")'random number seed         = ',seed_array
     write(22,"(*(G0,:,1X))")'initial number of cells    = ',nc
@@ -32,7 +32,6 @@ contains
     write(22,"(*(G0,:,1X))") "flag_background = ",flag_background
     write(22,"(*(G0,:,1X))") "flag_growth     = ",flag_growth
     write(22,"(*(G0,:,1X))") "flag_division   = ",flag_division
-    write(22,"(*(G0,:,1X))") "flag_DIT        = ",flag_DIT
     write(22,"(*(G0,:,1X))") ""
     write(22,"(*(G0,:,1X))") "flag_povray     = ",flag_povray
     write(22,"(*(G0,:,1X))") "  flag_povray_volumes      = ",flag_povray_volumes
@@ -44,7 +43,6 @@ contains
     write(22,"(*(G0,:,1X))") "flag_fate_output        = ",flag_fate_output
     write(22,"(*(G0,:,1X))") "flag_volume_output      = ",flag_volume_output
     write(22,"(*(G0,:,1X))") "flag_elements_final     = ",flag_elements_final
-    write(22,"(*(G0,:,1X))") "flag_measure_interface            = ",flag_measure_interface
     write(22,"(*(G0,:,1X))") "flag_measure_radius     = ",flag_measure_radius
     write(22,"(*(G0,:,1X))") "flag_measure_neighbours = ",flag_measure_neighbours
     write(22,"(*(G0,:,1X))") ""

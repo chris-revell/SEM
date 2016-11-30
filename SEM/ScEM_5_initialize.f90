@@ -4,19 +4,18 @@ module scem_5_initialize
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_initialconditions
   use scem_1_types
   use scem_2_com
   use scem_2_identity
   use scem_2_initial_create
   use scem_2_initial_exist
-  use scem_2_output_system
+  use scem_4_output_system
   use scem_2_output_povray
   use scem_2_pairs
   use scem_2_relist
   use scem_4_cortex
-  use volume_calculate_module
+  use scem_1_volume_calculate
 
   implicit none
 
@@ -42,7 +41,7 @@ module scem_5_initialize
       allocate(head(nx,ny,nz))
       allocate(list(ne_size))
       allocate(pairs(np_size,2))
-      !pairs_cortex can only be allocated after volume_calculate has been called because it relies on the Delaunay triangulation.
+      !pairs_cortex can only be allocated after scem_delaunay has been called because it relies on the Delaunay triangulation.
 
       ! initialize position vector for center of sector grid
       x_cen(1)=sector_size*int(nx/2)
@@ -51,6 +50,7 @@ module scem_5_initialize
 
       ! create initial values for sector arrays
       call scem_relist(0)
+
       ! locate element pairs
       call scem_pairs
 
@@ -64,15 +64,15 @@ module scem_5_initialize
       call scem_cortex
 
 	    ! Calculate initial cell volumes
-      call volume_calculate
+      if (flag_conserve.EQ.1.OR.flag_volume_output.EQ.1) then
+        call scem_volume_calculate
+      endif
 
       ! write initial system data to file
-      call scem_output_system
+      if (.NOT.intro) call scem_output_system
 
       ! Write element data to files in povray format
-      if (flag_povray.EQ.1) then
-        call scem_output_povray
-      endif
+      if ((flag_povray.EQ.1).AND.(.NOT.intro)) call scem_output_povray
 
       call scem_initialconditions
 

@@ -1,0 +1,8 @@
+          26
+        6654
+       51598
+ number of cells =           26
+ number of elements =         6654
+ number of element pairs =        51598
+ time =    4320.348    
+ Time taken for run (seconds):         118

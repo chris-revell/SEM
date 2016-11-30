@@ -4,12 +4,12 @@
 module scem_2_background
 
   use scem_0_input
-  use scem_0_useful
+
   use scem_1_types
 
   implicit none
 
-  contains
+contains
 
   subroutine scem_background(n)
     integer:: n
@@ -27,8 +27,9 @@ module scem_2_background
   subroutine scem_background1
     !Spherical potential well. Returning force outside a radius calculated from the total system volume. No force within that radius.
 
-    real*8              :: spherical_radius    !Radius of element relative to centre of spherical background potential well
-    real*8              :: volume_sum
+    real*8  :: spherical_radius    !Radius of element relative to centre of spherical background potential well
+    real*8  :: volume_sum
+    integer :: n
 
     volume_sum = 0
     do n=1, nc
@@ -49,6 +50,7 @@ module scem_2_background
     real*8              :: volume_sum
     real*8              :: cap_element_radius
     real*8,dimension(3) :: cap_radial_vector
+    integer             :: n
 
     volume_sum = 0
     do n=1, nc
@@ -78,23 +80,23 @@ module scem_2_background
 
     real*8              :: cylindrical_radius  !Radius of element relative to centre of "test tube"
     real*8,dimension(2) :: normalised_2d_position !Normalised x and y coordinates of element
+    integer :: n
 
+    do n=1, ne
+      cylindrical_radius = sqrt(elements(n)%position(1)**2 + elements(n)%position(3)**2)
+      normalised_2d_position(1) = elements(n)%position(1)/cylindrical_radius  !Used to give a direction to the force applied by the boundary
+      normalised_2d_position(2) = elements(n)%position(2)/cylindrical_radius
 
-      do n=1, ne
-        cylindrical_radius = sqrt(elements(n)%position(1)**2 + elements(n)%position(3)**2)
-        normalised_2d_position(1) = elements(n)%position(1)/cylindrical_radius  !Used to give a direction to the force applied by the boundary
-        normalised_2d_position(2) = elements(n)%position(2)/cylindrical_radius
+      !if (elements(n)%position(3).LT.-60) then !Lower boundary exclusion
+      !elements(n)%velocity(3) = elements(n)%velocity(3) + 100*(elements(n)%position(3)+60)**2
 
-        !if (elements(n)%position(3).LT.-60) then !Lower boundary exclusion
-        !elements(n)%velocity(3) = elements(n)%velocity(3) + 100*(elements(n)%position(3)+60)**2
-
-        if (cylindrical_radius.GT.10*(1-time/time_max)) then !Cylindrical boundary exclusion
-          elements(n)%velocity(1) = elements(n)%velocity(1) - normalised_2d_position(1)*(cylindrical_radius-10*(1-time/time_max))**2
-          elements(n)%velocity(2) = elements(n)%velocity(2) - normalised_2d_position(2)*(cylindrical_radius-10*(1-time/time_max))**2
-          !else
-          !elements(n)%velocity(3) = elements(n)%velocity(3) - 0.01 !Term for elements within "test tube" from gravitational force
-        endif
-      enddo
+      if (cylindrical_radius.GT.10*(1-time/time_max)) then !Cylindrical boundary exclusion
+        elements(n)%velocity(1) = elements(n)%velocity(1) - normalised_2d_position(1)*(cylindrical_radius-10*(1-time/time_max))**2
+        elements(n)%velocity(2) = elements(n)%velocity(2) - normalised_2d_position(2)*(cylindrical_radius-10*(1-time/time_max))**2
+        !else
+        !elements(n)%velocity(3) = elements(n)%velocity(3) - 0.01 !Term for elements within "test tube" from gravitational force
+      endif
+    enddo
   end subroutine
 
 end module scem_2_background

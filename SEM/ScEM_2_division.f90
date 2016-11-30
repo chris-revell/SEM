@@ -4,9 +4,7 @@ module scem_2_division
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
-
 
   implicit none
 
@@ -18,6 +16,8 @@ module scem_2_division
       integer :: nc_old
       real*8, dimension(3) :: pos,long_axis,relative_pos,x_com
       real*8 :: max_sep,max_sep_old,epsilon
+      integer :: i,j,k,m,n,nn
+      real*8  :: fate_decider
 
       allocate(c_el_temp1(0:4*ne_cell))
       allocate(c_el_temp2(0:4*ne_cell))
@@ -28,7 +28,11 @@ module scem_2_division
 
       do k=1,nc_old
          if (cells(k)%c_elements(0).ge.2*ne_cell) then
+
             nc=nc+1
+
+            if (intro) write(*,'(I2)') nc
+
             do i=2,cells(k)%c_elements(0)
                n=cells(k)%c_elements(i)
                do j=1,i-1
@@ -58,6 +62,8 @@ module scem_2_division
                   elements(n)%parent=nc
                end if
             end do
+            cells(k)%age=0.0
+            cells(nc)%age=0.0
             cells(k)%c_elements(:)=c_el_temp1(:)
             cells(nc)%c_elements(:)=c_el_temp2(:)
 
@@ -74,6 +80,22 @@ module scem_2_division
       			end if
 
             cells(nc)%label=nc
+
+            !Calculate the centres of mass of the two new daughter cells and store in the original_position component of the cells data type
+            x_com(:)=0.0
+            do m=1,cells(k)%c_elements(0)
+              n=cells(k)%c_elements(m)
+              x_com(:)=x_com(:)+elements(n)%position(:)
+            end do
+            x_com(:)=x_com(:)/cells(k)%c_elements(0)
+            cells(k)%original_position(:)=x_com(:)
+            x_com(:)=0.0
+            do m=1,cells(nc)%c_elements(0)
+              n=cells(nc)%c_elements(m)
+              x_com(:)=x_com(:)+elements(n)%position(:)
+            end do
+            x_com(:)=x_com(:)/cells(nc)%c_elements(0)
+            cells(nc)%original_position(:)=x_com(:)
 
          end if
       end do

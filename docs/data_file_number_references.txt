@@ -1,0 +1,24 @@
+List of file numbers in SEM code
+
+21 =
+22 = initialization_data
+23 =
+24 = elements_final
+25 = end_of_run_data
+26 = cell_fate_data_final
+27 = cell_volumes
+28 = cell_count
+29 =
+30 = povray data
+31 =
+32 =
+33 = sorting_data_type_radius1
+34 = sorting_data_type_radius2
+35 = sorting_data_radius
+36 = sorting_data_neighbours
+37 = sorting_data_velocity1
+38 = sorting_data_velocity2
+39 = com 
+40 =
+41 = sorting_displacement1
+42 = sorting_displacement2

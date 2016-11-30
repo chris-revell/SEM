@@ -4,15 +4,15 @@ module scem_2_output_final
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
-  use scem_1_plotting_commands
 
   implicit none
 
   contains
 
     subroutine scem_output_final
+
+      integer :: i,n
 
       !Calculate total time of run. Print to command line and end_of_run_data
       call SYSTEM_CLOCK(current_time)
@@ -25,6 +25,15 @@ module scem_2_output_final
         do i=1,ne
           write(24,'(3f12.6,i4)')elements(i)%position(:),elements(i)%parent
         end do
+      endif
+
+      !Write cell fate data to file
+      if (flag_fate_output.EQ.1) then
+        open(unit=26,file=output_folder//'/system_data/cell_fate_data_final.txt', status='unknown')
+        do n=1, nc
+          write(26,*) cells(n)%fate
+        end do
+        close(unit=26)
       endif
 
       open(unit=25,file=output_folder//'/system_data/end_of_run_data.txt',status='unknown')
@@ -40,13 +49,8 @@ module scem_2_output_final
       close(unit=24)
       close(unit=25)
 
-      call scem_plotting_commands
-
-      call system('gnuplot -c "'//output_folder//'/system_data/gnuplot_commands_system_plots.gnu"')
-
-!      call system('echo "perl extractor.pl '//output_folder//' "|pbcopy')
-
       write(*,*) "Output folder is:", output_folder
+      call system("python3 scripts/SEM_plotter.py "//output_folder)
 
     end subroutine scem_output_final
 

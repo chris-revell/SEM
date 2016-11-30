@@ -5,9 +5,7 @@
 
 module scem_1_inflexion
 
-  use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
 
   implicit none
 
@@ -29,15 +27,6 @@ module scem_1_inflexion
       end do
 
       r_inflex=r_equil*sqrt(x/rho) ! inflexion point in unscaled variables
-
-
-!This section can probably be removed in future
-!******************************************************************************
-      ! write r_inflex to potential data file
-!      open(unit=31,file=output_folder//'/system_data/potential_data',status='old',access='append')
-!      write(31,*)'inflexion point = ',r_inflex
-!      close(unit=31)
-!******************************************************************************
 
     end subroutine scem_inflexion
 

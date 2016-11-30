@@ -6,7 +6,6 @@ module scem_2_ageing
 
   use scem_0_arrays
   use scem_0_input
-  use scem_0_useful
   use scem_1_types
 
   implicit none
@@ -14,6 +13,8 @@ module scem_2_ageing
   contains
 
     subroutine scem_ageing
+
+      integer :: n
 
       ! update age and stage of each element
       do n=1,ne
@@ -26,6 +27,11 @@ module scem_2_ageing
                elements(n)%strength=1.0
             end if
          endif
+      end do
+
+      ! update age of each cell
+      do n=1,nc
+         cells(n)%age=cells(n)%age+dt
       end do
 
     end subroutine scem_ageing
