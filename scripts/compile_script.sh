@@ -18,7 +18,7 @@ ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/a
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/left_module.f90
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/trmesh_module.f90
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/trlist2_module.f90
-ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/ScEM_3*.f90
+ifort -c -g -openmp -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/ScEM_3*.f90
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/ScEM_4*.f90
 ifort -c -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/ScEM_5*.f90
 ifort -g -traceback -check all -fpe0 -warn -nogen-interface -debug full SEM/swptst_module.f90 SEM/lstptr_module.f90 SEM/store_module.f90 SEM/jrand_module.f90 SEM/insert_module.f90 SEM/bdyadd_module.f90 SEM/covsph_module.f90 SEM/intadd_module.f90 SEM/swap_module.f90 SEM/trfind_module.f90 SEM/addnod_module.f90 SEM/left_module.f90 SEM/trmesh_module.f90 SEM/trlist2_module.f90 SEM/ScEM_0*.f90 SEM/ScEM_1*.f90 SEM/ScEM_2*.f90 SEM/ScEM_3*.f90 SEM/ScEM_4*.f90 SEM/ScEM_5*.f90 SEM/ScEM_master.f90 -o ScEM_master #SEM/ScEM_3*.f90 SEM/ScEM_4*.f90 SEM/ScEM_5*.f90 SEM/ScEM_master.f90 -o ScEM_master

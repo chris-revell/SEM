@@ -7,6 +7,7 @@ module scem_3_near_neighbour_update
   use scem_1_potential
   use scem_1_types
   use scem_2_decouple_adhesion
+  use omp_lib
 
 contains
 
@@ -20,6 +21,12 @@ contains
     !Change adhesion magnitudes to account for local surface element density
     if (.NOT.intro) call scem_decouple_adhesion
 
+    !$omp parallel &
+    !$omp shared (np,pairs,elements,intro_rel_strength,rel_strength, &
+    !$omp& potential_deriv1,potential_deriv2,r_interaction_max_sq) &
+    !$omp private (n,nn,k,kk,index_intra,dx,sep_sq,fadein_amp,bin,r_s1,r_s2, &
+    !$omp& pot_deriv_interp1,pot_deriv_interp2,adhesion_factor_applied)
+    !$omp do
     do m=1,np
 
       n=pairs(m,1)           !n and nn are the global labels of each element in the pair currently under consideration.
@@ -76,6 +83,8 @@ contains
         elements(nn)%velocity(:)= elements(nn)%velocity(:)-dx(:)*(pot_deriv_interp1 + pot_deriv_interp2)
       endif
     end do
+    !$omp end do
+    !$omp end parallel
 
   end subroutine scem_near_neighbour_update
 end module scem_3_near_neighbour_update
