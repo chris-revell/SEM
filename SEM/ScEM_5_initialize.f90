@@ -15,7 +15,7 @@ module scem_5_initialize
   use scem_2_pairs
   use scem_2_relist
   use scem_4_cortex
-  use scem_4_volume_calculate
+  use scem_1_volume_calculate
 
   implicit none
 

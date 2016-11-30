@@ -21,7 +21,6 @@ contains
 
     intro = .TRUE.
 
-    WRITE(*,*) "CREATE"
     nc=1
     ne=nc*ne_cell
     np=4*ne
@@ -40,7 +39,7 @@ contains
 
     !Add elements to cell:
     icount=0		!counts elements placed for this cell
-  	do while (icount.lt.1.8*ne_cell)
+  	do while (icount.lt.ne_cell)
 
       ! Define random position of new element. Adjust random numbers to be between plus or minus 1 by subtracting 1 and doubling.
       CALL RANDOM_NUMBER(ra)
@@ -51,18 +50,18 @@ contains
 
       !The following block checks to ensure that new elements are not created too close to existing elements
       !Do not perform this loop if icount=0. If there are no existing elements, this new element will always be placed successfully so long as it is within the spherical radius of the cell
-      if (icount.GT.0.AND.success) then
-        j=1 ! loop counter
-        do while (success.and.(j.le.icount)) ! loop j over existing elements
-          pos_2(:)=elements(j)%position(:)   ! position of existing element j
-          dx(:)=pos_1(:)-pos_2(:)
-          dist_sq=dot_product(dx,dx)
-          if (dist_sq.lt.r_close_sq) then ! check that pair of elements are not too close
-            success=.FALSE. ! set success flag to failure (element too close to existing element) and return to redefine pos_1
-          end if
-          j=j+1 ! increment counter of existing elements
-        end do
-      endif
+      !if (icount.GT.0.AND.success) then
+      !  j=1 ! loop counter
+      !  do while (success.and.(j.le.icount)) ! loop j over existing elements
+      !    pos_2(:)=elements(j)%position(:)   ! position of existing element j
+      !    dx(:)=pos_1(:)-pos_2(:)
+      !    dist_sq=dot_product(dx,dx)
+      !    if (dist_sq.lt.r_close_sq) then ! check that pair of elements are not too close
+      !      success=.FALSE. ! set success flag to failure (element too close to existing element) and return to redefine pos_1
+      !    end if
+      !    j=j+1 ! increment counter of existing elements
+      !  end do
+      !endif
 
       ! If element was successfully places at pos_1, define properties of new element
       if (success) then
@@ -79,7 +78,7 @@ contains
 
   	end do
 
-    write(*,*)"Created 1 cell with ", icount, " elements."
+    write(*,'(A20,I3,A10)')"Created 1 cell with ", icount, " elements."
 
   end subroutine scem_initial_create
 

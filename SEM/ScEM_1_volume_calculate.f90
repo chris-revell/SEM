@@ -1,7 +1,7 @@
 !CK Revell January 2015
 !Module for computing the volume of a cell in a particle based model from the boundary elements and centre of mass.
 
-module scem_4_volume_calculate
+module scem_1_volume_calculate
 
 	use scem_0_input
 	use scem_0_arrays
@@ -49,4 +49,4 @@ module scem_4_volume_calculate
 			end do
 
 		end subroutine scem_volume_calculate
-end module scem_4_volume_calculate
+end module scem_1_volume_calculate

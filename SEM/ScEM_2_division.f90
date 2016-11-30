@@ -31,7 +31,7 @@ module scem_2_division
 
             nc=nc+1
 
-            if (intro) write(*,'(I2)',advance='no') nc
+            if (intro) write(*,'(I2)') nc
 
             do i=2,cells(k)%c_elements(0)
                n=cells(k)%c_elements(i)

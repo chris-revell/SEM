@@ -1,7 +1,7 @@
 !CK Revell January 2015
 !Module for applying the Promayon et al. (1996) method of volume conservation
 
-module scem_4_volume_conserve
+module scem_1_volume_conserve
 
 	use scem_0_arrays
 	use scem_1_types
@@ -151,4 +151,4 @@ module scem_4_volume_conserve
 			enddo
 
 		end subroutine scem_volume_conserve
-end module scem_4_volume_conserve
+end module scem_1_volume_conserve
