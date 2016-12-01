@@ -9,6 +9,7 @@ module scem_3_cortical_tension_update
   use scem_0_arrays
   use scem_1_types
   use scem_2_DIT
+  use omp_lib
 
   implicit none
 
