@@ -4,8 +4,8 @@
 module scem_2_background
 
   use scem_0_input
-
   use scem_1_types
+  use omp_lib
 
   implicit none
 
@@ -36,12 +36,19 @@ contains
       volume_sum = volume_sum + cells(n)%volume
     enddo
     spherical_boundary_radius = 1.1*(((3.0*volume_sum)/(pi*4.0))**(1.0/3.0)) !Boundary radius scales with total system volume
+
+    !$omp parallel &
+    !$omp shared (ne,elements,spherical_boundary_radius) &
+    !$omp private (n,spherical_radius)
+    !$omp do
     do n=1, ne
       spherical_radius = DOT_PRODUCT(elements(n)%position,elements(n)%position)
       if (spherical_radius.gt.spherical_boundary_radius) then
         elements(n)%velocity(:) = elements(n)%velocity(:) - 0.1*elements(n)%position(:)/spherical_radius    !Constant potential beyond boundary
       endif
     enddo
+    !$omp end do
+    !$omp end parallel
   end subroutine
 
   subroutine scem_background2
@@ -60,6 +67,10 @@ contains
     cap_radius = (81.0*volume_sum/28.0)**(1.0/3.0)
     h          = 2.0*cap_radius/3.0
 
+    !$omp parallel &
+    !$omp shared (ne,elements,cap_radius,h) &
+    !$omp private (n,cap_radial_vector,cap_element_radius)
+    !$omp do
     do n=1, ne
       cap_radial_vector(1) = elements(n)%position(1)
       cap_radial_vector(2) = elements(n)%position(2)
@@ -73,6 +84,8 @@ contains
         CYCLE
       endif
     enddo
+    !$omp end do
+    !$omp end parallel
   end subroutine
 
   subroutine scem_background3

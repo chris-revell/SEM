@@ -55,6 +55,10 @@ module scem_2_com
         pre_com(:) = 0
         epi_count  = 0
         pre_count  = 0
+        !$omp parallel &
+        !$omp shared (ne,cells,elements) &
+        !$omp private (n)
+        !$omp do reduction (+ : epi_count,epi_com,pre_count,pre_com)
         do n=1, ne
           parent_fate = cells(elements(n)%parent)%fate
           if (parent_fate.EQ.1) then
@@ -65,6 +69,8 @@ module scem_2_com
             pre_com(:) = pre_com(:) + elements(n)%position(:)
           endif
         enddo
+        !$omp end do
+        !$omp end parallel
         if (epi_count.GT.0) epi_com(:) = epi_com(:)/epi_count
         if (pre_count.GT.0) pre_com(:) = pre_com(:)/pre_count
       endif

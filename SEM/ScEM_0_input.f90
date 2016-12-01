@@ -342,4 +342,16 @@ module scem_0_input
 
     end subroutine scem_input
 
+
+    function CROSS_PRODUCT(vector1,vector2)
+      real*8, dimension(3), intent(in) :: vector1
+      real*8, dimension(3), intent(in) :: vector2
+      real*8, dimension(3) :: CROSS_PRODUCT
+
+      CROSS_PRODUCT(1) = vector1(2)*vector2(3)-vector1(3)*vector2(2)
+      CROSS_PRODUCT(2) = vector1(3)*vector2(1)-vector1(1)*vector2(3)
+      CROSS_PRODUCT(3) = vector1(1)*vector2(2)-vector1(2)*vector2(1)
+    end function CROSS_PRODUCT
+
+
 end module scem_0_input
