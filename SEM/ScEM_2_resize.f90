@@ -5,6 +5,7 @@ module scem_2_resize
   use scem_0_arrays
   use scem_0_input
   use scem_1_types
+  use omp_lib
 
   implicit none
 
@@ -20,7 +21,7 @@ module scem_2_resize
       real*8, allocatable, dimension(:,:) :: xe_prev_temp
       integer, allocatable, dimension(:) :: list_temp
       real*8 :: x_max,y_max,z_max
-      
+
 	    !When the number of elements in the system exceeds half of the dimension size of the elements array (ne_size) then arrays are reallocated
       if (ne.gt.trigger_frac*ne_size) then
          allocate(elements_temp(ne_size))
@@ -66,11 +67,17 @@ module scem_2_resize
       x_max=0.0
       y_max=0.0
       z_max=0.0
+      !$omp parallel &
+      !$omp shared (ne,elements) &
+      !$omp private (k)
+      !$omp do reduction (max : x_max,y_max,z_max)
       do k=1,ne
         x_max=MAX(x_max,(recip_sector_size*(ABS(elements(k)%position(1)))))
         y_max=MAX(y_max,(recip_sector_size*(ABS(elements(k)%position(2)))))
         z_max=MAX(z_max,(recip_sector_size*(ABS(elements(k)%position(3)))))
       end do
+      !$omp end do
+      !$omp end parallel
       if ((x_max.gt.trigger_frac*0.5*nx).or.(y_max.gt.trigger_frac*0.5*ny).or.(z_max.gt.trigger_frac*0.5*nz)) then
          deallocate(head)
          nx=2*nx
