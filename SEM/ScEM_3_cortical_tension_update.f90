@@ -33,6 +33,10 @@ contains
     pair_counter=0
     !Fill pairs_cortex(i)%label1 and pairs_cortex(i)%label2 with labels of elements in cortex pairs
     !Loop over all cells
+    !$omp parallel &
+    !$omp shared (nc,cells,pairs_cortex) &
+    !$omp private (c,j)
+    !$omp do
     do c=1, nc
       !Loop over all Delaunay triplets in cell c
       !$omp parallel &
@@ -56,6 +60,8 @@ contains
       !$omp end do
       !$omp end parallel
     enddo !End loop over cells
+    !$omp end do
+    !$omp end parallel
 
     !Now that cortex network has been established in pairs_cortex(i,1)
     !and pairs_cortex(i,2), calculate pairs_cortex(i,3) values

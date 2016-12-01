@@ -111,7 +111,7 @@ module scem_0_input
       nc_initial        = 12
       stiffness_factor  = 0.25
       cell_cycle_time   = 10000 ! Cell cycle time in seconds
-      n_cellcycles      = 2.0
+      n_cellcycles      = 1.0
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
