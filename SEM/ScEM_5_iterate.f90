@@ -20,6 +20,7 @@ module scem_5_iterate
   use scem_1_volume_conserve
   use scem_4_integrate
   use scem_4_output_system
+  use omp_lib
 
   implicit none
 
@@ -134,7 +135,7 @@ contains
         call scem_output_system
         if (flag_povray.EQ.1) call scem_output_povray
       end if
-      !$omp end single 
+      !$omp end single
 
       !$omp workshare
       forall(n=1:ne) elements(n)%velocity(:)=0.0

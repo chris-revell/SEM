@@ -34,6 +34,10 @@ contains
     !Loop over all cells
     do c=1, nc
       !Loop over all Delaunay triplets in cell c
+      !$omp parallel &
+      !$omp shared (nc,cells,pairs_cortex,c) &
+      !$omp private (j)
+      !$omp do reduction (+ : pair_counter)
       do j=1, cells(c)%triplet_count
         !Each edge of the Delaunay triangle adds a pair to the pairs_cortex array
         pair_counter = pair_counter+1
@@ -48,6 +52,8 @@ contains
         pairs_cortex(pair_counter)%label1 = cells(c)%triplets(3,j)
         pairs_cortex(pair_counter)%label2 = cells(c)%triplets(1,j)
       enddo !End loop over triangles
+      !$omp end do
+      !$omp end parallel
     enddo !End loop over cells
 
     !Now that cortex network has been established in pairs_cortex(i,1)
@@ -55,6 +61,10 @@ contains
     if (.NOT.intro) call scem_dit
 
     !Now update velocities for all pairs in this network.
+    !$omp parallel &
+    !$omp shared (pair_counter,pairs_cortex,elements,cells,intro) &
+    !$omp private (m,n,nn,dx,sep_sq)
+    !$omp do
     do m=1,pair_counter
       n=pairs_cortex(m)%label1           !n and nn are the global labels of each element in the pair currently under consideration.
       nn=pairs_cortex(m)%label2
@@ -78,6 +88,8 @@ contains
         elements(nn)%velocity(:)= elements(nn)%velocity(:)+ dx(:)*cortex_constant2*pairs_cortex(m)%cortex_factor
       endif
     end do
+    !$omp end do
+    !$omp end parallel
 
   end subroutine scem_cortical_tension_update
 end module scem_3_cortical_tension_update

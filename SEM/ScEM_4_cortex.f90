@@ -8,6 +8,7 @@ module scem_4_cortex
 	use scem_1_types
 	use scem_2_polar
 	use scem_3_delaunay
+	use omp_lib
 
 	implicit none
 
@@ -78,7 +79,7 @@ module scem_4_cortex
 			!$omp end do
 			!$omp end parallel
 
-			!TO DO parallelise the next sections as well? 
+			!TO DO parallelise the next sections as well?
 
 			!At this stage we have an array containing a list of which elements lie in each bin
 			!Next step is to determine which element in each bin has the greatest radius.
