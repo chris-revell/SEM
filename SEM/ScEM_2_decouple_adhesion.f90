@@ -20,14 +20,29 @@ contains
     !Need to decouple adhesion magnitude from changes in element density caused by differential interfacial tension
 
     !Refresh adhesion factors
+    !$omp parallel &
+    !$omp shared (ne,elements) &
+    !$omp private (i)
+    !$omp do
     do i=1,ne
       elements(ne)%adhesion_factor=1
     enddo
-!    open(unit=40,file=output_folder//"/decoupling.txt",status='unknown',position='append')
+    !$omp end do
+    !$omp end parallel
+
+    !$omp parallel &
+    !$omp shared (cells,elements) &
+    !$omp private (element_label,j,i,local_area,a,b,c)
+    !$omp do
     do i=1, nc
+      !$omp parallel &
+      !$omp shared (cells,elements,i)
+      !$omp private (element_label,j,local_area,a,b,c)
+      !$omp do
       do j=1, cells(i)%cortex_elements(0)
         element_label = cells(i)%cortex_elements(j)
         local_area = 0
+
         do k=1, cells(i)%triplet_count
           !t1,t2, and t3 are labels of elements in triplet k
           t1 = cells(i)%triplets(1,k)
@@ -37,7 +52,7 @@ contains
             ! a and b are vectors representing two sides of the triangle formed by elements t1, t2, and t3
             a = elements(t1)%position - elements(t2)%position
             b = elements(t1)%position - elements(t3)%position
-            c = CROSS_PRODUCT(a,b)
+            c = cross_product(a,b)
             local_area = 0.5*SQRT(DOT_PRODUCT(c,c)) !0.5*|axb|
           else
             CYCLE
@@ -51,14 +66,14 @@ contains
 
   end subroutine scem_decouple_adhesion
 
-!  function CROSS_PRODUCT(vector1,vector2)
-!    real*8, dimension(3), intent(in) :: vector1
-!    real*8, dimension(3), intent(in) :: vector2
-!    real*8, dimension(3) :: CROSS_PRODUCT
-!
-!    CROSS_PRODUCT(1) = vector1(2)*vector2(3)-vector1(3)*vector2(2)
-!    CROSS_PRODUCT(2) = vector1(3)*vector2(1)-vector1(1)*vector2(3)
-!    CROSS_PRODUCT(3) = vector1(1)*vector2(2)-vector1(2)*vector2(1)
-!  end function CROSS_PRODUCT
+  function cross_product(vector1,vector2)
+    real*8, dimension(3), intent(in) :: vector1
+    real*8, dimension(3), intent(in) :: vector2
+    real*8, dimension(3) :: cross_product
+
+    cross_product(1) = vector1(2)*vector2(3)-vector1(3)*vector2(2)
+    cross_product(2) = vector1(3)*vector2(1)-vector1(1)*vector2(3)
+    cross_product(3) = vector1(1)*vector2(2)-vector1(2)*vector2(1)
+  end function cross_product
 
 end module scem_2_decouple_adhesion
