@@ -52,7 +52,7 @@ module scem_4_cortex
 !			!$omp parallel &
 !			!$omp shared (cells,elements,i,bin_contents) &
 !			!$omp private (l,j,k)
-!			!$omp do reduction (+ : bin_counters)
+!			!$omp parallel do reduction (+:bin_counters(j,k)) shared (cells,elements,i,bin_contents)
 			do l=1, cells(i)%c_elements(0)				!Loop over all elements in the cell
 
 				element_label = cells(i)%c_elements(l)

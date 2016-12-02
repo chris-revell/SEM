@@ -90,7 +90,6 @@ contains
       forall(n=1:ne) elements(n)%position(:)=xe_prev(n,:)+dt*elements(n)%velocity(:)
       !$omp end workshare
 
-
       !$omp single
       ! element diffusion
       if (flag_diffusion.eq.1) call scem_diffusion
