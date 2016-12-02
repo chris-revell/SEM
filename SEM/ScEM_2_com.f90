@@ -9,8 +9,8 @@ module scem_2_com
 
   use scem_0_arrays
   use scem_0_input
-
   use scem_1_types
+  use omp_lib 
 
   implicit none
 

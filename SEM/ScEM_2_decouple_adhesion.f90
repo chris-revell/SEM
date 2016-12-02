@@ -5,6 +5,7 @@ module scem_2_decouple_adhesion
 
   use scem_0_input
   use scem_1_types
+  use omp_lib
 
   implicit none
 
@@ -54,7 +55,7 @@ contains
         enddo
         !$omp end do
         !$omp end parallel
-        
+
         !adhesion_factor for this element updated according to the local area around the element.
         elements(element_label)%adhesion_factor = local_area !Might be worth introducing a constant here so that the adhesion magnitude in scem_input can be maintained as a nice number
 !        write(40,*) elements(element_label)%DIT_factor, elements(element_label)%adhesion_factor
