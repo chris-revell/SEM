@@ -33,10 +33,6 @@ contains
     pair_counter=0
     !Fill pairs_cortex(i)%label1 and pairs_cortex(i)%label2 with labels of elements in cortex pairs
     !Loop over all cells
-    !$omp parallel &
-    !$omp shared (pairs_cortex) &
-    !$omp private (c,j)
-    !$omp do
     do c=1, nc
       do j=1, cells(c)%triplet_count
         !Each edge of the Delaunay triangle adds a pair to the pairs_cortex array
@@ -53,8 +49,6 @@ contains
         pairs_cortex(pair_counter)%label2 = cells(c)%triplets(1,j)
       enddo !End loop over triangles
     enddo !End loop over cells
-    !$omp end do
-    !$omp end parallel
 
     !Now that cortex network has been established in pairs_cortex(i,1)
     !and pairs_cortex(i,2), calculate pairs_cortex(i,3) values
@@ -62,7 +56,7 @@ contains
 
     !Now update velocities for all pairs in this network.
     !$omp parallel &
-    !$omp shared (pair_counter,pairs_cortex,elements,cells,intro) &
+    !$omp shared (elements) &
     !$omp private (m,n,nn,dx,sep_sq)
     !$omp do
     do m=1,pair_counter

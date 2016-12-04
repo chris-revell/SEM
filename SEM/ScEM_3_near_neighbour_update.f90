@@ -22,8 +22,7 @@ contains
     if (.NOT.intro) call scem_decouple_adhesion
 
     !$omp parallel &
-    !$omp shared (np,pairs,elements,intro_rel_strength,rel_strength, &
-    !$omp& potential_deriv1,potential_deriv2,r_interaction_max_sq) &
+    !$omp shared (elements) &
     !$omp private (n,nn,k,kk,index_intra,dx,sep_sq,fadein_amp,bin,r_s1,r_s2, &
     !$omp& pot_deriv_interp1,pot_deriv_interp2,adhesion_factor_applied)
     !$omp do
