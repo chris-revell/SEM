@@ -8,6 +8,7 @@ module scem_2_DIT
   use scem_0_arrays
   use scem_0_input
   use scem_1_types
+  use omp_lib
 
   implicit none
 
@@ -28,11 +29,16 @@ contains
     !This factor is a component of the "elements" data structure and is used
     !as a factor in the calculation of forces on elements.
 
-    !Refresh DIT_factor values for all elements
-    do j=1, ne
-      elements(j)%DIT_factor = 0
-    enddo
+!No need to refresh DIT_factor values? DIT factors are only used in contexts where the element will have to be a cortex element, in which case its DIT factor will be calculated anew at each timestep anyway.
+!    !Refresh DIT_factor values for all elements
+!    do j=1, ne
+!      elements(j)%DIT_factor = 0
+!    enddo
 
+    !$omp parallel &
+    !$omp shared (elements) &
+    !$omp private (j,cell_1,fate_1,cell_2,fate_2)
+    !$omp do
     do j=1,np
       cell_1  = elements(pairs(j,1))%parent
       fate_1  = cells(cell_1)%fate
@@ -51,7 +57,13 @@ contains
         elements(pairs(j,2))%DIT_factor = 2
       endif
     enddo
+    !$omp end do
+    !$omp end parallel
 
+    !$omp parallel &
+    !$omp shared (pairs_cortex) &
+    !$omp private(j)
+    !$omp do
     do j=1, np_cortex
       if (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.elements(pairs_cortex(j)%label2)%DIT_factor) then
       !Interface defined where both elements have the same DIT_factor value
@@ -85,6 +97,8 @@ contains
         pairs_cortex(j)%cortex_factor = 1.0
       endif
     enddo
+    !$omp end do
+    !$omp end parallel
 
   end subroutine
 end module scem_2_DIT

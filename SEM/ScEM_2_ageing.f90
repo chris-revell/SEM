@@ -19,8 +19,7 @@ module scem_2_ageing
 
       ! update age and stage of each element
       !$omp parallel &
-      !$omp shared (ne,elements,dt,establishment_time) &
-      !$omp private (n)
+      !$omp shared (elements)
       !$omp do
       do n=1,ne
          elements(n)%age=elements(n)%age+dt

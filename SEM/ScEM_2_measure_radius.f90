@@ -6,6 +6,7 @@ module scem_2_measure_radius
 	use scem_0_input
 	use scem_0_arrays
 	use scem_1_types
+	use omp_lib
 
 	implicit none
 
@@ -28,9 +29,13 @@ contains
 
 		!Need to start by calculating the centre of mass of the system, which can change after each iteration due to cell movement.
 		system_COM(:)=0
+		!$omp parallel
+		!$omp do reduction (+ : system_COM)
 		do i=1, ne
 			system_COM(:)=system_COM(:)+elements(i)%position(:)
 		enddo
+		!$omp end do
+		!$omp end parallel
 		system_COM(:)=system_COM(:)/ne  !Centre of mass found by dividing sum by total mass, ie total number of elements.
 
 		!Find the max cell radius of the whole system

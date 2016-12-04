@@ -5,6 +5,7 @@ module ScEM_2_measure_surface
 
   use scem_0_input
   use scem_1_types
+  use omp_lib
 
   implicit none
 
@@ -32,6 +33,9 @@ contains
     epi_area = 0
     pre_area = 0
 
+    !$omp parallel &
+    !$omp private (factor1,factor2,factor3,a,b,c,area)
+    !$omp do reduction (+:epi_area,pre_area)
     do i=1, nc
       do j=1, cells(i)%triplet_count
         factor1 = elements(cells(i)%triplets(1,j))%DIT_factor
@@ -54,6 +58,8 @@ contains
         endif
       enddo
     enddo
+    !$omp end do
+    !$omp end parallel
 
     if (epi_area.GT.0.AND.pre_area.GT.0) then
       epi_out = real(epi_area)/real(epi_area+pre_area)

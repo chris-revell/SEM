@@ -10,7 +10,7 @@ module scem_2_com
   use scem_0_arrays
   use scem_0_input
   use scem_1_types
-  use omp_lib 
+  use omp_lib
 
   implicit none
 
@@ -23,6 +23,10 @@ module scem_2_com
       integer              :: parent_fate,epi_count,pre_count
       integer              :: k,m,n
 
+      !$omp parallel &
+      !$omp shared (cells) &
+      !$omp private(k,x_com,rog)
+      !$omp do
       do k=1,nc
         ! calculate center of mass
         x_com(:)=0.0
@@ -47,6 +51,8 @@ module scem_2_com
         rog=sqrt(rog/cells(k)%c_elements(0))
         cells(k)%rad_gyration=rog
       end do
+      !$omp end do
+      !$omp end parallel 
 
 
       ! If needed for measurements, calculate centres of mass for each cell type

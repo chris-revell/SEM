@@ -5,6 +5,7 @@ module scem_2_measure_neighbours
 	use scem_0_input
 	use scem_0_arrays
 	use scem_1_types
+	use omp_lib
 
 	implicit none
 
@@ -40,6 +41,10 @@ contains
 		!If a pair acts between elements in cells of different parents i and j where i=!j,
 		!set neighbours(i,j) = .TRUE.
 		neighbours(:,:) = .FALSE.
+		!$omp parallel &
+		!$omp shared (neighbours) &
+		!$omp private(n,parent1,parent2)
+		!$omp do
 		do n=1, np
 			!Find labels of parent cells for elements in interaction pair
 			parent1 = elements(pairs(n,1))%parent
@@ -48,6 +53,8 @@ contains
 				neighbours(parent1,parent2) = .TRUE.
 			endif
 		enddo
+		!$omp end do
+		!$omp end parallel
 		!neighbours(i,j) = .TRUE. for any i,j where cell i and cell j are nearest neighbours.
 
 		!Use neighbours array to sum epi-epi, pre-pre and epi-pre nearest neighbour cell pairs

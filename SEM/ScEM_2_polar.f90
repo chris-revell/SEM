@@ -6,6 +6,7 @@ module scem_2_polar
 	use scem_0_arrays
 	use scem_0_input
 	use scem_1_types
+	use omp_lib
 
 	implicit none
 
@@ -19,21 +20,23 @@ module scem_2_polar
 		real*8, dimension(3) :: r_vector
 
 		!Loop over all elements in the system
+		!$omp parallel &
+		!$omp shared (elements) &
+		!$omp private (r_vector,r_squared,cos_theta)
+		!$omp do
 		do i=1, ne
-
 			!Calculate polar radius of element
 			r_vector(:) = elements(i)%position(:) - cells(elements(i)%parent)%position(:)
 			r_squared = r_vector(1)**2 + r_vector(2)**2 + r_vector(3)**2
 			elements(i)%polar(1) = sqrt(r_squared)
-
 			!Calculate polar angle of element
 			cos_theta = r_vector(3)/elements(i)%polar(1)
 			elements(i)%polar(2) = ACOS(cos_theta)
-
 			!Calculate azimuthal angle of the element. Add pi to define angle between 0 and 2pi rather than -pi and +pi.
 			elements(i)%polar(3) = pi+ATAN2(r_vector(2),r_vector(1))
-
 		end do
+		!$omp end do
+		!$omp end parallel 
 
 	end subroutine scem_polar
 

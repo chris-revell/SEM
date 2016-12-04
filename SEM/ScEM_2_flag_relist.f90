@@ -5,7 +5,8 @@ module scem_2_flag_relist
   use scem_0_arrays
   use scem_0_input
   use scem_1_types
-
+  use omp_lib
+  
   implicit none
 
   contains
@@ -18,6 +19,10 @@ module scem_2_flag_relist
       real*8  :: sep_sq
       real*8, dimension(3) :: dx,pos_1,pos_2
 
+      !$omp parallel &
+      !$omp shared (flag_relist) &
+      !$omp private (pos_1,pos_2,dx,sep_sq)
+      !$omp do
       do n=1,ne
          pos_1(:)=elements(n)%position(:)			!Note that these are the latest positions of the elements - xe_compare contains the old positions of the elements
          pos_2(:)=xe_compare(n,:)					!Remember from scem_relist(arg), xe_compare(n,:)=elements(n)%position(:) for all ne elements
@@ -27,6 +32,8 @@ module scem_2_flag_relist
             flag_relist=1							!If any element has moved by more than a specified distance then flag_relist is set to 1, which triggers reconstructing of sector tables and pair array in scem_iterate
          end if
       end do
+      !$omp end do
+      !$omp end parallel
 
     end subroutine scem_flag_relist
 

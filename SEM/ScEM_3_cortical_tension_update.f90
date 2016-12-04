@@ -34,15 +34,10 @@ contains
     !Fill pairs_cortex(i)%label1 and pairs_cortex(i)%label2 with labels of elements in cortex pairs
     !Loop over all cells
     !$omp parallel &
-    !$omp shared (nc,cells,pairs_cortex) &
+    !$omp shared (pairs_cortex) &
     !$omp private (c,j)
     !$omp do
     do c=1, nc
-      !Loop over all Delaunay triplets in cell c
-!      !$omp parallel &
-!      !$omp shared (nc,cells,pairs_cortex,c) &
-!      !$omp private (j)
-!      !$omp do reduction (+ : pair_counter)
       do j=1, cells(c)%triplet_count
         !Each edge of the Delaunay triangle adds a pair to the pairs_cortex array
         pair_counter = pair_counter+1
@@ -57,8 +52,6 @@ contains
         pairs_cortex(pair_counter)%label1 = cells(c)%triplets(3,j)
         pairs_cortex(pair_counter)%label2 = cells(c)%triplets(1,j)
       enddo !End loop over triangles
-!      !$omp end do
-!      !$omp end parallel
     enddo !End loop over cells
     !$omp end do
     !$omp end parallel

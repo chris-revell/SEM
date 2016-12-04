@@ -22,12 +22,12 @@ module scem_1_volume_calculate
 			real*8, dimension(3)									:: R
 !			real*8, dimension(3)									:: QcrossR				!Used in volume calculation. Cross product of Q and R.
 
+			!$omp parallel &
+			!$omp shared (cells,elements) &
+			!$omp private (P,Q,R,volume_triplet,volume_cell)
+			!$omp do
 			do j=1, nc
 				volume_cell = 0
-				!$omp parallel &
-				!$omp shared (cells,elements) &
-				!$omp private (P,Q,R,volume_triplet)
-				!$omp do reduction (+ : volume_cell)
 				do i=1, cells(j)%triplet_count
 
 					volume_triplet=0
@@ -48,23 +48,13 @@ module scem_1_volume_calculate
 					volume_cell = volume_cell + ABS(volume_triplet)
 
 				end do
-				!$omp end do
-				!$omp end parallel
 
 				cells(j)%volume = volume_cell
 
 			end do
+			!$omp end do
+			!$omp end parallel
 
 		end subroutine scem_volume_calculate
-
-!		function CROSS_PRODUCT(vector1,vector2)
-!	    real*8, dimension(3), intent(in) :: vector1
-!	    real*8, dimension(3), intent(in) :: vector2
-!	    real*8, dimension(3) :: CROSS_PRODUCT
-!
-!	    CROSS_PRODUCT(1) = vector1(2)*vector2(3)-vector1(3)*vector2(2)
-!	    CROSS_PRODUCT(2) = vector1(3)*vector2(1)-vector1(1)*vector2(3)
-!	    CROSS_PRODUCT(3) = vector1(1)*vector2(2)-vector1(2)*vector2(1)
-!	  end function CROSS_PRODUCT
 
 end module scem_1_volume_calculate

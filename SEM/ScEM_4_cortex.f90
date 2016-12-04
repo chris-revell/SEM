@@ -22,15 +22,17 @@ module scem_4_cortex
 
 		call scem_polar
 
+		!$omp parallel &
+		!$omp shared (cells,elements) &
+		!$omp private (i,n,j,k,bin_counters,bin_contents,element_label,R,R_max,m,p,l,max_radius_elements)
+		!$omp do
 		do i=1, nc
 		!Loop over all cells
 			cells(i)%cortex_elements(:)=0		!Set cortex counter to zero before counting cortex elements later on in this module.
-
 			!Refresh all elements to bulk cytoplasm type. If this is not done, there will be a steady gain of cortex elements over time because once an element is labelled as cortex it can never revert back to bulk.
 			do n=1, cells(i)%c_elements(0)
 				elements(cells(i)%c_elements(n))%type = 1
 			enddo
-
 			!Divide cell into solid angle bins.
 			!Take the element with the largest radius in each bin to be a surface element.
 			!This element and others within the cortex thickness set to type 2 - cortex.
@@ -47,19 +49,10 @@ module scem_4_cortex
 			k=0
 			bin_counters(:,:) = 0
 			bin_contents(:,:,:) = 0
-
-
-!			!$omp parallel &
-!			!$omp shared (cells,elements,i,bin_contents) &
-!			!$omp private (l,j,k)
-!			!$omp parallel do reduction (+:bin_counters(j,k)) shared (cells,elements,i,bin_contents)
 			do l=1, cells(i)%c_elements(0)				!Loop over all elements in the cell
-
 				element_label = cells(i)%c_elements(l)
-
 				j = int(elements(element_label)%polar(2)/(pi/4))+1
 				k = int(elements(element_label)%polar(3)/(pi/4))+1
-
 				!Note that where previously the boundaries between bins were "less than or equal to" the upper boundary, they are now "less than"
 				!This means that an element whose azimuthal or polar angle lies exactly on the boundary of a bin will now fall into the bin
 				!above the one in which it would previously have been found, but this shouldn't be a problem since the chances of an angle
@@ -68,7 +61,6 @@ module scem_4_cortex
 				!precisely 2pi, since in both these cases j or k would take a value of 5 or 9 respectively, which would put it outside the bounds
 				!of the bin_contents and bin_counters arrays. The chances of this should again be vanishingly small but it's worth bearing in mind
 				!should the problem ever occur.
-
 				!At this point, (j,k) identifies the bin in which the element falls
 				!Next step is to increase bin counter by 1 and allocate element to bin array
 				!The array element in bin_contents to which the label of this SEM element is
@@ -76,10 +68,6 @@ module scem_4_cortex
 				bin_counters(j,k)=bin_counters(j,k)+1
 				bin_contents(j,k,bin_counters(j,k))=element_label
 			end do !End loop over all elements in the cell.
-!			!$omp end do
-!			!$omp end parallel
-
-			!TO DO parallelise the next sections as well?
 
 			!At this stage we have an array containing a list of which elements lie in each bin
 			!Next step is to determine which element in each bin has the greatest radius.
@@ -137,8 +125,9 @@ module scem_4_cortex
 					end if
 				end do
 			end do
-
 		end do
+		!$omp end do
+		!$omp end parallel
 
 		!Should now have specified the type of all elements in all cells
 		!Elements set to be of cortex type if their radius exceeds 80% of the max radius in that bin

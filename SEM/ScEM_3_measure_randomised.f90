@@ -13,6 +13,7 @@ module scem_3_measure_randomised
   use scem_2_measure_type_radius
   use scem_2_measure_surface
   use scem_2_measure_velocity
+  use omp_lib
 
   implicit none
 
@@ -41,7 +42,11 @@ contains
       stored_fates(n) = cells(n)%fate
     enddo
 
-    
+
+    !$omp parallel &
+    !$omp shared (elements) &
+    !$omp private (cells)
+    !$omp do
     do i=1, 10 ! 10 seems to be an adequate number of tests, but could make it smaller to speed up the program
 
       do n=1,nc
@@ -65,6 +70,8 @@ contains
 !      if (flag_measure_velocity.EQ.1)     call scem_measure_velocity
 
     enddo
+    !$omp end do
+    !$omp end parallel
 
     !Restore original system state.
     do n=1,nc

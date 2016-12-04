@@ -8,7 +8,6 @@ module scem_1_potential
 
   use scem_0_arrays
   use scem_0_input
-  use omp_lib
 
   implicit none
 
@@ -27,31 +26,19 @@ module scem_1_potential
       allocate(r_sq_table(0:n_bins)) ! r_sq_table is a local array containing tabulated values of r^2
 
 !For attractive potential
-      !$omp parallel &
-      !$omp shared (n_bins,r_sq_table,rho,r_equil_sq,force_amplitude,pot_deriv_table,d_r_sq) &
-      !$omp private (j,sep_sq,factor)
-      !$omp do
       do j=0,n_bins
          sep_sq=j*d_r_sq                               ! calculate r^2
          r_sq_table(j)=sep_sq                          ! fill r_sq_table
          factor=exp(rho*(1.0-sep_sq/r_equil_sq))       ! a useful factor for potential evaluation
          pot_deriv_table(j)=-force_amplitude*factor ! This is the force applied by the potential.
       end do
-      !$omp end do
-      !$omp end parallel
 
       ! loop over bins and use linear interpolation to fill potential_deriv2
       ! These values are not forces themselves but are used later in a linear interpolation to find forces.
-      !$omp parallel &
-      !$omp shared (n_bins,pot_deriv_table,d_r_sq_recip,r_sq_table,potential_deriv1) &
-      !$omp private (j)
-      !$omp do
       do j=0,n_bins-1
          potential_deriv1(j,1)=(pot_deriv_table(j+1)-pot_deriv_table(j))*d_r_sq_recip
          potential_deriv1(j,2)=(pot_deriv_table(j)*r_sq_table(j+1)-pot_deriv_table(j+1)*r_sq_table(j))*d_r_sq_recip
       end do
-      !$omp end do
-      !$omp end parallel
 
       ! rescale force by damping_element to retrieve (what ultimately will be) a velocity
       ! note, for efficiency, this quantity needs to be multiplied by a position vector to yield a true velocity
@@ -59,29 +46,18 @@ module scem_1_potential
       potential_deriv1=potential_deriv1/damping_element
 
 !For repulsive potential, same as above but with different formula for pot_deriv_table
-      !$omp parallel &
-      !$omp shared (n_bins,r_sq_table,rho,r_equil_sq,force_amplitude,pot_deriv_table,d_r_sq) &
-      !$omp private (j,sep_sq,factor)
-      !$omp do
       do j=0,n_bins
          sep_sq=j*d_r_sq                               ! calculate r^2
          r_sq_table(j)=sep_sq                          ! fill r_sq_table
          factor=exp(rho*(1.0-sep_sq/r_equil_sq))       ! a useful factor for potential evaluation
          pot_deriv_table(j)=force_amplitude*factor**2 ! This is the force applied by the potential.
       end do
-      !$omp end do
-      !$omp end parallel
 
-      !$omp parallel &
-      !$omp shared (n_bins,pot_deriv_table,d_r_sq_recip,r_sq_table,potential_deriv1) &
-      !$omp private (j)
-      !$omp do
       do j=0,n_bins-1
          potential_deriv2(j,1)=(pot_deriv_table(j+1)-pot_deriv_table(j))*d_r_sq_recip
          potential_deriv2(j,2)=(pot_deriv_table(j)*r_sq_table(j+1)-pot_deriv_table(j+1)*r_sq_table(j))*d_r_sq_recip
       end do
-      !$omp end do
-      !$omp end parallel
+
       potential_deriv2=potential_deriv2/damping_element
 
       ! deallocate local arrays
