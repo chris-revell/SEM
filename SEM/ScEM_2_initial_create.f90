@@ -13,9 +13,9 @@ contains
 
   subroutine scem_initial_create
 
-    integer              :: icount,j
-    real                 :: dist_sq
-    real*8, dimension(3) :: dx,pos_1,pos_2
+    integer              :: icount!,j
+    !real                 :: dist_sq
+    real*8, dimension(3) :: pos_1!,pos_2,dx
     real, dimension(3)   :: ra
     logical              :: success
 

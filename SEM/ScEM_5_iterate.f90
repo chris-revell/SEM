@@ -78,7 +78,7 @@ contains
       forall(n=1:ne) elements(n)%position(:)=xe_prev(n,:)+dt*elements(n)%velocity(:)
 
       ! element diffusion
-      if (flag_diffusion.eq.1) call scem_diffusion
+      if (flag_diffusion.eq.1.OR.intro) call scem_diffusion
 
       !Conserve cell volumes
       if (flag_conserve.eq.1) call scem_volume_conserve

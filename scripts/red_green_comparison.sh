@@ -1,6 +1,6 @@
 #!/bin/bash
 #Script that takes a data folder as a command line argument and creates the comparison gif for that folder
-set -e
+#set -e
 perl scripts/extractor.pl $1 Green triangle
 perl scripts/extractor.pl $1 Red triangle
 perl scripts/extractor.pl $1 triangle
