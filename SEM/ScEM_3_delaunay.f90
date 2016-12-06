@@ -21,7 +21,7 @@ contains
     real*8, allocatable, dimension(:)			:: z					!Position data for cortex elements relative to COM and normalised to unit sphere
     real*8, dimension(3)                  :: r_vector
     real*8																:: radius				!Distance from cell COM to a given element (for normalising to unit sphere)
-    integer, allocatable, dimension(:)		:: list
+    integer, allocatable, dimension(:)		:: dlist
     integer, allocatable, dimension(:)		:: lptr
     integer, allocatable, dimension(:)		:: lend
     integer																:: lnew
@@ -32,10 +32,6 @@ contains
     integer																:: nt					!Number of neighbour triplets in triangulation
     integer, allocatable, dimension(:,:)	:: ltri					!Array of delaunay triplets. 2nd index is label of triplet, first index is 1-3. So ltri(1,n), ltri(2,n), ltri(3,n) are labels of elements in neighbour triplet n, with ltri(1,n) being the smallest element label.
 
-    !$omp parallel &
-    !$omp shared (nc,cells,elements) &
-    !$omp private (i,j,x,y,z,list,lptr,lend,near,next,dist,ltri,ier,nt)
-    !$omp do
     do j=1, nc
 
       !Allocate element position arrays for delaunay triangulation
@@ -44,10 +40,6 @@ contains
       allocate(z(cells(j)%cortex_elements(0)))
 
       !Fill x,y,z arrays with positions of cortex elements relative to cell centre of mass and projected onto unit sphere.
-      !$omp parallel &
-      !$omp shared (cells,elements,x,y,z) &
-      !$omp private (i,k,r_vector,radius)
-      !$omp do
       do i=1, cells(j)%cortex_elements(0)
         k        = cells(j)%cortex_elements(i)
         r_vector = elements(k)%position-cells(j)%position
@@ -56,47 +48,39 @@ contains
         y(i)		 = r_vector(2)/radius
         z(i)		 = r_vector(3)/radius
       end do
-      !$omp end do
-      !$omp end parallel
 
       !Allocate arrays for trmesh using system values
-      allocate(list(6*(cells(j)%cortex_elements(0)-2)))
-      allocate(lptr(6*(cells(j)%cortex_elements(0)-2)))
-      allocate(lend(6*(cells(j)%cortex_elements(0)-2)))
+      allocate(dlist(6*(cells(j)%cortex_elements(0))))
+      allocate(lptr(6*(cells(j)%cortex_elements(0))))
+      allocate(lend(6*(cells(j)%cortex_elements(0))))
       allocate(near(cells(j)%cortex_elements(0)))
       allocate(next(cells(j)%cortex_elements(0)))
       allocate(dist(cells(j)%cortex_elements(0)))
       allocate(ltri(3,(2*cells(j)%cortex_elements(0)-4)))
 
       !Call trmesh to perform triangulation
-      call trmesh ( cells(j)%cortex_elements(0), x, y, z, list, lptr, lend, lnew, near, next, dist, ier )
+      call trmesh ( cells(j)%cortex_elements(0), x, y, z, dlist, lptr, lend, lnew, near, next, dist, ier )
 
-      !Call trlist2 to extract usable triplet list ltri from trmesh results
-      call trlist2 ( cells(j)%cortex_elements(0), list, lptr, lend, nt, ltri, ier )
+      !Call trlist2 to extract usable triplet dlist ltri from trmesh results
+      call trlist2 ( cells(j)%cortex_elements(0), dlist, lptr, lend, nt, ltri, ier )
 
-      !Now that we have the list of Delaunay triangles, we can also allocate and fill the triplets array in the
+      !Now that we have the dlist of Delaunay triangles, we can also allocate and fill the triplets array in the
       !cell data structure so that the triplets can be used in other modules.
       !Use cells(j)%cortex_elements() array to convert the label of elements in ltri(:,:) into the global element
       !label in cells(j)%triplets(:,:). This will make life much easier when the triplets array is used later on.
       if (allocated(cells(j)%triplets)) deallocate(cells(j)%triplets)
       allocate(cells(j)%triplets(3,(2*cells(j)%cortex_elements(0)-4)))
-      !$omp parallel &
-      !$omp shared (cells,j,nt,ltri) &
-      !$omp private (i)
-      !$omp do
       do i=1, nt
         cells(j)%triplets(1,i)=cells(j)%cortex_elements(ltri(1,i))
         cells(j)%triplets(2,i)=cells(j)%cortex_elements(ltri(2,i))
         cells(j)%triplets(3,i)=cells(j)%cortex_elements(ltri(3,i))
       end do
-      !$omp end do
-      !$omp end parallel
       cells(j)%triplet_count = nt
 
       deallocate(x)
       deallocate(y)
       deallocate(z)
-      deallocate(list)
+      deallocate(dlist)
       deallocate(lptr)
       deallocate(lend)
       deallocate(near)
@@ -105,8 +89,7 @@ contains
       deallocate(ltri)
 
     end do
-    !$omp end do
-    !$omp end parallel
+
 
   end subroutine scem_delaunay
 

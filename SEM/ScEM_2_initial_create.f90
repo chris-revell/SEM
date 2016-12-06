@@ -46,7 +46,7 @@ contains
       pos_1(:)=r_cell*(ra(:)-0.5)
       success = .TRUE.
 
-      if (DOT_PRODUCT(pos_1,pos_1).GT.0.25*r_cell_sq) success = .FALSE. !Restrict to spherical initial system
+      if (DOT_PRODUCT(pos_1,pos_1).GT.0.5*r_cell_sq) success = .FALSE. !Restrict to spherical initial system
 
       !The following block checks to ensure that new elements are not created too close to existing elements
       !Do not perform this loop if icount=0. If there are no existing elements, this new element will always be placed successfully so long as it is within the spherical radius of the cell

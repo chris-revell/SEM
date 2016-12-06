@@ -4,7 +4,7 @@ module insert_module
 	
 	contains
 
-		subroutine insert ( k, lp, list, lptr, lnew )
+		subroutine insert ( k, lp, dlist, lptr, lnew )
 
 			!*****************************************************************************80
 			!
@@ -13,7 +13,7 @@ module insert_module
 			!  Discussion:
 			!
 			!    This subroutine inserts K as a neighbor of N1 following
-			!    N2, where LP is the LIST pointer of N2 as a neighbor of
+			!    N2, where LP is the dlist pointer of N2 as a neighbor of
 			!    N1.  Note that, if N2 is the last neighbor of N1, K will
 			!    become the first neighbor (even if N1 is a boundary node).
 			!
@@ -39,15 +39,15 @@ module insert_module
 			!
 			!    Input, integer ( kind = 4 ) K, the index of the node to be inserted.
 			!
-			!    Input, integer ( kind = 4 ) LP, the LIST pointer of N2 as a neighbor of N1.
+			!    Input, integer ( kind = 4 ) LP, the dlist pointer of N2 as a neighbor of N1.
 			!
-			!    Input/output, integer ( kind = 4 ) LIST(6*(N-2)), LPTR(6*(N-2)), LNEW, 
+			!    Input/output, integer ( kind = 4 ) dlist(6*(N-2)), LPTR(6*(N-2)), LNEW, 
 			!    the data structure defining the triangulation, created by TRMESH.
 			!    On output, updated with the addition of node K.
 			!
 
 			  integer ( kind = 4 ) k
-			  integer ( kind = 4 ) list(*)
+			  integer ( kind = 4 ) dlist(*)
 			  integer ( kind = 4 ) lnew
 			  integer ( kind = 4 ) lp
 			  integer ( kind = 4 ) lptr(*)
@@ -55,7 +55,7 @@ module insert_module
 
 			  lsav = lptr(lp)
 			  lptr(lp) = lnew
-			  list(lnew) = k
+			  dlist(lnew) = k
 			  lptr(lnew) = lsav
 			  lnew = lnew + 1
 

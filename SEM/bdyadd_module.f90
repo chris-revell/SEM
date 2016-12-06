@@ -6,7 +6,7 @@ module bdyadd_module
 
 	contains
 
-		subroutine bdyadd ( kk, i1, i2, list, lptr, lend, lnew )
+		subroutine bdyadd ( kk, i1, i2, dlist, lptr, lend, lnew )
 
 			!*****************************************************************************80
 			!
@@ -51,7 +51,7 @@ module bdyadd_module
 			!    Input, integer ( kind = 4 ) I2, the last (leftmost) boundary node that 
 			!    is visible from node KK.  I1 and I2 may be determined by TRFIND.
 			!
-			!    Input/output, integer ( kind = 4 ) LIST(6*(N-2)), LPTR(6*(N-2)), LEND(N),
+			!    Input/output, integer ( kind = 4 ) dlist(6*(N-2)), LPTR(6*(N-2)), LEND(N),
 			!    LNEW, the triangulation data structure created by TRMESH.  
 			!    Nodes I1 and I2 must be included 
 			!    in the triangulation.  On output, the data structure is updated with
@@ -61,8 +61,8 @@ module bdyadd_module
 			!  Local parameters:
 			!
 			!    K =     Local copy of KK
-			!    LP =    LIST pointer
-			!    LSAV =  LIST pointer
+			!    LP =    dlist pointer
+			!    LSAV =  dlist pointer
 			!    N1,N2 = Local copies of I1 and I2, respectively
 			!    NEXT =  Boundary node visible from K
 			!    NSAV =  Boundary node visible from K
@@ -73,7 +73,7 @@ module bdyadd_module
 			  integer ( kind = 4 ) k
 			  integer ( kind = 4 ) kk
 			  integer ( kind = 4 ) lend(*)
-			  integer ( kind = 4 ) list(*)
+			  integer ( kind = 4 ) dlist(*)
 			  integer ( kind = 4 ) lnew
 			  integer ( kind = 4 ) lp
 			  integer ( kind = 4 ) lptr(*)
@@ -92,12 +92,12 @@ module bdyadd_module
 			  lp = lend(n1)
 			  lsav = lptr(lp)
 			  lptr(lp) = lnew
-			  list(lnew) = -k
+			  dlist(lnew) = -k
 			  lptr(lnew) = lsav
 			  lend(n1) = lnew
 			  lnew = lnew + 1
-			  next = -list(lp)
-			  list(lp) = next
+			  next = -dlist(lp)
+			  dlist(lp) = next
 			  nsav = next
 			!
 			!  Loop on the remaining boundary nodes between N1 and N2,
@@ -106,21 +106,21 @@ module bdyadd_module
 			  do
 
 				lp = lend(next)
-				call insert ( k, lp, list, lptr, lnew )
+				call insert ( k, lp, dlist, lptr, lnew )
 
 				if ( next == n2 ) then
 				  exit
 				end if
 
-				next = -list(lp)
-				list(lp) = next
+				next = -dlist(lp)
+				dlist(lp) = next
 
 			  end do
 			!
 			!  Add the boundary nodes between N1 and N2 as neighbors of node K.
 			!
 			  lsav = lnew
-			  list(lnew) = n1
+			  dlist(lnew) = n1
 			  lptr(lnew) = lnew + 1
 			  lnew = lnew + 1
 			  next = nsav
@@ -131,15 +131,15 @@ module bdyadd_module
 				  exit
 				end if
 
-				list(lnew) = next
+				dlist(lnew) = next
 				lptr(lnew) = lnew + 1
 				lnew = lnew + 1
 				lp = lend(next)
-				next = list(lp)
+				next = dlist(lp)
 
 			  end do
 
-			  list(lnew) = -n2
+			  dlist(lnew) = -n2
 			  lptr(lnew) = lsav
 			  lend(k) = lnew
 			  lnew = lnew + 1

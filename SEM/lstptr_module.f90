@@ -4,16 +4,16 @@ module lstptr_module
 	
 	contains			
 			
-			integer function lstptr ( lpl, nb, list, lptr )
+			integer function lstptr ( lpl, nb, dlist, lptr )
 
 				!*****************************************************************************80
 				!
-				!! LSTPTR returns the index of NB in the adjacency list.
+				!! LSTPTR returns the index of NB in the adjacency dlist.
 				!
 				!  Discussion:
 				!
-				!    This function returns the index (LIST pointer) of NB in
-				!    the adjacency list for N0, where LPL = LEND(N0).
+				!    This function returns the index (dlist pointer) of NB in
+				!    the adjacency dlist for N0, where LPL = LEND(N0).
 				!
 				!    This function is identical to the similarly named function in TRIPACK.
 				!
@@ -40,20 +40,20 @@ module lstptr_module
 				!    Input, integer ( kind = 4 ) NB, index of the node whose pointer is to 
 				!    be returned.  NB must be connected to N0.
 				!
-				!    Input, integer ( kind = 4 ) LIST(6*(N-2)), LPTR(6*(N-2)), the data 
+				!    Input, integer ( kind = 4 ) dlist(6*(N-2)), LPTR(6*(N-2)), the data 
 				!    structure defining the triangulation, created by TRMESH.
 				!
-				!    Output, integer ( kind = 4 ) LSTPTR, pointer such that LIST(LSTPTR) = NB or
-				!    LIST(LSTPTR) = -NB, unless NB is not a neighbor of N0, in which 
+				!    Output, integer ( kind = 4 ) LSTPTR, pointer such that dlist(LSTPTR) = NB or
+				!    dlist(LSTPTR) = -NB, unless NB is not a neighbor of N0, in which 
 				!    case LSTPTR = LPL.
 				!
 				!  Local parameters:
 				!
-				!    LP = LIST pointer
+				!    LP = dlist pointer
 				!    ND = Nodal index
 				!
 
-				  integer ( kind = 4 ) list(*)
+				  integer ( kind = 4 ) dlist(*)
 				  integer ( kind = 4 ) lp
 				  integer ( kind = 4 ) lpl
 				  integer ( kind = 4 ) lptr(*)
@@ -65,7 +65,7 @@ module lstptr_module
 
 				  do
 
-					nd = list(lp)
+					nd = dlist(lp)
 
 					if ( nd == nb ) then
 					  exit

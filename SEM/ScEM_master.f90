@@ -16,7 +16,7 @@ program scem_master
 
   implicit none
 
-  write(*,*) "Number of processors: ", omp_get_num_procs()
+!  write(*,*) "Number of processors: ", omp_get_num_procs()
 
   ! Retrieve system parameters and constants. scem_input is a subroutine in ScEM_0_input.f90 that initialises a large number of system parameters that have already been defined but not evaluated. To vary the system parameters simply change the numbers in this subroutine.
   call scem_input

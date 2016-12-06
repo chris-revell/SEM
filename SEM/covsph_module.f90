@@ -6,7 +6,7 @@ module covsph_module
 	
 	contains
 	
-		subroutine covsph ( kk, n0, list, lptr, lend, lnew )
+		subroutine covsph ( kk, n0, dlist, lptr, lend, lnew )
 
 			!*****************************************************************************80
 			!
@@ -45,7 +45,7 @@ module covsph_module
 			!    Input, integer ( kind = 4 ) N0 = Index of a boundary node (in the range
 			!    1 to KK-1).  N0 may be determined by TRFIND.
 			!
-			!    Input/output, integer ( kind = 4 ) LIST(6*(N-2)), LPTR(6*(N-2)), LEND(N),
+			!    Input/output, integer ( kind = 4 ) dlist(6*(N-2)), LPTR(6*(N-2)), LEND(N),
 			!    LNEW, the triangulation data structure created by TRMESH.  Node N0 must
 			!    be included in the triangulation.  On output, updated with the addition 
 			!    of node KK as the last entry.  The updated triangulation contains no
@@ -54,8 +54,8 @@ module covsph_module
 			!  Local parameters:
 			!
 			!    K =     Local copy of KK
-			!    LP =    LIST pointer
-			!    LSAV =  LIST pointer
+			!    LP =    dlist pointer
+			!    LSAV =  dlist pointer
 			!    NEXT =  Boundary node visible from K
 			!    NST =   Local copy of N0
 			!
@@ -63,7 +63,7 @@ module covsph_module
 			  integer ( kind = 4 ) k
 			  integer ( kind = 4 ) kk
 			  integer ( kind = 4 ) lend(*)
-			  integer ( kind = 4 ) list(*)
+			  integer ( kind = 4 ) dlist(*)
 			  integer ( kind = 4 ) lnew
 			  integer ( kind = 4 ) lp
 			  integer ( kind = 4 ) lptr(*)
@@ -84,9 +84,9 @@ module covsph_module
 			  do
 
 				lp = lend(next)
-				call insert ( k, lp, list, lptr, lnew )
-				next = -list(lp)
-				list(lp) = next
+				call insert ( k, lp, dlist, lptr, lnew )
+				next = -dlist(lp)
+				dlist(lp) = next
 
 				if ( next == nst ) then
 				  exit
@@ -94,17 +94,17 @@ module covsph_module
 
 			  end do
 			!
-			!  Traverse the boundary again, adding each node to K's adjacency list.
+			!  Traverse the boundary again, adding each node to K's adjacency dlist.
 			!
 			  lsav = lnew
 
 			  do
 
 				lp = lend(next)
-				list(lnew) = next
+				dlist(lnew) = next
 				lptr(lnew) = lnew + 1
 				lnew = lnew + 1
-				next = list(lp)
+				next = dlist(lp)
 
 				if ( next == nst ) then
 				  exit

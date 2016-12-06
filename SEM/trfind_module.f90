@@ -8,7 +8,7 @@ module trfind_module
 	
 	contains
 	
-		subroutine trfind ( nst, p, n, x, y, z, list, lptr, lend, b1, b2, b3, i1, &
+		subroutine trfind ( nst, p, n, x, y, z, dlist, lptr, lend, b1, b2, b3, i1, &
 		  i2, i3 )
 
 			!*****************************************************************************80
@@ -53,7 +53,7 @@ module trfind_module
 			!    Input, real ( kind = 8 ) X(N), Y(N), Z(N), the coordinates of the
 			!    triangulation nodes (unit vectors).
 			!
-			!    Input, integer ( kind = 4 ) LIST(6*(N-2)), LPTR(6*(N-2)), LEND(N), the 
+			!    Input, integer ( kind = 4 ) dlist(6*(N-2)), LPTR(6*(N-2)), LEND(N), the 
 			!    data structure defining the triangulation, created by TRMESH.
 			!
 			!    Output, real ( kind = 8 ) B1, B2, B3, the unnormalized barycentric
@@ -73,7 +73,7 @@ module trfind_module
 			!
 			!    EPS =      Machine precision
 			!    IX,IY,IZ = Integer seeds for JRAND
-			!    LP =       LIST pointer
+			!    LP =       dlist pointer
 			!    N0,N1,N2 = Nodes in counterclockwise order defining a
 			!               cone (with vertex N0) containing P, or end-
 			!               points of a boundary edge such that P Right
@@ -117,7 +117,7 @@ module trfind_module
 			  integer ( kind = 4 ), save :: iz = 3
 !			  integer ( kind = 4 ) jrand
 			  integer ( kind = 4 ) lend(n)
-			  integer ( kind = 4 ) list(6*(n-2))
+			  integer ( kind = 4 ) dlist(6*(n-2))
 			  integer ( kind = 4 ) lp
 			  integer ( kind = 4 ) lptr(6*(n-2))
 !			  integer ( kind = 4 ) lstptr
@@ -186,9 +186,9 @@ module trfind_module
 			2 continue
 
 			  lp = lend(n0)
-			  nl = list(lp)
+			  nl = dlist(lp)
 			  lp = lptr(lp)
-			  nf = list(lp)
+			  nf = dlist(lp)
 			  n1 = nf
 			!
 			!  Find a pair of adjacent neighbors N1,N2 of N0 that define
@@ -202,7 +202,7 @@ module trfind_module
 
 				if ( det ( x(n0),y(n0),z(n0),x(n1),y(n1),z(n1),xp,yp,zp ) < 0.0D+00 ) then
 				  lp = lptr(lp)
-				  n1 = list(lp)
+				  n1 = dlist(lp)
 				  if ( n1 == nl ) then
 					go to 6
 				  end if
@@ -239,7 +239,7 @@ module trfind_module
 			4 continue
 
 				lp = lptr(lp)
-				n2 = abs ( list(lp) )
+				n2 = abs ( dlist(lp) )
 
 				if ( det(x(n0),y(n0),z(n0),x(n2),y(n2),z(n2),xp,yp,zp) < 0.0D+00 ) then
 				  go to 7
@@ -273,7 +273,7 @@ module trfind_module
 				  end if
 
 				  lp = lptr(lp)
-				  n1 = abs ( list(lp) )
+				  n1 = abs ( dlist(lp) )
 
 				  if ( n1 == nl ) then
 					i1 = 0
@@ -318,14 +318,14 @@ module trfind_module
 			!  Set N4 to the first neighbor of N2 following N1 (the
 			!  node opposite N2->N1) unless N1->N2 is a boundary arc.
 			!
-				lp = lstptr ( lend(n2), n1, list, lptr )
+				lp = lstptr ( lend(n2), n1, dlist, lptr )
 
-				if ( list(lp) < 0 ) then
+				if ( dlist(lp) < 0 ) then
 				  go to 9
 				end if
 
 				lp = lptr(lp)
-				n4 = abs ( list(lp) )
+				n4 = abs ( dlist(lp) )
 			!
 			!  Define a new arc N1->N2 which intersects the geodesic N0-P.
 			!
@@ -417,7 +417,7 @@ module trfind_module
 
 			  lp = lend(n2)
 			  lp = lptr(lp)
-			  next = list(lp)
+			  next = dlist(lp)
 
 			  if ( det(x(n2),y(n2),z(n2),x(next),y(next),z(next),xp,yp,zp) >= 0.0D+00 ) then
 			!
@@ -479,7 +479,7 @@ module trfind_module
 			12  continue
 
 				lp = lend(n1)
-				next = -list(lp)
+				next = -dlist(lp)
 
 				if ( 0.0D+00 <= &
 				  det ( x(next), y(next), z(next), x(n1), y(n1), z(n1), xp, yp, zp )  ) then

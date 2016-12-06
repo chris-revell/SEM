@@ -6,7 +6,7 @@ module swap_module
 	
 	contains
 
-		subroutine swap ( in1, in2, io1, io2, list, lptr, lend, lp21 )
+		subroutine swap ( in1, in2, io1, io2, dlist, lptr, lend, lp21 )
 
 			!*****************************************************************************80
 			!
@@ -43,7 +43,7 @@ module swap_module
 			!    vertices of the quadrilateral.  IO1-IO2 is replaced by IN1-IN2.  
 			!    (IO1,IO2,IN1) and (IO2,IO1,IN2) must be triangles on input.
 			!
-			!    Input/output, integer ( kind = 4 ) LIST(6*(N-2)), LPTR(6*(N-2)), LEND(N),
+			!    Input/output, integer ( kind = 4 ) dlist(6*(N-2)), LPTR(6*(N-2)), LEND(N),
 			!    the data structure defining the triangulation, created by TRMESH.  
 			!    On output, updated with the swap; triangles (IO1,IO2,IN1) an (IO2,IO1,IN2) 
 			!    are replaced by (IN1,IN2,IO2) and (IN2,IN1,IO1) unless LP21 = 0.
@@ -54,7 +54,7 @@ module swap_module
 			!
 			!  Local parameters:
 			!
-			!    LP, LPH, LPSAV = LIST pointers
+			!    LP, LPH, LPSAV = dlist pointers
 			!
 
 			  integer ( kind = 4 ) in1
@@ -62,7 +62,7 @@ module swap_module
 			  integer ( kind = 4 ) io1
 			  integer ( kind = 4 ) io2
 			  integer ( kind = 4 ) lend(*)
-			  integer ( kind = 4 ) list(*)
+			  integer ( kind = 4 ) dlist(*)
 			  integer ( kind = 4 ) lp
 			  integer ( kind = 4 ) lp21
 			  integer ( kind = 4 ) lph
@@ -72,16 +72,16 @@ module swap_module
 			!
 			!  Test for IN1 and IN2 adjacent.
 			!
-			  lp = lstptr ( lend(in1), in2, list, lptr )
+			  lp = lstptr ( lend(in1), in2, dlist, lptr )
 
-			  if ( abs ( list(lp) ) == in2 ) then
+			  if ( abs ( dlist(lp) ) == in2 ) then
 				lp21 = 0
 				return
 			  end if
 			!
 			!  Delete IO2 as a neighbor of IO1.
 			!
-			  lp = lstptr ( lend(io1), in2, list, lptr )
+			  lp = lstptr ( lend(io1), in2, dlist, lptr )
 			  lph = lptr(lp)
 			  lptr(lp) = lptr(lph)
 			!
@@ -93,15 +93,15 @@ module swap_module
 			!
 			!  Insert IN2 as a neighbor of IN1 following IO1 using the hole created above.
 			!
-			  lp = lstptr ( lend(in1), io1, list, lptr )
+			  lp = lstptr ( lend(in1), io1, dlist, lptr )
 			  lpsav = lptr(lp)
 			  lptr(lp) = lph
-			  list(lph) = in2
+			  dlist(lph) = in2
 			  lptr(lph) = lpsav
 			!
 			!  Delete IO1 as a neighbor of IO2.
 			!
-			  lp = lstptr ( lend(io2), in1, list, lptr )
+			  lp = lstptr ( lend(io2), in1, dlist, lptr )
 			  lph = lptr(lp)
 			  lptr(lp) = lptr(lph)
 			!
@@ -113,10 +113,10 @@ module swap_module
 			!
 			!  Insert IN1 as a neighbor of IN2 following IO2.
 			!
-			  lp = lstptr ( lend(in2), io2, list, lptr )
+			  lp = lstptr ( lend(in2), io2, dlist, lptr )
 			  lpsav = lptr(lp)
 			  lptr(lp) = lph
-			  list(lph) = in1
+			  dlist(lph) = in1
 			  lptr(lph) = lpsav
 			  lp21 = lph
 

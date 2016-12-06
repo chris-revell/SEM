@@ -7,7 +7,7 @@ module intadd_module
 		
 	contains
 
-		subroutine intadd ( kk, i1, i2, i3, list, lptr, lend, lnew )
+		subroutine intadd ( kk, i1, i2, i3, dlist, lptr, lend, lnew )
 
 			!*****************************************************************************80
 			!
@@ -48,7 +48,7 @@ module intadd_module
 			!    counterclockwise-ordered sequence of vertices of a triangle which contains 
 			!    node KK.
 			!
-			!    Input, integer ( kind = 4 ) LIST(6*(N-2)), LPTR(6*(N-2)), LEND(N), LNEW, 
+			!    Input, integer ( kind = 4 ) dlist(6*(N-2)), LPTR(6*(N-2)), LEND(N), LNEW, 
 			!    the data structure defining the triangulation, created by TRMESH.  Triangle
 			!    (I1,I2,I3) must be included in the triangulation.
 			!    On output, updated with the addition of node KK.  KK
@@ -57,7 +57,7 @@ module intadd_module
 			!  Local parameters:
 			!
 			!    K =        Local copy of KK
-			!    LP =       LIST pointer
+			!    LP =       dlist pointer
 			!    N1,N2,N3 = Local copies of I1, I2, and I3
 			!
 			  implicit none
@@ -68,7 +68,7 @@ module intadd_module
 			  integer ( kind = 4 ) k
 			  integer ( kind = 4 ) kk
 			  integer ( kind = 4 ) lend(*)
-			  integer ( kind = 4 ) list(*)
+			  integer ( kind = 4 ) dlist(*)
 			  integer ( kind = 4 ) lnew
 			  integer ( kind = 4 ) lp
 			  integer ( kind = 4 ) lptr(*)
@@ -87,20 +87,20 @@ module intadd_module
 			!
 			!  Add K as a neighbor of I1, I2, and I3.
 			!
-			  lp = lstptr ( lend(n1), n2, list, lptr )
-			  call insert ( k, lp, list, lptr, lnew )
+			  lp = lstptr ( lend(n1), n2, dlist, lptr )
+			  call insert ( k, lp, dlist, lptr, lnew )
 
-			  lp = lstptr ( lend(n2), n3, list, lptr )
-			  call insert ( k, lp, list, lptr, lnew )
+			  lp = lstptr ( lend(n2), n3, dlist, lptr )
+			  call insert ( k, lp, dlist, lptr, lnew )
 
-			  lp = lstptr ( lend(n3), n1, list, lptr )
-			  call insert ( k, lp, list, lptr, lnew )
+			  lp = lstptr ( lend(n3), n1, dlist, lptr )
+			  call insert ( k, lp, dlist, lptr, lnew )
 			!
 			!  Add I1, I2, and I3 as neighbors of K.
 			!
-			  list(lnew) = n1
-			  list(lnew+1) = n2
-			  list(lnew+2) = n3
+			  dlist(lnew) = n1
+			  dlist(lnew+1) = n2
+			  dlist(lnew+2) = n3
 			  lptr(lnew) = lnew + 1
 			  lptr(lnew+1) = lnew + 2
 			  lptr(lnew+2) = lnew

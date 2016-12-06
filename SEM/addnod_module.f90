@@ -12,7 +12,7 @@ module addnod_module
 
 	contains
 
-		subroutine addnod ( nst, k, x, y, z, list, lptr, lend, lnew, ier )
+		subroutine addnod ( nst, k, x, y, z, dlist, lptr, lend, lnew, ier )
 
 			!*****************************************************************************80
 			!
@@ -61,7 +61,7 @@ module addnod_module
 			!
 			!    Input, real ( kind = 8 ) X(K), Y(K), Z(K), the coordinates of the nodes.
 			!
-			!    Input/output, integer ( kind = 4 ) LIST(6*(N-2)), LPTR(6*(N-2)), LEND(K),
+			!    Input/output, integer ( kind = 4 ) dlist(6*(N-2)), LPTR(6*(N-2)), LEND(K),
 			!    LNEW.  On input, the data structure associated with the triangulation of
 			!    nodes 1 to K-1.  On output, the data has been updated to include node
 			!    K.  The array lengths are assumed to be large enough to add node K.
@@ -87,9 +87,9 @@ module addnod_module
 			!    KM1 =      K-1
 			!    L =        Vertex index (I1, I2, or I3) returned in IER
 			!               if node K coincides with a vertex
-			!    LP =       LIST pointer
-			!    LPF =      LIST pointer to the first neighbor of K
-			!    LPO1 =     LIST pointer to IO1
+			!    LP =       dlist pointer
+			!    LPF =      dlist pointer to the first neighbor of K
+			!    LPO1 =     dlist pointer to IO1
 			!    LPO1S =    Saved value of LPO1
 			!    P =        Cartesian coordinates of node K
 			!
@@ -111,7 +111,7 @@ module addnod_module
 			  integer ( kind = 4 ) km1
 			  integer ( kind = 4 ) l
 			  integer ( kind = 4 ) lend(k)
-			  integer ( kind = 4 ) list(*)
+			  integer ( kind = 4 ) dlist(*)
 			  integer ( kind = 4 ) lnew
 			  integer ( kind = 4 ) lp
 			  integer ( kind = 4 ) lpf
@@ -152,7 +152,7 @@ module addnod_module
 			!  (I1) and leftmost (I2) visible boundary nodes as viewed
 			!  from node K.
 			!
-			  call trfind ( ist, p, km1, x, y, z, list, lptr, lend, b1, b2, b3, i1, i2, i3 )
+			  call trfind ( ist, p, km1, x, y, z, dlist, lptr, lend, b1, b2, b3, i1, i2, i3 )
 			!
 			!  Test for collinear or duplicate nodes.
 			!
@@ -195,14 +195,14 @@ module addnod_module
 				  stop
 				end if
 
-				call intadd ( kk, i1, i2, i3, list, lptr, lend, lnew )
+				call intadd ( kk, i1, i2, i3, dlist, lptr, lend, lnew )
 
 			  else
 
 				if ( i1 /= i2 ) then
-				  call bdyadd ( kk, i1,i2, list, lptr, lend, lnew )
+				  call bdyadd ( kk, i1,i2, dlist, lptr, lend, lnew )
 				else
-				  call covsph ( kk, i1, list, lptr, lend, lnew )
+				  call covsph ( kk, i1, dlist, lptr, lend, lnew )
 				end if
 
 			  end if
@@ -213,20 +213,20 @@ module addnod_module
 			!
 			  lp = lend(kk)
 			  lpf = lptr(lp)
-			  io2 = list(lpf)
+			  io2 = dlist(lpf)
 			  lpo1 = lptr(lpf)
-			  io1 = abs ( list(lpo1) )
+			  io1 = abs ( dlist(lpo1) )
 			!
 			!  Begin loop: find the node opposite K.
 			!
 			  do
 
-				lp = lstptr ( lend(io1), io2, list, lptr )
+				lp = lstptr ( lend(io1), io2, dlist, lptr )
 
-				if ( 0 <= list(lp) ) then
+				if ( 0 <= dlist(lp) ) then
 
 				  lp = lptr(lp)
-				  in1 = abs ( list(lp) )
+				  in1 = abs ( dlist(lp) )
 			!
 			!  Swap test:  if a swap occurs, two new arcs are
 			!  opposite K and must be tested.
@@ -235,18 +235,18 @@ module addnod_module
 
 				  if ( .not. swptst ( in1, kk, io1, io2, x, y, z ) ) then
 
-					if ( lpo1 == lpf .or. list(lpo1) < 0 ) then
+					if ( lpo1 == lpf .or. dlist(lpo1) < 0 ) then
 					  exit
 					end if
 
 					io2 = io1
 					lpo1 = lptr(lpo1)
-					io1 = abs ( list(lpo1) )
+					io1 = abs ( dlist(lpo1) )
 					cycle
 
 				  end if
 
-				  call swap ( in1, kk, io1, io2, list, lptr, lend, lpo1 )
+				  call swap ( in1, kk, io1, io2, dlist, lptr, lend, lpo1 )
 			!
 			!  A swap is not possible because KK and IN1 are already
 			!  adjacent.  This error in SWPTST only occurs in the
@@ -263,13 +263,13 @@ module addnod_module
 			!
 			!  No swap occurred.  Test for termination and reset IO2 and IO1.
 			!
-				if ( lpo1 == lpf .or. list(lpo1) < 0 ) then
+				if ( lpo1 == lpf .or. dlist(lpo1) < 0 ) then
 				  exit
 				end if
 
 				io2 = io1
 				lpo1 = lptr(lpo1)
-				io1 = abs ( list(lpo1) )
+				io1 = abs ( dlist(lpo1) )
 
 			  end do
 

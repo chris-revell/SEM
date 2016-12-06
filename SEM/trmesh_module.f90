@@ -7,7 +7,7 @@ module trmesh_module
 
 	contains
 
-		subroutine trmesh ( n, x, y, z, list, lptr, lend, lnew, near, next, dist, ier )
+		subroutine trmesh ( n, x, y, z, dlist, lptr, lend, lnew, near, next, dist, ier )
 
 			!*****************************************************************************
 			!
@@ -50,7 +50,7 @@ module trmesh_module
 			!    Spherical coordinates (latitude and longitude) may be
 			!    converted to Cartesian coordinates by Subroutine TRANS.
 			!
-			!    The following is a list of the software package modules
+			!    The following is a dlist of the software package modules
 			!    which a user may wish to call directly:
 			!
 			!    ADDNOD - Updates the triangulation by appending a new node.
@@ -105,10 +105,10 @@ module trmesh_module
 			!             Subroutine TRMESH.
 			!
 			!    TRLIST - Converts the triangulation data structure to a
-			!             triangle list more suitable for use in a finite
+			!             triangle dlist more suitable for use in a finite
 			!             element code.
 			!
-			!    TRLPRT - Prints the triangle list created by TRLIST.
+			!    TRLPRT - Prints the triangle dlist created by TRLIST.
 			!
 			!    TRMESH - Creates a Delaunay triangulation of a set of
 			!             nodes.
@@ -149,7 +149,7 @@ module trmesh_module
 			!    for all K.  The first three nodes must not be collinear (lie on a
 			!    common great circle).
 			!
-			!    Output, integer ( kind = 4 ) LIST(6*(N-2)), nodal indexes which, along
+			!    Output, integer ( kind = 4 ) dlist(6*(N-2)), nodal indexes which, along
 			!    with LPTR, LEND, and LNEW, define the triangulation as a set of N
 			!    adjacency lists; counterclockwise-ordered sequences of neighboring nodes
 			!    such that the first and last neighbors of a boundary node are boundary
@@ -157,17 +157,17 @@ module trmesh_module
 			!    distinguish between interior and boundary nodes, the last neighbor of
 			!    each boundary node is represented by the negative of its index.
 			!
-			!    Output, integer ( kind = 4 ) LPTR(6*(N-2)), = Set of pointers (LIST
-			!    indexes) in one-to-one correspondence with the elements of LIST.
-			!    LIST(LPTR(I)) indexes the node which follows LIST(I) in cyclical
+			!    Output, integer ( kind = 4 ) LPTR(6*(N-2)), = Set of pointers (dlist
+			!    indexes) in one-to-one correspondence with the elements of dlist.
+			!    dlist(LPTR(I)) indexes the node which follows dlist(I) in cyclical
 			!    counterclockwise order (the first neighbor follows the last neighbor).
 			!
 			!    Output, integer ( kind = 4 ) LEND(N), pointers to adjacency lists.
-			!    LEND(K) points to the last neighbor of node K.  LIST(LEND(K)) < 0 if and
+			!    LEND(K) points to the last neighbor of node K.  dlist(LEND(K)) < 0 if and
 			!    only if K is a boundary node.
 			!
 			!    Output, integer ( kind = 4 ) LNEW, pointer to the first empty location
-			!    in LIST and LPTR (list length plus one).  LIST, LPTR, LEND, and LNEW are
+			!    in dlist and LPTR (dlist length plus one).  dlist, LPTR, LEND, and LNEW are
 			!    not altered if IER < 0, and are incomplete if 0 < IER.
 			!
 			!    Workspace, integer ( kind = 4 ) NEAR(N),
@@ -197,7 +197,7 @@ module trmesh_module
 			!    I0 =       Index of the node preceding I in a sequence of
 			!               unprocessed nodes:  I = NEXT(I0)
 			!    K =        Index of node to be added and DO-loop index: 3 < K
-			!    LP =       LIST index (pointer) of a neighbor of K
+			!    LP =       dlist index (pointer) of a neighbor of K
 			!    LPL =      Pointer to the last neighbor of K
 			!    NEXTI =    NEXT(I)
 			!    NN =       Local copy of N
@@ -217,7 +217,7 @@ module trmesh_module
 			  integer ( kind = 4 ) k
 !			  logical              left
 			  integer ( kind = 4 ) lend(n)
-			  integer ( kind = 4 ) list(6*(n-2))
+			  integer ( kind = 4 ) dlist(6*(n-2))
 			  integer ( kind = 4 ) lnew
 			  integer ( kind = 4 ) lp
 			  integer ( kind = 4 ) lpl
@@ -242,28 +242,28 @@ module trmesh_module
 			  end if
 
 			!
-			!  Store the first triangle in the linked list.
+			!  Store the first triangle in the linked dlist.
 			!
 			  if ( .not. left (x(1),y(1),z(1),x(2),y(2),z(2), &
 							   x(3),y(3),z(3) ) ) then
 			!
 			!  The first triangle is (3,2,1) = (2,1,3) = (1,3,2).
 			!
-				list(1) = 3
+				dlist(1) = 3
 				lptr(1) = 2
-				list(2) = -2
+				dlist(2) = -2
 				lptr(2) = 1
 				lend(1) = 2
 
-				list(3) = 1
+				dlist(3) = 1
 				lptr(3) = 4
-				list(4) = -3
+				dlist(4) = -3
 				lptr(4) = 3
 				lend(2) = 4
 
-				list(5) = 2
+				dlist(5) = 2
 				lptr(5) = 6
-				list(6) = -1
+				dlist(6) = -1
 				lptr(6) = 5
 				lend(3) = 6
 
@@ -272,21 +272,21 @@ module trmesh_module
 			!  The first triangle is (1,2,3):  3 Strictly Left 1->2,
 			!  i.e., node 3 lies in the left hemisphere defined by arc 1->2.
 			!
-				list(1) = 2
+				dlist(1) = 2
 				lptr(1) = 2
-				list(2) = -3
+				dlist(2) = -3
 				lptr(2) = 1
 				lend(1) = 2
 
-				list(3) = 3
+				dlist(3) = 3
 				lptr(3) = 4
-				list(4) = -1
+				dlist(4) = -1
 				lptr(4) = 3
 				lend(2) = 4
 
-				list(5) = 1
+				dlist(5) = 1
 				lptr(5) = 6
-				list(6) = -2
+				dlist(6) = -2
 				lptr(6) = 5
 				lend(3) = 6
 			!
@@ -371,7 +371,7 @@ module trmesh_module
 			!
 			  do k = 4, nn
 
-				call addnod ( near(k), k, x, y, z, list, lptr, lend, lnew, ier )
+				call addnod ( near(k), k, x, y, z, dlist, lptr, lend, lnew, ier )
 
 				if ( ier /= 0 ) then
 				  write ( *, '(a)' ) ' '
@@ -416,7 +416,7 @@ module trmesh_module
 			3   continue
 
 				lp = lptr(lp)
-				j = abs ( list(lp) )
+				j = abs ( dlist(lp) )
 			!
 			!  Loop on elements I in the sequence of unprocessed nodes
 			!  associated with J:  K is a candidate for replacing J

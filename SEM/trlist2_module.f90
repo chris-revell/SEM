@@ -6,19 +6,19 @@ module trlist2_module
 
 	contains 
 	
-		subroutine trlist2 ( n, list, lptr, lend, nt, ltri, ier )
+		subroutine trlist2 ( n, dlist, lptr, lend, nt, ltri, ier )
 	
 			!*****************************************************************************80
 			!
-			!! TRLIST2 converts a triangulation data structure to a triangle list.
+			!! TRLIST2 converts a triangulation data structure to a triangle dlist.
 			!
 			!  Discussion:
 			!
 			!    This subroutine converts a triangulation data structure
-			!    from the linked list created by TRMESH to a triangle list.
+			!    from the linked dlist created by TRMESH to a triangle dlist.
 			!
 			!    It is a version of TRLIST for the special case where the triangle
-			!    list should only include the nodes that define each triangle.
+			!    dlist should only include the nodes that define each triangle.
 			!
 			!  Modified:
 			!
@@ -41,8 +41,8 @@ module trlist2_module
 			!    Input, integer ( kind = 4 ) N, the number of nodes in the triangulation.
 			!    3 <= N.
 			!
-			!    Input, integer ( kind = 4 ) LIST(6*(N-2)), LPTR(6*(N-2)), LEND(N), linked
-			!    list data structure defining the triangulation.  Refer to TRMESH.
+			!    Input, integer ( kind = 4 ) dlist(6*(N-2)), LPTR(6*(N-2)), LEND(N), linked
+			!    dlist data structure defining the triangulation.  Refer to TRMESH.
 			!
 			!    Output, integer ( kind = 4 ) NT, the number of triangles in the 
 			!    triangulation unless IER /=0, in which case NT = 0.  NT = 2N-NB-2 if 
@@ -59,7 +59,7 @@ module trlist2_module
 			!    Output, integer ( kind = 4 ) IER, error indicator.
 			!    0, if no errors were encountered.
 			!    1, if N is outside its valid range on input.
-			!    2, if the triangulation data structure (LIST,LPTR,LEND) is invalid.  
+			!    2, if the triangulation data structure (dlist,LPTR,LEND) is invalid.  
 			!      Note, however, that these arrays are not completely tested for validity.
 			!
 			!  Local parameters:
@@ -71,7 +71,7 @@ module trlist2_module
 			!    KA =       Arc index and number of currently stored arcs
 			!    KN =       Index of the triangle that shares arc I1-I2 with KT
 			!    KT =       Triangle index and number of currently stored triangles
-			!    LP =       LIST pointer
+			!    LP =       dlist pointer
 			!    LP2 =      Pointer to N2 as a neighbor of N1
 			!    LPL =      Pointer to the last neighbor of I1
 			!    LPLN1 =    Pointer to the last neighbor of N1
@@ -92,7 +92,7 @@ module trlist2_module
 			  integer ( kind = 4 ) kn
 			  integer ( kind = 4 ) kt
 			  integer ( kind = 4 ) lend(n)
-			  integer ( kind = 4 ) list(6*(n-2))
+			  integer ( kind = 4 ) dlist(6*(n-2))
 			  integer ( kind = 4 ) lp
 			  integer ( kind = 4 ) lp2
 			  integer ( kind = 4 ) lpl
@@ -136,9 +136,9 @@ module trlist2_module
 			1   continue
 
 				  lp2 = lptr(lp2)
-				  n2 = list(lp2)
+				  n2 = dlist(lp2)
 				  lp = lptr(lp2)
-				  n3 = abs ( list(lp) )
+				  n3 = abs ( dlist(lp) )
 
 				  if ( n2 < n1 .or. n3 < n1 ) then
 					go to 8
@@ -176,7 +176,7 @@ module trlist2_module
 
 					do
 
-					  if ( list(lp) == i2 ) then
+					  if ( dlist(lp) == i2 ) then
 						go to 3
 					  end if
 
@@ -191,7 +191,7 @@ module trlist2_module
 			!  Invalid triangulation data structure:  I1 is a neighbor of
 			!  I2, but I2 is not a neighbor of I1.
 			!
-					if ( abs ( list(lp) ) /= i2 ) then
+					if ( abs ( dlist(lp) ) /= i2 ) then
 					  nt = 0
 					  ier = 2
 					  return
@@ -202,7 +202,7 @@ module trlist2_module
 			!
 					kn = 0
 
-					if ( list(lp) < 0 ) then
+					if ( dlist(lp) < 0 ) then
 					  go to 6
 					end if
 			!
@@ -212,7 +212,7 @@ module trlist2_module
 			3       continue
 
 					lp = lptr(lp)
-					i3 = abs ( list(lp) )
+					i3 = abs ( dlist(lp) )
 			!
 			!  Find J such that LTRI(J,KN) = I3 (not used if KT < KN),
 			!  and permute the vertex indexes of KN so that I1 is smallest.
@@ -239,7 +239,7 @@ module trlist2_module
 					  cycle
 					end if
 			!
-			!  Find KN, if it exists, by searching the triangle list in
+			!  Find KN, if it exists, by searching the triangle dlist in
 			!  reverse order.
 			!
 					do kn = kt-1, 1, -1
