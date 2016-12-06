@@ -92,7 +92,7 @@ module scem_0_input
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
-        flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
+        flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
@@ -111,7 +111,7 @@ module scem_0_input
       nc_initial        = 12
       stiffness_factor  = 0.25
       cell_cycle_time   = 10000 ! Cell cycle time in seconds
-      n_cellcycles      = 2.0
+      n_cellcycles      = 1.0
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
@@ -121,7 +121,7 @@ module scem_0_input
       DIT_response(1,1) = 0.4   ! Epiblast homotypic interface DIT response factor
       DIT_response(1,2) = 2.0   ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0   ! Primitive endoderm external system surface DIT response factor
-      DIT_response(2,1) = 0.7   ! Primitive endoderm homotypic interface DIT response factor
+      DIT_response(2,1) = 1.0   ! Primitive endoderm homotypic interface DIT response factor
       DIT_response(2,2) = 2.0   ! Primitive endoderm heterotypic interface DIT response factor
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
