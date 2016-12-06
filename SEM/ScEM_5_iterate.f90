@@ -112,7 +112,7 @@ contains
       call scem_cortex
 
       !Calculate cell volumes
-      call scem_volume_calculate
+      if (flag_volume_output.EQ.1.OR.flag_conserve.EQ.1.OR.flag_background.NE.0) call scem_volume_calculate
 
       !Outputting data to file at intervals of output_interval.
       if (mod(time,(output_interval)).LT.dt.AND..NOT.intro) then

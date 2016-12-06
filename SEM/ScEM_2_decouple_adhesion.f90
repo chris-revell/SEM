@@ -20,9 +20,9 @@ contains
     !Need to decouple adhesion magnitude from changes in element density caused by differential interfacial tension
 
     !Refresh adhesion factors
-    do i=1,ne
-      elements(ne)%adhesion_factor=1
-    enddo
+!    do i=1,ne
+!      elements(ne)%adhesion_factor=1
+!    enddo
 !    open(unit=40,file=output_folder//"/decoupling.txt",status='unknown',position='append')
     do i=1, nc
       do j=1, cells(i)%cortex_elements(0)
@@ -38,7 +38,7 @@ contains
             a = elements(t1)%position - elements(t2)%position
             b = elements(t1)%position - elements(t3)%position
             c = cross_product(a,b)
-            local_area = 0.5*SQRT(DOT_PRODUCT(c,c)) !0.5*|axb|
+            local_area = local_area + 0.5*SQRT(DOT_PRODUCT(c,c)) !0.5*|axb|
           else
             CYCLE
           endif

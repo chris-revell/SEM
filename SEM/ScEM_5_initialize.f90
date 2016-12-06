@@ -64,7 +64,7 @@ module scem_5_initialize
       call scem_cortex
 
 	    ! Calculate initial cell volumes
-      call scem_volume_calculate
+      if (flag_volume_output.EQ.1.OR.flag_conserve.EQ.1.OR.flag_background.NE.0) call scem_volume_calculate
 
       ! write initial system data to file
       if (.NOT.intro) call scem_output_system
