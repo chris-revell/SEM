@@ -26,9 +26,7 @@ module scem_4_cortex
 			cells(i)%cortex_elements(:)=0		!Set cortex counter to zero before counting cortex elements later on in this module.
 
 			!Refresh all elements to bulk cytoplasm type. If this is not done, there will be a steady gain of cortex elements over time because once an element is labelled as cortex it can never revert back to bulk.
-			do n=1, cells(i)%c_elements(0)
-				elements(cells(i)%c_elements(n))%type = 1
-			enddo
+			FORALL(n=1:cells(i)%c_elements(0)) elements(cells(i)%c_elements(n))%type = 1
 
 			!Divide cell into solid angle bins.
 			!Take the element with the largest radius in each bin to be a surface element.

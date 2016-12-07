@@ -20,9 +20,8 @@ contains
     !Need to decouple adhesion magnitude from changes in element density caused by differential interfacial tension
 
     !Refresh adhesion factors
-!    do i=1,ne
-!      elements(ne)%adhesion_factor=1
-!    enddo
+    FORALL(i=1:ne) elements(i)%adhesion_factor=1
+
 !    open(unit=40,file=output_folder//"/decoupling.txt",status='unknown',position='append')
     do i=1, nc
       do j=1, cells(i)%cortex_elements(0)

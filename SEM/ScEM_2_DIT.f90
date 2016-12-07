@@ -29,9 +29,7 @@ contains
     !as a factor in the calculation of forces on elements.
 
     !Refresh DIT_factor values for all elements
-!    do j=1, ne
-!      elements(j)%DIT_factor = 0
-!    enddo
+    FORALL(j=1:ne) elements(j)%DIT_factor = 0
 
     do j=1,np
       cell_1  = elements(pairs(j,1))%parent
