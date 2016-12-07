@@ -7,7 +7,9 @@ set -e #Exit script if any of the povray renderings fail.
 for i in $(ls $1); do
   if [ ${i: -4:4} == ".pov" ]
   then
-    povray $1/$i +FJ Output_File_Name=$1/${i:0:7}".jpg" -D +H900 +W1200 >/dev/null 2>&1
+    echo ${i:0:7}
+    povray/povray $1/$i +FJ Output_File_Name=$1/${i:0:7}".jpg" -D +H900 +W1200 +Lpovray >/dev/null 2>&1
+    clear
   fi
 done
 
@@ -21,4 +23,4 @@ done
 
 #convert -delay 15 -loop 0 $1/*.jpg $1/animated.gif
 #rm $1/*.jpg
-rm $1/*.pov
+#rm $1/*.pov
