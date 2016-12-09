@@ -37,7 +37,7 @@ contains
     do while (time.LT.time_max)
 
       if (intro.AND.nc.GE.nc_initial) then
-        write(*,'(A20,I2,A41)') "Grew intro system to",nc_initial," cells. Initiating simulation parameters."
+        write(*,'(A20,I2,A41)') "Grew intro system to ",nc_initial," cells. Initiating simulation parameters."
         intro = .FALSE.
         !Set fates for initial cells randomly
         fatesnotbalanced = .TRUE.

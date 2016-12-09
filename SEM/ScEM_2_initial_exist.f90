@@ -35,14 +35,15 @@ module scem_2_initial_exist
       ! allocate cell and element data arrays
       allocate(cells(nc_size))
       allocate(elements(ne_size))
+      nc_initial = nc
 
       !Set cell fates from file or randomly
       if (flag_randomise.EQ.1) then
         !Set fates for initial cells randomly
-        epi_counter = 0
-        hypo_counter= 0
         fatesnotbalanced = .TRUE.
         do while (fatesnotbalanced)
+          epi_counter = 0
+          hypo_counter= 0
           do n=1, nc
             CALL RANDOM_NUMBER(fate_decider)
             if (fate_decider.GE.0.5) then
@@ -53,18 +54,29 @@ module scem_2_initial_exist
               hypo_counter = hypo_counter+1
             endif
           enddo
-          if (epi_counter.EQ.hypo_counter) fatesnotbalanced = .FALSE.
+          if (MOD(nc,2).EQ.0) then
+            if (epi_counter.EQ.hypo_counter) fatesnotbalanced = .FALSE.
+          else
+            if (ABS(epi_counter-hypo_counter).EQ.1) fatesnotbalanced = .FALSE.
+          endif
         enddo
-        print*, "epi_counter", epi_counter
-        print*, "hypo_counter", hypo_counter
       else
         !Read fates for initial cells from file cell_fate_data.txt
         open(unit=12,file='config_files/cell_fate_data.txt',status='old')
+        epi_counter = 0
+        pre_counter = 0
         do n=1, nc
          read(12,*) cells(n)%fate
+         if (cells(n)%fate.EQ.1) then
+           epi_counter = epi_counter + 1
+         else
+           pre_counter = pre_counter +1
         end do
         close(unit=12)
       endif
+      write(*,'(A18,I2,A7)') "Initial system of ",nc," cells."
+      write(*,'(A29,I2)') "Initial number of epiblasts: ", epi_counter
+      write(*,'(A30,I2)') "Initial number of hypoblasts: ", hypo_counter
 
       !Set cell labels
       do n=1,nc

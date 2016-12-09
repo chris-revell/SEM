@@ -79,10 +79,10 @@ module scem_0_input
     subroutine scem_input
 
       !Simulation control switches
-      flag_create     = 1 ! flag_create = 0 (1) for initial cell from file (created de novo)
+      flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
-      flag_background = 0 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
+      flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
       flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
       flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_randomise  = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
@@ -330,15 +330,15 @@ module scem_0_input
       intro_rel_strength(2,2,2,1,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
       intro_rel_strength(2,2,2,2,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cortex-hypoblast cortex
 
-      intro_rel_strength(2,1,1,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
-      intro_rel_strength(2,1,1,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
-      intro_rel_strength(2,1,1,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
-      intro_rel_strength(2,1,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
-      intro_rel_strength(2,1,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
-      intro_rel_strength(2,1,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
-      intro_rel_strength(2,2,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-      intro_rel_strength(2,2,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
-      intro_rel_strength(2,2,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
+      intro_rel_strength(2,1,1,1,1,2) = 3.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  intro_rel_strength(2,1,1,1,2,2) = 3.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+		  intro_rel_strength(2,1,1,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
+  		intro_rel_strength(2,1,2,1,1,2) = 3.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+  		intro_rel_strength(2,1,2,1,2,2) = 3.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+  		intro_rel_strength(2,1,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
+  		intro_rel_strength(2,2,2,1,1,2) = 3.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+  		intro_rel_strength(2,2,2,1,2,2) = 3.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+  		intro_rel_strength(2,2,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
     end subroutine scem_input
 
