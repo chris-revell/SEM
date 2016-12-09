@@ -9,7 +9,6 @@ for i in $(ls $1); do
   then
     echo ${i:0:7}
     povray/povray $1/$i +FJ Output_File_Name=$1/${i:0:7}".jpg" -D +H900 +W1200 +Lpovray >/dev/null 2>&1
-    clear
   fi
 done
 
