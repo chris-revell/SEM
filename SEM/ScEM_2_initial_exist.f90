@@ -15,7 +15,7 @@ module scem_2_initial_exist
 
       integer :: n
       integer :: epi_counter
-      integer :: hypo_counter
+      integer :: pre_counter
       real*8  :: fate_decider
       logical :: fatesnotbalanced
 
@@ -43,7 +43,7 @@ module scem_2_initial_exist
         fatesnotbalanced = .TRUE.
         do while (fatesnotbalanced)
           epi_counter = 0
-          hypo_counter= 0
+          pre_counter = 0
           do n=1, nc
             CALL RANDOM_NUMBER(fate_decider)
             if (fate_decider.GE.0.5) then
@@ -51,13 +51,13 @@ module scem_2_initial_exist
               epi_counter = epi_counter+1
             else
               cells(n)%fate = 2
-              hypo_counter = hypo_counter+1
+              pre_counter = pre_counter+1
             endif
           enddo
           if (MOD(nc,2).EQ.0) then
-            if (epi_counter.EQ.hypo_counter) fatesnotbalanced = .FALSE.
+            if (epi_counter.EQ.pre_counter) fatesnotbalanced = .FALSE.
           else
-            if (ABS(epi_counter-hypo_counter).EQ.1) fatesnotbalanced = .FALSE.
+            if (ABS(epi_counter-pre_counter).EQ.1) fatesnotbalanced = .FALSE.
           endif
         enddo
       else
@@ -71,12 +71,13 @@ module scem_2_initial_exist
            epi_counter = epi_counter + 1
          else
            pre_counter = pre_counter +1
+         endif
         end do
         close(unit=12)
       endif
       write(*,'(A18,I2,A7)') "Initial system of ",nc," cells."
       write(*,'(A29,I2)') "Initial number of epiblasts: ", epi_counter
-      write(*,'(A30,I2)') "Initial number of hypoblasts: ", hypo_counter
+      write(*,'(A30,I2)') "Initial number of hypoblasts: ", pre_counter
 
       !Set cell labels
       do n=1,nc
