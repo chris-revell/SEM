@@ -90,7 +90,7 @@ module scem_0_input
       !Output control switches
       flag_povray = 1                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
-        flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
+        flag_povray_elements     = 1 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
         flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
@@ -99,26 +99,26 @@ module scem_0_input
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
       flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
-      flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
-      flag_measure_displacement=1    ! Switch to turn off displacement sorting measurement
-      flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
-      flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
-      flag_measure_velocity   = 1    ! Switch to turn off velocity measurement
-      flag_measure_com        = 1
-      flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
+      flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
+      flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
+      flag_measure_type_radius= 0    ! Switch to turn off type radius sorting measurement
+      flag_measure_surface    = 0    ! Switch to turn off surface sorting measurement
+      flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
+      flag_measure_com        = 0
+      flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
       nc_initial        = 10
       stiffness_factor  = 1.0
       cell_cycle_time   = 10000 ! Cell cycle time in seconds
-      n_cellcycles      = 4.0
+      n_cellcycles      = 6.0
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
-      cortex_constant1  = 0.2   ! Magnitude of baseline cortical tension in epiblasts
-      cortex_constant2  = 0.2   ! Magnitude of baseline cortical tension in primitive endoderm
+      cortex_constant1  = 0.1   ! Magnitude of baseline cortical tension in epiblasts
+      cortex_constant2  = 0.1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0   ! Epiblast external system surface DIT response factor
-      DIT_response(1,1) = 0.6   ! Epiblast homotypic interface DIT response factor
+      DIT_response(1,1) = 0.8   ! Epiblast homotypic interface DIT response factor
       DIT_response(1,2) = 1.0   ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0   ! Primitive endoderm external system surface DIT response factor
       DIT_response(2,1) = 1.0   ! Primitive endoderm homotypic interface DIT response factor
@@ -219,15 +219,12 @@ module scem_0_input
                                                 ! note: may need better derivation for this time and relationship to cell_cycle_time
         r_placement_min_sq=(frac_placement_min*r_equil)**2 ! squared minimum distance from new element to nearest neighbour
 
-      ! allocate rel_strength array
-      allocate(rel_strength(2,0:n_c_types,0:n_c_types,0:n_e_types,0:n_e_types,2))
-	    !assign values to relative strength array
-	    rel_strength(:,:,:,:,:,:)=0.0	!default interactions are zero
-
+      ! Define rel_strength array
       ! Explanation of indices:
       ! rel_strength(adhesive/repulsive,fate1,fate2,type1,type1,intra/inter)
+      allocate(rel_strength(2,0:n_c_types,0:n_c_types,0:n_e_types,0:n_e_types,2))
 
-		  rel_strength(1,1,1,1,1,1) = stiffness_factor  !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
+      rel_strength(1,1,1,1,1,1) = stiffness_factor  !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
 		  rel_strength(1,1,1,1,2,1) = stiffness_factor	 !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cortex
       rel_strength(1,1,1,2,2,1)	= stiffness_factor  !Adhesive component, intra-cellular Epiblast cortex-epiblast cortex
 		  rel_strength(1,1,2,1,1,1)	= 0.0	 !Adhesive component, intra-cellular Epiblast cytoplasm-hypoblast cytoplasm. Set to zero but shouldn't happen anyway.
@@ -341,5 +338,15 @@ module scem_0_input
   		intro_rel_strength(2,2,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
     end subroutine scem_input
+
+    function CROSS_PRODUCT(vector1,vector2)
+      real*8, dimension(3), intent(in) :: vector1
+      real*8, dimension(3), intent(in) :: vector2
+      real*8, dimension(3) :: CROSS_PRODUCT
+
+      CROSS_PRODUCT(1) = vector1(2)*vector2(3)-vector1(3)*vector2(2)
+      CROSS_PRODUCT(2) = vector1(3)*vector2(1)-vector1(1)*vector2(3)
+      CROSS_PRODUCT(3) = vector1(1)*vector2(2)-vector1(2)*vector2(1)
+    end function CROSS_PRODUCT
 
 end module scem_0_input

@@ -72,6 +72,12 @@ module scem_2_output_povray
                 '> 1.5 texture { pigment { color Red } } } // element, cell',&
                 elements(i)%parent, ", fate",cells(elements(i)%parent)%fate
           endif
+          if (i.EQ.cells(1)%cortex_elements(1)) then
+            write(30,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F4.2,A64)') ' sphere {  < ',&
+                elements(i)%position(1), ',', elements(i)%position(2),',', &
+                elements(i)%position(3),&
+                '> ',r_interaction_max,'texture { pigment { color Blue transmit .85}finish{phong .8} } }'
+          endif
         enddo
       endif
       write(30,*)

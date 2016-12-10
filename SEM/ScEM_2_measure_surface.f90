@@ -42,7 +42,7 @@ contains
           !If all 3 elements in a triplet have DIT_factor.EQ.0, then this triplet is on the external system surface
           a = elements(cells(i)%triplets(1,j))%position - elements(cells(i)%triplets(2,j))%position
           b = elements(cells(i)%triplets(1,j))%position - elements(cells(i)%triplets(3,j))%position
-          c = cross_product(a,b)
+          c = CROSS_PRODUCT(a,b)
           area = 0.5*SQRT(DOT_PRODUCT(c,c)) !0.5*|axb|
           if (cells(i)%fate.EQ.1) then
             epi_area = epi_area + area
@@ -64,15 +64,5 @@ contains
     close(43)
 
   end subroutine scem_measure_surface
-
-  function cross_product(vector1,vector2)
-    real*8, dimension(3), intent(in) :: vector1
-    real*8, dimension(3), intent(in) :: vector2
-    real*8, dimension(3) :: cross_product
-
-    cross_product(1) = vector1(2)*vector2(3)-vector1(3)*vector2(2)
-    cross_product(2) = vector1(3)*vector2(1)-vector1(1)*vector2(3)
-    cross_product(3) = vector1(1)*vector2(2)-vector1(2)*vector2(1)
-  end function cross_product
 
 end module ScEM_2_measure_surface
