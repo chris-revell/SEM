@@ -108,10 +108,10 @@ module scem_0_input
       flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
-      nc_initial        = 10
+      nc_initial        = 2
       stiffness_factor  = 1.0
       cell_cycle_time   = 10000 ! Cell cycle time in seconds
-      n_cellcycles      = 6.0
+      n_cellcycles      = 2.0
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
