@@ -22,7 +22,8 @@ contains
     !Refresh adhesion factors
     FORALL(i=1:ne) elements(i)%adhesion_factor=1
 
-!    open(unit=40,file=output_folder//"/decoupling.txt",status='unknown',position='append')
+    if (mod(time,(output_interval)).LT.dt) open(unit=40,file=output_folder//"/decoupling.txt",position='append')
+
     do i=1, nc
       do j=1, cells(i)%cortex_elements(0)
         element_label = cells(i)%cortex_elements(j)
@@ -44,7 +45,8 @@ contains
         enddo
         !adhesion_factor for this element updated according to the local area around the element.
         elements(element_label)%adhesion_factor = local_area !Might be worth introducing a constant here so that the adhesion magnitude in scem_input can be maintained as a nice number
-!        write(40,*) elements(element_label)%DIT_factor, elements(element_label)%adhesion_factor
+        if (mod(time,(output_interval)).LT.dt) write(40,*) elements(element_label)%DIT_factor, elements(element_label)%adhesion_factor
+
       enddo
     enddo
 

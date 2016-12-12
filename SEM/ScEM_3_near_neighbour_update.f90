@@ -60,16 +60,18 @@ contains
         if (intro) then
           adhesion_factor_applied = 1.0
         else
-          adhesion_factor_applied = MIN(elements(n)%adhesion_factor,elements(nn)%adhesion_factor)/20 !3.684      !elements(n)%adhesion_factor*elements(nn)%adhesion_factor
+          adhesion_factor_applied = MIN(elements(n)%adhesion_factor,elements(nn)%adhesion_factor)/13 !3.684      !elements(n)%adhesion_factor*elements(nn)%adhesion_factor
         endif
         if (index_intra.EQ.1) then
           !Both elements are in the same cell, so no adhesion_factor should be applied to attractive component
           pot_deriv_interp1 = r_s1*(sep_sq*potential_deriv1(bin,1) + potential_deriv1(bin,2))
+          pot_deriv_interp2 = r_s2*(sep_sq*potential_deriv2(bin,1) + potential_deriv2(bin,2))
         else
           !Elements are in different cells, and thus an adhesion_factor should be applied to attractive component
           pot_deriv_interp1 = r_s1*adhesion_factor_applied*(sep_sq*potential_deriv1(bin,1) + potential_deriv1(bin,2))
+          pot_deriv_interp2 = r_s2*adhesion_factor_applied*(sep_sq*potential_deriv2(bin,1) + potential_deriv2(bin,2))
         endif
-        pot_deriv_interp2 = r_s2*(sep_sq*potential_deriv2(bin,1) + potential_deriv2(bin,2))
+
 
         !Element velocities updated.
         elements(n)%velocity(:) = elements(n)%velocity(:)+dx(:)*(pot_deriv_interp1 + pot_deriv_interp2)

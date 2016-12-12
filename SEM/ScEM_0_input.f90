@@ -79,7 +79,7 @@ module scem_0_input
     subroutine scem_input
 
       !Simulation control switches
-      flag_create     = 1 ! flag_create = 0 (1) for initial cell from file (created de novo)
+      flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
@@ -108,17 +108,17 @@ module scem_0_input
       flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
-      nc_initial        = 2
+      nc_initial        = 10
       stiffness_factor  = 1.0
       cell_cycle_time   = 10000 ! Cell cycle time in seconds
-      n_cellcycles      = 2.0
+      n_cellcycles      = 0.5
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
       cortex_constant1  = 0.1   ! Magnitude of baseline cortical tension in epiblasts
       cortex_constant2  = 0.1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0   ! Epiblast external system surface DIT response factor
-      DIT_response(1,1) = 0.8   ! Epiblast homotypic interface DIT response factor
+      DIT_response(1,1) = 0.4   ! Epiblast homotypic interface DIT response factor
       DIT_response(1,2) = 1.0   ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0   ! Primitive endoderm external system surface DIT response factor
       DIT_response(2,1) = 1.0   ! Primitive endoderm homotypic interface DIT response factor
@@ -190,7 +190,7 @@ module scem_0_input
       epsilon=0.01   ! value of potential relative to minimum at r_interaction_max
       n_bins=1024    ! number of bins for potential table
       frac_close=0.8 ! fraction of equilibrium distance for initialization (< approx 0.85)
-      frac_interaction_max=1.6  !1.8 ! --> fraction of equilibrium distance for maximum interaction range (in window 1.5 to 1.9)
+      frac_interaction_max=1.8  !1.8 ! --> fraction of equilibrium distance for maximum interaction range (in window 1.5 to 1.9)
                                 !     1.5 has sharply contracted potential and efficient
                                 !     1.9 has more relaxed potential, and still reasonably efficient (factor of 2.5 slower)
                                 !     > 1.9 brings in more element interactions, contracting cell, and slowing simulation
