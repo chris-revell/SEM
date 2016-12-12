@@ -112,13 +112,13 @@ module scem_0_input
       stiffness_factor  = 1.0
       cell_cycle_time   = 10000 ! Cell cycle time in seconds
       n_cellcycles      = 2.0
-      epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
-      hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
-      epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
+      epi_adhesion      = 2.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
+      hypo_adhesion     = 2.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
+      epi_hypo_adhesion = 2.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
       cortex_constant1  = 0.1   ! Magnitude of baseline cortical tension in epiblasts
       cortex_constant2  = 0.1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0   ! Epiblast external system surface DIT response factor
-      DIT_response(1,1) = 0.4   ! Epiblast homotypic interface DIT response factor
+      DIT_response(1,1) = 0.5   ! Epiblast homotypic interface DIT response factor
       DIT_response(1,2) = 1.0   ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0   ! Primitive endoderm external system surface DIT response factor
       DIT_response(2,1) = 1.0   ! Primitive endoderm homotypic interface DIT response factor
