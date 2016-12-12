@@ -72,7 +72,6 @@ contains
           pot_deriv_interp2 = r_s2*adhesion_factor_applied*(sep_sq*potential_deriv2(bin,1) + potential_deriv2(bin,2))
         endif
 
-
         !Element velocities updated.
         elements(n)%velocity(:) = elements(n)%velocity(:)+dx(:)*(pot_deriv_interp1 + pot_deriv_interp2)
         elements(nn)%velocity(:)= elements(nn)%velocity(:)-dx(:)*(pot_deriv_interp1 + pot_deriv_interp2)
