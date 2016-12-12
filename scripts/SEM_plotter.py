@@ -358,3 +358,14 @@ if os.path.exists(os.path.join(inputfolder_sorting,"surface.txt")):
     ax6.set_position([box.x0, box.y0, box.width*0.8, box.height])
     ax6.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
     fig6.savefig(os.path.join(plot_folder,"surface.png"),bbox_inches="tight")
+
+if os.path.exists(os.path.join(inputfolder_sorting,"com.txt")):
+    data_com = np.genfromtxt(os.path.join(inputfolder_sorting,"com.txt"))
+    fig9 = plt.figure()
+    ax9 = fig9.add_subplot(111)
+    ax9.set_title("Distance between centres of mass of each cell type against time",y=1.05)
+    ax9.set_xlabel("Time")
+    ax9.set_ylabel("Distance between centres of mass")
+    ax9.set_ylim([0,np.max(data_com[:,1])])
+    ax9.plot(data_com[:,0],data_com[:,1])
+    fig9.savefig(os.path.join(plot_folder,"com.png"))

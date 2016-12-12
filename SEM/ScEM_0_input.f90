@@ -108,7 +108,7 @@ module scem_0_input
       flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
-      nc_initial        = 12
+      nc_initial        = 1
       stiffness_factor  = 1.0
       cell_cycle_time   = 10000 ! Cell cycle time in seconds
       n_cellcycles      = 2.0
