@@ -15,7 +15,7 @@ contains
 		integer 								:: parent1,parent2
 		integer									:: fate1,fate2
 		integer									:: i,j,n
-		real*8									:: dx
+		real*8,dimension(3)			:: dx
 		integer, dimension(2,2) :: neighbour_counts
 
 		!Allocate neighbours array defined in scem_0_arrays
