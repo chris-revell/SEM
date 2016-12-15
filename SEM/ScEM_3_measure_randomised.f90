@@ -13,6 +13,7 @@ module scem_3_measure_randomised
   use scem_2_measure_type_radius
   use scem_2_measure_surface
   use scem_2_measure_velocity
+  use scem_2_measure_com
 
   implicit none
 
