@@ -218,19 +218,23 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/surface.txt")):
 #Check if neighbours data exists in first run folder. If so, import and plot
 if os.path.exists(os.path.join(datafolders[0],"sorting_data/neighbours.txt")):
     combined_neighbours = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/neighbours.txt"))
-
+    combined_neighbour_dif = np.stack((combined_neighbours[:,0],combined_neighbours[:,1]-combined_neighbours[:,2]),axis=1)
     for i in range(1,len(datafolders)):
         data = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/neighbours.txt"))
+        dif_data = np.stack((data[:,0],data[:,1]-data[:,2]),axis=1)
         combined_neighbours = np.vstack((combined_neighbours,data))
+        combined_neighbour_dif = np.vstack((combined_neighbour_dif,dif_data))
 
     zeroneighboursdata1 = np.array([])
     zeroneighboursdata2 = np.array([])
     zeroneighboursdata3 = np.array([])
+    zeroneighbourdif    = np.array([])
     for i in range(0,len(combined_neighbours[:,0])):
         if combined_neighbours[i,0] == 0.0:
             zeroneighboursdata1 = np.append(zeroneighboursdata1,combined_neighbours[i,1])
             zeroneighboursdata2 = np.append(zeroneighboursdata2,combined_neighbours[i,2])
             zeroneighboursdata3 = np.append(zeroneighboursdata3,combined_neighbours[i,3])
+            zeroneighbourdif    = np.append(zeroneighbourdif,combined_neighbours[i,1]-combined_neighbours[i,2])
 
     neighbours_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbours[:,0],combined_neighbours[:,1],bins=5)
     neighbours_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbours[:,0],combined_neighbours[:,2],bins=5)
@@ -310,6 +314,25 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/neighbours.txt")):
         fig7.set_tight_layout(True)
         fig7.savefig(os.path.join(argv[1],"neighbours_normalised.png"),bbox_inches="tight")
         np.savetxt(os.path.join(argv[1],"neighbours_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2,outmean3,outstd3),axis=1))
+
+    neighboursdifmean,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbours[:,0],combined_neighbours[:,1],bins=5)
+    neighboursdifzeromean = np.mean(zeroneighbourdif)
+    neighboursdifstd,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbours[:,0],combined_neighbours[:,1],statistic=np.std,bins=5)
+    neighboursdifzerostd = np.std(zeroneighbourdif)
+    outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
+    outmean     = np.append(neighboursdifzeromean,neighboursdifmean)
+    outstd      = np.append(neighboursdifzerostd,neighboursdifstd)
+    fig13 = plt.figure()
+    ax13 = fig13.add_subplot(111)
+    ax13.errorbar(outbin_edges,outmean,yerr=outstd,ls="none")
+    ax13.scatter(outbin_edges,outmean,color="Blue")
+    ax13.set_title("Difference between number of Epi-Epi cell neighbour pairs and\n PrE-PrE cell neighbour pairs averaged over "+str(len(datafolders))+" runs",y=1.05)
+    ax13.set_xlabel("Simulation run time")
+    ax13.set_ylabel("Difference between number of Epi-Epi cell neighbour\n pairs and PrE-PrE cell neighbour pairs")
+    ax13.set_xlim(xmin=-100)
+    fig13.set_tight_layout(True)
+    fig13.savefig(os.path.join(argv[1],"neighbours_dif.png"))
+    np.savetxt(os.path.join(argv[1],"neighbours_dif.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
 
 
 #Check if centre of mass data exists in first run folder. If so, import and plot
