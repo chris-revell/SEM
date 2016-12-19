@@ -11,7 +11,13 @@ datafolders = [os.path.join(argv[1],f) for f in os.listdir(argv[1]) if os.path.i
 if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
     combined_typeradius1 = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/type_radius1.txt"))
     combined_typeradius2 = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/type_radius2.txt"))
-    dt = combined_typeradius1[1,0] - combined_typeradius1[0,0]
+    for i in combined_typeradius1[:,0]:
+        if i > 0:
+            dt = i
+            break
+        else:
+            pass
+
     for i in range(1,len(datafolders)):
         data1 = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/type_radius1.txt"))
         data2 = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/type_radius2.txt"))
@@ -25,7 +31,6 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
     for i in range(0,len(combined_typeradius1)):
         if combined_typeradius1[i,0] == 0.0:
             zerotimedata1 = np.append(zerotimedata1,combined_typeradius1[i,1])
-            #combined_typeradius1 = np.delete(combined_typeradius1,[i,:])        #Problem if cell age is zero at t=0?
         if combined_typeradius1[i,2] <= dt:
             zeroagedata1 = np.append(zeroagedata1,combined_typeradius1[i,1])
             combined_typeradius1
@@ -44,16 +49,17 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
     tr_age_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_typeradius2[:,2],combined_typeradius2[:,1],statistic=np.std,bins=5)
     tr_age_zerostd1 = np.std(zeroagedata1)
     tr_age_zerostd2 = np.std(zeroagedata2)
+    outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
+    outmean1 = np.append(tr_age_zeromean1,tr_age_mean1)
+    outstd1 = np.append(tr_age_zerostd1,tr_age_std1)
+    outmean2 = np.append(tr_age_zeromean2,tr_age_mean2)
+    outstd2 = np.append(tr_age_zerostd2,tr_age_std2)
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
-    ax1.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+100),tr_age_mean1,yerr=(tr_age_std1,tr_age_std1),color="Green",ls="none")
-    ax1.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_age_mean2,yerr=(tr_age_std2,tr_age_std2),color="Red",ls="none")
-    ax1.errorbar(0,tr_age_zeromean1,yerr=(tr_age_zerostd1),color="Green",ls="none")
-    ax1.errorbar(0,tr_age_zeromean2,yerr=(tr_age_zerostd2),color="Red",ls="none")
-    ax1.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+100),tr_age_mean1,color="Green",label="Epi")
-    ax1.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_age_mean2,color="Red",label="PrE")
-    ax1.scatter(0,tr_age_zeromean1,color="Green")
-    ax1.scatter(0,tr_age_zeromean2,color="Red")
+    ax1.errorbar(outbin_edges+100,outmean1,yerr=outstd1,color="Green",ls="none")
+    ax1.errorbar(outbin_edges,outmean2,yerr=outstd2,color="Red",ls="none")
+    ax1.scatter(outbin_edges+100,outmean1,color="Green",label="Epi")
+    ax1.scatter(outbin_edges,outmean2,color="Red",label="PrE")
     ax1.set_title("Mean distance of cells of each type from centre of mass \nof that type against cell age, averaged over "+str(len(datafolders))+" runs",y=1.05)
     ax1.set_xlabel("Age of cell")
     ax1.set_ylabel("Distance from centre of mass")
@@ -61,11 +67,6 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
     ax1.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
     fig1.set_tight_layout(True)
     fig1.savefig(os.path.join(argv[1],"radius_age.png"),bbox_inches="tight")
-    outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
-    outmean1 = np.append(tr_age_zeromean1,tr_age_mean1)
-    outstd1 = np.append(tr_age_zerostd1,tr_age_std1)
-    outmean2 = np.append(tr_age_zeromean2,tr_age_mean2)
-    outstd2 = np.append(tr_age_zerostd2,tr_age_std2)
     np.savetxt(os.path.join(argv[1],"radius_age.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
     #Type radius against simulation time
@@ -77,16 +78,17 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
     tr_time_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_typeradius2[:,0],combined_typeradius2[:,1],statistic=np.std,bins=5)
     tr_time_zerostd1 = np.std(zerotimedata1)
     tr_time_zerostd2 = np.std(zerotimedata2)
+    outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
+    outmean1 = np.append(tr_time_zeromean1,tr_time_mean1)
+    outstd1 = np.append(tr_time_zerostd1,tr_time_std1)
+    outmean2 = np.append(tr_time_zeromean2,tr_time_mean2)
+    outstd2 = np.append(tr_time_zerostd2,tr_time_std2)
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
-    ax2.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+200),tr_time_mean1,yerr=(tr_time_std1,tr_time_std1),color="Green",ls="none")
-    ax2.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean2,yerr=(tr_time_std2,tr_time_std2),color="Red",ls="none")
-    ax2.errorbar(200,tr_time_zeromean1,yerr=(tr_time_zerostd1),color="Green",ls="none")
-    ax2.errorbar(0,tr_time_zeromean2,yerr=(tr_time_zerostd2),color="Red",ls="none")
-    ax2.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+200),tr_time_mean1,color="Green",label="Epi")
-    ax2.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean2,color="Red",label="PrE")
-    ax2.scatter(200,tr_time_zeromean1,color="Green")
-    ax2.scatter(0,tr_time_zeromean2,color="Red")
+    ax2.errorbar(outbin_edges+100,outmean1,yerr=outstd1,color="Green",ls="none")
+    ax2.errorbar(outbin_edges,outmean2,yerr=outstd2,color="Red",ls="none")
+    ax2.scatter(outbin_edges+100,outmean1,color="Green",label="Epi")
+    ax2.scatter(outbin_edges,outmean2,color="Red",label="PrE")
     ax2.set_title("Mean distance of cells of each type from centre of mass of that type against\n simulation run time, averaged over "+str(len(datafolders))+" runs",y=1.05)
     ax2.set_xlabel("Simulation run time")
     ax2.set_ylabel("Distance from centre of mass")
@@ -94,11 +96,6 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
     ax2.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
     fig2.set_tight_layout(True)
     fig2.savefig(os.path.join(argv[1],"radius_time.png"),bbox_inches="tight")
-    outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
-    outmean1 = np.append(tr_time_zeromean1,tr_time_mean1)
-    outstd1 = np.append(tr_time_zerostd1,tr_time_std1)
-    outmean2 = np.append(tr_time_zeromean2,tr_time_mean2)
-    outstd2 = np.append(tr_time_zerostd2,tr_time_std2)
     np.savetxt(os.path.join(argv[1],"radius_time.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
     #As above, normalised against randomised data
@@ -132,20 +129,17 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
         tr_age_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius2[:,2],combined_random_typeradius2[:,1],bins=5)
         tr_age_random_zeromean1 = np.mean(zeroagerandomdata1)
         tr_age_random_zeromean2 = np.mean(zeroagerandomdata2)
-        #Ignore randomised standard deviation for now
-        #tr_age_random_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius1[:,2],combined_random_typeradius1[:,1],statistic=np.std,bins=5)
-        #tr_age_random_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius2[:,2],combined_random_typeradius2[:,1],statistic=np.std,bins=5)
-
+        outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
+        outmean1 = np.append(tr_age_zeromean1-tr_age_random_zeromean1,tr_age_mean1-tr_age_random_mean1)
+        outstd1 = np.append(tr_age_zerostd1,tr_age_std1)
+        outmean2 = np.append(tr_age_zeromean2-tr_age_random_zeromean2,tr_age_mean2-tr_age_random_mean2)
+        outstd2 = np.append(tr_age_zerostd2,tr_age_std2)
         fig3 = plt.figure()
         ax3 = fig3.add_subplot(111)
-        ax3.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+100),tr_age_mean1-tr_age_random_mean1,yerr=(tr_age_std1,tr_age_std1),color="Green",ls="none")
-        ax3.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_age_mean2-tr_age_random_mean2,yerr=(tr_age_std2,tr_age_std2),color="Red",ls="none")
-        ax3.errorbar(0,tr_age_zeromean1-tr_age_random_zeromean1,yerr=(tr_age_zerostd1),color="Green",ls="none")
-        ax3.errorbar(0,tr_age_zeromean2-tr_age_random_zeromean2,yerr=(tr_age_zerostd2),color="Red",ls="none")
-        ax3.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+100),tr_age_mean1-tr_age_random_mean1,color="Green",label="Epi")
-        ax3.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_age_mean2-tr_age_random_mean2,color="Red",label="PrE")
-        ax3.scatter(0,tr_age_zeromean1-tr_age_random_zeromean1,color="Green")
-        ax3.scatter(0,tr_age_zeromean2-tr_age_random_zeromean2,color="Red")
+        ax3.errorbar(outbin_edges+100,outmean1,yerr=outstd1,color="Green",ls="none")
+        ax3.errorbar(outbin_edges,outmean2,yerr=outstd2,color="Red",ls="none")
+        ax3.scatter(outbin_edges+100,outmean1,color="Green",label="Epi")
+        ax3.scatter(outbin_edges,outmean2,color="Red",label="PrE")
         ax3.set_title("Mean distance of cells of each type from centre of mass of that type against cell age,\n averaged over "+str(len(datafolders))+" runs and normalised by randomised measurements",y=1.05)
         ax3.set_xlabel("Age of cell")
         ax3.set_ylabel("Distance from centre of mass \nrelative to randomised system")
@@ -153,11 +147,6 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
         ax3.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
         fig3.set_tight_layout(True)
         fig3.savefig(os.path.join(argv[1],"radius_age_normalised.png"),bbox_inches="tight")
-        outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
-        outmean1 = np.append(tr_age_zeromean1-tr_age_random_zeromean1,tr_age_mean1-tr_age_random_mean1)
-        outstd1 = np.append(tr_age_zerostd1,tr_age_std1)
-        outmean2 = np.append(tr_age_zeromean2-tr_age_random_zeromean2,tr_age_mean2-tr_age_random_mean2)
-        outstd2 = np.append(tr_age_zerostd2,tr_age_std2)
         np.savetxt(os.path.join(argv[1],"radius_age_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
         #Type radius against simulation run time
@@ -165,32 +154,24 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
         tr_time_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius2[:,0],combined_random_typeradius2[:,1],bins=5)
         tr_time_random_zeromean1 = np.mean(zerotimerandomdata1)
         tr_time_random_zeromean2 = np.mean(zerotimerandomdata2)
-        #Ignore randomised standard deviation for now
-        #tr_time_random_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius1[:,0],combined_random_typeradius1[:,1],statistic=np.std,bins=5)
-        #tr_time_random_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius2[:,0],combined_random_typeradius2[:,1],statistic=np.std,bins=5)
-
+        outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
+        outmean1 = np.append(tr_time_zeromean1-tr_time_random_zeromean1,tr_time_mean1-tr_time_random_mean1)
+        outstd1 = np.append(tr_time_zerostd1,tr_time_std1)
+        outmean2 = np.append(tr_time_zeromean2-tr_time_random_zeromean2,tr_time_mean2-tr_time_random_mean2)
+        outstd2 = np.append(tr_time_zerostd2,tr_time_std2)
         fig4 = plt.figure()
         ax4 = fig4.add_subplot(111)
-        ax4.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+250),tr_time_mean1-tr_time_random_mean1,yerr=(tr_time_std1,tr_time_std1),color="Green",ls="none")
-        ax4.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean2-tr_time_random_mean2,yerr=(tr_time_std2,tr_time_std2),color="Red",ls="none")
-        ax4.errorbar(250,tr_time_zeromean1-tr_time_random_zeromean1,yerr=(tr_time_zerostd1),color="Green",ls="none")
-        ax4.errorbar(0,tr_time_zeromean2-tr_time_random_zeromean2,yerr=(tr_time_zerostd2),color="Red",ls="none")
-        ax4.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+250),tr_time_mean1-tr_time_random_mean1,color="Green",label="Epi")
-        ax4.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean2-tr_time_random_mean2,color="Red",label="PrE")
-        ax4.scatter(250,tr_time_zeromean1-tr_time_random_zeromean1,color="Green")
-        ax4.scatter(0,tr_time_zeromean2-tr_time_random_zeromean2,color="Red")
-        ax4.set_title("Mean distance of cells of each type from centre of mass of that type against simulation run time,\n averaged over "+str(len(datafolders))+" runs and normalised by randomised measurements",y=1.05)
+        ax4.errorbar(outbin_edges+100,outmean1,yerr=outstd1,color="Green",ls="none")
+        ax4.errorbar(outbin_edges,outmean2,yerr=outstd2,color="Red",ls="none")
+        ax4.scatter(outbin_edges+100,outmean1,color="Green",label="Epi")
+        ax4.scatter(outbin_edges,outmean2,color="Red",label="PrE")
+        ax4.set_title("Mean distance of cells of each type from centre of mass\n of that type against simulation run time, averaged over "+str(len(datafolders))+" runs\n and normalised by randomised measurements",y=1.05)
         ax4.set_xlabel("Simulation run time")
         ax4.set_ylabel("Distance from centre of mass \nrelative to randomised system")
         ax4.set_xlim(xmin=-300)
         ax4.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
         fig4.set_tight_layout(True)
         fig4.savefig(os.path.join(argv[1],"radius_time_normalised.png"),bbox_inches="tight")
-        outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
-        outmean1 = np.append(tr_time_zeromean1-tr_time_random_zeromean1,tr_time_mean1-tr_time_random_mean1)
-        outstd1 = np.append(tr_time_zerostd1,tr_time_std1)
-        outmean2 = np.append(tr_time_zeromean2-tr_time_random_zeromean2,tr_time_mean2-tr_time_random_mean2)
-        outstd2 = np.append(tr_time_zerostd2,tr_time_std2)
         np.savetxt(os.path.join(argv[1],"radius_time_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
 
@@ -359,9 +340,8 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/com.txt")):
     ax8.set_xlabel("Simulation run time")
     ax8.set_ylabel("Distance between centres of mass of two cell types")
     ax8.set_xlim(xmin=-100)
-    ax8.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
     fig8.set_tight_layout(True)
-    fig8.savefig(os.path.join(argv[1],"com.png"),bbox_inches="tight")
+    fig8.savefig(os.path.join(argv[1],"com.png"))
     np.savetxt(os.path.join(argv[1],"com.txt"),np.stack((outbin_edges,outmean1,outstd1),axis=1))
 
 
@@ -369,95 +349,76 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/com.txt")):
 if os.path.exists(os.path.join(datafolders[0],"sorting_data/velocity1.txt")):
     combined_velocity1 = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/velocity1.txt"))
     combined_velocity2 = np.genfromtxt(os.path.join(datafolders[0],"sorting_data/velocity2.txt"))
-    dt = combined_velocity1[1,0] - combined_velocity1[0,0]
     for i in range(1,len(datafolders)):
         data1 = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/velocity1.txt"))
         data2 = np.genfromtxt(os.path.join(datafolders[i],"sorting_data/velocity2.txt"))
         combined_velocity1 = np.vstack((combined_velocity1,data1))
         combined_velocity2 = np.vstack((combined_velocity2,data2))
 
-    zerotimedata1 = np.array([])
-    zerotimedata2 = np.array([])
     zeroagedata1 = np.array([])
     zeroagedata2 = np.array([])
     for i in range(0,len(combined_velocity1)):
-        if combined_velocity1[i,0] == 0.0:
-            zerotimedata1 = np.append(zerotimedata1,combined_velocity1[i,1])
-            #combined_velocity1 = np.delete(combined_velocity1,[i,:])        #Problem if cell age is zero at t=0?
         if combined_velocity1[i,2] <= dt:
             zeroagedata1 = np.append(zeroagedata1,combined_velocity1[i,1])
-            combined_velocity1
     for i in range(0,len(combined_velocity2)):
-        if combined_velocity2[i,0] == 0.0:
-            zerotimedata2 = np.append(zerotimedata2,combined_velocity2[i,1])
         if combined_velocity2[i,2] <= dt:
             zeroagedata2 = np.append(zeroagedata2,combined_velocity2[i,1])
 
     #Plot velocity against age of cell
-    tr_age_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity1[:,2],combined_velocity1[:,1],bins=5)
-    tr_age_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity2[:,2],combined_velocity2[:,1],bins=5)
-    tr_age_zeromean1 = np.mean(zeroagedata1)
-    tr_age_zeromean2 = np.mean(zeroagedata2)
-    tr_age_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity1[:,2],combined_velocity1[:,1],statistic=np.std,bins=5)
-    tr_age_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity2[:,2],combined_velocity2[:,1],statistic=np.std,bins=5)
-    tr_age_zerostd1 = np.std(zeroagedata1)
-    tr_age_zerostd2 = np.std(zeroagedata2)
+    v_age_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity1[:,2],combined_velocity1[:,1],bins=5)
+    v_age_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity2[:,2],combined_velocity2[:,1],bins=5)
+    v_age_zeromean1 = np.mean(zeroagedata1)
+    v_age_zeromean2 = np.mean(zeroagedata2)
+    v_age_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity1[:,2],combined_velocity1[:,1],statistic=np.std,bins=5)
+    v_age_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity2[:,2],combined_velocity2[:,1],statistic=np.std,bins=5)
+    v_age_zerostd1 = np.std(zeroagedata1)
+    v_age_zerostd2 = np.std(zeroagedata2)
     outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
-    outmean1 = np.append(tr_age_zeromean1,tr_age_mean1)
-    outstd1 = np.append(tr_age_zerostd1,tr_age_std1)
-    outmean2 = np.append(tr_age_zeromean2,tr_age_mean2)
-    outstd2 = np.append(tr_age_zerostd2,tr_age_std2)
+    outmean1 = np.append(v_age_zeromean1,v_age_mean1)
+    outstd1 = np.append(v_age_zerostd1,v_age_std1)
+    outmean2 = np.append(v_age_zeromean2,v_age_mean2)
+    outstd2 = np.append(v_age_zerostd2,v_age_std2)
     fig9 = plt.figure()
     ax9 = fig9.add_subplot(111)
     ax9.errorbar(outbin_edges+100,outmean1,yerr=(outstd1),color="Green",ls="none")
     ax9.errorbar(outbin_edges,outmean2,yerr=(outstd2),color="Red",ls="none")
     ax9.scatter(outbin_edges+100,outmean1,color="Green",label="Epi")
     ax9.scatter(outbin_edges,outmean2,color="Red",label="PrE")
-
-#*******************************
-
-    ax9.set_title("Mean distance of cells of each type from centre of mass \nof that type against cell age, averaged over "+str(len(datafolders))+" runs",y=1.05)
+    ax9.set_title("Mean velocity of each type away from centre of mass of that type\n against cell age, averaged over "+str(len(datafolders))+" runs",y=1.05)
     ax9.set_xlabel("Age of cell")
-    ax9.set_ylabel("Distance from centre of mass")
+    ax9.set_ylabel("Velocity away from centre of mass")
     ax9.set_xlim(xmin=-100)
     ax9.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
     fig9.set_tight_layout(True)
-    fig9.savefig(os.path.join(argv[1],"radius_age.png"),bbox_inches="tight")
-    np.savetxt(os.path.join(argv[1],"radius_age.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
+    fig9.savefig(os.path.join(argv[1],"velocity_age.png"),bbox_inches="tight")
+    np.savetxt(os.path.join(argv[1],"velocity_age.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
     #Type radius against simulation time
-    tr_time_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity1[:,0],combined_velocity1[:,1],bins=5)
-    tr_time_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity2[:,0],combined_velocity2[:,1],bins=5)
-    tr_time_zeromean1 = np.mean(zerotimedata1)
-    tr_time_zeromean2 = np.mean(zerotimedata2)
-    tr_time_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity1[:,0],combined_velocity1[:,1],statistic=np.std,bins=5)
-    tr_time_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity2[:,0],combined_velocity2[:,1],statistic=np.std,bins=5)
-    tr_time_zerostd1 = np.std(zerotimedata1)
-    tr_time_zerostd2 = np.std(zerotimedata2)
-    fig2 = plt.figure()
-    ax2 = fig2.add_subplot(111)
-    ax2.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+200),tr_time_mean1,yerr=(tr_time_std1,tr_time_std1),color="Green",ls="none")
-    ax2.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean2,yerr=(tr_time_std2,tr_time_std2),color="Red",ls="none")
-    ax2.errorbar(200,tr_time_zeromean1,yerr=(tr_time_zerostd1),color="Green",ls="none")
-    ax2.errorbar(0,tr_time_zeromean2,yerr=(tr_time_zerostd2),color="Red",ls="none")
-    ax2.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+200),tr_time_mean1,color="Green",label="Epi")
-    ax2.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean2,color="Red",label="PrE")
-    ax2.scatter(200,tr_time_zeromean1,color="Green")
-    ax2.scatter(0,tr_time_zeromean2,color="Red")
-    ax2.set_title("Mean distance of cells of each type from centre of mass of that type against\n simulation run time, averaged over "+str(len(datafolders))+" runs",y=1.05)
-    ax2.set_xlabel("Simulation run time")
-    ax2.set_ylabel("Distance from centre of mass")
-    ax2.set_xlim(xmin=-100)
-    ax2.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-    fig2.set_tight_layout(True)
-    fig2.savefig(os.path.join(argv[1],"radius_time.png"),bbox_inches="tight")
-    outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
-    outmean1 = np.append(tr_time_zeromean1,tr_time_mean1)
-    outstd1 = np.append(tr_time_zerostd1,tr_time_std1)
-    outmean2 = np.append(tr_time_zeromean2,tr_time_mean2)
-    outstd2 = np.append(tr_time_zerostd2,tr_time_std2)
-    np.savetxt(os.path.join(argv[1],"radius_time.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
+    v_radius_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity1[:,0],combined_velocity1[:,1],bins=5)
+    v_radius_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity2[:,0],combined_velocity2[:,1],bins=5)
+    v_radius_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity1[:,0],combined_velocity1[:,1],statistic=np.std,bins=5)
+    v_radius_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity2[:,0],combined_velocity2[:,1],statistic=np.std,bins=5)
+    outbin_edges = bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0
+    outmean1 = v_radius_mean1
+    outstd1 = v_radius_std1
+    outmean2 = v_radius_mean2
+    outstd2 = v_radius_std2
+    fig10 = plt.figure()
+    ax10 = fig10.add_subplot(111)
+    ax10.errorbar(outbin_edges+100,outmean1,yerr=(outstd1),color="Green",ls="none")
+    ax10.errorbar(outbin_edges,outmean2,yerr=(outstd2),color="Red",ls="none")
+    ax10.scatter(outbin_edges+100,outmean1,color="Green",label="Epi")
+    ax10.scatter(outbin_edges,outmean2,color="Red",label="PrE")
+    ax10.set_title("Mean velocity of each type away from centre of mass of that type\n against radius from centre of mass, averaged over "+str(len(datafolders))+" runs",y=1.05)
+    ax10.set_xlabel("Radius from centre of mass")
+    ax10.set_ylabel("Velocity away from centre of mass")
+    ax10.set_xlim(xmin=-100)
+    ax10.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
+    fig10.set_tight_layout(True)
+    fig10.savefig(os.path.join(argv[1],"velocity_radius.png"),bbox_inches="tight")
+    np.savetxt(os.path.join(argv[1],"velocity_radius.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
+    """
     #As above, normalised against randomised data
     #Check if randomised data exists, and if so import it into arrays for combining with other runs
     if os.path.exists(os.path.join(datafolders[0],"randomised_data/velocity1.txt")):
@@ -469,83 +430,60 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/velocity1.txt")):
             combined_random_velocity1 = np.vstack((combined_random_velocity1,data1))
             combined_random_velocity2 = np.vstack((combined_random_velocity2,data2))
 
-        zerotimerandomdata1 = np.array([])
-        zerotimerandomdata2 = np.array([])
         zeroagerandomdata1 = np.array([])
         zeroagerandomdata2 = np.array([])
         for i in range(0,len(combined_random_velocity1[:,0])):
-            if combined_random_velocity1[i,0] == 0.0:
-                zerotimerandomdata1 = np.append(zerotimerandomdata1,combined_random_velocity1[i,1])
             if combined_random_velocity1[i,2] <= dt:
                 zeroagerandomdata1 = np.append(zeroagerandomdata1,combined_random_velocity1[i,1])
         for i in range(0,len(combined_random_velocity2[:,0])):
-            if combined_random_velocity2[i,0] == 0.0:
-                zerotimerandomdata2 = np.append(zerotimerandomdata2,combined_random_velocity2[i,1])
             if combined_random_velocity2[i,2] <= dt:
                 zeroagerandomdata2 = np.append(zeroagerandomdata2,combined_random_velocity2[i,1])
 
         #Type radius against cell age:
-        tr_age_random_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity1[:,2],combined_random_velocity1[:,1],bins=5)
-        tr_age_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity2[:,2],combined_random_velocity2[:,1],bins=5)
-        tr_age_random_zeromean1 = np.mean(zeroagerandomdata1)
-        tr_age_random_zeromean2 = np.mean(zeroagerandomdata2)
-        #Ignore randomised standard deviation for now
-        #tr_age_random_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity1[:,2],combined_random_velocity1[:,1],statistic=np.std,bins=5)
-        #tr_age_random_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity2[:,2],combined_random_velocity2[:,1],statistic=np.std,bins=5)
-
-        fig3 = plt.figure()
-        ax3 = fig3.add_subplot(111)
-        ax3.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+100),tr_age_mean1-tr_age_random_mean1,yerr=(tr_age_std1,tr_age_std1),color="Green",ls="none")
-        ax3.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_age_mean2-tr_age_random_mean2,yerr=(tr_age_std2,tr_age_std2),color="Red",ls="none")
-        ax3.errorbar(0,tr_age_zeromean1-tr_age_random_zeromean1,yerr=(tr_age_zerostd1),color="Green",ls="none")
-        ax3.errorbar(0,tr_age_zeromean2-tr_age_random_zeromean2,yerr=(tr_age_zerostd2),color="Red",ls="none")
-        ax3.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+100),tr_age_mean1-tr_age_random_mean1,color="Green",label="Epi")
-        ax3.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_age_mean2-tr_age_random_mean2,color="Red",label="PrE")
-        ax3.scatter(0,tr_age_zeromean1-tr_age_random_zeromean1,color="Green")
-        ax3.scatter(0,tr_age_zeromean2-tr_age_random_zeromean2,color="Red")
-        ax3.set_title("Mean distance of cells of each type from centre of mass of that type against cell age,\n averaged over "+str(len(datafolders))+" runs and normalised by randomised measurements",y=1.05)
-        ax3.set_xlabel("Age of cell")
-        ax3.set_ylabel("Distance from centre of mass \nrelative to randomised system")
-        ax3.set_xlim(xmin=-100)
-        ax3.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-        fig3.set_tight_layout(True)
-        fig3.savefig(os.path.join(argv[1],"radius_age_normalised.png"),bbox_inches="tight")
+        v_age_random_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity1[:,2],combined_random_velocity1[:,1],bins=5)
+        v_age_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity2[:,2],combined_random_velocity2[:,1],bins=5)
+        v_age_random_zeromean1 = np.mean(zeroagerandomdata1)
+        v_age_random_zeromean2 = np.mean(zeroagerandomdata2)
         outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
-        outmean1 = np.append(tr_age_zeromean1-tr_age_random_zeromean1,tr_age_mean1-tr_age_random_mean1)
-        outstd1 = np.append(tr_age_zerostd1,tr_age_std1)
-        outmean2 = np.append(tr_age_zeromean2-tr_age_random_zeromean2,tr_age_mean2-tr_age_random_mean2)
-        outstd2 = np.append(tr_age_zerostd2,tr_age_std2)
-        np.savetxt(os.path.join(argv[1],"radius_age_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
+        outmean1 = np.append(v_age_zeromean1-v_age_random_zeromean1,v_age_mean1-v_age_random_mean1)
+        outstd1 = np.append(v_age_zerostd1,v_age_std1)
+        outmean2 = np.append(v_age_zeromean2-v_age_random_zeromean2,v_age_mean2-v_age_random_mean2)
+        outstd2 = np.append(v_age_zerostd2,v_age_std2)
+        fig11 = plt.figure()
+        ax11 = fig11.add_subplot(111)
+        ax11.errorbar(outbin_edges+100,outmean1,yerr=(outstd1),color="Green",ls="none")
+        ax11.errorbar(outbin_edges,outmean2,yerr=(outstd2),color="Red",ls="none")
+        ax11.scatter(outbin_edges+100,outmean1,color="Green",label="Epi")
+        ax11.scatter(outbin_edges,outmean2,color="Red",label="PrE")
+        ax11.set_title("Mean velocity of each type away from centre of mass of that type\n against cell age, averaged over "+str(len(datafolders))+" runs, normalised by randomised data",y=1.05)
+        ax11.set_xlabel("Age of cell")
+        ax11.set_ylabel("Velocity away from centre of mass relative to random system")
+        ax11.set_xlim(xmin=-100)
+        ax11.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
+        fig11.set_tight_layout(True)
+        fig11.savefig(os.path.join(argv[1],"velocity_age_normalised.png"),bbox_inches="tight")
+        np.savetxt(os.path.join(argv[1],"velocity_age_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
         #Type radius against simulation run time
-        tr_time_random_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity1[:,0],combined_random_velocity1[:,1],bins=5)
-        tr_time_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity2[:,0],combined_random_velocity2[:,1],bins=5)
-        tr_time_random_zeromean1 = np.mean(zerotimerandomdata1)
-        tr_time_random_zeromean2 = np.mean(zerotimerandomdata2)
-        #Ignore randomised standard deviation for now
-        #tr_time_random_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity1[:,0],combined_random_velocity1[:,1],statistic=np.std,bins=5)
-        #tr_time_random_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity2[:,0],combined_random_velocity2[:,1],statistic=np.std,bins=5)
-
+        v_radius_random_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity1[:,0],combined_random_velocity1[:,1],bins=5)
+        v_radius_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity2[:,0],combined_random_velocity2[:,1],bins=5)
+        outbin_edges = bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0
+        outmean1 = v_radius_mean1-v_radius_random_mean1
+        outstd1 = v_radius_std1
+        outmean2 = v_radius_mean2-v_radius_random_mean2
+        outstd2 = v_radius_std2
         fig4 = plt.figure()
-        ax4 = fig4.add_subplot(111)
-        ax4.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+250),tr_time_mean1-tr_time_random_mean1,yerr=(tr_time_std1,tr_time_std1),color="Green",ls="none")
-        ax4.errorbar((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean2-tr_time_random_mean2,yerr=(tr_time_std2,tr_time_std2),color="Red",ls="none")
-        ax4.errorbar(250,tr_time_zeromean1-tr_time_random_zeromean1,yerr=(tr_time_zerostd1),color="Green",ls="none")
-        ax4.errorbar(0,tr_time_zeromean2-tr_time_random_zeromean2,yerr=(tr_time_zerostd2),color="Red",ls="none")
-        ax4.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0+250),tr_time_mean1-tr_time_random_mean1,color="Green",label="Epi")
-        ax4.scatter((bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0),tr_time_mean2-tr_time_random_mean2,color="Red",label="PrE")
-        ax4.scatter(250,tr_time_zeromean1-tr_time_random_zeromean1,color="Green")
-        ax4.scatter(0,tr_time_zeromean2-tr_time_random_zeromean2,color="Red")
-        ax4.set_title("Mean distance of cells of each type from centre of mass of that type against simulation run time,\n averaged over "+str(len(datafolders))+" runs and normalised by randomised measurements",y=1.05)
-        ax4.set_xlabel("Simulation run time")
-        ax4.set_ylabel("Distance from centre of mass \nrelative to randomised system")
-        ax4.set_xlim(xmin=-300)
-        ax4.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-        fig4.set_tight_layout(True)
-        fig4.savefig(os.path.join(argv[1],"radius_time_normalised.png"),bbox_inches="tight")
-        outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
-        outmean1 = np.append(tr_time_zeromean1-tr_time_random_zeromean1,tr_time_mean1-tr_time_random_mean1)
-        outstd1 = np.append(tr_time_zerostd1,tr_time_std1)
-        outmean2 = np.append(tr_time_zeromean2-tr_time_random_zeromean2,tr_time_mean2-tr_time_random_mean2)
-        outstd2 = np.append(tr_time_zerostd2,tr_time_std2)
-        np.savetxt(os.path.join(argv[1],"radius_time_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
+        ax12 = fig12.add_subplot(111)
+        ax12.errorbar(outbin_edges+100,outmean1,yerr=(outstd1),color="Green",ls="none")
+        ax12.errorbar(outbin_edges,outmean2,yerr=(outstd2),color="Red",ls="none")
+        ax12.scatter(outbin_edges+100,outmean1,color="Green",label="Epi")
+        ax12.scatter(outbin_edges,outmean2,color="Red",label="PrE")
+        ax12.set_title("Mean velocity of each type away from centre of mass of that type\n against radius from centre of mass, averaged over "+str(len(datafolders))+" runs, normalised by random data",y=1.05)
+        ax12.set_xlabel("Radius from centre of mass")
+        ax12.set_ylabel("Velocity away from centre of mass relative to random system")
+        ax12.set_xlim(xmin=-300)
+        ax12.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
+        fig12.set_tight_layout(True)
+        fig12.savefig(os.path.join(argv[1],"velocity_radius_normalised.png"),bbox_inches="tight")
+        np.savetxt(os.path.join(argv[1],"velocity_radius_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
+        """
