@@ -26,8 +26,8 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
 
     zerotimedata1 = np.array([])
     zerotimedata2 = np.array([])
-    zeroagedata1 = np.array([])
-    zeroagedata2 = np.array([])
+    zeroagedata1  = np.array([])
+    zeroagedata2  = np.array([])
     for i in range(0,len(combined_typeradius1)):
         if combined_typeradius1[i,0] == 0.0:
             zerotimedata1 = np.append(zerotimedata1,combined_typeradius1[i,1])
@@ -56,9 +56,9 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
     outstd2 = np.append(tr_age_zerostd2,tr_age_std2)
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
-    ax1.errorbar(outbin_edges+100,outmean1,yerr=outstd1,color="Green",ls="none")
+    ax1.errorbar(outbin_edges+50,outmean1,yerr=outstd1,color="Green",ls="none")
     ax1.errorbar(outbin_edges,outmean2,yerr=outstd2,color="Red",ls="none")
-    ax1.scatter(outbin_edges+100,outmean1,color="Green",label="Epi")
+    ax1.scatter(outbin_edges+50,outmean1,color="Green",label="Epi")
     ax1.scatter(outbin_edges,outmean2,color="Red",label="PrE")
     ax1.set_title("Mean distance of cells of each type from centre of mass \nof that type against cell age, averaged over "+str(len(datafolders))+" runs",y=1.05)
     ax1.set_xlabel("Age of cell")
@@ -315,9 +315,9 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/neighbours.txt")):
         fig7.savefig(os.path.join(argv[1],"neighbours_normalised.png"),bbox_inches="tight")
         np.savetxt(os.path.join(argv[1],"neighbours_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2,outmean3,outstd3),axis=1))
 
-    neighboursdifmean,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbours[:,0],combined_neighbours[:,1],bins=5)
+    neighboursdifmean,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbour_dif[:,0],combined_neighbour_dif[:,1],bins=5)
     neighboursdifzeromean = np.mean(zeroneighbourdif)
-    neighboursdifstd,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbours[:,0],combined_neighbours[:,1],statistic=np.std,bins=5)
+    neighboursdifstd,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbour_dif[:,0],combined_neighbour_dif[:,1],statistic=np.std,bins=5)
     neighboursdifzerostd = np.std(zeroneighbourdif)
     outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
     outmean     = np.append(neighboursdifzeromean,neighboursdifmean)
