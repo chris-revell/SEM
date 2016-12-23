@@ -103,18 +103,18 @@ module scem_0_input
       flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
-      flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
+      flag_measure_velocity   = 1    ! Switch to turn off velocity measurement
       flag_measure_com        = 0
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
-      nc_initial        = 12
+      nc_initial        = 10
       stiffness_factor  = 0.25
       cell_cycle_time   = 6000 ! Cell cycle time in seconds
       n_cellcycles      = 2.0
-      epi_adhesion      = 2.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
-      hypo_adhesion     = 2.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
-      epi_hypo_adhesion = 2.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
+      epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
+      hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
+      epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
       cortex_constant1  = 0.1   ! Magnitude of baseline cortical tension in epiblasts
       cortex_constant2  = 0.1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0   ! Epiblast external system surface DIT response factor
@@ -164,7 +164,7 @@ module scem_0_input
       ! system parameters
       trigger_frac=0.5 ! safety margin for triggering array reallocation
       ! derived quantitites
-      dt_amp_max=0.1
+      dt_amp_max=0.2    !0.1
       ! cell parameters
       n_c_types=2 ! Number of cell types. 1=epiblast, 2=hypoblast
       n_e_types=2 ! Number of element types. 1=cytoplasm, 2=cortex
@@ -254,14 +254,14 @@ module scem_0_input
 		  rel_strength(2,2,2,1,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
 		  rel_strength(2,2,2,2,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cortex-hypoblast cortex
 
-		  rel_strength(2,1,1,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
-		  rel_strength(2,1,1,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+		  rel_strength(2,1,1,1,1,2) = 2.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(2,1,1,1,2,2) = 2.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
 		  rel_strength(2,1,1,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
-  		rel_strength(2,1,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
-  		rel_strength(2,1,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+  		rel_strength(2,1,2,1,1,2) = 2.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(2,1,2,1,2,2) = 2.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
   		rel_strength(2,1,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
-  		rel_strength(2,2,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-  		rel_strength(2,2,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+  		rel_strength(2,2,2,1,1,2) = 2.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(2,2,2,1,2,2) = 2.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
   		rel_strength(2,2,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
       r_s_max = MAXVAL(rel_strength)
