@@ -18,6 +18,7 @@ contains
     write(22,"(*(G0,:,1X))")'initial number of elements = ',ne
     write(22,"(*(G0,:,1X))")'initial number of pairs    = ',np
     write(22,"(*(G0,:,1X))")'run time                   = ',time_max
+    write(22,"(*(G0,:,1X))")'dt                         = ',dt
     write(22,"(*(G0,:,1X))")'frac_interaction_max       = ',frac_interaction_max
     write(22,"(*(G0,:,1X))")'elements per cell          = ',ne_cell
     write(22,"(*(G0,:,1X))") ""

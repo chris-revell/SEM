@@ -1,7 +1,5 @@
 ! T. J Newman, Tempe, July 2010
 
-! edited for growth algorithm, September 2010
-
 module scem_0_input
 
   implicit none
@@ -64,7 +62,7 @@ module scem_0_input
   character(len=10):: time_of_run   !Time of simulation run
   character(len=21):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
-  character(len=3) :: arg1!,arg4
+  character(len=4) :: arg1,arg2,arg3,arg4,arg5,arg6
   logical :: randomising
   logical :: intro
 
@@ -108,21 +106,34 @@ module scem_0_input
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
-      nc_initial        = 10
+      nc_initial        = 12
       stiffness_factor  = 0.25
       cell_cycle_time   = 6000 ! Cell cycle time in seconds
       n_cellcycles      = 2.0
+
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
-      hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
-      epi_hypo_adhesion = 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
+      CALL GET_COMMAND_ARGUMENT(1,arg1)
+      READ(arg1,*) hypo_adhesion     != 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
+      CALL GET_COMMAND_ARGUMENT(2,arg2)
+      READ(arg2,*) epi_hypo_adhesion != 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
       cortex_constant1  = 0.1   ! Magnitude of baseline cortical tension in epiblasts
       cortex_constant2  = 0.1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0   ! Epiblast external system surface DIT response factor
-      DIT_response(1,1) = 0.2   ! Epiblast homotypic interface DIT response factor
-      DIT_response(1,2) = 2.0   ! Epiblast heterotypic interface DIT response factor
+      CALL GET_COMMAND_ARGUMENT(3,arg3)
+      READ(arg3,*) DIT_response(1,1) != 0.2   ! Epiblast homotypic interface DIT response factor
+      CALL GET_COMMAND_ARGUMENT(4,arg4)
+      READ(arg4,*) DIT_response(1,2) != 2.0   ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0   ! Primitive endoderm external system surface DIT response factor
-      DIT_response(2,1) = 1.0   ! Primitive endoderm homotypic interface DIT response factor
-      DIT_response(2,2) = 2.0   ! Primitive endoderm heterotypic interface DIT response factor
+      CALL GET_COMMAND_ARGUMENT(5,arg5)
+      READ(arg5,*) DIT_response(2,1) != 1.0   ! Primitive endoderm homotypic interface DIT response factor
+      CALL GET_COMMAND_ARGUMENT(6,arg6)
+      READ(arg6,*) DIT_response(2,2) != 2.0   ! Primitive endoderm heterotypic interface DIT response factor
+      print*, hypo_adhesion
+      print*, epi_hypo_adhesion
+      print*, DIT_response(1,1)
+      print*, DIT_response(1,2)
+      print*, DIT_response(2,1)
+      print*, DIT_response(2,2)
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
 
