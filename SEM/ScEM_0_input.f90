@@ -58,11 +58,12 @@ module scem_0_input
   integer, dimension(4,8,100) :: bin_contents
   integer, dimension(4,8)    :: bin_counters
   !Variables for setting output folder
-  character(len=8) :: date_of_run   !Date of simulation run
-  character(len=10):: time_of_run   !Time of simulation run
-  character(len=21):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+!  character(len=8) :: date_of_run   !Date of simulation run
+!  character(len=10):: time_of_run   !Time of simulation run
+  character(len=23):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
-  character(len=4) :: arg1,arg2,arg3,arg4,arg5,arg6
+  character(len=3) :: arg1,arg2,arg3,arg4,arg5
+  character(len=1) :: arg6
   logical :: randomising
   logical :: intro
 
@@ -126,14 +127,7 @@ module scem_0_input
       DIT_response(2,0) = 1.0   ! Primitive endoderm external system surface DIT response factor
       CALL GET_COMMAND_ARGUMENT(5,arg5)
       READ(arg5,*) DIT_response(2,1) != 1.0   ! Primitive endoderm homotypic interface DIT response factor
-      CALL GET_COMMAND_ARGUMENT(6,arg6)
-      READ(arg6,*) DIT_response(2,2) != 2.0   ! Primitive endoderm heterotypic interface DIT response factor
-      print*, hypo_adhesion
-      print*, epi_hypo_adhesion
-      print*, DIT_response(1,1)
-      print*, DIT_response(1,2)
-      print*, DIT_response(2,1)
-      print*, DIT_response(2,2)
+      DIT_response(2,2) = DIT_response(1,2) !2.0   ! Primitive endoderm heterotypic interface DIT response factor
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
 
@@ -155,8 +149,10 @@ module scem_0_input
 
       !Create labelled file for data output
       !Catch date and time, create folder to store data in
-      call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "../data/"//date_of_run//"_"//time_of_run
+      CALL GET_COMMAND_ARGUMENT(6,arg6)
+      !call date_and_time(DATE=date_of_run,TIME=time_of_run)
+      output_folder = "../data/"//arg1(1:1)//arg1(3:3)//"_"//arg2(1:1)//arg2(3:3)//"_"//arg3(1:1)//arg3(3:3)//"_"//arg4(1:1)&
+      //arg4(3:3)//"_"//arg5(1:1)//arg5(3:3)//"_"//arg6(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/sorting_data")
