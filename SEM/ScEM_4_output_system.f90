@@ -20,7 +20,7 @@ module scem_4_output_system
 
     subroutine scem_output_system
 
-      integer :: n
+      integer :: n,epi_count,pre_count
 
       !Calculate time expired so far
       call SYSTEM_CLOCK(current_time)
@@ -32,7 +32,16 @@ module scem_4_output_system
       !Print time and cell count to cell_count file to allow cell count to be plotted against time
       if (flag_count_output.EQ.1) then
         open(unit=28,file=output_folder//'/system_data/cell_count.txt', status='unknown')
-        write(28,*) real(time), nc
+        epi_count = 0
+        pre_count = 0
+        do n=1,nc
+          if (cells(n)%fate.EQ.1) then
+            epi_count = epi_count + 1
+          else
+            pre_count = pre_count + 1
+          endif
+        enddo
+        write(28,*) real(time), epi_count, pre_count
       endif
 
       !Write cell volume data to file
