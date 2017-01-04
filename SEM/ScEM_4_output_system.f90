@@ -27,7 +27,7 @@ module scem_4_output_system
       total_system_time = (current_time-start_time)/count_rate
 
       !Write system progress update to the command line.
-      write(*,*) real(time),total_system_time,ne,nc,np,n_snapshots
+      write(*,*) time,total_system_time,ne,nc,np,n_snapshots
 
       !Print time and cell count to cell_count file to allow cell count to be plotted against time
       if (flag_count_output.EQ.1) then

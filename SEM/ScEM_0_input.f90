@@ -60,10 +60,10 @@ module scem_0_input
   !Variables for setting output folder
 !  character(len=8) :: date_of_run   !Date of simulation run
 !  character(len=10):: time_of_run   !Time of simulation run
-  character(len=24):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+  character(len=15):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
-  character(len=3) :: arg1,arg2,arg3,arg4,arg5
-  character(len=1) :: arg6
+  character(len=3) :: arg1,arg2!,arg3,arg4,arg5
+  character(len=1) :: arg3
   logical :: randomising
   logical :: intro
 
@@ -115,19 +115,16 @@ module scem_0_input
       epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) hypo_adhesion     != 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
-      CALL GET_COMMAND_ARGUMENT(2,arg2)
-      READ(arg2,*) epi_hypo_adhesion != 3.0   ! Magnitude of adhesion between epiblasts and primitive endoderm
+      epi_hypo_adhesion = hypo_adhesion   ! Magnitude of adhesion between epiblasts and primitive endoderm
       cortex_constant1  = 0.1   ! Magnitude of baseline cortical tension in epiblasts
       cortex_constant2  = 0.1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0   ! Epiblast external system surface DIT response factor
-      CALL GET_COMMAND_ARGUMENT(3,arg3)
-      READ(arg3,*) DIT_response(1,1) != 0.2   ! Epiblast homotypic interface DIT response factor
-      CALL GET_COMMAND_ARGUMENT(4,arg4)
-      READ(arg4,*) DIT_response(1,2) != 2.0   ! Epiblast heterotypic interface DIT response factor
+      CALL GET_COMMAND_ARGUMENT(2,arg2)
+      READ(arg2,*)  DIT_response(1,1)  ! Epiblast homotypic interface DIT response factor
+      DIT_response(1,2) = 1.0   ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0   ! Primitive endoderm external system surface DIT response factor
-      CALL GET_COMMAND_ARGUMENT(5,arg5)
-      READ(arg5,*) DIT_response(2,1) != 1.0   ! Primitive endoderm homotypic interface DIT response factor
-      DIT_response(2,2) = DIT_response(1,2) !2.0   ! Primitive endoderm heterotypic interface DIT response factor
+      DIT_response(2,1) = 1.0   ! Primitive endoderm homotypic interface DIT response factor
+      DIT_response(2,2) = 1.0   ! Primitive endoderm heterotypic interface DIT response factor
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
 
@@ -149,10 +146,9 @@ module scem_0_input
 
       !Create labelled file for data output
       !Catch date and time, create folder to store data in
-      CALL GET_COMMAND_ARGUMENT(6,arg6)
+      CALL GET_COMMAND_ARGUMENT(3,arg3)
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "../data/"//arg1(1:1)//arg1(3:3)//"_"//arg2(1:1)//arg2(3:3)//"_"//arg3(1:1)//arg3(3:3)//"_"//arg4(1:1)&
-      //arg4(3:3)//"_"//arg5(1:1)//arg5(3:3)//"_"//arg6(1:1)
+      output_folder = "../data/"//arg1(1:1)//arg1(3:3)//"_"//arg2(1:1)//arg2(3:3)//"_"//arg3(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/sorting_data")
