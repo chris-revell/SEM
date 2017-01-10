@@ -50,7 +50,8 @@ module scem_2_output_final
       close(unit=25)
 
       write(*,*) "Output folder is:", output_folder
-      call system("python3 scripts/SEM_plotter.py "//output_folder//" >> /dev/null 2>&1")
+      !call system("python3 scripts/SEM_plotter.py "//output_folder//" >> /dev/null 2>&1")
+      call system("./scripts/binning.py "//output_folder//" >> /dev/null 2>&1")
 
     end subroutine scem_output_final
 

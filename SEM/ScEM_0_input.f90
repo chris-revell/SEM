@@ -102,7 +102,7 @@ module scem_0_input
       flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 1    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
-      flag_measure_velocity   = 1    ! Switch to turn off velocity measurement
+      flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
       flag_measure_com        = 0
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
