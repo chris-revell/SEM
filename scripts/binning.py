@@ -1,4 +1,7 @@
 #!/Library/Frameworks/Python.framework/Versions/3.5/bin/python3
+
+# Python script to bin and plot measurement data from a single run.
+
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats
@@ -298,7 +301,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/neighbours.txt")):
         fig7.set_tight_layout(True)
         fig7.savefig(os.path.join(argv[1],"plots/neighbours_normalised.png"),bbox_inches="tight")
         np.savetxt(os.path.join(argv[1],"stats/neighbours_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2,outmean3,outstd3),axis=1))
-
+    """
     neighboursdifmean,bin_edges,binnumber = scipy.stats.binned_statistic(neighbour_dif[:,0],neighbour_dif[:,1],bins=5)
     neighboursdifzeromean = np.mean(zeroneighbourdif)
     neighboursdifstd,bin_edges,binnumber = scipy.stats.binned_statistic(neighbour_dif[:,0],neighbour_dif[:,1],statistic=scipy.stats.sem,bins=5)
@@ -317,6 +320,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/neighbours.txt")):
     fig13.set_tight_layout(True)
     fig13.savefig(os.path.join(argv[1],"plots/neighbours_dif.png"))
     np.savetxt(os.path.join(argv[1],"stats/neighbours_dif.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
+    """
 
 
 #Check if centre of mass data exists in first run folder. If so, import and plot
