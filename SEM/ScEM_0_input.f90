@@ -108,15 +108,15 @@ module scem_0_input
 
       !Simulation control parameters
       nc_initial        = 12
-      stiffness_factor  = 1!0.25
+      stiffness_factor  = 0.25
       cell_cycle_time   = 6000 ! Cell cycle time in seconds
       n_cellcycles      = 2.0
 
-      epi_adhesion      = 1.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
-      hypo_adhesion     = 1.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
+      epi_adhesion      = 3.0   ! Magnitude of mutual adhesion between epiblasts (type 1)
+      hypo_adhesion     = 3.0   ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_hypo_adhesion = hypo_adhesion   ! Magnitude of adhesion between epiblasts and primitive endoderm
-      cortex_constant1  = 0.01   ! Magnitude of baseline cortical tension in epiblasts
-      cortex_constant2  = 0.01   ! Magnitude of baseline cortical tension in primitive endoderm
+      cortex_constant1  = 0.1   ! Magnitude of baseline cortical tension in epiblasts
+      cortex_constant2  = 0.1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0   ! Epiblast external system surface DIT response factor
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) DIT_response(1,1)  ! Epiblast homotypic interface DIT response factor

@@ -7,41 +7,29 @@ import matplotlib.pyplot as plt
 
 datafolders = [f for f in os.listdir(argv[1]) if os.path.isdir(os.path.join(argv[1], f))]
 
-fig1 = plt.figure()
-ax1 = fig1.add_subplot(111)
-ax1.set_title("Phase space")
-ax1.set_xlabel("Primitive Endoderm Adhesion Magnitude")
-ax1.set_ylabel("Epiblast Homotypic Interface Tension Factor")
+measurements = [m for m in os.listdir(os.path.join(argv[1],datafolders[0],"meandata")) if "normalised" in m or "surface" in m ]
 
-fig2 = plt.figure()
-ax2 = fig2.add_subplot(111)
-ax2.set_title("Phase space")
-ax2.set_xlabel("Primitive Endoderm Adhesion Magnitude")
-ax2.set_ylabel("Epiblast Homotypic Interface Tension Factor")
-ax2.set_xlim([0,3.1])
-ax2.set_ylim([0,1])
+for measurement in measurements:
 
-phasespace = np.zeros((len(datafolders),3))
+    phasespace = np.zeros((4,4))
 
-for i in enumerate(datafolders):
+    for i in enumerate(datafolders):
 
-    x = int(i[1].split("_")[0])/10
-    y = int(i[1].split("_")[1])/10
+        x = int(i[1].split("_")[0])
+        y = int(i[1].split("_")[1])
 
-    measurementdata = np.genfromtxt(os.path.join(argv[1],i[1],"meandata/neighbours_normalised.txt"))
-    z = measurementdata[-1,3]
+        measurementdata = np.genfromtxt(os.path.join(argv[1],i[1],"meandata",measurement))
+        z = np.mean(measurementdata[:,3]) #measurementdata[-1,1]
 
-    phasespace[i[0],0] = x
-    phasespace[i[0],1] = y
-    phasespace[i[0],2] = z
+        phasespace[-(int(int(i[0])/4)+1),int(i[0])%4] = z
 
-#phasespace[:,2] = phasespace[:,2]*256/np.max(phasespace[:,2])
-
-#ax1.scatter(phasespace[:,0],phasespace[:,1],s=phasespace[:,2]*500,marker="s")
-ax1.scatter(phasespace[:,0],phasespace[:,1],s=1000,marker="s",c=phasespace[:,2]*256,cmap=plt.cm.coolwarm)
-fig1.savefig("phasespace1.png")
-
-phasespace2 = phasespace
-phasespace2[:,2] = phasespace[:,2]*256/np.max(phasespace[:,2])
-ax2.imshow(phasespace2,cmap="Reds",interpolation="none")
-fig2.savefig("phasespace2.png")
+        fig1 = plt.figure()
+        ax1 = fig1.add_subplot(111)
+        ax1.set_title("Phase space")
+        ax1.set_ylabel("Primitive Endoderm Adhesion Magnitude")
+        ax1.set_xlabel("Epiblast Homotypic Interface Tension Factor")
+        ax1.imshow(phasespace,cmap="Reds",extent=[0,1,0,3])
+        ax1.set_aspect(1/3)
+        fig1.colorbar(ax1, cmap="Reds")
+        fig1.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace.png"))
+        plt.close(fig1)
