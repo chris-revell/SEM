@@ -148,7 +148,7 @@ module scem_0_input
       !Catch date and time, create folder to store data in
       CALL GET_COMMAND_ARGUMENT(3,arg3)
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "../data/"//arg1(1:1)//arg1(3:3)//"_"//arg2(1:1)//arg2(3:3)//"_"//arg3(1:1)
+      output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/sorting_data")
