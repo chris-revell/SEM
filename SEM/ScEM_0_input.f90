@@ -60,9 +60,9 @@ module scem_0_input
   !Variables for setting output folder
 !  character(len=8) :: date_of_run   !Date of simulation run
 !  character(len=10):: time_of_run   !Time of simulation run
-  character(len=15):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+  character(len=17):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
-  character(len=3) :: arg1,arg2!,arg3,arg4,arg5
+  character(len=4) :: arg1,arg2!,arg3,arg4,arg5
   character(len=1) :: arg3
   logical :: randomising
   logical :: intro
