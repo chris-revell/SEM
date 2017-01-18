@@ -9,7 +9,7 @@ program scem_master
   use scem_1_inflexion
   use scem_1_potential
   use scem_2_deallocate
-  use scem_2_output_final
+  use scem_3_output_final
   use scem_5_initialize
   use scem_5_iterate
 
