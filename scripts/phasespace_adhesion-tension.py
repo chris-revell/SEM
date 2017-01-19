@@ -19,9 +19,9 @@ for measurement in measurements:
     for i in enumerate(datafolders):
 
         if int(i[1].split("_")[1])/10 not in x:
-            x.append(int(i[1].split("_")[1])/10)
+            x.append(int(i[1].split("_")[1])/100)
         if int(i[1].split("_")[0])/10 not in y:
-            y.append(int(i[1].split("_")[0])/10)
+            y.append(int(i[1].split("_")[0])/100)
 
         measurementdata = np.genfromtxt(os.path.join(argv[1],i[1],"meandata",measurement))
         if "neighbours" in measurement:

@@ -35,7 +35,7 @@ for measurement in measurements:
         phasespace_mean[-(int(int(i[0])/4)+1),int(i[0])%4] = z_mean
 
     fig,ax = plt.subplots()#figsize=(9,6))
-    cax = ax.imshow(phasespace_final,cmap="Reds",extent=[0.125,1.125,0.5,4.5],interpolation="none")
+    cax = ax.imshow(phasespace_final,cmap="Reds",extent=[0.5,4.5,0.125,1.125],interpolation="none")
     if "neighbours" in measurement:
         ax.set_title("Final value of number of additional epiblast-epiblast\nneighbour pairs relative to random system")
     if "surface" in measurement:
@@ -50,7 +50,7 @@ for measurement in measurements:
     #ax.set_yticklabels(y)
     ax.set_xticks(x)
     #ax.set_xticklabels(x)
-    ax.set_aspect(1/3)
+    ax.set_aspect(4)
     cbar = fig.colorbar(cax, ticks=[np.min(phasespace_final), np.max(phasespace_final)])
     cbar.ax.set_yticklabels([str(np.min(phasespace_final)), str(np.max(phasespace_final))])  # vertically oriented colorbar
     fig.set_tight_layout(True)
@@ -58,7 +58,7 @@ for measurement in measurements:
     plt.close(fig)
 
     fig,ax = plt.subplots()#figsize=(9,6))
-    cax = ax.imshow(phasespace_mean,cmap="Reds",extent=[0.125,1.125,0.5,4.5],interpolation="none")
+    cax = ax.imshow(phasespace_mean,cmap="Reds",extent=[0.5,4.5,0.125,1.125],interpolation="none")
     if "neighbours" in measurement:
         ax.set_title("Mean over time of number of additional epiblast-epiblast\nneighbour pairsrelative to random system")
     if "surface" in measurement:
@@ -73,7 +73,7 @@ for measurement in measurements:
     #ax.set_yticklabels(y)
     ax.set_xticks(x)
     #ax.set_xticklabels(x)
-    ax.set_aspect(1/3)
+    ax.set_aspect(4)
     cbar = fig.colorbar(cax, ticks=[np.min(phasespace_mean), np.max(phasespace_mean)])
     cbar.ax.set_yticklabels([str(np.min(phasespace_mean)), str(np.max(phasespace_mean))])  # vertically oriented colorbar
     fig.set_tight_layout(True)
