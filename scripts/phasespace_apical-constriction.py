@@ -35,7 +35,7 @@ for measurement in measurements:
         phasespace_mean[-(int(int(i[0])/4)+1),int(i[0])%4] = z_mean
 
     fig,ax = plt.subplots()#figsize=(9,6))
-    cax = ax.imshow(phasespace_final,cmap="Reds",extent=[0.5,4.5,0.125,1.125],interpolation="none")
+    cax = ax.imshow(phasespace_final,cmap="Reds",extent=[0.125,1.125,0.5,4.5],interpolation="none")
     if "neighbours" in measurement:
         ax.set_title("Final value of number of additional epiblast-epiblast\nneighbour pairs relative to random system")
     if "surface" in measurement:
@@ -58,7 +58,7 @@ for measurement in measurements:
     plt.close(fig)
 
     fig,ax = plt.subplots()#figsize=(9,6))
-    cax = ax.imshow(phasespace_mean,cmap="Reds",extent=[0.5,4.5,0.125,1.125],interpolation="none")
+    cax = ax.imshow(phasespace_mean,cmap="Reds",extent=[0.125,1.125,0.5,4.5],interpolation="none")
     if "neighbours" in measurement:
         ax.set_title("Mean over time of number of additional epiblast-epiblast\nneighbour pairs relative to random system")
     if "surface" in measurement:
