@@ -60,7 +60,7 @@ for measurement in measurements:
     fig,ax = plt.subplots()#figsize=(9,6))
     cax = ax.imshow(phasespace_mean,cmap="Reds",extent=[0.125,1.125,0.375,3.375],interpolation="none")
     if "neighbours" in measurement:
-        ax.set_title("Mean over time of number of additional epiblast-epiblast\nneighbour pairsrelative to random system")
+        ax.set_title("Mean over time of number of additional epiblast-epiblast\nneighbour pairs relative to random system")
     if "surface" in measurement:
         ax.set_title("Mean over time of proportion of external surface\noccupied by primitive endoderm")
     if "radius_time" in measurement:

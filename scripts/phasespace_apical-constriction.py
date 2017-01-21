@@ -44,13 +44,13 @@ for measurement in measurements:
         ax.set_title("Final value of distance of primitive endoderm from\ncentre of mass relative to random system")
     if "radius_age" in measurement:
         ax.set_title("Final value of distance of primitive endoderm from\ncentre of mass relative to random system")
-    ax.set_ylabel("Epiblast Homotypic Interface Tension Factor")
-    ax.set_xlabel("Epiblast and Primitive Endoderm Heterotypic\nInterface Tension Factor")
+    ax.set_ylabel("Epiblast External Surface Interface Tension Factor and\nPrimitive Endoderm Internal Interface Tension Factor")
+    ax.set_xlabel("Epiblast Interal Interface Tension Factor and\nPrimitive Endoderm External Surface Interface Tension Factor")
     ax.set_yticks(y)
     #ax.set_yticklabels(y)
     ax.set_xticks(x)
     #ax.set_xticklabels(x)
-    ax.set_aspect(4)
+    ax.set_aspect(1/4)
     cbar = fig.colorbar(cax, ticks=[np.min(phasespace_final), np.max(phasespace_final)])
     cbar.ax.set_yticklabels([str(np.min(phasespace_final)), str(np.max(phasespace_final))])  # vertically oriented colorbar
     fig.set_tight_layout(True)
@@ -67,13 +67,13 @@ for measurement in measurements:
         ax.set_title("Mean over time of distance of primitive endoderm from\ncentre of massrelative to random system")
     if "radius_age" in measurement:
         ax.set_title("Mean over cell age of distance of primitive endoderm\nfrom centre of mass relative to random system")
-    ax.set_ylabel("Epiblast Homotypic Interface Tension Factor")
-    ax.set_xlabel("Epiblast and Primitive Endoderm Heterotypic\nInterface Tension Factor")
+    ax.set_ylabel("Epiblast External Surface Interface Tension Factor and\nPrimitive Endoderm Internal Interface Tension Factor")
+    ax.set_xlabel("Epiblast Interal Interface Tension Factor and\nPrimitive Endoderm External Surface Interface Tension Factor")
     ax.set_yticks(y)
     #ax.set_yticklabels(y)
     ax.set_xticks(x)
     #ax.set_xticklabels(x)
-    ax.set_aspect(4)
+    ax.set_aspect(1/4)
     cbar = fig.colorbar(cax, ticks=[np.min(phasespace_mean), np.max(phasespace_mean)])
     cbar.ax.set_yticklabels([str(np.min(phasespace_mean)), str(np.max(phasespace_mean))])  # vertically oriented colorbar
     fig.set_tight_layout(True)
