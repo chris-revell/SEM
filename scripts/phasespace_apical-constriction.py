@@ -52,7 +52,7 @@ for measurement in measurements:
     #ax.set_xticklabels(x)
     ax.set_aspect(1/4)
     cbar = fig.colorbar(cax, ticks=[np.min(phasespace_final), np.max(phasespace_final)])
-    cbar.ax.set_yticklabels([str(np.min(phasespace_final)), str(np.max(phasespace_final))])  # vertically oriented colorbar
+    cbar.ax.set_yticklabels(["%.1f" % np.min(phasespace_mean), "%.1f" % np.max(phasespace_mean)])  # vertically oriented colorbar
     fig.set_tight_layout(True)
     fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace_finalvalue.png"))
     plt.close(fig)
@@ -75,7 +75,7 @@ for measurement in measurements:
     #ax.set_xticklabels(x)
     ax.set_aspect(1/4)
     cbar = fig.colorbar(cax, ticks=[np.min(phasespace_mean), np.max(phasespace_mean)])
-    cbar.ax.set_yticklabels([str(np.min(phasespace_mean)), str(np.max(phasespace_mean))])  # vertically oriented colorbar
+    cbar.ax.set_yticklabels(["%.1f" % np.min(phasespace_mean), "%.1f" % np.max(phasespace_mean)])  # vertically oriented colorbar
     fig.set_tight_layout(True)
     fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace_mean.png"))
     plt.close(fig)
