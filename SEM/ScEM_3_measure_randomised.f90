@@ -46,7 +46,7 @@ contains
     enddo
 
 
-    do i=1, 10 ! 10 seems to be an adequate number of tests, but could make it smaller to speed up the program
+    do i=1, 1000 ! 10 seems to be an adequate number of tests, but could make it smaller to speed up the program
 
       fatesnotbalanced = .TRUE.
       do while (fatesnotbalanced)
@@ -68,11 +68,11 @@ contains
 
       if (flag_measure_neighbours.EQ.1)   call scem_measure_neighbours
 
-      if (flag_measure_displacement.EQ.1) call scem_measure_displacement
+!      if (flag_measure_displacement.EQ.1) call scem_measure_displacement
 
       if (flag_measure_type_radius.EQ.1)  call scem_measure_type_radius
 
-      if (flag_measure_com.EQ.1)          call scem_measure_com
+      if (flag_measure_surface.EQ.1)      call scem_measure_surface
 
 !      if (flag_measure_velocity.EQ.1)     call scem_measure_velocity
 

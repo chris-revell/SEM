@@ -1,10 +1,10 @@
 #!/Library/Frameworks/Python.framework/Versions/3.5/bin/python3
 
-# Python script to bin, average and plot data from multiple runs with the same input parameters, all contained within one directory specified at the command line. 
+# Python script to bin, average and plot data from multiple runs with the same input parameters, all contained within one directory specified at the command line.
 
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.stats
+from scipy.stats import binned_statistic
 import os
 from sys import argv
 from math import sqrt
@@ -60,12 +60,12 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
             zeroagedata2 = np.append(zeroagedata2,combined_typeradius2[i,1])
 
     #Plot type radius against age of cell
-    tr_age_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_typeradius1[:,2],combined_typeradius1[:,1],bins=5)
-    tr_age_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_typeradius2[:,2],combined_typeradius2[:,1],bins=5)
+    tr_age_mean1,bin_edges,binnumber = binned_statistic(combined_typeradius1[:,2],combined_typeradius1[:,1],bins=5)
+    tr_age_mean2,bin_edges,binnumber = binned_statistic(combined_typeradius2[:,2],combined_typeradius2[:,1],bins=5)
     tr_age_zeromean1 = np.mean(zeroagedata1)
     tr_age_zeromean2 = np.mean(zeroagedata2)
-    tr_age_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_typeradius1[:,2],combined_typeradius1[:,1],statistic=scipy.stats.sem,bins=5)
-    tr_age_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_typeradius2[:,2],combined_typeradius2[:,1],statistic=scipy.stats.sem,bins=5)
+    tr_age_std1,bin_edges,binnumber = binned_statistic(combined_typeradius1[:,2],combined_typeradius1[:,1],statistic=scipy.stats.sem,bins=5)
+    tr_age_std2,bin_edges,binnumber = binned_statistic(combined_typeradius2[:,2],combined_typeradius2[:,1],statistic=scipy.stats.sem,bins=5)
     tr_age_zerostd1 = scipy.stats.sem(zeroagedata1)
     tr_age_zerostd2 = scipy.stats.sem(zeroagedata2)
     outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
@@ -89,12 +89,12 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
     np.savetxt(os.path.join(meandatafolder,"radius_age.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
     #Type radius against simulation time
-    tr_time_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_typeradius1[:,0],combined_typeradius1[:,1],bins=5)
-    tr_time_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_typeradius2[:,0],combined_typeradius2[:,1],bins=5)
+    tr_time_mean1,bin_edges,binnumber = binned_statistic(combined_typeradius1[:,0],combined_typeradius1[:,1],bins=5)
+    tr_time_mean2,bin_edges,binnumber = binned_statistic(combined_typeradius2[:,0],combined_typeradius2[:,1],bins=5)
     tr_time_zeromean1 = np.mean(zerotimedata1)
     tr_time_zeromean2 = np.mean(zerotimedata2)
-    tr_time_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_typeradius1[:,0],combined_typeradius1[:,1],statistic=scipy.stats.sem,bins=5)
-    tr_time_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_typeradius2[:,0],combined_typeradius2[:,1],statistic=scipy.stats.sem,bins=5)
+    tr_time_std1,bin_edges,binnumber = binned_statistic(combined_typeradius1[:,0],combined_typeradius1[:,1],statistic=scipy.stats.sem,bins=5)
+    tr_time_std2,bin_edges,binnumber = binned_statistic(combined_typeradius2[:,0],combined_typeradius2[:,1],statistic=scipy.stats.sem,bins=5)
     tr_time_zerostd1 = scipy.stats.sem(zerotimedata1)
     tr_time_zerostd2 = scipy.stats.sem(zerotimedata2)
     outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
@@ -144,8 +144,8 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
                 zeroagerandomdata2 = np.append(zeroagerandomdata2,combined_random_typeradius2[i,1])
 
         #Type radius against cell age:
-        tr_age_random_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius1[:,2],combined_random_typeradius1[:,1],bins=5)
-        tr_age_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius2[:,2],combined_random_typeradius2[:,1],bins=5)
+        tr_age_random_mean1,bin_edges,binnumber = binned_statistic(combined_random_typeradius1[:,2],combined_random_typeradius1[:,1],bins=5)
+        tr_age_random_mean2,bin_edges,binnumber = binned_statistic(combined_random_typeradius2[:,2],combined_random_typeradius2[:,1],bins=5)
         tr_age_random_zeromean1 = np.mean(zeroagerandomdata1)
         tr_age_random_zeromean2 = np.mean(zeroagerandomdata2)
         outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
@@ -169,8 +169,8 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/type_radius1.txt")):
         np.savetxt(os.path.join(meandatafolder,"radius_age_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
         #Type radius against simulation run time
-        tr_time_random_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius1[:,0],combined_random_typeradius1[:,1],bins=5)
-        tr_time_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_typeradius2[:,0],combined_random_typeradius2[:,1],bins=5)
+        tr_time_random_mean1,bin_edges,binnumber = binned_statistic(combined_random_typeradius1[:,0],combined_random_typeradius1[:,1],bins=5)
+        tr_time_random_mean2,bin_edges,binnumber = binned_statistic(combined_random_typeradius2[:,0],combined_random_typeradius2[:,1],bins=5)
         tr_time_random_zeromean1 = np.mean(zerotimerandomdata1)
         tr_time_random_zeromean2 = np.mean(zerotimerandomdata2)
         outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
@@ -204,12 +204,12 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/surface.txt")):
         combined_surface = np.vstack((combined_surface,data))
         zerolist_surface1.append(data[0,1])
         zerolist_surface2.append(data[0,2])
-    surface_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_surface[:,0],combined_surface[:,1],bins=5)
-    surface_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_surface[:,0],combined_surface[:,2],bins=5)
+    surface_mean1,bin_edges,binnumber = binned_statistic(combined_surface[:,0],combined_surface[:,1],bins=5)
+    surface_mean2,bin_edges,binnumber = binned_statistic(combined_surface[:,0],combined_surface[:,2],bins=5)
     zeromean_surface1 = np.mean(np.array(zerolist_surface1))
     zeromean_surface2 = np.mean(np.array(zerolist_surface2))
-    surface_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_surface[:,0],combined_surface[:,1],statistic=scipy.stats.sem,bins=5)
-    surface_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_surface[:,0],combined_surface[:,2],statistic=scipy.stats.sem,bins=5)
+    surface_std1,bin_edges,binnumber = binned_statistic(combined_surface[:,0],combined_surface[:,1],statistic=scipy.stats.sem,bins=5)
+    surface_std2,bin_edges,binnumber = binned_statistic(combined_surface[:,0],combined_surface[:,2],statistic=scipy.stats.sem,bins=5)
     zerostd_surface1 = scipy.stats.sem(np.array(zerolist_surface1))
     zerostd_surface2 = scipy.stats.sem(np.array(zerolist_surface2))
     outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
@@ -255,15 +255,15 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/neighbours.txt")):
             zeroneighboursdata3 = np.append(zeroneighboursdata3,combined_neighbours[i,3])
             zeroneighbourdif    = np.append(zeroneighbourdif,combined_neighbours[i,1]-combined_neighbours[i,2])
 
-    neighbours_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbours[:,0],combined_neighbours[:,1],bins=5)
-    neighbours_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbours[:,0],combined_neighbours[:,2],bins=5)
-    neighbours_mean3,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbours[:,0],combined_neighbours[:,3],bins=5)
+    neighbours_mean1,bin_edges,binnumber = binned_statistic(combined_neighbours[:,0],combined_neighbours[:,1],bins=5)
+    neighbours_mean2,bin_edges,binnumber = binned_statistic(combined_neighbours[:,0],combined_neighbours[:,2],bins=5)
+    neighbours_mean3,bin_edges,binnumber = binned_statistic(combined_neighbours[:,0],combined_neighbours[:,3],bins=5)
     neighbours_zeromean1 = np.mean(zeroneighboursdata1)
     neighbours_zeromean2 = np.mean(zeroneighboursdata2)
     neighbours_zeromean3 = np.mean(zeroneighboursdata3)
-    neighbours_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbours[:,0],combined_neighbours[:,1],statistic=scipy.stats.sem,bins=5)
-    neighbours_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbours[:,0],combined_neighbours[:,2],statistic=scipy.stats.sem,bins=5)
-    neighbours_std3,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbours[:,0],combined_neighbours[:,3],statistic=scipy.stats.sem,bins=5)
+    neighbours_std1,bin_edges,binnumber = binned_statistic(combined_neighbours[:,0],combined_neighbours[:,1],statistic=scipy.stats.sem,bins=5)
+    neighbours_std2,bin_edges,binnumber = binned_statistic(combined_neighbours[:,0],combined_neighbours[:,2],statistic=scipy.stats.sem,bins=5)
+    neighbours_std3,bin_edges,binnumber = binned_statistic(combined_neighbours[:,0],combined_neighbours[:,3],statistic=scipy.stats.sem,bins=5)
     neighbours_zerostd1 = scipy.stats.sem(zeroneighboursdata1)
     neighbours_zerostd2 = scipy.stats.sem(zeroneighboursdata2)
     neighbours_zerostd3 = scipy.stats.sem(zeroneighboursdata3)
@@ -308,9 +308,9 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/neighbours.txt")):
                 zeroneighboursrandomdata2 = np.append(zeroneighboursrandomdata2,combined_random_neighbours[i,2])
                 zeroneighboursrandomdata3 = np.append(zeroneighboursrandomdata3,combined_random_neighbours[i,3])
 
-        neighbours_random_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_neighbours[:,0],combined_random_neighbours[:,1],bins=5)
-        neighbours_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_neighbours[:,0],combined_random_neighbours[:,2],bins=5)
-        neighbours_random_mean3,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_neighbours[:,0],combined_random_neighbours[:,3],bins=5)
+        neighbours_random_mean1,bin_edges,binnumber = binned_statistic(combined_random_neighbours[:,0],combined_random_neighbours[:,1],bins=5)
+        neighbours_random_mean2,bin_edges,binnumber = binned_statistic(combined_random_neighbours[:,0],combined_random_neighbours[:,2],bins=5)
+        neighbours_random_mean3,bin_edges,binnumber = binned_statistic(combined_random_neighbours[:,0],combined_random_neighbours[:,3],bins=5)
         neighbours_random_zeromean1 = np.mean(zeroneighboursrandomdata1)
         neighbours_random_zeromean2 = np.mean(zeroneighboursrandomdata2)
         neighbours_random_zeromean3 = np.mean(zeroneighboursrandomdata3)
@@ -334,9 +334,9 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/neighbours.txt")):
         fig7.savefig(os.path.join(plotfolder,"neighbours_normalised.png"),bbox_inches="tight")
         np.savetxt(os.path.join(meandatafolder,"neighbours_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2,outmean3,outstd3),axis=1))
     """
-    neighboursdifmean,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbour_dif[:,0],combined_neighbour_dif[:,1],bins=5)
+    neighboursdifmean,bin_edges,binnumber = binned_statistic(combined_neighbour_dif[:,0],combined_neighbour_dif[:,1],bins=5)
     neighboursdifzeromean = np.mean(zeroneighbourdif)
-    neighboursdifstd,bin_edges,binnumber = scipy.stats.binned_statistic(combined_neighbour_dif[:,0],combined_neighbour_dif[:,1],statistic=scipy.stats.sem,bins=5)
+    neighboursdifstd,bin_edges,binnumber = binned_statistic(combined_neighbour_dif[:,0],combined_neighbour_dif[:,1],statistic=scipy.stats.sem,bins=5)
     neighboursdifzerostd = scipy.stats.sem(zeroneighbourdif)
     outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
     outmean     = np.append(neighboursdifzeromean,neighboursdifmean)
@@ -368,9 +368,9 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/com.txt")):
         if combined_com[i,0] == 0.0:
             zerocomdata = np.append(zerocomdata,combined_com[i,1])
 
-    com_mean,bin_edges,binnumber = scipy.stats.binned_statistic(combined_com[:,0],combined_com[:,1],bins=5)
+    com_mean,bin_edges,binnumber = binned_statistic(combined_com[:,0],combined_com[:,1],bins=5)
     com_zeromean = np.mean(zerocomdata)
-    com_std,bin_edges,binnumber = scipy.stats.binned_statistic(combined_com[:,0],combined_com[:,1],statistic=scipy.stats.sem,bins=5)
+    com_std,bin_edges,binnumber = binned_statistic(combined_com[:,0],combined_com[:,1],statistic=scipy.stats.sem,bins=5)
     com_zerostd = scipy.stats.sem(zerocomdata)
     outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
     outmean     = np.append(com_zeromean,com_mean)
@@ -408,12 +408,12 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/velocity1.txt")):
             zeroagedata2 = np.append(zeroagedata2,combined_velocity2[i,1])
 
     #Plot velocity against age of cell
-    v_age_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity1[:,2],combined_velocity1[:,1],bins=5)
-    v_age_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity2[:,2],combined_velocity2[:,1],bins=5)
+    v_age_mean1,bin_edges,binnumber = binned_statistic(combined_velocity1[:,2],combined_velocity1[:,1],bins=5)
+    v_age_mean2,bin_edges,binnumber = binned_statistic(combined_velocity2[:,2],combined_velocity2[:,1],bins=5)
     v_age_zeromean1 = np.mean(zeroagedata1)
     v_age_zeromean2 = np.mean(zeroagedata2)
-    v_age_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity1[:,2],combined_velocity1[:,1],statistic=scipy.stats.sem,bins=5)
-    v_age_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity2[:,2],combined_velocity2[:,1],statistic=scipy.stats.sem,bins=5)
+    v_age_std1,bin_edges,binnumber = binned_statistic(combined_velocity1[:,2],combined_velocity1[:,1],statistic=scipy.stats.sem,bins=5)
+    v_age_std2,bin_edges,binnumber = binned_statistic(combined_velocity2[:,2],combined_velocity2[:,1],statistic=scipy.stats.sem,bins=5)
     v_age_zerostd1 = scipy.stats.sem(zeroagedata1)
     v_age_zerostd2 = scipy.stats.sem(zeroagedata2)
     outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
@@ -437,10 +437,10 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/velocity1.txt")):
     np.savetxt(os.path.join(meandatafolder,"velocity_age.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
     #Type radius against simulation time
-    v_radius_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity1[:,0],combined_velocity1[:,1],bins=5)
-    v_radius_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity2[:,0],combined_velocity2[:,1],bins=5)
-    v_radius_std1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity1[:,0],combined_velocity1[:,1],statistic=scipy.stats.sem,bins=5)
-    v_radius_std2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_velocity2[:,0],combined_velocity2[:,1],statistic=scipy.stats.sem,bins=5)
+    v_radius_mean1,bin_edges,binnumber = binned_statistic(combined_velocity1[:,0],combined_velocity1[:,1],bins=5)
+    v_radius_mean2,bin_edges,binnumber = binned_statistic(combined_velocity2[:,0],combined_velocity2[:,1],bins=5)
+    v_radius_std1,bin_edges,binnumber = binned_statistic(combined_velocity1[:,0],combined_velocity1[:,1],statistic=scipy.stats.sem,bins=5)
+    v_radius_std2,bin_edges,binnumber = binned_statistic(combined_velocity2[:,0],combined_velocity2[:,1],statistic=scipy.stats.sem,bins=5)
     outbin_edges = bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0
     outmean1 = v_radius_mean1
     outstd1 = v_radius_std1
@@ -483,8 +483,8 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/velocity1.txt")):
                 zeroagerandomdata2 = np.append(zeroagerandomdata2,combined_random_velocity2[i,1])
 
         #Type radius against cell age:
-        v_age_random_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity1[:,2],combined_random_velocity1[:,1],bins=5)
-        v_age_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity2[:,2],combined_random_velocity2[:,1],bins=5)
+        v_age_random_mean1,bin_edges,binnumber = binned_statistic(combined_random_velocity1[:,2],combined_random_velocity1[:,1],bins=5)
+        v_age_random_mean2,bin_edges,binnumber = binned_statistic(combined_random_velocity2[:,2],combined_random_velocity2[:,1],bins=5)
         v_age_random_zeromean1 = np.mean(zeroagerandomdata1)
         v_age_random_zeromean2 = np.mean(zeroagerandomdata2)
         outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
@@ -508,8 +508,8 @@ if os.path.exists(os.path.join(datafolders[0],"sorting_data/velocity1.txt")):
         np.savetxt(os.path.join(meandatafolder,"velocity_age_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
         #Type radius against simulation run time
-        v_radius_random_mean1,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity1[:,0],combined_random_velocity1[:,1],bins=5)
-        v_radius_random_mean2,bin_edges,binnumber = scipy.stats.binned_statistic(combined_random_velocity2[:,0],combined_random_velocity2[:,1],bins=5)
+        v_radius_random_mean1,bin_edges,binnumber = binned_statistic(combined_random_velocity1[:,0],combined_random_velocity1[:,1],bins=5)
+        v_radius_random_mean2,bin_edges,binnumber = binned_statistic(combined_random_velocity2[:,0],combined_random_velocity2[:,1],bins=5)
         outbin_edges = bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0
         outmean1 = v_radius_mean1-v_radius_random_mean1
         outstd1 = v_radius_std1
