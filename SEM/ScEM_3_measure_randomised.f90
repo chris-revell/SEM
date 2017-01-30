@@ -46,7 +46,7 @@ contains
     enddo
 
 
-    do i=1, 1000 ! 10 seems to be an adequate number of tests, but could make it smaller to speed up the program
+    do i=1, 10000 ! 10 seems to be an adequate number of tests, but could make it smaller to speed up the program
 
       fatesnotbalanced = .TRUE.
       do while (fatesnotbalanced)

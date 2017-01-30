@@ -8,7 +8,12 @@ if os.path.exists(os.path.join(argv[1],"0-1plots")):
     pass
 else:
     os.mkdir(os.path.join(argv[1],"0-1plots"))
+if os.path.exists(os.path.join(argv[1],"0-1data")):
+    pass
+else:
+    os.mkdir(os.path.join(argv[1],"0-1data"))
 
+#Plot epiblast-epiblast neighbour number as a proportion of the maximum possible
 neighbourdata = np.genfromtxt(os.path.join(argv[1],"sorting_data/neighbours.txt"))
 neighbourrandomdata = np.genfromtxt(os.path.join(argv[1],"randomised_data/neighbours.txt"))
 minvalues = np.zeros((100))
@@ -24,9 +29,10 @@ meanvalues = meanvalues/1000
 normalisedneighbourdata = (neighbourdata[:,1]-meanvalues)/(maxvalues[:]-meanvalues[:])
 fig1 = plt.figure()
 ax1 = fig1.add_subplot(111)
-ax1.set_ylim([0,1])
+#ax1.set_ylim([0,1])
 ax1.plot(neighbourdata[:,0],normalisedneighbourdata[:])
 fig1.savefig(os.path.join(argv[1],"0-1plots","neighbours0-1.png"))
+np.savetxt(os.path.join(argv[1],"0-1data","neighbour0-1.txt"),np.stack((neighbourdata[:,0],normalisedneighbourdata),axis=1))
 
 surfacedata = np.genfromtxt(os.path.join(argv[1],"sorting_data/surface.txt"))
 surfacerandomdata = np.genfromtxt(os.path.join(argv[1],"randomised_data/surface.txt"))
@@ -43,9 +49,10 @@ meanvalues = meanvalues/1000
 normalisedsurfacedata = (surfacedata[:,2]-meanvalues)/(maxvalues[:]-meanvalues[:])
 fig2 = plt.figure()
 ax2 = fig2.add_subplot(111)
-ax2.set_ylim([0,1])
+#ax2.set_ylim([0,1])
 ax2.plot(surfacedata[:,0],normalisedsurfacedata[:])
 fig2.savefig(os.path.join(argv[1],"0-1plots","surface0-1.png"))
+np.savetxt(os.path.join(argv[1],"0-1data","surface0-1.txt"),np.stack((surfacedata[:,0],normalisedsurfacedata),axis=1))
 
 
 radiusdata = np.genfromtxt(os.path.join(argv[1],"sorting_data/radius.txt"))
@@ -63,6 +70,7 @@ meanvalues = meanvalues/1000
 normalisedradiusdata = (radiusdata[:,1]-meanvalues)/(maxvalues[:]-meanvalues[:])
 fig3 = plt.figure()
 ax3 = fig3.add_subplot(111)
-ax3.set_ylim([0,1])
+#ax3.set_ylim([0,1])
 ax3.plot(radiusdata[:,0],normalisedradiusdata[:])
 fig3.savefig(os.path.join(argv[1],"0-1plots","radius0-1.png"))
+np.savetxt(os.path.join(argv[1],"0-1data","radius0-1.txt"),np.stack((radiusdata[:,0],normalisedradiusdata),axis=1))
