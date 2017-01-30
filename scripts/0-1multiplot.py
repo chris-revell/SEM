@@ -1,3 +1,4 @@
+#!/Library/Frameworks/Python.framework/Versions/3.5/bin/python3
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -41,11 +42,11 @@ if os.path.exists(os.path.join(datafolders[0],"0-1data/radius0-1.txt")):
     ax1 = fig1.add_subplot(111)
     ax1.errorbar(outbin_edges,outmean,yerr=outstd,color="Red",ls="none")
     ax1.scatter(outbin_edges,outmean,color="Red")
-    ax1.set_title("Mean distance of primitive endoderm from centre of mass\nas a proportion of maximum possible value",y=1.05)
+    ax1.set_title("Mean distance of primitive endoderm from centre of mass as a\nproportion of maximum possible value, averaged over "+str(len(datafolders))+" runs",y=1.05)
     ax1.set_xlabel("Time")
     ax1.set_ylabel("Distance from centre of mass as a proportion of maximum")
     ax1.set_ylim([-0.1,1.1])
-    fig1.savefig(os.path.join(plotfolder,"radius.png"))#,bbox_inches="tight")
+    fig1.savefig(os.path.join(plotfolder,"radius.png"),bbox_inches="tight")
     np.savetxt(os.path.join(datafolder,"radius.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
 
 if os.path.exists(os.path.join(datafolders[0],"0-1data/surface0-1.txt")):
@@ -69,14 +70,12 @@ if os.path.exists(os.path.join(datafolders[0],"0-1data/surface0-1.txt")):
     outstd = np.append(surface_zerostd,surface_std)
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
-    ax1.errorbar(outbin_edges,outmean,yerr=outstd,color="Green",ls="none")
-    ax1.scatter(outbin_edges,outmean,color="Green")
-    #ax1.set_title("Mean distance of cells of each type from centre of mass \nof that type against cell age, averaged over "+str(len(datafolders))+" runs",y=1.05)
-    #ax1.set_xlabel("Age of cell")
-    #ax1.set_ylabel("Distance from centre of mass")
-    #ax1.set_xlim(xmin=-100)
-    #ax1.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-    #fig1.set_tight_layout(True)
+    ax1.errorbar(outbin_edges,outmean,yerr=outstd,color="Red",ls="none")
+    ax1.scatter(outbin_edges,outmean,color="Red")
+    ax1.set_title("Proportion of external surface occupied by primitive endoderm as a\nproportion of maximum possible value, averaged over "+str(len(datafolders))+" runs",y=1.05)
+    ax1.set_xlabel("Time")
+    ax1.set_ylabel("Proportion of external surface occupied by primitive\nendoderm as a proportion of maximum possible value")
+    ax1.set_ylim([-0.1,1.1])
     fig1.savefig(os.path.join(plotfolder,"surface.png"),bbox_inches="tight")
     np.savetxt(os.path.join(datafolder,"surface.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
 
@@ -103,11 +102,9 @@ if os.path.exists(os.path.join(datafolders[0],"0-1data/neighbour0-1.txt")):
     ax1 = fig1.add_subplot(111)
     ax1.errorbar(outbin_edges,outmean,yerr=outstd,color="Green",ls="none")
     ax1.scatter(outbin_edges,outmean,color="Green")
-    #ax1.set_title("Mean distance of cells of each type from centre of mass \nof that type against cell age, averaged over "+str(len(datafolders))+" runs",y=1.05)
-    #ax1.set_xlabel("Age of cell")
-    #ax1.set_ylabel("Distance from centre of mass")
-    #ax1.set_xlim(xmin=-100)
-    #ax1.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-    #fig1.set_tight_layout(True)
+    ax1.set_title("Number of epiblast-epiblast neighbour pairs as a proportion of maximum\npossible value, averaged over "+str(len(datafolders))+" runs",y=1.05)
+    ax1.set_xlabel("Time")
+    ax1.set_ylabel("Number of epiblast-epiblast pairs\nas a proportion of maximum")
+    ax1.set_ylim([-0.1,1.1])
     fig1.savefig(os.path.join(plotfolder,"neighbour.png"),bbox_inches="tight")
     np.savetxt(os.path.join(datafolder,"neighbour.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))

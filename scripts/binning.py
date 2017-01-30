@@ -70,7 +70,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/type_radius1.txt")):
     ax1.set_ylabel("Distance from centre of mass")
     ax1.set_xlim(xmin=-100)
     ax1.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-    fig1.set_tight_layout(True)
+    #fig1.set_tight_layout(True)
     fig1.savefig(os.path.join(argv[1],"plots/radius_age.png"),bbox_inches="tight")
     np.savetxt(os.path.join(argv[1],"stats/radius_age.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
@@ -99,7 +99,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/type_radius1.txt")):
     ax2.set_ylabel("Distance from centre of mass")
     ax2.set_xlim(xmin=-100)
     ax2.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-    fig2.set_tight_layout(True)
+    #fig2.set_tight_layout(True)
     fig2.savefig(os.path.join(argv[1],"plots/radius_time.png"),bbox_inches="tight")
     np.savetxt(os.path.join(argv[1],"stats/radius_time.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
@@ -145,7 +145,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/type_radius1.txt")):
         ax3.set_ylabel("Distance from centre of mass \nrelative to randomised system")
         ax3.set_xlim(xmin=-100)
         ax3.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-        fig3.set_tight_layout(True)
+        #fig3.set_tight_layout(True)
         fig3.savefig(os.path.join(argv[1],"plots/radius_age_normalised.png"),bbox_inches="tight")
         np.savetxt(os.path.join(argv[1],"stats/radius_age_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
@@ -170,7 +170,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/type_radius1.txt")):
         ax4.set_ylabel("Distance from centre of mass \nrelative to randomised system")
         ax4.set_xlim(xmin=-300)
         ax4.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-        fig4.set_tight_layout(True)
+        #fig4.set_tight_layout(True)
         fig4.savefig(os.path.join(argv[1],"plots/radius_time_normalised.png"),bbox_inches="tight")
         np.savetxt(os.path.join(argv[1],"stats/radius_time_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
@@ -203,7 +203,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/surface.txt")):
     ax5.set_xlim(xmin=-100)
     ax5.set_ylim([0,1])
     ax5.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-    fig5.set_tight_layout(True)
+    #fig5.set_tight_layout(True)
     fig5.savefig(os.path.join(argv[1],"plots/surface.png"),bbox_inches="tight")
     np.savetxt(os.path.join(argv[1],"stats/surface.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
@@ -256,7 +256,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/neighbours.txt")):
     ax6.set_ylabel("Number of cell neighbours pairs")
     ax6.set_xlim(xmin=-100)
     ax6.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-    fig6.set_tight_layout(True)
+    #fig6.set_tight_layout(True)
     fig6.savefig(os.path.join(argv[1],"plots/neighbours.png"),bbox_inches="tight")
     np.savetxt(os.path.join(argv[1],"stats/neighbours.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2,outmean3,outstd3),axis=1))
 
@@ -296,7 +296,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/neighbours.txt")):
         ax7.set_ylabel("Number of cell neighbours pairs relative to randomised data")
         ax7.set_xlim(xmin=-300)
         ax7.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-        fig7.set_tight_layout(True)
+        #fig7.set_tight_layout(True)
         fig7.savefig(os.path.join(argv[1],"plots/neighbours_normalised.png"),bbox_inches="tight")
         np.savetxt(os.path.join(argv[1],"stats/neighbours_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2,outmean3,outstd3),axis=1))
     """
@@ -315,7 +315,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/neighbours.txt")):
     ax13.set_xlabel("Simulation run time")
     ax13.set_ylabel("Difference between number of Epi-Epi cell neighbour\n pairs and PrE-PrE cell neighbour pairs")
     ax13.set_xlim(xmin=-100)
-    fig13.set_tight_layout(True)
+    #fig13.set_tight_layout(True)
     fig13.savefig(os.path.join(argv[1],"plots/neighbours_dif.png"))
     np.savetxt(os.path.join(argv[1],"stats/neighbours_dif.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
     """
@@ -341,7 +341,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/com.txt")):
     ax8.set_xlabel("Simulation run time")
     ax8.set_ylabel("Distance between centres of mass of two cell types")
     ax8.set_xlim(xmin=-100)
-    fig8.set_tight_layout(True)
+    #fig8.set_tight_layout(True)
     fig8.savefig(os.path.join(argv[1],"plots/com.png"))
     np.savetxt(os.path.join(argv[1],"stats/com.txt"),np.stack((outbin_edges,outmean1,outstd1),axis=1))
 
@@ -385,7 +385,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/velocity1.txt")):
     ax9.set_ylabel("Velocity away from centre of mass")
     ax9.set_xlim(xmin=-100)
     ax9.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-    fig9.set_tight_layout(True)
+    #fig9.set_tight_layout(True)
     fig9.savefig(os.path.join(argv[1],"plots/velocity_age.png"),bbox_inches="tight")
     np.savetxt(os.path.join(argv[1],"stats/velocity_age.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
@@ -410,7 +410,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/velocity1.txt")):
     ax10.set_ylabel("Velocity away from centre of mass")
     ax10.set_xlim(xmin=0)
     ax10.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-    fig10.set_tight_layout(True)
+    #fig10.set_tight_layout(True)
     fig10.savefig(os.path.join(argv[1],"plots/velocity_radius.png"),bbox_inches="tight")
     np.savetxt(os.path.join(argv[1],"stats/velocity_radius.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
@@ -456,7 +456,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/velocity1.txt")):
         ax11.set_ylabel("Velocity away from centre of mass relative to random system")
         ax11.set_xlim(xmin=-100)
         ax11.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-        fig11.set_tight_layout(True)
+        #fig11.set_tight_layout(True)
         fig11.savefig(os.path.join(argv[1],"plots/velocity_age_normalised.png"),bbox_inches="tight")
         np.savetxt(os.path.join(argv[1],"stats/velocity_age_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
@@ -479,7 +479,7 @@ if os.path.exists(os.path.join(run_folder,"sorting_data/velocity1.txt")):
         ax12.set_ylabel("Velocity away from centre of mass relative to random system")
         ax12.set_xlim(xmin=-300)
         ax12.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-        fig12.set_tight_layout(True)
+        #fig12.set_tight_layout(True)
         fig12.savefig(os.path.join(argv[1],"plots/velocity_radius_normalised.png"),bbox_inches="tight")
         np.savetxt(os.path.join(argv[1],"stats/velocity_radius_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
         """

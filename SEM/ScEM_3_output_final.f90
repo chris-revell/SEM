@@ -37,10 +37,10 @@ module scem_3_output_final
         close(unit=26)
       endif
 
-      if (flag_povray.NE.1.OR.flag_povray_triangles.NE.1) then
-        flag_povray_triangles = 1
-        call scem_output_povray
-      endif
+      !if (flag_povray.NE.1.OR.flag_povray_triangles.NE.1) then
+      !  flag_povray_triangles = 1
+      !  call scem_output_povray
+      !endif
 
       open(unit=25,file=output_folder//'/system_data/end_of_run_data.txt',status='unknown')
       write(25,*)nc

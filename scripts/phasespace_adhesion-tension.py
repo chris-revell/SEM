@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 
 datafolders = [f for f in os.listdir(argv[1]) if os.path.isdir(os.path.join(argv[1], f))]
 
-measurements = [m for m in os.listdir(os.path.join(argv[1],datafolders[0],"meandata")) if "normalised" in m or "surface" in m ]
+#measurements = [m for m in os.listdir(os.path.join(argv[1],datafolders[0],"meandata")) if "normalised" in m or "surface" in m ]
+measurements = [m for m in os.listdir(os.path.join(argv[1],datafolders[0],"0-1data")) ]
 
 for measurement in measurements:
 
@@ -23,7 +24,8 @@ for measurement in measurements:
         if int(i[1].split("_")[0])/10 not in y:
             y.append(int(i[1].split("_")[0])/100)
 
-        measurementdata = np.genfromtxt(os.path.join(argv[1],i[1],"meandata",measurement))
+        #measurementdata = np.genfromtxt(os.path.join(argv[1],i[1],"meandata",measurement))
+        measurementdata = np.genfromtxt(os.path.join(argv[1],i[1],"0-1data",measurement))
         if "neighbours" in measurement:
             z_final = measurementdata[-1,1]
             z_mean = np.mean(measurementdata[:,1])
