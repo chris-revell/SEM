@@ -4,6 +4,7 @@ import numpy as np
 import os
 from sys import argv
 from scipy.stats import binned_statistic,sem
+import zerooneplotting
 
 folderstoignore = ["p_values","meandata","meanplots","0-1data","0-1plots"]
 datafolders = [os.path.join(argv[1],f) for f in os.listdir(argv[1]) if os.path.isdir(os.path.join(argv[1], f)) and f not in folderstoignore ]
@@ -18,6 +19,9 @@ if os.path.exists(plotfolder):
     pass
 else:
     os.mkdir(plotfolder)
+
+for i in datafolders:
+    zerooneplotting.zeroonemeasurements(i)
 
 if os.path.exists(os.path.join(datafolders[0],"0-1data/radius0-1.txt")):
     combined_radius = np.genfromtxt(os.path.join(datafolders[0],"0-1data/radius0-1.txt"))

@@ -8,9 +8,13 @@ from scipy.stats import binned_statistic,sem
 import os
 from sys import argv
 from math import sqrt
+import binning
 
 folderstoignore = ["p_values","meandata","meanplots","0-1data","0-1plots"]
 datafolders = [os.path.join(argv[1],f) for f in os.listdir(argv[1]) if os.path.isdir(os.path.join(argv[1], f)) and f not in folderstoignore ]
+
+for i in datafolders:
+    binning.binningall(i)
 
 errordivisor = sqrt(len(datafolders))
 

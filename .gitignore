@@ -3,3 +3,4 @@ ScEM_master.dSYM/*
 ScEM_master
 *.o
 *.mod
+scripts/__pycache__
