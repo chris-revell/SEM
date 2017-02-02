@@ -21,19 +21,20 @@ contains
 
   subroutine scem_measure_randomised
 
-    integer :: n,i,epi_counter,epi_ran_counter
-    real*8  :: fate_decider
-    logical :: fatesnotbalanced
+    integer                  :: n,i,epi_counter,epi_ran_counter,configuration
+    real*8                   :: fate_decider
+    logical                  :: fatesnotbalanced
+    integer,dimension(10000) :: tested
 
     !Set randomising = .TRUE. in order to divert output from measurement subroutines to randomised data files.
     randomising = .TRUE.
 
     !Store current system state
     !reallocate stored_fates array only if the number of cells in the system has increased.
-    if (allocated(stored_fates)) then
+    if (ALLOCATED(stored_fates)) then
 				if (nc.GT.SIZE(stored_fates)) then
-					deallocate(stored_fates)
-					allocate(stored_fates(nc))
+					DEALLOCATE(stored_fates)
+					ALLOCATE(stored_fates(nc))
 				endif
 		else
 			!Array has not yet been allocated (ie, this is the start of the simulation)
@@ -46,7 +47,7 @@ contains
     enddo
 
 
-    do i=1, 10000 ! 10 seems to be an adequate number of tests, but could make it smaller to speed up the program
+    do i=1, 10000
 
       fatesnotbalanced = .TRUE.
       do while (fatesnotbalanced)
@@ -61,6 +62,18 @@ contains
           endif
         enddo
         if (epi_ran_counter.EQ.epi_counter) fatesnotbalanced = .FALSE.
+        configuration = 0
+        do n=1,nc
+          configuration = configuration + (2**(n-1))*(cells(n)%fate-1)
+        enddo
+        do n=1,i
+          if (configuration.EQ.tested(n)) then
+            fatesnotbalanced = .TRUE.
+            EXIT
+          else
+            CYCLE
+          endif
+        enddo
       enddo
 
       !Perform sorting measurements on newly randomised system. Randomised measurements not required for velocity or surface measurements.

@@ -78,7 +78,7 @@ module scem_0_input
     subroutine scem_input
 
       !Simulation control switches
-      flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
+      flag_create     = 1 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
@@ -107,7 +107,7 @@ module scem_0_input
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
-      nc_initial        = 12
+      nc_initial        = 50
       stiffness_factor  = 0.25
       cell_cycle_time   = 6000 ! Cell cycle time in seconds
       n_cellcycles      = 2.0
