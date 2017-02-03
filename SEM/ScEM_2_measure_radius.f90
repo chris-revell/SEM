@@ -13,9 +13,9 @@ contains
 
 	subroutine scem_measure_radius
 
-		integer :: i,precount
-		real*8	:: meanradius
-		real*8, dimension(3) :: pre_COM		!Vector position of system centre of mass
+		integer :: i,precount,epicount
+		real*8	:: premeanradius,epimeanradius
+		real*8, dimension(3) :: pre_COM,epi_COM		!Vector position of system centres of mass
 		real*8, dimension(3) :: cell_vector		!Vector position of cell relative to system centre of mass
 
 		if (randomising) then
@@ -26,27 +26,41 @@ contains
 
 		!Need to start by calculating the centre of mass of the system, which can change after each iteration due to cell movement.
 		pre_COM(:)= 0
+		epi_COM(:)= 0
 		precount  = 0
+		epicount  = 0
 		do i=1, ne
 			if (cells(elements(i)%parent)%fate.EQ.2) then
 				pre_COM(:)=pre_COM(:)+elements(i)%position(:)
 				precount = precount + 1
+			else
+				epi_COM(:)=epi_COM(:)+elements(i)%position(:)
+				epicount = epicount + 1
 			endif
 		enddo
 		pre_COM(:)=pre_COM(:)/precount  !Centre of mass found by dividing sum by total mass, ie total number of elements.
+		epi_COM(:)=epi_COM(:)/epicount
 
+		!Now switching from elements to cells
 		precount = 0
-		meanradius = 0
+		premeanradius = 0
+		epicount = 0
+		epimeanradius = 0
 		do i=1, nc
 			if (cells(i)%fate.EQ.2) then
 				cell_vector = cells(i)%position - pre_COM
-				meanradius = meanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))
+				premeanradius = premeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))
 				precount = precount + 1
+			else
+				cell_vector = cells(i)%position - epi_COM
+				epimeanradius = epimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))
+				epicount = epicount + 1
 			endif
 		enddo
-		meanradius = meanradius/precount
+		premeanradius = premeanradius/precount
+		epimeanradius = epimeanradius/precount
 
-		write(35,*) time, meanradius
+		write(35,*) time, epimeanradius, epimeanradius
 
 		close(35)
 

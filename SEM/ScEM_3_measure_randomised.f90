@@ -47,7 +47,7 @@ contains
     enddo
 
 
-    do i=1, 10000
+    do i=1, 100000
 
       fatesnotbalanced = .TRUE.
       do while (fatesnotbalanced)
@@ -75,6 +75,7 @@ contains
           endif
         enddo
       enddo
+      tested(i) = configuration
 
       !Perform sorting measurements on newly randomised system. Randomised measurements not required for velocity or surface measurements.
       if (flag_measure_radius.EQ.1)       call scem_measure_radius
@@ -83,7 +84,7 @@ contains
 
 !      if (flag_measure_displacement.EQ.1) call scem_measure_displacement
 
-      if (flag_measure_type_radius.EQ.1)  call scem_measure_type_radius
+!      if (flag_measure_type_radius.EQ.1)  call scem_measure_type_radius
 
       if (flag_measure_surface.EQ.1)      call scem_measure_surface
 
