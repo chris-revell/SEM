@@ -14,9 +14,6 @@ contains
     open(unit=22,file=output_folder//'/initial_conditions.txt',status='unknown')
 
     write(22,"(*(G0,:,1X))")'random number seed         = ',seed_array
-    write(22,"(*(G0,:,1X))")'initial number of cells    = ',nc
-    write(22,"(*(G0,:,1X))")'initial number of elements = ',ne
-    write(22,"(*(G0,:,1X))")'initial number of pairs    = ',np
     write(22,"(*(G0,:,1X))")'run time                   = ',time_max
     write(22,"(*(G0,:,1X))")'dt                         = ',dt
     write(22,"(*(G0,:,1X))")'frac_interaction_max       = ',frac_interaction_max

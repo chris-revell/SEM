@@ -23,11 +23,7 @@ contains
     real*8, dimension(3) :: b
     real*8, dimension(3) :: c
 
-    if (randomising) then
-      open(unit=43,file=output_folder//"/randomised_data/surface.txt",status="unknown",position="append")
-    else
-      open(unit=43,file=output_folder//"/sorting_data/surface.txt",status="unknown",position="append")
-    endif
+    if (.NOT.randomising) open(unit=43,file=output_folder//"/sorting_data/surface.txt",status="unknown",position="append")
 
     epi_area = 0
     pre_area = 0
@@ -58,7 +54,14 @@ contains
     if (epi_area.GT.0.AND.pre_area.GT.0) then
       epi_out = real(epi_area)/real(epi_area+pre_area)
       pre_out = real(pre_area)/real(epi_area+pre_area)
-      write(43,*) time, epi_out, pre_out
+
+      if (randomising) then
+  			surface_mean = surface_mean + pre_out
+        surface_max  = MAX(surface_max,pre_out)
+      else
+        write(43,*) time, epi_out, pre_out
+      endif
+
     endif
 
     close(43)

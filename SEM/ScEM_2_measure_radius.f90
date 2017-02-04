@@ -18,11 +18,7 @@ contains
 		real*8, dimension(3) :: pre_COM,epi_COM		!Vector position of system centres of mass
 		real*8, dimension(3) :: cell_vector		!Vector position of cell relative to system centre of mass
 
-		if (randomising) then
-			open(unit=35,file=output_folder//'/randomised_data/radius.txt',status='unknown',position="append")
-		else
-			open(unit=35,file=output_folder//'/sorting_data/radius.txt', status='unknown',position="append")
-		endif
+		if (.NOT.randomising) open(unit=35,file=output_folder//'/sorting_data/radius.txt', status='unknown',position="append")
 
 		!Need to start by calculating the centre of mass of the system, which can change after each iteration due to cell movement.
 		pre_COM(:)= 0
@@ -60,7 +56,15 @@ contains
 		premeanradius = premeanradius/precount
 		epimeanradius = epimeanradius/precount
 
-		write(35,*) time, epimeanradius, epimeanradius
+
+		if (randomising) then
+			radius1_mean = radius1_mean + epimeanradius
+			radius1_min  = MIN(radius1_min,epimeanradius)
+			radius2_mean = radius2_mean + premeanradius
+			radius2_max  = MAX(radius2_max,premeanradius)
+		else
+			write(35,*) time, epimeanradius, premeanradius
+		endif
 
 		close(35)
 

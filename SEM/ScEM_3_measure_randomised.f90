@@ -21,13 +21,10 @@ contains
 
   subroutine scem_measure_randomised
 
-    integer                  :: n,i,epi_counter,epi_ran_counter,configuration
-    real*8                   :: fate_decider
-    logical                  :: fatesnotbalanced
-    integer,dimension(10000) :: tested
-
-    !Set randomising = .TRUE. in order to divert output from measurement subroutines to randomised data files.
-    randomising = .TRUE.
+    integer                          :: n,i,epi_counter,epi_ran_counter,configuration,n_random
+    real*8                           :: fate_decider
+    logical                          :: fatesnotbalanced
+    integer,allocatable,dimension(:) :: tested
 
     !Store current system state
     !reallocate stored_fates array only if the number of cells in the system has increased.
@@ -46,8 +43,29 @@ contains
       if (cells(n)%fate.EQ.1) epi_counter = epi_counter+1
     enddo
 
+    !Set n_random. The number of random tests is set to be the minimum of nc choose n_epiblasts or 10000. This prevents an infinite loop when the number of possible configurations is smaller than 10000.
+    !Use Stirling's approximation in binomial coefficient.
+    n_random = MIN(20000,INT(0.95*(nc**(nc+0.5))/(SQRT(2*pi)*epi_counter**(epi_counter+0.5)*(nc-epi_counter)**(nc-epi_counter+0.5))))
 
-    do i=1, 100000
+    allocate(tested(n_random))
+
+    !Set randomising = .TRUE. in order to divert output from measurement subroutines to randomised data files.
+    randomising = .TRUE.
+    tested(:) = 0
+
+    open(unit=44, file=output_folder//'/randomised_data/radius.txt', status='unknown',position="append")
+    open(unit=45, file=output_folder//'/randomised_data/neighbours.txt', status='unknown',position="append")
+    open(unit=46, file=output_folder//'/randomised_data/surface.txt', status='unknown',position="append")
+    radius1_mean = 0
+    radius1_min = 1000
+    radius2_mean = 0
+    radius2_max = 0
+    neighbours_mean = 0
+    neighbours_max = 0
+    surface_mean = 0
+    surface_max = 0
+
+    do i=1, n_random
 
       fatesnotbalanced = .TRUE.
       do while (fatesnotbalanced)
@@ -91,6 +109,18 @@ contains
 !      if (flag_measure_velocity.EQ.1)     call scem_measure_velocity
 
     enddo
+
+    radius1_mean    = radius1_mean/n_random
+    radius2_mean    = radius2_mean/n_random
+    neighbours_mean = neighbours_mean/n_random
+    surface_mean    = surface_mean/n_random
+    write(44,"(*(G0,:,1X))") time,radius1_mean,radius1_min,radius2_mean,radius2_max
+    write(45,"(*(G0,:,1X))") time,neighbours_mean,neighbours_max
+    write(46,"(*(G0,:,1X))") time,surface_mean,surface_max
+    close(44)
+    close(45)
+    close(46)
+
 
     !Restore original system state.
     do n=1,nc

@@ -31,11 +31,7 @@ contains
 			allocate(neighbours(nc,nc))
 		endif
 
-		if (randomising) then
-			open(unit=36,file=output_folder//'/randomised_data/neighbours.txt',status='unknown',position="append")
-		else
-			open(unit=36,file=output_folder//'/sorting_data/neighbours.txt',status='unknown',position="append")
-		endif
+		if (.NOT.randomising) open(unit=36,file=output_folder//'/sorting_data/neighbours.txt',status='unknown',position="append")
 
 		!Start by looking at all element-element interaction pairs.
 		!If a pair acts between elements in cells of different parents i and j where i=!j,
@@ -66,8 +62,13 @@ contains
 		!neighbour_counts(i,j) now equals the total number of nearest neighbour pairs containing a cell of fate i and a cell of fate j
 		!Need to sum neighbour_counts(1,2) + neighbour_counts(2,1) to obtain unlike pair count.
 
-		!Write measurements to file sorting_data_neighbours
-		write(36,*) time, neighbour_counts(1,1), neighbour_counts(2,2), (neighbour_counts(1,2)+neighbour_counts(2,1))
+		!Write measurements to file 
+		if (randomising) then
+			neighbours_mean = neighbours_mean + neighbour_counts(1,1)
+			neighbours_max  = MAX(neighbours_max,neighbour_counts(1,1))
+		else
+			write(36,*) time, neighbour_counts(1,1), neighbour_counts(2,2), (neighbour_counts(1,2)+neighbour_counts(2,1))
+		endif
 
 		close(36)
 

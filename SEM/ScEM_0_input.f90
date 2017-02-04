@@ -73,6 +73,16 @@ module scem_0_input
   real*8 :: spherical_boundary_radius
 !**********
 
+  real*8  :: radius1_mean = 0
+  real*8  :: radius1_min = 1000
+  real*8  :: radius2_mean = 0
+  real*8  :: radius2_max = 0
+  integer :: neighbours_mean = 0
+  integer :: neighbours_max = 0
+  real*8  :: surface_mean = 0
+  real*8  :: surface_max
+
+
   contains
 
     subroutine scem_input
@@ -107,7 +117,7 @@ module scem_0_input
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
 
       !Simulation control parameters
-      nc_initial        = 50
+      nc_initial        = 12
       stiffness_factor  = 0.25
       cell_cycle_time   = 6000 ! Cell cycle time in seconds
       n_cellcycles      = 2.0
