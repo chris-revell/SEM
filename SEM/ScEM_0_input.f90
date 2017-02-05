@@ -81,6 +81,8 @@ module scem_0_input
   integer :: neighbours_max = 0
   real*8  :: surface_mean = 0
   real*8  :: surface_max
+  integer :: n_random=0
+  integer :: n_random_max=20000
 
 
   contains
