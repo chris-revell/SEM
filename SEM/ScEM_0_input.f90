@@ -73,16 +73,16 @@ module scem_0_input
   real*8 :: spherical_boundary_radius
 !**********
 
-  real*8  :: radius1_mean = 0
-  real*8  :: radius1_min = 1000
-  real*8  :: radius2_mean = 0
-  real*8  :: radius2_max = 0
-  integer :: neighbours_mean = 0
-  integer :: neighbours_max = 0
-  real*8  :: surface_mean = 0
+  real*8  :: radius1_mean
+  real*8  :: radius1_min
+  real*8  :: radius2_mean
+  real*8  :: radius2_max
+  integer :: neighbours_mean
+  integer :: neighbours_max
+  real*8  :: surface_mean
   real*8  :: surface_max
-  integer :: n_random=0
-  integer :: n_random_max=20000
+  integer :: n_random     = 0
+  integer :: n_random_max = 20000
 
 
   contains
@@ -90,7 +90,7 @@ module scem_0_input
     subroutine scem_input
 
       !Simulation control switches
-      flag_create     = 1 ! flag_create = 0 (1) for initial cell from file (created de novo)
+      flag_create     = 0 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
