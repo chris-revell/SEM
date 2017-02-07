@@ -57,14 +57,14 @@ contains
     open(unit=44, file=output_folder//'/randomised_data/radius.txt', status='unknown',position="append")
     open(unit=45, file=output_folder//'/randomised_data/neighbours.txt', status='unknown',position="append")
     open(unit=46, file=output_folder//'/randomised_data/surface.txt', status='unknown',position="append")
-!    radius1_mean = 0
-!    radius1_min = 1000
-!    radius2_mean = 0
-!    radius2_max = 0
-!    neighbours_mean = 0
-!    neighbours_max = 0
-!    surface_mean = 0
-!    surface_max = 0
+    radius1_mean = 0
+    radius1_min = 1000
+    radius2_mean = 0
+    radius2_max = 0
+    neighbours_mean = 0
+    neighbours_max = 0
+    surface_mean = 0
+    surface_max = 0
 
     do i=1, n_random
 
