@@ -43,7 +43,7 @@ def zeroonemeasurements(arg):
     radiusrandomdata = np.genfromtxt(os.path.join(arg,"randomised_data/radius.txt"))
     #Epi radius
     meanvalues = radiusrandomdata[:,1]
-    minvalues  = radiusrandomdata[:,1]
+    minvalues  = radiusrandomdata[:,2]
     normalisedradiusdata = (radiusdata[:,1]-meanvalues)/(minvalues[:]-meanvalues[:])
     fig3 = plt.figure()
     ax3 = fig3.add_subplot(111)
