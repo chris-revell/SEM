@@ -24,9 +24,9 @@ for i in datafolders:
     zerooneplotting.zeroonemeasurements(i)
 
 if os.path.exists(os.path.join(datafolders[0],"0-1data/epiradius0-1.txt")):
-    combined_radius = np.genfromtxt(os.path.join(datafolders[0],"0-1data/radius0-1.txt"))
+    combined_radius = np.genfromtxt(os.path.join(datafolders[0],"0-1data/epiradius0-1.txt"))
     for i in range(1,len(datafolders)):
-        data = np.genfromtxt(os.path.join(datafolders[i],"0-1data/radius0-1.txt"))
+        data = np.genfromtxt(os.path.join(datafolders[i],"0-1data/epiradius0-1.txt"))
         combined_radius = np.vstack((combined_radius,data))
 
     zerodata = np.array([])
@@ -52,13 +52,13 @@ if os.path.exists(os.path.join(datafolders[0],"0-1data/epiradius0-1.txt")):
     #ax1.set_ylabel("Distance from centre of mass as a proportion of maximum")
     ax1.set_ylabel("Sorting Index")
     ax1.set_ylim([-0.1,1.1])
-    fig1.savefig(os.path.join(plotfolder,"radius.png"),bbox_inches="tight")
-    np.savetxt(os.path.join(datafolder,"radius.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
+    fig1.savefig(os.path.join(plotfolder,"epiradius.png"),bbox_inches="tight")
+    np.savetxt(os.path.join(datafolder,"epiradius.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
 
 if os.path.exists(os.path.join(datafolders[0],"0-1data/preradius0-1.txt")):
-    combined_radius = np.genfromtxt(os.path.join(datafolders[0],"0-1data/radius0-1.txt"))
+    combined_radius = np.genfromtxt(os.path.join(datafolders[0],"0-1data/preradius0-1.txt"))
     for i in range(1,len(datafolders)):
-        data = np.genfromtxt(os.path.join(datafolders[i],"0-1data/radius0-1.txt"))
+        data = np.genfromtxt(os.path.join(datafolders[i],"0-1data/preradius0-1.txt"))
         combined_radius = np.vstack((combined_radius,data))
 
     zerodata = np.array([])
@@ -84,8 +84,8 @@ if os.path.exists(os.path.join(datafolders[0],"0-1data/preradius0-1.txt")):
     #ax1.set_ylabel("Distance from centre of mass as a proportion of maximum")
     ax1.set_ylabel("Sorting Index")
     ax1.set_ylim([-0.1,1.1])
-    fig1.savefig(os.path.join(plotfolder,"radius.png"),bbox_inches="tight")
-    np.savetxt(os.path.join(datafolder,"radius.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
+    fig1.savefig(os.path.join(plotfolder,"preradius.png"),bbox_inches="tight")
+    np.savetxt(os.path.join(datafolder,"preradius.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
 
 if os.path.exists(os.path.join(datafolders[0],"0-1data/surface0-1.txt")):
     combined_surface = np.genfromtxt(os.path.join(datafolders[0],"0-1data/surface0-1.txt"))
