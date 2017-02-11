@@ -22,8 +22,6 @@ for measurement in measurements:
             x.append(int(i[1].split("_")[1])/100)
         if int(i[1].split("_")[0])/100 not in y:
             y.append(int(i[1].split("_")[0])/100)
-        print(x)
-        print(y)
 
         measurementdata = np.genfromtxt(os.path.join(argv[1],i[1],"0-1data",measurement))
         z_final = measurementdata[-1,1]
@@ -54,6 +52,7 @@ for measurement in measurements:
     fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace_finalvalue.png"))
     plt.close(fig)
 
+    """
     fig,ax = plt.subplots()#figsize=(9,6))
     cax = ax.imshow(phasespace_mean,vmin=0,vmax=1,cmap="Reds",extent=[0.125,1.125,0.375,3.375],interpolation="none")
     if "neighbour" in measurement:
@@ -76,3 +75,4 @@ for measurement in measurements:
     fig.set_tight_layout(True)
     fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace_mean.png"))
     plt.close(fig)
+    """

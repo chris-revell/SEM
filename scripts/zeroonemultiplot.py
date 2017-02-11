@@ -7,7 +7,7 @@ from scipy.stats import binned_statistic,sem
 import zerooneplotting
 
 folderstoignore = ["p_values","meandata","meanplots","0-1data","0-1plots"]
-datafolders = [os.path.join(argv[1],f) for f in os.listdir(argv[1]) if os.path.isdir(os.path.join(argv[1], f)) and f not in folderstoignore ]
+parameters = [os.path.join(argv[1],f) for f in os.listdir(argv[1]) if os.path.isdir(os.path.join(argv[1], f)) and f not in folderstoignore ]
 
 datafolder = os.path.join(argv[1],"0-1data")
 plotfolder = os.path.join(argv[1],"0-1plots")
@@ -20,13 +20,13 @@ if os.path.exists(plotfolder):
 else:
     os.mkdir(plotfolder)
 
-for i in datafolders:
+for i in parameters:
     zerooneplotting.zeroonemeasurements(i)
 
-if os.path.exists(os.path.join(datafolders[0],"0-1data/epiradius0-1.txt")):
-    combined_radius = np.genfromtxt(os.path.join(datafolders[0],"0-1data/epiradius0-1.txt"))
-    for i in range(1,len(datafolders)):
-        data = np.genfromtxt(os.path.join(datafolders[i],"0-1data/epiradius0-1.txt"))
+if os.path.exists(os.path.join(parameters[0],"0-1data/epiradius0-1.txt")):
+    combined_radius = np.genfromtxt(os.path.join(parameters[0],"0-1data/epiradius0-1.txt"))
+    for i in range(1,len(parameters)):
+        data = np.genfromtxt(os.path.join(parameters[i],"0-1data/epiradius0-1.txt"))
         combined_radius = np.vstack((combined_radius,data))
 
     zerodata = np.array([])
@@ -46,8 +46,8 @@ if os.path.exists(os.path.join(datafolders[0],"0-1data/epiradius0-1.txt")):
     ax1 = fig1.add_subplot(111)
     ax1.errorbar(outbin_edges,outmean,yerr=outstd,color="Red",ls="none")
     ax1.scatter(outbin_edges,outmean,color="Red")
-    #ax1.set_title("Mean distance of epiblast from centre of mass as a\nproportion minimum possible value, averaged over "+str(len(datafolders))+" runs",y=1.05)
-    ax1.set_title("State of system as a proportion of the difference between perfectly sorted and random,\nas measured by mean distance of epiblast from centre of mass,\naveraged over "+str(len(datafolders))+" runs",y=1.05)
+    #ax1.set_title("Mean distance of epiblast from centre of mass as a\nproportion minimum possible value, averaged over "+str(len(parameters))+" runs",y=1.05)
+    ax1.set_title("State of system as a proportion of the difference between perfectly sorted and random,\nas measured by mean distance of epiblast from centre of mass,\naveraged over "+str(len(parameters))+" runs",y=1.05)
     ax1.set_xlabel("Time")
     #ax1.set_ylabel("Distance from centre of mass as a proportion of maximum")
     ax1.set_ylabel("Sorting Index")
@@ -55,10 +55,10 @@ if os.path.exists(os.path.join(datafolders[0],"0-1data/epiradius0-1.txt")):
     fig1.savefig(os.path.join(plotfolder,"epiradius.png"),bbox_inches="tight")
     np.savetxt(os.path.join(datafolder,"epiradius.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
 
-if os.path.exists(os.path.join(datafolders[0],"0-1data/preradius0-1.txt")):
-    combined_radius = np.genfromtxt(os.path.join(datafolders[0],"0-1data/preradius0-1.txt"))
-    for i in range(1,len(datafolders)):
-        data = np.genfromtxt(os.path.join(datafolders[i],"0-1data/preradius0-1.txt"))
+if os.path.exists(os.path.join(parameters[0],"0-1data/preradius0-1.txt")):
+    combined_radius = np.genfromtxt(os.path.join(parameters[0],"0-1data/preradius0-1.txt"))
+    for i in range(1,len(parameters)):
+        data = np.genfromtxt(os.path.join(parameters[i],"0-1data/preradius0-1.txt"))
         combined_radius = np.vstack((combined_radius,data))
 
     zerodata = np.array([])
@@ -78,8 +78,8 @@ if os.path.exists(os.path.join(datafolders[0],"0-1data/preradius0-1.txt")):
     ax1 = fig1.add_subplot(111)
     ax1.errorbar(outbin_edges,outmean,yerr=outstd,color="Red",ls="none")
     ax1.scatter(outbin_edges,outmean,color="Red")
-    #ax1.set_title("Mean distance of primitive endoderm from centre of mass as a\nproportion of maximum possible value, averaged over "+str(len(datafolders))+" runs",y=1.05)
-    ax1.set_title("State of system as a proportion of the difference between perfectly sorted and random,\nas measured by mean distance of primitive endoderm from centre of mass,\naveraged over "+str(len(datafolders))+" runs",y=1.05)
+    #ax1.set_title("Mean distance of primitive endoderm from centre of mass as a\nproportion of maximum possible value, averaged over "+str(len(parameters))+" runs",y=1.05)
+    ax1.set_title("State of system as a proportion of the difference between perfectly sorted and random,\nas measured by mean distance of primitive endoderm from centre of mass,\naveraged over "+str(len(parameters))+" runs",y=1.05)
     ax1.set_xlabel("Time")
     #ax1.set_ylabel("Distance from centre of mass as a proportion of maximum")
     ax1.set_ylabel("Sorting Index")
@@ -87,10 +87,10 @@ if os.path.exists(os.path.join(datafolders[0],"0-1data/preradius0-1.txt")):
     fig1.savefig(os.path.join(plotfolder,"preradius.png"),bbox_inches="tight")
     np.savetxt(os.path.join(datafolder,"preradius.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
 
-if os.path.exists(os.path.join(datafolders[0],"0-1data/surface0-1.txt")):
-    combined_surface = np.genfromtxt(os.path.join(datafolders[0],"0-1data/surface0-1.txt"))
-    for i in range(1,len(datafolders)):
-        data = np.genfromtxt(os.path.join(datafolders[i],"0-1data/surface0-1.txt"))
+if os.path.exists(os.path.join(parameters[0],"0-1data/surface0-1.txt")):
+    combined_surface = np.genfromtxt(os.path.join(parameters[0],"0-1data/surface0-1.txt"))
+    for i in range(1,len(parameters)):
+        data = np.genfromtxt(os.path.join(parameters[i],"0-1data/surface0-1.txt"))
         combined_surface = np.vstack((combined_surface,data))
 
     zerodata = np.array([])
@@ -110,8 +110,8 @@ if os.path.exists(os.path.join(datafolders[0],"0-1data/surface0-1.txt")):
     ax1 = fig1.add_subplot(111)
     ax1.errorbar(outbin_edges,outmean,yerr=outstd,color="Red",ls="none")
     ax1.scatter(outbin_edges,outmean,color="Red")
-    #ax1.set_title("Proportion of external surface occupied by primitive endoderm as a\nproportion of maximum possible value, averaged over "+str(len(datafolders))+" runs",y=1.05)
-    ax1.set_title("State of system as a proportion of the difference between perfectly sorted and random,\nas measured by proportion of external surface occupied by primitive endoderm,\naveraged over "+str(len(datafolders))+" runs",y=1.05)
+    #ax1.set_title("Proportion of external surface occupied by primitive endoderm as a\nproportion of maximum possible value, averaged over "+str(len(parameters))+" runs",y=1.05)
+    ax1.set_title("State of system as a proportion of the difference between perfectly sorted and random,\nas measured by proportion of external surface occupied by primitive endoderm,\naveraged over "+str(len(parameters))+" runs",y=1.05)
     ax1.set_xlabel("Time")
     #ax1.set_ylabel("Proportion of external surface occupied by primitive\nendoderm as a proportion of maximum possible value")
     ax1.set_ylabel("Sorting Index")
@@ -119,10 +119,10 @@ if os.path.exists(os.path.join(datafolders[0],"0-1data/surface0-1.txt")):
     fig1.savefig(os.path.join(plotfolder,"surface.png"),bbox_inches="tight")
     np.savetxt(os.path.join(datafolder,"surface.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
 
-if os.path.exists(os.path.join(datafolders[0],"0-1data/neighbour0-1.txt")):
-    combined_neighbour = np.genfromtxt(os.path.join(datafolders[0],"0-1data/neighbour0-1.txt"))
-    for i in range(1,len(datafolders)):
-        data = np.genfromtxt(os.path.join(datafolders[i],"0-1data/neighbour0-1.txt"))
+if os.path.exists(os.path.join(parameters[0],"0-1data/neighbour0-1.txt")):
+    combined_neighbour = np.genfromtxt(os.path.join(parameters[0],"0-1data/neighbour0-1.txt"))
+    for i in range(1,len(parameters)):
+        data = np.genfromtxt(os.path.join(parameters[i],"0-1data/neighbour0-1.txt"))
         combined_neighbour = np.vstack((combined_neighbour,data))
 
     zerodata = np.array([])
@@ -142,8 +142,8 @@ if os.path.exists(os.path.join(datafolders[0],"0-1data/neighbour0-1.txt")):
     ax1 = fig1.add_subplot(111)
     ax1.errorbar(outbin_edges,outmean,yerr=outstd,color="Green",ls="none")
     ax1.scatter(outbin_edges,outmean,color="Green")
-    #ax1.set_title("Number of epiblast-epiblast neighbour pairs as a proportion of maximum\npossible value, averaged over "+str(len(datafolders))+" runs",y=1.05)
-    ax1.set_title("State of system as a proportion of the difference between perfectly sorted and random,\nas measured by number of epiblast-epiblast neighbour pairs,\naveraged over "+str(len(datafolders))+" runs",y=1.05)
+    #ax1.set_title("Number of epiblast-epiblast neighbour pairs as a proportion of maximum\npossible value, averaged over "+str(len(parameters))+" runs",y=1.05)
+    ax1.set_title("State of system as a proportion of the difference between perfectly sorted and random,\nas measured by number of epiblast-epiblast neighbour pairs,\naveraged over "+str(len(parameters))+" runs",y=1.05)
     ax1.set_xlabel("Time")
     #ax1.set_ylabel("Number of epiblast-epiblast pairs\nas a proportion of maximum")
     ax1.set_ylabel("Sorting Index")

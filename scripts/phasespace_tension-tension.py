@@ -49,6 +49,7 @@ for measurement in measurements:
     fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace_finalvalue.png"),bbox_inches="tight")
     plt.close(fig)
 
+    """
     fig,ax = plt.subplots()#figsize=(9,6))
     cax = ax.imshow(phasespace_mean,cmap="Reds",extent=[0.5,4.5,0.125,1.125],interpolation="none")
     if "neighbour" in measurement:
@@ -68,3 +69,4 @@ for measurement in measurements:
     cbar.set_ticks([0,1])
     fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace_mean.png"),bbox_inches="tight")
     plt.close(fig)
+    """
