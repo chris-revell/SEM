@@ -115,7 +115,7 @@ contains
       if (flag_volume_output.EQ.1.OR.flag_conserve.EQ.1.OR.flag_background.NE.0) call scem_volume_calculate
 
       !Outputting data to file at intervals of output_interval.
-      if (mod(time,(2*output_interval)).LT.dt.AND..NOT.intro) then
+      if (mod(time,output_interval).LT.dt.AND..NOT.intro) then
         n_snapshots=n_snapshots+1
         call scem_output_system
         if (flag_povray.EQ.1) call scem_output_povray
