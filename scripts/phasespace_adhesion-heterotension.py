@@ -30,7 +30,7 @@ for measurement in measurements:
         phasespace_mean[-(int(int(i[0])/4)+1),int(i[0])%4] = z_mean
 
     fig,ax = plt.subplots()#figsize=(9,6))
-    cax = ax.imshow(phasespace_final,cmap="Reds",extent=[0.5,4.5,0.375,3.375],interpolation="none")
+    cax = ax.imshow(phasespace_final,vmin=0,vmax=1,cmap="Reds",extent=[0.5,4.5,0.375,3.375],interpolation="none")
     if "neighbour" in measurement:
         ax.set_title("Final value of sorting index as measured by number\nof additional epiblast-epiblastneighbour pairs")
     if "surface" in measurement:
