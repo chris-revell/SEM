@@ -30,7 +30,7 @@ for measurement in measurements:
         phasespace_mean[-(int(int(i[0])/4)+1),int(i[0])%4] = z_mean
 
     fig,ax = plt.subplots()#figsize=(9,6))
-    cax = ax.imshow(phasespace_final,vmin=0,vmax=1,cmap="Reds",extent=[0.125,1.125,0.5,4.5],interpolation="none")
+    cax = ax.imshow(phasespace_final,vmin=0,vmax=1,cmap="Reds",extent=[0.125,1.125,0.5,4.5],interpolation="bilinear")
     if "neighbour" in measurement:
         ax.set_title("Final value of sorting index as measured by number\nof additional epiblast-epiblastneighbour pairs")
     if "surface" in measurement:
@@ -46,12 +46,12 @@ for measurement in measurements:
     ax.set_aspect(1/4)
     cbar = fig.colorbar(cax)
     cbar.set_ticks([0,1])
-    fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace_finalvalue.png"),bbox_inches="tight")
+    fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace_finalvalue.png"),bbox_inches="tight",dpi=500)
     plt.close(fig)
 
     """
     fig,ax = plt.subplots()#figsize=(9,6))
-    cax = ax.imshow(phasespace_mean,cmap="Reds",extent=[0.125,1.125,0.5,4.5],interpolation="none")
+    cax = ax.imshow(phasespace_mean,cmap="Reds",extent=[0.125,1.125,0.5,4.5],interpolation="bilinear")
     if "neighbour" in measurement:
         ax.set_title("Mean over time of sorting index as measured by number\nof additional epiblast-epiblastneighbour pairs")
     if "surface" in measurement:
@@ -67,6 +67,6 @@ for measurement in measurements:
     ax.set_aspect(1/4)
     cbar = fig.colorbar(cax)
     cbar.set_ticks([0,1])
-    fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace_mean.png"),bbox_inches="tight")
+    fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace_mean.png"),bbox_inches="tight",dpi=500)
     plt.close(fig)
     """

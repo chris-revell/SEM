@@ -116,7 +116,7 @@ module scem_0_input
       flag_measure_surface    = 0    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
       flag_measure_com        = 0
-      flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comaprison
+      flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
 
       !Simulation control parameters
       nc_initial        = 12

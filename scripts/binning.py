@@ -71,7 +71,7 @@ def binningall(runfolder):
         ax1.set_xlim(xmin=-100)
         ax1.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
         #fig1.set_tight_layout(True)
-        fig1.savefig(os.path.join(runfolder,"plots/radius_age.png"),bbox_inches="tight")
+        fig1.savefig(os.path.join(runfolder,"plots/radius_age.png"),bbox_inches="tight",dpi=500)
         np.savetxt(os.path.join(runfolder,"stats/radius_age.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
         #Type radius against simulation time
@@ -100,7 +100,7 @@ def binningall(runfolder):
         ax2.set_xlim(xmin=-100)
         ax2.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
         #fig2.set_tight_layout(True)
-        fig2.savefig(os.path.join(runfolder,"plots/radius_time.png"),bbox_inches="tight")
+        fig2.savefig(os.path.join(runfolder,"plots/radius_time.png"),bbox_inches="tight",dpi=500)
         np.savetxt(os.path.join(runfolder,"stats/radius_time.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
         #As above, normalised against randomised data
@@ -146,7 +146,7 @@ def binningall(runfolder):
             ax3.set_xlim(xmin=-100)
             ax3.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
             #fig3.set_tight_layout(True)
-            fig3.savefig(os.path.join(runfolder,"plots/radius_age_normalised.png"),bbox_inches="tight")
+            fig3.savefig(os.path.join(runfolder,"plots/radius_age_normalised.png"),bbox_inches="tight",dpi=500)
             np.savetxt(os.path.join(runfolder,"stats/radius_age_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
             #Type radius against simulation run time
@@ -171,7 +171,7 @@ def binningall(runfolder):
             ax4.set_xlim(xmin=-300)
             ax4.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
             #fig4.set_tight_layout(True)
-            fig4.savefig(os.path.join(runfolder,"plots/radius_time_normalised.png"),bbox_inches="tight")
+            fig4.savefig(os.path.join(runfolder,"plots/radius_time_normalised.png"),bbox_inches="tight",dpi=500)
             np.savetxt(os.path.join(runfolder,"stats/radius_time_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
 
@@ -204,7 +204,7 @@ def binningall(runfolder):
         ax5.set_ylim([0,1])
         ax5.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
         #fig5.set_tight_layout(True)
-        fig5.savefig(os.path.join(runfolder,"plots/surface.png"),bbox_inches="tight")
+        fig5.savefig(os.path.join(runfolder,"plots/surface.png"),bbox_inches="tight",dpi=500)
         np.savetxt(os.path.join(runfolder,"stats/surface.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
 
@@ -257,7 +257,7 @@ def binningall(runfolder):
         ax6.set_xlim(xmin=-100)
         ax6.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
         #fig6.set_tight_layout(True)
-        fig6.savefig(os.path.join(runfolder,"plots/neighbours.png"),bbox_inches="tight")
+        fig6.savefig(os.path.join(runfolder,"plots/neighbours.png"),bbox_inches="tight",dpi=500)
         np.savetxt(os.path.join(runfolder,"stats/neighbours.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2,outmean3,outstd3),axis=1))
 
         #As above, normalised against randomised data
@@ -297,7 +297,7 @@ def binningall(runfolder):
             ax7.set_xlim(xmin=-300)
             ax7.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
             #fig7.set_tight_layout(True)
-            fig7.savefig(os.path.join(runfolder,"plots/neighbours_normalised.png"),bbox_inches="tight")
+            fig7.savefig(os.path.join(runfolder,"plots/neighbours_normalised.png"),bbox_inches="tight",dpi=500)
             np.savetxt(os.path.join(runfolder,"stats/neighbours_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2,outmean3,outstd3),axis=1))
         """
         neighboursdifmean,bin_edges,binnumber = binned_statistic(neighbour_dif[:,0],neighbour_dif[:,1],bins=5)
@@ -386,7 +386,7 @@ def binningall(runfolder):
         ax9.set_xlim(xmin=-100)
         ax9.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
         #fig9.set_tight_layout(True)
-        fig9.savefig(os.path.join(runfolder,"plots/velocity_age.png"),bbox_inches="tight")
+        fig9.savefig(os.path.join(runfolder,"plots/velocity_age.png"),bbox_inches="tight",dpi=500)
         np.savetxt(os.path.join(runfolder,"stats/velocity_age.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
         #Type radius against simulation time
@@ -411,7 +411,7 @@ def binningall(runfolder):
         ax10.set_xlim(xmin=0)
         ax10.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
         #fig10.set_tight_layout(True)
-        fig10.savefig(os.path.join(runfolder,"plots/velocity_radius.png"),bbox_inches="tight")
+        fig10.savefig(os.path.join(runfolder,"plots/velocity_radius.png"),bbox_inches="tight",dpi=500)
         np.savetxt(os.path.join(runfolder,"stats/velocity_radius.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
         """
@@ -457,7 +457,7 @@ def binningall(runfolder):
             ax11.set_xlim(xmin=-100)
             ax11.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
             #fig11.set_tight_layout(True)
-            fig11.savefig(os.path.join(runfolder,"plots/velocity_age_normalised.png"),bbox_inches="tight")
+            fig11.savefig(os.path.join(runfolder,"plots/velocity_age_normalised.png"),bbox_inches="tight",dpi=500)
             np.savetxt(os.path.join(runfolder,"stats/velocity_age_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
 
             #Type radius against simulation run time
@@ -480,7 +480,7 @@ def binningall(runfolder):
             ax12.set_xlim(xmin=-300)
             ax12.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
             #fig12.set_tight_layout(True)
-            fig12.savefig(os.path.join(runfolder,"plots/velocity_radius_normalised.png"),bbox_inches="tight")
+            fig12.savefig(os.path.join(runfolder,"plots/velocity_radius_normalised.png"),bbox_inches="tight",dpi=500)
             np.savetxt(os.path.join(runfolder,"stats/velocity_radius_normalised.txt"),np.stack((outbin_edges,outmean1,outstd1,outmean2,outstd2),axis=1))
             """
 

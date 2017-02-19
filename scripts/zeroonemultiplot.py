@@ -52,7 +52,7 @@ if os.path.exists(os.path.join(parameters[0],"0-1data/epiradius0-1.txt")):
     #ax1.set_ylabel("Distance from centre of mass as a proportion of maximum")
     ax1.set_ylabel("Sorting Index")
     ax1.set_ylim([-0.1,1.1])
-    fig1.savefig(os.path.join(plotfolder,"epiradius.png"),bbox_inches="tight")
+    fig1.savefig(os.path.join(plotfolder,"epiradius.png"),bbox_inches="tight",dpi=500)
     np.savetxt(os.path.join(datafolder,"epiradius.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
 
 if os.path.exists(os.path.join(parameters[0],"0-1data/preradius0-1.txt")):
@@ -84,7 +84,7 @@ if os.path.exists(os.path.join(parameters[0],"0-1data/preradius0-1.txt")):
     #ax1.set_ylabel("Distance from centre of mass as a proportion of maximum")
     ax1.set_ylabel("Sorting Index")
     ax1.set_ylim([-0.1,1.1])
-    fig1.savefig(os.path.join(plotfolder,"preradius.png"),bbox_inches="tight")
+    fig1.savefig(os.path.join(plotfolder,"preradius.png"),bbox_inches="tight",dpi=500)
     np.savetxt(os.path.join(datafolder,"preradius.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
 
 if os.path.exists(os.path.join(parameters[0],"0-1data/surface0-1.txt")):
@@ -116,7 +116,7 @@ if os.path.exists(os.path.join(parameters[0],"0-1data/surface0-1.txt")):
     #ax1.set_ylabel("Proportion of external surface occupied by primitive\nendoderm as a proportion of maximum possible value")
     ax1.set_ylabel("Sorting Index")
     ax1.set_ylim([-0.1,1.1])
-    fig1.savefig(os.path.join(plotfolder,"surface.png"),bbox_inches="tight")
+    fig1.savefig(os.path.join(plotfolder,"surface.png"),bbox_inches="tight",dpi=500)
     np.savetxt(os.path.join(datafolder,"surface.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
 
 if os.path.exists(os.path.join(parameters[0],"0-1data/neighbour0-1.txt")):
@@ -148,5 +148,5 @@ if os.path.exists(os.path.join(parameters[0],"0-1data/neighbour0-1.txt")):
     #ax1.set_ylabel("Number of epiblast-epiblast pairs\nas a proportion of maximum")
     ax1.set_ylabel("Sorting Index")
     ax1.set_ylim([-0.1,1.1])
-    fig1.savefig(os.path.join(plotfolder,"neighbour.png"),bbox_inches="tight")
+    fig1.savefig(os.path.join(plotfolder,"neighbour.png"),bbox_inches="tight",dpi=500)
     np.savetxt(os.path.join(datafolder,"neighbour.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
