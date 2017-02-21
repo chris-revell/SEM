@@ -21,7 +21,7 @@ for measurement in measurements:
         if int(i[1].split("_")[1])/100 not in x:
             x.append(int(i[1].split("_")[1])/100)
         if int(i[1].split("_")[0])/100 not in y:
-            y.append(int(i[1].split("_")[0])/100)
+            y.append(int(i[1].split("_")[0])/300)
 
         measurementdata = np.genfromtxt(os.path.join(argv[1],i[1],"0-1data",measurement))
         z_final = measurementdata[-1,1]
@@ -46,8 +46,9 @@ for measurement in measurements:
     ax.set_aspect(4/3)
     cbar = fig.colorbar(cax)
     cbar.set_ticks([0,1])
-    fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace_finalvalue.png"),bbox_inches="tight",dpi=500)
+    fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace.png"),bbox_inches="tight",dpi=500)
     plt.close(fig)
+    np.savetxt(os.path.join(argv[1],measurement[:-4]+"_phasespace.txt"),phasespace_final)
 
     """
     fig,ax = plt.subplots()#figsize=(9,6))

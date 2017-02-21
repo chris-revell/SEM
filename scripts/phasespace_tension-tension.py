@@ -46,8 +46,9 @@ for measurement in measurements:
     ax.set_aspect(4)
     cbar = fig.colorbar(cax)
     cbar.set_ticks([0,1])
-    fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace_finalvalue.png"),bbox_inches="tight",dpi=500)
+    fig.savefig(os.path.join(argv[1],measurement[:-4]+"_phasespace.png"),bbox_inches="tight",dpi=500)
     plt.close(fig)
+    np.savetxt(os.path.join(argv[1],measurement[:-4]+"_phasespace.txt"),phasespace_final)
 
     """
     fig,ax = plt.subplots()#figsize=(9,6))
