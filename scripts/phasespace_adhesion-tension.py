@@ -15,13 +15,15 @@ for measurement in measurements:
     phasespace_mean = np.zeros((4,4))
     x = []
     y = []
+    yl = []
 
     for i in enumerate(datafolders):
 
         if int(i[1].split("_")[1])/100 not in x:
             x.append(int(i[1].split("_")[1])/100)
         if int(i[1].split("_")[0])/100 not in y:
-            y.append(int(i[1].split("_")[0])/300)
+            y.append(int(i[1].split("_")[0])/100)
+            yl.append(str(int(i[1].split("_")[0])/300))
 
         measurementdata = np.genfromtxt(os.path.join(argv[1],i[1],"0-1data",measurement))
         z_final = measurementdata[-1,1]
@@ -42,9 +44,8 @@ for measurement in measurements:
     ax.set_ylabel("Primitive Endoderm Adhesion Magnitude")
     ax.set_xlabel("Epiblast Homotypic Interface Tension Factor")
     ax.set_yticks([0.75,1.5,2.25,3])
-    ax.set_yticklabels(y)
-    ax.set_xticks([0.25,0.5,0.75,1.0])
-    ax.set_xticklabels(x)
+    ax.set_yticklabels(yl)
+    ax.set_xticks(x)
     ax.set_aspect(1/3)
     cbar = fig.colorbar(cax)
     cbar.set_ticks([0,1])

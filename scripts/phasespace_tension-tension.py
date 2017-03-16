@@ -40,7 +40,7 @@ for measurement in measurements:
     if "epiradius" in measurement:
         ax.set_title("Final value of sorting index as measured by distance\nof epiblast fromcentre of mass")
     ax.set_ylabel("Epiblast Homotypic Interface Tension Factor")
-    ax.set_xlabel("Epiblast and Primitive Endoderm Heterotypic\nInterface Tension Factor")
+    ax.set_xlabel("Primitive Endoderm Heterotypic\nInterface Tension Factor")
     ax.set_yticks(y)
     ax.set_xticks(x)
     ax.set_aspect(4)
