@@ -19,9 +19,9 @@ def binningall(runfolder):
         os.mkdir(os.path.join(runfolder,"stats"))
 
     #Check if type radius data exists in first run folder. If so, import and plot
-    if os.path.exists(os.path.join(run_folder,"sorting_data/type_radius1.txt")):
-        typeradius1 = np.genfromtxt(os.path.join(run_folder,"sorting_data/type_radius1.txt"))
-        typeradius2 = np.genfromtxt(os.path.join(run_folder,"sorting_data/type_radius2.txt"))
+    if os.path.exists(os.path.join(runfolder,"sorting_data/type_radius1.txt")):
+        typeradius1 = np.genfromtxt(os.path.join(runfolder,"sorting_data/type_radius1.txt"))
+        typeradius2 = np.genfromtxt(os.path.join(runfolder,"sorting_data/type_radius2.txt"))
         for i in typeradius1[:,0]:
             if i > 0:
                 dt = i
@@ -105,9 +105,9 @@ def binningall(runfolder):
 
         #As above, normalised against randomised data
         #Check if randomised data exists, and if so import it into arrays for combining with other runs
-        if os.path.exists(os.path.join(run_folder,"randomised_data/type_radius1.txt")):
-            random_typeradius1 = np.genfromtxt(os.path.join(run_folder,"randomised_data/type_radius1.txt"))
-            random_typeradius2 = np.genfromtxt(os.path.join(run_folder,"randomised_data/type_radius2.txt"))
+        if os.path.exists(os.path.join(runfolder,"randomised_data/type_radius1.txt")):
+            random_typeradius1 = np.genfromtxt(os.path.join(runfolder,"randomised_data/type_radius1.txt"))
+            random_typeradius2 = np.genfromtxt(os.path.join(runfolder,"randomised_data/type_radius2.txt"))
 
             zerotimerandomdata1 = np.array([])
             zerotimerandomdata2 = np.array([])
@@ -176,8 +176,8 @@ def binningall(runfolder):
 
 
     #Check if surface data exists in first run folder. If so, import it and create arrays typeradius1 and typeradius2 to contain data from all runs.
-    if os.path.exists(os.path.join(run_folder,"sorting_data/surface.txt")):
-        surface = np.genfromtxt(os.path.join(run_folder,"sorting_data/surface.txt"))
+    if os.path.exists(os.path.join(runfolder,"sorting_data/surface.txt")):
+        surface = np.genfromtxt(os.path.join(runfolder,"sorting_data/surface.txt"))
         surface_mean1,bin_edges,binnumber = binned_statistic(surface[:,0],surface[:,1],bins=5)
         surface_mean2,bin_edges,binnumber = binned_statistic(surface[:,0],surface[:,2],bins=5)
         zeromean_surface1 = surface[0,1]
@@ -209,8 +209,8 @@ def binningall(runfolder):
 
 
     #Check if neighbours data exists in first run folder. If so, import and plot
-    if os.path.exists(os.path.join(run_folder,"sorting_data/neighbours.txt")):
-        neighbours = np.genfromtxt(os.path.join(run_folder,"sorting_data/neighbours.txt"))
+    if os.path.exists(os.path.join(runfolder,"sorting_data/neighbours.txt")):
+        neighbours = np.genfromtxt(os.path.join(runfolder,"sorting_data/neighbours.txt"))
         neighbour_dif = np.stack((neighbours[:,0],neighbours[:,1]-neighbours[:,2]),axis=1)
 
         zeroneighboursdata1 = np.array([])
@@ -262,8 +262,8 @@ def binningall(runfolder):
 
         #As above, normalised against randomised data
         #Check if randomised data exists, and if so import it into arrays for combining with other runs
-        if os.path.exists(os.path.join(run_folder,"randomised_data/neighbours.txt")):
-            random_neighbours = np.genfromtxt(os.path.join(run_folder,"randomised_data/neighbours.txt"))
+        if os.path.exists(os.path.join(runfolder,"randomised_data/neighbours.txt")):
+            random_neighbours = np.genfromtxt(os.path.join(runfolder,"randomised_data/neighbours.txt"))
 
             zeroneighboursrandomdata1 = np.array([])
             zeroneighboursrandomdata2 = np.array([])
@@ -322,8 +322,8 @@ def binningall(runfolder):
 
 
     #Check if centre of mass data exists in first run folder. If so, import and plot
-    if os.path.exists(os.path.join(run_folder,"sorting_data/com.txt")):
-        com = np.genfromtxt(os.path.join(run_folder,"sorting_data/com.txt"))
+    if os.path.exists(os.path.join(runfolder,"sorting_data/com.txt")):
+        com = np.genfromtxt(os.path.join(runfolder,"sorting_data/com.txt"))
 
         zerocomdata = com[i,1]
         com_mean,bin_edges,binnumber = binned_statistic(com[:,0],com[:,1],bins=5)
@@ -347,9 +347,9 @@ def binningall(runfolder):
 
 
     #Check if velocity data exists in first run folder. If so, import and plot
-    if os.path.exists(os.path.join(run_folder,"sorting_data/velocity1.txt")):
-        velocity1 = np.genfromtxt(os.path.join(run_folder,"sorting_data/velocity1.txt"))
-        velocity2 = np.genfromtxt(os.path.join(run_folder,"sorting_data/velocity2.txt"))
+    if os.path.exists(os.path.join(runfolder,"sorting_data/velocity1.txt")):
+        velocity1 = np.genfromtxt(os.path.join(runfolder,"sorting_data/velocity1.txt"))
+        velocity2 = np.genfromtxt(os.path.join(runfolder,"sorting_data/velocity2.txt"))
 
         zeroagedata1 = np.array([])
         zeroagedata2 = np.array([])
@@ -417,9 +417,9 @@ def binningall(runfolder):
         """
         #As above, normalised against randomised data
         #Check if randomised data exists, and if so import it into arrays for combining with other runs
-        if os.path.exists(os.path.join(run_folder,"randomised_data/velocity1.txt")):
-            random_velocity1 = np.genfromtxt(os.path.join(run_folder,"randomised_data/velocity1.txt"))
-            random_velocity2 = np.genfromtxt(os.path.join(run_folder,"randomised_data/velocity2.txt"))
+        if os.path.exists(os.path.join(runfolder,"randomised_data/velocity1.txt")):
+            random_velocity1 = np.genfromtxt(os.path.join(runfolder,"randomised_data/velocity1.txt"))
+            random_velocity2 = np.genfromtxt(os.path.join(runfolder,"randomised_data/velocity2.txt"))
             for i in range(1,len(datafolders)):
                 data1 = np.genfromtxt(os.path.join(datafolders[i],"randomised_data/velocity1.txt"))
                 data2 = np.genfromtxt(os.path.join(datafolders[i],"randomised_data/velocity2.txt"))
