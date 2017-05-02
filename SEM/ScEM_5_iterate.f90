@@ -97,13 +97,13 @@ contains
       call scem_ageing
 
       ! cell growth
-      if (flag_growth.eq.1) call scem_growth
+      if (flag_growth.eq.1.OR.intro) call scem_growth
 
       ! cell division
-      if (flag_division.eq.1) call scem_division
+      if (flag_division.eq.1.OR.intro) call scem_division
 
       ! check for resizing of (element,cell,sector) arrays
-      if (flag_growth.eq.1) call scem_resize
+      if (flag_growth.eq.1.or.intro) call scem_resize
 
       ! re-calculate center of mass and radius of gyration of each cell
       call scem_com

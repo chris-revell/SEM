@@ -62,7 +62,7 @@ contains
         else
           adhesion_factor_applied = MIN(elements(n)%adhesion_factor,elements(nn)%adhesion_factor)/22 !3.684      !elements(n)%adhesion_factor*elements(nn)%adhesion_factor
         endif
-        if (index_intra.EQ.1) then
+        if (index_intra.EQ.1.OR.elements(n)%type.EQ.1.OR.elements(nn)%type.EQ.1) then
           !Both elements are in the same cell, so no adhesion_factor should be applied to attractive component
           pot_deriv_interp1 = r_s1*(sep_sq*potential_deriv1(bin,1) + potential_deriv1(bin,2))
           pot_deriv_interp2 = r_s2*(sep_sq*potential_deriv2(bin,1) + potential_deriv2(bin,2))
