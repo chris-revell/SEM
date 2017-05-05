@@ -114,8 +114,16 @@ contains
       !Calculate cell volumes
       if (flag_volume_output.EQ.1.OR.flag_conserve.EQ.1.OR.flag_background.NE.0) call scem_volume_calculate
 
-      !Outputting data to file at intervals of output_interval.
       if (mod(time,output_interval).LT.dt.AND..NOT.intro) then
+        !Calculate time expired so far
+        call SYSTEM_CLOCK(current_time)
+        total_system_time = (current_time-start_time)/count_rate
+        !Write system progress update to the command line.
+        write(*,"(*(G0,:,1X))") time,total_system_time,ne,nc,n_snapshots !write(*,"(F12.4,I6,I8,I6,I6)") time,total_system_time,ne,nc,n_snapshots
+      endif
+
+      !Outputting data to file at intervals of output_interval.
+      if (mod(time,output_interval2).LT.dt.AND..NOT.intro) then
         n_snapshots=n_snapshots+1
         call scem_output_system
         if (flag_povray.EQ.1) call scem_output_povray

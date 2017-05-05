@@ -44,7 +44,7 @@ module scem_0_input
   real*8  :: cell_cycle_time,rate_new_element,establishment_time,prob_new_element,frac_growth
   real*8  :: frac_placement_min,r_placement_min_sq
   real*8  :: buffer_frac,buffer_size,buffer_size_sq,sector_size,sector_size_sq,recip_sector_size
-  real*8  :: time,output_interval,time_max,dt,dt_amp_max,r_s_max
+  real*8  :: time,output_interval,output_interval2,time_max,dt,dt_amp_max,r_s_max
   real*8  :: trigger_frac
   !Variables for cell behaviour
   real*8 :: stiffness_factor
@@ -60,10 +60,10 @@ module scem_0_input
   !Variables for setting output folder
 !  character(len=8) :: date_of_run   !Date of simulation run
 !  character(len=10):: time_of_run   !Time of simulation run
-  character(len=17):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+  character(len=25):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
-  character(len=4) :: arg1,arg2!,arg3,arg4,arg5
-  character(len=1) :: arg3
+  character(len=4) :: arg1,arg2,arg3,arg4
+  character(len=1) :: arg5
   logical :: randomising
   logical :: intro
 
@@ -119,23 +119,25 @@ module scem_0_input
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
 
       !Simulation control parameters
-      nc_initial        = 4
-      stiffness_factor  = 1
-      cell_cycle_time   = 6000 ! Cell cycle time in seconds
-      n_cellcycles      = 1.0
-
-      epi_adhesion      = 1.0 ! Magnitude of mutual adhesion between epiblasts (type 1)
-      hypo_adhesion     = 1.0 ! Magnitude of mutual adhesion between primitive endoderm (type 2)
-      epi_hypo_adhesion = hypo_adhesion   ! Magnitude of adhesion between epiblasts and primitive endoderm
-      cortex_constant1  = 0.1   ! Magnitude of baseline cortical tension in epiblasts
-      cortex_constant2  = 0.1   ! Magnitude of baseline cortical tension in primitive endoderm
-      DIT_response(1,0) = 1.0 ! Epiblast external system surface DIT response factor
+      nc_initial        = 10
       CALL GET_COMMAND_ARGUMENT(1,arg1)
-      READ(arg1,*) DIT_response(1,1)  ! Epiblast homotypic interface DIT response factor
+      READ(arg1,*) stiffness_factor
+      cell_cycle_time   = 12000 ! Cell cycle time in seconds
+      n_cellcycles      = 2.0
+
+      CALL GET_COMMAND_ARGUMENT(2,arg2)
+      READ(arg2,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
+      hypo_adhesion     = epi_adhesion ! Magnitude of mutual adhesion between primitive endoderm (type 2)
+      epi_hypo_adhesion = hypo_adhesion   ! Magnitude of adhesion between epiblasts and primitive endoderm
+      CALL GET_COMMAND_ARGUMENT(3,arg3)
+      READ(arg3,*) cortex_constant1   ! Magnitude of baseline cortical tension in epiblasts
+      cortex_constant2  = cortex_constant1   ! Magnitude of baseline cortical tension in primitive endoderm
+      DIT_response(1,0) = 1.0 ! Epiblast external system surface DIT response factor
+      CALL GET_COMMAND_ARGUMENT(4,arg4)
+      READ(arg4,*) DIT_response(1,1)  ! Epiblast homotypic interface DIT response factor
       DIT_response(1,2) = 1.0 ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0  ! Primitive endoderm external system surface DIT response factor
-      CALL GET_COMMAND_ARGUMENT(2,arg2)
-      READ(arg2,*) DIT_response(2,1)  ! Primitive endoderm homotypic interface DIT response factor
+      DIT_response(2,1) = 1.0 ! Primitive endoderm homotypic interface DIT response factor
       DIT_response(2,2) = 1.0  ! Primitive endoderm heterotypic interface DIT response factor
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
@@ -158,9 +160,10 @@ module scem_0_input
 
       !Create labelled file for data output
       !Catch date and time, create folder to store data in
-      CALL GET_COMMAND_ARGUMENT(3,arg3)
+      CALL GET_COMMAND_ARGUMENT(5,arg5)
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)
+      output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//arg4(1:1)//&
+        arg4(3:4)//"_"//arg5(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/sorting_data")
@@ -285,6 +288,7 @@ module scem_0_input
       ! temporal parameters - all in *seconds*
       time_max=n_cellcycles*cell_cycle_time ! --> time of simulation in seconds
       output_interval=time_max/49.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
+      output_interval2=time_max/4.0
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities
         diff_amp=sqrt(dt*diff_coeff) ! amplitude of noise in diffusion term

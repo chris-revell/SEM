@@ -22,13 +22,6 @@ module scem_4_output_system
 
       integer :: n,epi_count,pre_count
 
-      !Calculate time expired so far
-      call SYSTEM_CLOCK(current_time)
-      total_system_time = (current_time-start_time)/count_rate
-
-      !Write system progress update to the command line.
-      write(*,"(*(G0,:,1X))") time,total_system_time,ne,nc,n_snapshots !write(*,"(F12.4,I6,I8,I6,I6)") time,total_system_time,ne,nc,n_snapshots
-
       !Print time and cell count to cell_count file to allow cell count to be plotted against time
       if (flag_count_output.EQ.1) then
         open(unit=28,file=output_folder//'/system_data/cell_count.txt', status='unknown')

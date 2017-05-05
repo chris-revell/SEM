@@ -20,21 +20,16 @@ module scem_2_polar
 
 		!Loop over all elements in the system
 		do i=1, ne
-
 			!Calculate polar radius of element
 			r_vector(:) = elements(i)%position(:) - cells(elements(i)%parent)%position(:)
 			r_squared = r_vector(1)**2 + r_vector(2)**2 + r_vector(3)**2
 			elements(i)%polar(1) = sqrt(r_squared)
-
 			!Calculate polar angle of element
 			cos_theta = r_vector(3)/elements(i)%polar(1)
 			elements(i)%polar(2) = ACOS(cos_theta)
-
 			!Calculate azimuthal angle of the element. Add pi to define angle between 0 and 2pi rather than -pi and +pi.
 			elements(i)%polar(3) = pi+ATAN2(r_vector(2),r_vector(1))
-
 		end do
-
 	end subroutine scem_polar
 
 end module scem_2_polar
