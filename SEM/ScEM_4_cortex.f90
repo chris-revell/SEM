@@ -85,11 +85,7 @@ module scem_4_cortex
 								CYCLE
 							end if
 						end do
-						if (R.GT.R_max) then			!If the maximum radius in this bin exceeds previous max, reset max to be equal to the local max in this bin
-							R_max=R
-						else
-							CYCLE
-						end if
+						R_max=MAX(R,R_max) !If the maximum radius in this bin exceeds previous max, reset max to be equal to the local max in this bin
 					else
 						CYCLE
 					end if

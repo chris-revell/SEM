@@ -270,14 +270,14 @@ module scem_0_input
 		  rel_strength(2,2,2,1,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
 		  rel_strength(2,2,2,2,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cortex-hypoblast cortex
 
-		  rel_strength(2,1,1,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
-		  rel_strength(2,1,1,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+		  rel_strength(2,1,1,1,1,2) = 2.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(2,1,1,1,2,2) = 2.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
 		  rel_strength(2,1,1,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
-  		rel_strength(2,1,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
-  		rel_strength(2,1,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+  		rel_strength(2,1,2,1,1,2) = 2.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(2,1,2,1,2,2) = 2.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
   		rel_strength(2,1,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
-  		rel_strength(2,2,2,1,1,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-  		rel_strength(2,2,2,1,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+  		rel_strength(2,2,2,1,1,2) = 2.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(2,2,2,1,2,2) = 2.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
   		rel_strength(2,2,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
       r_s_max = MAXVAL(rel_strength)
