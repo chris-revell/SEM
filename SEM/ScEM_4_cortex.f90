@@ -11,9 +11,9 @@ module scem_4_cortex
 
 	implicit none
 
-	contains
+contains
 
-		subroutine scem_cortex
+	subroutine scem_cortex
 
 		integer	:: i,j,k,l,m,n
 
@@ -47,35 +47,25 @@ module scem_4_cortex
 
 				n = cells(i)%c_elements(l)
 
-				j = int(elements(n)%polar(2)/(pi/4))+1
+				j = int(elements(n)%polar(2)/(pi/4)) + 1
 				k = int(elements(n)%polar(3)/(pi/4))
 
-				!Note that where previously the boundaries between bins were "less than or equal to" the upper boundary, they are now "less than"
-				!This means that an element whose azimuthal or polar angle lies exactly on the boundary of a bin will now fall into the bin
-				!above the one in which it would previously have been found, but this shouldn't be a problem since the chances of an angle
-				!exactly coinciding with the boundary of a bin is vanishingly small.
-				!We may also need to include terms for what to do if the polar angle is exactly equal to +/- pi or the azimuthal angle is equal to
-				!precisely 2pi, since in both these cases j or k would take a value of 5 or 9 respectively, which would put it outside the bounds
-				!of the bin_contents and bin_counters arrays. The chances of this should again be vanishingly small but it's worth bearing in mind
-				!should the problem ever occur.
+				bin_counters(j+k)=bin_counters(j+k) + 1
+				bin_contents(j+k,bin_counters(j+k)) = n
 
-				!At this point, (j,k) identifies the bin in which the element falls
-				!Next step is to increase bin counter by 1 and allocate element to bin array
-				!The array element in bin_contents to which the label of this SEM element is
-				!added is given by the value of bin_counters(j,k) at this time
-				bin_counters(j+k)=bin_counters(j+k)+1
-				bin_contents(j+k,bin_counters(j+k))=n
+				bin_max_radius(j+k) = MAX(bin_max_radius(j+k),elements(n)%polar(1)) 
+
 			end do !End loop over all elements in the cell.
 
 
 			!At this stage we have an array containing a list of which elements lie in each bin
 			!Next step is to determine which element in each bin has the greatest radius.
 
-			do k=1,32							!Do loop over all bins
-				do l=1, bin_counters(k)		!Do loop over all elements in bin
-					bin_max_radius(k)=MAX(bin_max_radius(k),elements(bin_contents(k,l))%polar(1)) !Update the array that contains the max radius of elements within this bin
-				end do
-			end do
+	!		do k=1,32							!Do loop over all bins
+	!			do l=1, bin_counters(k)		!Do loop over all elements in bin
+	!				bin_max_radius(k)=MAX(bin_max_radius(k),elements(bin_contents(k,l))%polar(1)) !Update the array that contains the max radius of elements within this bin
+	!			end do
+	!		end do
 
 			!Should now have a value for the element that has the greatest
 			!radius for the whole cell and also an array bin_max_radius
@@ -109,6 +99,6 @@ module scem_4_cortex
 		!Perform delaunay triangulation over the newly allocated set of cortex elements.
 		call scem_delaunay
 
-		end subroutine scem_cortex
+	end subroutine scem_cortex
 
 end module scem_4_cortex
