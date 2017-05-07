@@ -15,9 +15,7 @@ module scem_4_cortex
 
 		subroutine scem_cortex
 
-		integer	:: i,j,k,l,m,n,p
-		integer :: element_label
-		real*8  :: R, R_max
+		integer	:: i,j,k,l,m,n
 
 		call scem_polar
 
@@ -40,17 +38,17 @@ module scem_4_cortex
 			!from 0 to less than and not equal to 2 pi.
 			!Each bin also has a corresponding counter of the number of elements in that bin.
 			!The counters are stored in bin_counters array.
-			j=0
-			k=0
-			bin_counters(:,:) = 0
-			bin_contents(:,:,:) = 0
+			bin_counters(:)   = 0
+			bin_contents(:,:) = 0
+			bin_max_radius(:) = 0
 
+			!Allocate elements to a bin
 			do l=1, cells(i)%c_elements(0)				!Loop over all elements in the cell
 
-				element_label = cells(i)%c_elements(l)
+				n = cells(i)%c_elements(l)
 
-				j = int(elements(element_label)%polar(2)/(pi/4))+1
-				k = int(elements(element_label)%polar(3)/(pi/4))+1
+				j = int(elements(n)%polar(2)/(pi/4))+1
+				k = int(elements(n)%polar(3)/(pi/4))
 
 				!Note that where previously the boundaries between bins were "less than or equal to" the upper boundary, they are now "less than"
 				!This means that an element whose azimuthal or polar angle lies exactly on the boundary of a bin will now fall into the bin
@@ -65,60 +63,39 @@ module scem_4_cortex
 				!Next step is to increase bin counter by 1 and allocate element to bin array
 				!The array element in bin_contents to which the label of this SEM element is
 				!added is given by the value of bin_counters(j,k) at this time
-				bin_counters(j,k)=bin_counters(j,k)+1
-				bin_contents(j,k,bin_counters(j,k))=element_label
+				bin_counters(j+k)=bin_counters(j+k)+1
+				bin_contents(j+k,bin_counters(j+k))=n
 			end do !End loop over all elements in the cell.
 
 
 			!At this stage we have an array containing a list of which elements lie in each bin
 			!Next step is to determine which element in each bin has the greatest radius.
-			R_max=0
-			do j=1,4
-				do k=1,8							!Do loop over all bins j,k
-					R=0
-					if (bin_counters(j,k).GT.0) then
-						do l=1, bin_counters(j,k)		!Do loop over all elements in bin j,k
-							if (elements(bin_contents(j,k,l))%polar(1).GT.R) then
-								R=elements(bin_contents(j,k,l))%polar(1)
-								max_radius_elements(j,k)=bin_contents(j,k,l)	!Update the array that contains the label of the element with the maximum radius
-							else
-								CYCLE
-							end if
-						end do
-						R_max=MAX(R,R_max) !If the maximum radius in this bin exceeds previous max, reset max to be equal to the local max in this bin
-					else
-						CYCLE
-					end if
+
+			do k=1,32							!Do loop over all bins
+				do l=1, bin_counters(k)		!Do loop over all elements in bin
+					bin_max_radius(k)=MAX(bin_max_radius(k),elements(bin_contents(k,l))%polar(1)) !Update the array that contains the max radius of elements within this bin
 				end do
 			end do
 
 			!Should now have a value for the element that has the greatest
-			!radius for the whole cell and also an array max_radius_elements
+			!radius for the whole cell and also an array bin_max_radius
 			!that gives the label of the element with the greatest radius in each bin
 
 			!We now need to set elements to be cortex elements
-			!All elements in max_radius_elements are set to be surface elements
+			!All elements in bin_max_radius are set to be surface elements
 			!unless their radius is less than half of R_max
 			!(this is in order to exclude bins that by chance have no high radius elements in)
 			!Furthermore, in order to include some thickness to the cortex, any element whose
 			!radius is greater than 80% of the maximum radius of any element in its bin is
 			!also set to be a surface element.
 
-			do j=1,4
-				do k=1,8							!Do loop over all bins j,k
-					if (bin_counters(j,k).GT.0) then !Check that there are elements in this bin
-						l=max_radius_elements(j,k)		!l is label of max radius element in this bin
-!						if (elements(element_label)%polar(1).GT.(0.5*R_max)) then	!Only set cortex elements in this bin if the max radius in the bin exceeds half of the max radius for the whole cell
-							do m=1, bin_counters(j,k)					!Loop over all elements in bin
-								n=bin_contents(j,k,m)						!n is the label of the element currently being considered - the mth element in bin (j,k)
-								if (elements(n)%polar(1).GT.(0.8*elements(l)%polar(1))) then
-									elements(n)%type=2																					!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
-									cells(i)%cortex_elements(0)=cells(i)%cortex_elements(0)+1		!Increment cortex counter by 1
-									p=cells(i)%cortex_elements(0)																!Current value of cortex counter (for conciseness in next line)
-									cells(i)%cortex_elements(cells(i)%cortex_elements(0))=n			!pth element of cortex element array in cell data structure is set to the label of this cortex element q. So by the end cortex_elements contains a list of all cortex element labels.
-								end if
-							end do
-!						end if
+			do k=1,32							!Do loop over all bins
+				do m=1, bin_counters(k)					!Loop over all elements in bin
+					n=bin_contents(k,m)						!n is the label of the element currently being considered - the mth element in bin (j,k)
+					if (elements(n)%polar(1).GT.(0.8*bin_max_radius(k))) then
+						elements(n)%type=2																					!Set all elements in this bin whose radius is greater than 80% of the max radius in the bin to be cortex elements. This naturally includes the outermost element and gives the cortex thickness
+						cells(i)%cortex_elements(0)=cells(i)%cortex_elements(0)+1		!Increment cortex counter by 1
+						cells(i)%cortex_elements(cells(i)%cortex_elements(0))=n			!pth element of cortex element array in cell data structure is set to the label of this cortex element q. So by the end cortex_elements contains a list of all cortex element labels.
 					end if
 				end do
 			end do

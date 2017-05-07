@@ -54,9 +54,7 @@ module scem_0_input
   real*8 :: hypo_adhesion
   real*8 :: epi_hypo_adhesion
   real   :: n_cellcycles !Number of cell cycles for run
-  !Arrays for cortex element allocation
-  integer, dimension(4,8,100) :: bin_contents
-  integer, dimension(4,8)    :: bin_counters
+
   !Variables for setting output folder
 !  character(len=8) :: date_of_run   !Date of simulation run
 !  character(len=10):: time_of_run   !Time of simulation run
