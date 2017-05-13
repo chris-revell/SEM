@@ -50,8 +50,8 @@ contains
     write(22,"(*(G0,:,1X))") 'cell cycle time      = ',cell_cycle_time
     write(22,"(*(G0,:,1X))") 'number of cell cycles= ',n_cellcycles
     write(22,"(*(G0,:,1X))") "epi_adhesion         = ",epi_adhesion
-    write(22,"(*(G0,:,1X))") "hypo_adhesion        = ",hypo_adhesion
-    write(22,"(*(G0,:,1X))") "epi_hypo_adhesion    = ",epi_hypo_adhesion
+    write(22,"(*(G0,:,1X))") "pre_adhesion        = ",pre_adhesion
+    write(22,"(*(G0,:,1X))") "epi_pre_adhesion    = ",epi_pre_adhesion
     write(22,"(*(G0,:,1X))") 'cortex_constant1     = ',cortex_constant1
     write(22,"(*(G0,:,1X))") 'cortex_constant2     = ',cortex_constant2
     write(22,"(*(G0,:,1X))") ""

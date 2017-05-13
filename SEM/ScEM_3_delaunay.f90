@@ -32,6 +32,7 @@ contains
     integer																:: nt					!Number of neighbour triplets in triangulation
     integer, allocatable, dimension(:,:)	:: ltri					!Array of delaunay triplets. 2nd index is label of triplet, first index is 1-3. So ltri(1,n), ltri(2,n), ltri(3,n) are labels of elements in neighbour triplet n, with ltri(1,n) being the smallest element label.
 
+    np_cortex = 0
 
     do j=1, nc
 
@@ -78,6 +79,8 @@ contains
         cells(j)%triplets(3,i)=cells(j)%cortex_elements(ltri(3,i))
       end do
       cells(j)%triplet_count = nt
+
+      np_cortex = np_cortex + 3*nt
 
       deallocate(x)
       deallocate(y)

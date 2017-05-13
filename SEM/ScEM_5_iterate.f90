@@ -74,6 +74,7 @@ contains
       call scem_integrate ! first integration and increment by half a step
       forall(n=1:ne) elements(n)%position(:)=elements(n)%position(:)+0.5*dt*elements(n)%velocity(:)
       forall(n=1:ne) elements(n)%velocity(:)=0.0
+      !call scem_cortex
       call scem_integrate ! second integration and increment by a full step
       forall(n=1:ne) elements(n)%position(:)=xe_prev(n,:)+dt*elements(n)%velocity(:)
 

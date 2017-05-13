@@ -7,6 +7,7 @@ module scem_4_cortex
 	use scem_0_arrays
 	use scem_1_types
 	use scem_2_polar
+	use scem_2_DIT
 	use scem_3_delaunay
 
 	implicit none
@@ -15,16 +16,16 @@ contains
 
 	subroutine scem_cortex
 
-		integer	:: i,j,k,l,m,n
+		integer	:: i,j,k,l,m,n,pair_counter
+
+		!Refresh all elements to bulk cytoplasm type. If this is not done, there will be a steady gain of cortex elements over time because once an element is labelled as cortex it can never revert back to bulk.
+		FORALL(n=1:ne) elements(n)%type = 1
 
 		call scem_polar
 
 		do i=1, nc
 		!Loop over all cells
 			cells(i)%cortex_elements(:)=0		!Set cortex counter to zero before counting cortex elements later on in this module.
-
-			!Refresh all elements to bulk cytoplasm type. If this is not done, there will be a steady gain of cortex elements over time because once an element is labelled as cortex it can never revert back to bulk.
-			FORALL(n=1:cells(i)%c_elements(0)) elements(cells(i)%c_elements(n))%type = 1
 
 			!Divide cell into solid angle bins.
 			!Take the element with the largest radius in each bin to be a surface element.
@@ -53,7 +54,7 @@ contains
 				bin_counters(j+k)=bin_counters(j+k) + 1
 				bin_contents(j+k,bin_counters(j+k)) = n
 
-				bin_max_radius(j+k) = MAX(bin_max_radius(j+k),elements(n)%polar(1)) 
+				bin_max_radius(j+k) = MAX(bin_max_radius(j+k),elements(n)%polar(1))
 
 			end do !End loop over all elements in the cell.
 
@@ -98,6 +99,34 @@ contains
 
 		!Perform delaunay triangulation over the newly allocated set of cortex elements.
 		call scem_delaunay
+
+		!Allocate the size of the pairs_cortex array by summing over 3 times the number of delaunay triangles in each cell.
+    if (allocated(pairs_cortex)) deallocate(pairs_cortex)
+    allocate(pairs_cortex(np_cortex))
+    pair_counter=0
+    !Fill pairs_cortex(i)%label1 and pairs_cortex(i)%label2 with labels of elements in cortex pairs
+    !Loop over all cells
+    do i=1, nc
+      !Loop over all Delaunay triplets in cell c
+      do j=1, cells(i)%triplet_count
+        !Each edge of the Delaunay triangle adds a pair to the pairs_cortex array
+        pair_counter = pair_counter+1
+        pairs_cortex(pair_counter)%label1 = cells(i)%triplets(1,j)   !Use min(cells(i)%triplets(1,j),cells(i)%triplets(2,j)) if we want to ensure that the lowest label comes first.
+        pairs_cortex(pair_counter)%label2 = cells(i)%triplets(2,j)   !Use max(cells(i)%triplets(1,j),cells(i)%triplets(2,j)) if we want to ensure that the highest label comes second.
+
+        pair_counter = pair_counter+1
+        pairs_cortex(pair_counter)%label1 = cells(i)%triplets(2,j)
+        pairs_cortex(pair_counter)%label2 = cells(i)%triplets(3,j)
+
+        pair_counter = pair_counter+1
+        pairs_cortex(pair_counter)%label1 = cells(i)%triplets(3,j)
+        pairs_cortex(pair_counter)%label2 = cells(i)%triplets(1,j)
+      enddo !End loop over triangles
+    enddo !End loop over cells
+
+    pairs_cortex(:)%cortex_factor = 1
+
+		if (.NOT.intro) call scem_dit
 
 	end subroutine scem_cortex
 
