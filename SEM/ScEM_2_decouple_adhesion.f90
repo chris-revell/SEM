@@ -15,16 +15,11 @@ contains
     integer :: element_label,t1,t2,t3,i,j,k
     real*8  :: local_area
     real*8, dimension(3)  :: a,b,c
-!    integer :: parentfate
-
-
-    !Need to decouple adhesion magnitude from changes in element density caused by differential interfacial tension
 
     !Refresh adhesion factors
     FORALL(i=1:ne) elements(i)%adhesion_factor=1
 
-!    if (mod(time,(output_interval)).LT.dt) open(unit=31,file=output_folder//"/decoupling1.txt",position='append')
-!    if (mod(time,(output_interval)).LT.dt) open(unit=32,file=output_folder//"/decoupling2.txt",position='append')
+!    if (mod(time,(output_interval2)).LT.dt) open(unit=31,file=output_folder//"/decouplingareas.txt",position='append')
 
     do i=1, nc
       do j=1, cells(i)%cortex_elements(0)
@@ -46,15 +41,11 @@ contains
           endif
         enddo
         !adhesion_factor for this element updated according to the local area around the element.
-        elements(element_label)%adhesion_factor = local_area !Might be worth introducing a constant here so that the adhesion magnitude in scem_input can be maintained as a nice number
-!        if (mod(time,(output_interval)).LT.dt) then
-!          parentfate = cells(elements(element_label)%parent)%fate
-!          if (parentfate.EQ.1) then
-!            write(31,*) elements(element_label)%DIT_factor, elements(element_label)%adhesion_factor
-!          else
-!            write(32,*) elements(element_label)%DIT_factor, elements(element_label)%adhesion_factor
-!          endif
-!        endif
+        elements(element_label)%adhesion_factor = local_area/area_normalisation_factor !Might be worth introducing a constant here so that the adhesion magnitude in scem_input can be maintained as a nice number
+
+  !      if (mod(time,(output_interval2)).LT.dt) write(31,*) ne, local_area
+
+
       enddo
     enddo
 

@@ -51,8 +51,8 @@ module scem_0_input
   real*8 :: cortex_constant1,cortex_constant2
   real*8,dimension(2,0:2) :: DIT_response
   real*8 :: epi_adhesion
-  real*8 :: hypo_adhesion
-  real*8 :: epi_hypo_adhesion
+  real*8 :: pre_adhesion
+  real*8 :: epi_pre_adhesion
   real   :: n_cellcycles !Number of cell cycles for run
 
   !Variables for setting output folder
@@ -82,6 +82,7 @@ module scem_0_input
   integer :: n_random     = 0
   integer :: n_random_max = 20000
 
+  real*8  :: area_normalisation_factor
 
   contains
 
@@ -125,18 +126,17 @@ module scem_0_input
 
       CALL GET_COMMAND_ARGUMENT(2,arg2)
       READ(arg2,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
-      hypo_adhesion     = epi_adhesion ! Magnitude of mutual adhesion between primitive endoderm (type 2)
-      epi_hypo_adhesion = hypo_adhesion   ! Magnitude of adhesion between epiblasts and primitive endoderm
+      pre_adhesion     = epi_adhesion ! Magnitude of mutual adhesion between primitive endoderm (type 2)
+      epi_pre_adhesion = pre_adhesion   ! Magnitude of adhesion between epiblasts and primitive endoderm
       CALL GET_COMMAND_ARGUMENT(3,arg3)
       READ(arg3,*) cortex_constant1   ! Magnitude of baseline cortical tension in epiblasts
       cortex_constant2  = cortex_constant1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0 ! Epiblast external system surface DIT response factor
-      CALL GET_COMMAND_ARGUMENT(4,arg4)
-      READ(arg4,*) DIT_response(1,1)  ! Epiblast homotypic interface DIT response factor
+      DIT_response(1,1) = 1.0 ! Epiblast homotypic interface DIT response factor
       DIT_response(1,2) = 1.0 ! Epiblast heterotypic interface DIT response factor
-      DIT_response(2,0) = 1.0  ! Primitive endoderm external system surface DIT response factor
+      DIT_response(2,0) = 1.0 ! Primitive endoderm external system surface DIT response factor
       DIT_response(2,1) = 1.0 ! Primitive endoderm homotypic interface DIT response factor
-      DIT_response(2,2) = 1.0  ! Primitive endoderm heterotypic interface DIT response factor
+      DIT_response(2,2) = 1.0 ! Primitive endoderm heterotypic interface DIT response factor
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
 
@@ -250,13 +250,13 @@ module scem_0_input
 
 		  rel_strength(1,1,1,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
 		  rel_strength(1,1,1,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-epiblast cortex
-      rel_strength(1,1,1,2,2,2) = epi_adhesion !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex
+      rel_strength(1,1,1,2,2,2) = epi_adhesion  !Adhesive component, inter-cellular Epiblast cortex-epiblast cortex
   		rel_strength(1,1,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
   		rel_strength(1,1,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
-  		rel_strength(1,1,2,2,2,2) = epi_hypo_adhesion  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
+  		rel_strength(1,1,2,2,2,2) = epi_pre_adhesion  !Adhesive component, inter-cellular Epiblast cortex-hypoblast cortex
   		rel_strength(1,2,2,1,1,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
   		rel_strength(1,2,2,1,2,2) = 0.0  !Adhesive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
-  		rel_strength(1,2,2,2,2,2) = hypo_adhesion  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
+  		rel_strength(1,2,2,2,2,2) = pre_adhesion  !Adhesive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
       rel_strength(2,1,1,1,1,1) = stiffness_factor  !Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
 		  rel_strength(2,1,1,1,2,1) = stiffness_factor	!Repulsive component, intra-cellular Epiblast cytoplasm-epiblast cortex
@@ -351,6 +351,68 @@ module scem_0_input
       intro_rel_strength(2,2,2,1,1,2) = 3.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
       intro_rel_strength(2,2,2,1,2,2) = 3.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
       intro_rel_strength(2,2,2,2,2,2) = 0.5*intro_rel_strength(1,2,2,2,2,2)  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
+
+
+
+      if (stiffness_factor.LE.0.25) then
+        if (real(cortex_constant1,4).LE.0.01) then
+          area_normalisation_factor = 27.1
+        elseif (real(cortex_constant1,4).LE.0.05) then
+          area_normalisation_factor = 17.8
+        elseif (real(cortex_constant1,4).LE.0.1) then
+          area_normalisation_factor = 13.9
+        elseif (real(cortex_constant1,4).LE.0.15) then
+          area_normalisation_factor = 11.3
+        elseif (real(cortex_constant1,4).LE.0.2) then
+          area_normalisation_factor = 9.39
+        else
+          area_normalisation_factor = 20
+        endif
+      elseif (stiffness_factor.LE.0.5) then
+        if (real(cortex_constant1,4).LE.0.01) then
+          area_normalisation_factor = 29.7
+        elseif (real(cortex_constant1,4).LE.0.05) then
+          area_normalisation_factor = 22.0
+        elseif (real(cortex_constant1,4).LE.0.1) then
+          area_normalisation_factor = 17.7
+        elseif (real(cortex_constant1,4).LE.0.15) then
+          area_normalisation_factor = 15.5
+        elseif (real(cortex_constant1,4).LE.0.2) then
+          area_normalisation_factor = 13.4
+        else
+          area_normalisation_factor = 20
+        endif
+      elseif (stiffness_factor.LE.0.75) then
+        if (real(cortex_constant1,4).LE.0.01) then
+          area_normalisation_factor = 31.3
+        elseif (real(cortex_constant1,4).LE.0.05) then
+          area_normalisation_factor = 24.2
+        elseif (real(cortex_constant1,4).LE.0.1) then
+          area_normalisation_factor = 20.4
+        elseif (real(cortex_constant1,4).LE.0.15) then
+          area_normalisation_factor = 18.0
+        elseif (real(cortex_constant1,4).LE.0.2) then
+          area_normalisation_factor = 16.1
+        else
+          area_normalisation_factor = 20
+        endif
+      else
+        if (real(cortex_constant1,4).LE.0.01) then
+          area_normalisation_factor = 31.8
+        elseif (real(cortex_constant1,4).LE.0.05) then
+          area_normalisation_factor = 26.3
+        elseif (real(cortex_constant1,4).LE.0.1) then
+          area_normalisation_factor = 22.4
+        elseif (real(cortex_constant1,4).LE.0.15) then
+          area_normalisation_factor = 19.9
+        elseif (real(cortex_constant1,4).LE.0.2) then
+          area_normalisation_factor = 17.9
+        else
+          area_normalisation_factor = 20
+        endif
+      endif
+
+
 
     end subroutine scem_input
 

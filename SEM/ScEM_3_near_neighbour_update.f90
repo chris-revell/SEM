@@ -60,7 +60,7 @@ contains
         if (intro) then
           adhesion_factor_applied = 1.0
         else
-          adhesion_factor_applied = MIN(elements(n)%adhesion_factor,elements(nn)%adhesion_factor)/20 !3.684      !elements(n)%adhesion_factor*elements(nn)%adhesion_factor
+          adhesion_factor_applied = MIN(elements(n)%adhesion_factor,elements(nn)%adhesion_factor)
         endif
         if (index_intra.EQ.1.OR.elements(n)%type.EQ.1.OR.elements(nn)%type.EQ.1) then
           !Both elements are in the same cell, so no adhesion_factor should be applied to attractive component
