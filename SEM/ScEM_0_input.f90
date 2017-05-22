@@ -58,10 +58,10 @@ module scem_0_input
   !Variables for setting output folder
 !  character(len=8) :: date_of_run   !Date of simulation run
 !  character(len=10):: time_of_run   !Time of simulation run
-  character(len=25):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+  character(len=21):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
-  character(len=4) :: arg1,arg2,arg3,arg4
-  character(len=1) :: arg5
+  character(len=4) :: arg1,arg2,arg3
+  character(len=1) :: arg4
   logical :: randomising
   logical :: intro
 
@@ -158,10 +158,9 @@ module scem_0_input
 
       !Create labelled file for data output
       !Catch date and time, create folder to store data in
-      CALL GET_COMMAND_ARGUMENT(5,arg5)
+      CALL GET_COMMAND_ARGUMENT(4,arg4)
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//arg4(1:1)//&
-        arg4(3:4)//"_"//arg5(1:1)
+      output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//arg4(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/sorting_data")
@@ -286,7 +285,7 @@ module scem_0_input
       ! temporal parameters - all in *seconds*
       time_max=n_cellcycles*cell_cycle_time ! --> time of simulation in seconds
       output_interval=time_max/49.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
-      output_interval2=time_max/4.0
+      output_interval2=time_max/49.0
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities
         diff_amp=sqrt(dt*diff_coeff) ! amplitude of noise in diffusion term
