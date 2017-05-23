@@ -54,54 +54,9 @@ contains
     do j=1, np_cortex
       if (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.elements(pairs_cortex(j)%label2)%DIT_factor) then
       !Interface defined where both elements have the same DIT_factor value
-
-        SELECT CASE (cells(elements(pairs_cortex(j)%label1)%parent)%fate)
-          CASE (1)
-            DIT_index1 = 1
-          CASE (2)
-            DIT_index1 = 2
-          CASE DEFAULT
-            DIT_index1 = 1
-        END SELECT
-
-        SELECT CASE (elements(pairs_cortex(j)%label1)%DIT_factor)
-          CASE (0)
-            DIT_index2 = 0
-          CASE (1)
-            DIT_index2 = 1
-          CASE (2)
-            DIT_index2 = 2
-          CASE DEFAULT
-            DIT_index2 = 0
-        END SELECT
-
+        DIT_index1 = cells(elements(pairs_cortex(j)%label1)%parent)%fate
+        DIT_index2 = elements(pairs_cortex(j)%label1)%DIT_factor
         pairs_cortex(j)%cortex_factor = DIT_response(DIT_index1,DIT_index2)
-
-!        if (cells(elements(pairs_cortex(j)%label1)%parent)%fate.EQ.1) then
-!        !DIT response for epiblast (type 1) cells
-!          if (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.0) then
-!            !Response at external surface of the system
-!            pairs_cortex(j)%cortex_factor = DIT_response(1,0)
-!          elseif (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.1) then
-!            !Response at homotypic interface
-!            pairs_cortex(j)%cortex_factor = DIT_response(1,1)
-!          elseif (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.2) then
-!            !Response at hetertypic interface
-!            pairs_cortex(j)%cortex_factor = DIT_response(1,2)
-!          endif
-!        else
-!        !DIT response for primitive endoderm (type 2) cells
-!          if (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.0) then
-!            !Response at external surface of the system
-!            pairs_cortex(j)%cortex_factor = DIT_response(2,0)
-!          elseif (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.1) then
-!            !Response at homotypic interface
-!            pairs_cortex(j)%cortex_factor = DIT_response(2,1)
-!          elseif (elements(pairs_cortex(j)%label1)%DIT_factor.EQ.2) then
-!            !Response at hetertypic interface
-!            pairs_cortex(j)%cortex_factor = DIT_response(2,2)
-!          endif
-!        endif
       else
       !Cortex pairs in which both elements do not share the same DIT_factor are considered to lie between interfaces, so have the baseline cortical tension
         pairs_cortex(j)%cortex_factor = 1.0
