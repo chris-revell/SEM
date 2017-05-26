@@ -115,8 +115,6 @@ module scem_1_volume_conserve
 				!Project the displacement vector of the system from external forces along D to find a vector that can be added to the system vector to appoximately move the system back onto the surface of constant volme.
 				!First calculate F by taking the difference of P_1 and xe_prev (positions of elements before external forces)
 				do l=1, cells(c)%cortex_elements(0)
-				enddo
-				do l=1, cells(c)%cortex_elements(0)
 					F(l*3-2) = elements(cells(c)%cortex_elements(l))%position(1) - &
 										xe_prev(cells(c)%cortex_elements(l),1)
 					F(l*3-1) = elements(cells(c)%cortex_elements(l))%position(2) - &

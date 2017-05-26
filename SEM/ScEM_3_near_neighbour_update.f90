@@ -14,7 +14,7 @@ contains
 
     integer :: m,n,nn,k,kk
     integer :: bin,index_intra
-    real*8  :: sep_sq,pot_deriv_interp1,pot_deriv_interp2,fadein_amp,r_s1,r_s2,adhesion_factor_applied
+    real*8  :: sep_sq,pot_deriv_interp1,pot_deriv_interp2,fadein_amp,r_s1,r_s2!,adhesion_factor_applied
     real*8, dimension(3) :: dx
 
     !Change adhesion magnitudes to account for local surface element density
@@ -57,18 +57,19 @@ contains
 
         !Calculate an adhesion factor to apply from the adhesion factors of the two cells in this pair, and the normalisation factor needed to recover natural number adhesion magnitudes.
         !The exact form of this calculation might need a little more thought and justification in future. Should it be the product of two factors, their mean, or the minimum of the two?
-        if (intro) then
-          adhesion_factor_applied = 1.0
-        else
-          adhesion_factor_applied = MIN(elements(n)%adhesion_factor,elements(nn)%adhesion_factor)
-        endif
-        if (index_intra.EQ.1.OR.elements(n)%type.EQ.1.OR.elements(nn)%type.EQ.1) then
+!        if (intro) then
+!          adhesion_factor_applied = 1.0
+!        else
+!          adhesion_factor_applied =
+!        endif
+        if (index_intra.EQ.1.OR.elements(n)%type.EQ.1.OR.elements(nn)%type.EQ.1.OR.intro) then
           !Both elements are in the same cell, so no adhesion_factor should be applied to attractive component
           pot_deriv_interp1 = r_s1*(sep_sq*potential_deriv1(bin,1) + potential_deriv1(bin,2))
           pot_deriv_interp2 = r_s2*(sep_sq*potential_deriv2(bin,1) + potential_deriv2(bin,2))
         else
           !Elements are in different cells, and thus an adhesion_factor should be applied to attractive component
-          pot_deriv_interp1 = r_s1*adhesion_factor_applied*(sep_sq*potential_deriv1(bin,1) + potential_deriv1(bin,2))
+          pot_deriv_interp1 = r_s1*MIN(elements(n)%adhesion_factor,elements(nn)%adhesion_factor)&
+            *(sep_sq*potential_deriv1(bin,1) + potential_deriv1(bin,2))
           pot_deriv_interp2 = r_s2*(sep_sq*potential_deriv2(bin,1) + potential_deriv2(bin,2))
         endif
 

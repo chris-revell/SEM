@@ -48,21 +48,6 @@ contains
 
       if (DOT_PRODUCT(pos_1,pos_1).GT.0.25*r_cell_sq) success = .FALSE. !Restrict to spherical initial system
 
-      !The following block checks to ensure that new elements are not created too close to existing elements
-      !Do not perform this loop if icount=0. If there are no existing elements, this new element will always be placed successfully so long as it is within the spherical radius of the cell
-      !if (icount.GT.0.AND.success) then
-      !  j=1 ! loop counter
-      !  do while (success.and.(j.le.icount)) ! loop j over existing elements
-      !    pos_2(:)=elements(j)%position(:)   ! position of existing element j
-      !    dx(:)=pos_1(:)-pos_2(:)
-      !    dist_sq=dot_product(dx,dx)
-      !    if (dist_sq.lt.r_close_sq) then ! check that pair of elements are not too close
-      !      success=.FALSE. ! set success flag to failure (element too close to existing element) and return to redefine pos_1
-      !    end if
-      !    j=j+1 ! increment counter of existing elements
-      !  end do
-      !endif
-
       ! If element was successfully places at pos_1, define properties of new element
       if (success) then
         icount=icount+1                       ! increment counter of successfully placed elements
@@ -74,7 +59,7 @@ contains
         elements(icount)%position(:)=pos_1(:) ! position of new element w.r.t. origin
         elements(icount)%age=0.0              ! initialize age of new element
         elements(icount)%velocity(:)=0.0      ! initialize velocity of new element
-      endif
+      endif 
 
   	end do
 
