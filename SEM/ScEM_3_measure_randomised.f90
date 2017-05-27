@@ -61,6 +61,8 @@ contains
     radius1_min = 1000
     radius2_mean = 0
     radius2_max = 0
+    radius3_mean = 0
+    radius3_min = 1000
     neighbours_mean = 0
     neighbours_max = 0
     surface_mean = 0
@@ -115,7 +117,7 @@ contains
     radius2_mean    = radius2_mean/n_random
     neighbours_mean = neighbours_mean/n_random
     surface_mean    = surface_mean/n_random
-    write(44,"(*(G0,:,1X))") time,radius1_mean,radius1_min,radius2_mean,radius2_max
+    write(44,"(*(G0,:,1X))") time,radius1_mean,radius1_min,radius2_mean,radius2_max,radius3_mean,radius3_min
     write(45,"(*(G0,:,1X))") time,neighbours_mean,neighbours_max
     write(46,"(*(G0,:,1X))") time,surface_mean,surface_max
     close(44)

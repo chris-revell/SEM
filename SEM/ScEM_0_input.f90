@@ -23,7 +23,7 @@ module scem_0_input
   integer :: flag_povray_pairs,flag_povray_volumes,flag_povray,flag_povray_triangles,flag_povray_cortex_pairs
   integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_radius,flag_measure_type_radius
   integer :: flag_measure_neighbours,flag_measure_displacement,flag_measure_surface,flag_elements_final
-  integer :: flag_measure_randomised,flag_measure_velocity,flag_measure_com
+  integer :: flag_measure_randomised,flag_measure_velocity,flag_measure_com,flag_random_init
   integer :: flag_relist ! flag triggering relist of sector assignments
   !Variables for initiating randoms number sequence
   integer :: seedarraylength
@@ -75,6 +75,8 @@ module scem_0_input
   real*8  :: radius1_min
   real*8  :: radius2_mean
   real*8  :: radius2_max
+  real*8  :: radius3_mean
+  real*8  :: radius3_min
   integer :: neighbours_mean
   integer :: neighbours_max
   real*8  :: surface_mean
@@ -90,6 +92,7 @@ module scem_0_input
 
       !Simulation control switches
       flag_create     = 1 ! flag_create = 0 (1) for initial cell from file (created de novo)
+      flag_random_init= 1
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
@@ -109,10 +112,10 @@ module scem_0_input
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
       flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
-      flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
+      flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
       flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 0    ! Switch to turn off type radius sorting measurement
-      flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
+      flag_measure_surface    = 0    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
       flag_measure_com        = 0
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
@@ -122,7 +125,7 @@ module scem_0_input
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) stiffness_factor
       cell_cycle_time   = 12000 ! Cell cycle time in seconds
-      n_cellcycles      = 2.0
+      n_cellcycles      = 1.0
 
       CALL GET_COMMAND_ARGUMENT(2,arg2)
       READ(arg2,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
@@ -140,18 +143,20 @@ module scem_0_input
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
 
-      !To use processor determined random number seed and print that seed
+      if (flag_random_init.EQ.1) then
+      !Use processor determined random number seed and print that seed
         call RANDOM_SEED
         call RANDOM_SEED(size=seedarraylength)
         allocate(seed_array(seedarraylength))
         call RANDOM_SEED(get=seed_array)
         print*, "seed_array", seed_array
-
-      !To use user-defined random number seed:
-        !allocate(seed_array(2))
-        !seed_array(1) = 1591826533
-        !seed_array(2) = 497
-        !call RANDOM_SEED(PUT=seed_array)
+      else
+      !Use user-defined random number seed:
+        allocate(seed_array(2))
+        seed_array(1) = 1591826533
+        seed_array(2) = 497
+        call RANDOM_SEED(PUT=seed_array)
+      endif
 
       !Take time when run is initiated
       call SYSTEM_CLOCK(start_time, count_rate)
