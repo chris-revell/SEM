@@ -58,10 +58,10 @@ module scem_0_input
   !Variables for setting output folder
 !  character(len=8) :: date_of_run   !Date of simulation run
 !  character(len=10):: time_of_run   !Time of simulation run
-  character(len=29):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+  character(len=25):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
-  character(len=4) :: arg1,arg2,arg3,arg4,arg5
-  character(len=1) :: arg6
+  character(len=4) :: arg1,arg2,arg3,arg4!,arg5
+  character(len=1) :: arg5
   logical :: randomising
   logical :: intro
 
@@ -106,19 +106,19 @@ module scem_0_input
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
         flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
-        flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
+        flag_povray_cortex_pairs = 1 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
-      flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
-      flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
+      flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
+      flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
       flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 0    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
       flag_measure_com        = 0
-      flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
+      flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
 
       !Simulation control parameters
       nc_initial        = 10
@@ -139,8 +139,7 @@ module scem_0_input
       READ(arg4,*) DIT_response(1,1) ! Epiblast homotypic interface DIT response factor
       DIT_response(1,2) = 1.0 ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0 ! Primitive endoderm external system surface DIT response factor
-      CALL GET_COMMAND_ARGUMENT(5,arg5)
-      READ(arg5,*) DIT_response(2,1)  ! Primitive endoderm homotypic interface DIT response factor
+      DIT_response(2,1) = 1.0 ! Primitive endoderm homotypic interface DIT response factor
       DIT_response(2,2) = 1.0 ! Primitive endoderm heterotypic interface DIT response factor
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
@@ -165,10 +164,10 @@ module scem_0_input
 
       !Create labelled file for data output
       !Catch date and time, create folder to store data in
-      CALL GET_COMMAND_ARGUMENT(6,arg6)
+      CALL GET_COMMAND_ARGUMENT(5,arg5)
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
       output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
-        arg4(1:1)//arg4(3:4)//"_"//arg5(1:1)//arg5(3:4)//"_"//arg6(1:1)
+        arg4(1:1)//arg4(3:4)//"_"//arg5(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/sorting_data")

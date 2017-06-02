@@ -32,7 +32,7 @@ module scem_2_output_povray
       write(30,*) 'background {White}'
       write(30,*)
       write(30,*) 'camera {'
-      write(30,*) '   location  <500, 0, 0>'
+      write(30,*) '   location  <250, 0, 0>'
       write(30,*) '   angle 12'
       write(30,*) '   sky <0,0,1>'
       write(30,*) '   look_at<0,0,0>}'

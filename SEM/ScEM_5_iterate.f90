@@ -55,7 +55,7 @@ contains
             endif
           enddo
           if (MOD(nc,2).EQ.0) then
-            if (epi_counter.EQ.pre_counter) fatesnotbalanced = .FALSE.
+            if (epi_counter.EQ.2) fatesnotbalanced = .FALSE.
           else
             if (ABS(epi_counter-pre_counter).EQ.1) fatesnotbalanced = .FALSE.
           endif
