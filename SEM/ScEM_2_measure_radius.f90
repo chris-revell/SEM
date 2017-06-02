@@ -72,7 +72,7 @@ contains
 			radius3_mean = radius3_mean + sysmeanradius
 			radius3_min  = MIN(radius3_min,sysmeanradius)
 		else
-			write(35,*) time, epimeanradius, premeanradius, sysmeanradius
+			write(35,"(*(G0,:,1X))") time, epimeanradius, premeanradius, sysmeanradius
 		endif
 
 		close(35)
