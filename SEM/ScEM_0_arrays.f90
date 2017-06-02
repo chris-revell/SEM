@@ -15,11 +15,11 @@ module scem_0_arrays
   integer, allocatable, dimension(:,:,:)	 :: head
   integer, allocatable, dimension(:)	     :: list
   integer, allocatable, dimension(:,:)     :: pairs
-  integer, allocatable, dimension(:,:)		 :: neighbours
-  integer, dimension(32,100)               :: bin_contents    !For use in scem_cortex
+  integer, dimension(200,200)		           :: neighbours
+  integer, dimension(32,256)               :: bin_contents    !For use in scem_cortex
   integer, dimension(32)                   :: bin_counters    !For use in scem_cortex
   real*8, dimension(32)                    :: bin_max_radius  !For use in scem_cortex
-  integer,allocatable,dimension(:)         :: stored_fates  !For use in scem_measure_randomised
-
+  integer,dimension(200)                   :: stored_fates  !For use in scem_measure_randomised
+  integer,dimension(20000)                 :: tested
 
 end module scem_0_arrays

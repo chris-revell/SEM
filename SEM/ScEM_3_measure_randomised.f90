@@ -24,19 +24,8 @@ contains
     integer                          :: n,i,epi_counter,epi_ran_counter,configuration
     real*8                           :: fate_decider
     logical                          :: fatesnotbalanced
-    integer,allocatable,dimension(:) :: tested
 
     !Store current system state
-    !reallocate stored_fates array only if the number of cells in the system has increased.
-    if (ALLOCATED(stored_fates)) then
-				if (nc.GT.SIZE(stored_fates)) then
-					DEALLOCATE(stored_fates)
-					ALLOCATE(stored_fates(nc))
-				endif
-		else
-			!Array has not yet been allocated (ie, this is the start of the simulation)
-			allocate(stored_fates(nc))
-		endif
     epi_counter=0
     do n=1,nc
       stored_fates(n) = cells(n)%fate
@@ -48,8 +37,6 @@ contains
     if (n_random.LT.n_random_max) n_random = MIN(20000,&
       INT(0.95*(nc**(nc+0.5))/(SQRT(2*pi)*epi_counter**(epi_counter+0.5)*(nc-epi_counter)**(nc-epi_counter+0.5))))
 
-    allocate(tested(n_random))
-
     !Set randomising = .TRUE. in order to divert output from measurement subroutines to randomised data files.
     randomising = .TRUE.
     tested(:) = 0
@@ -58,11 +45,11 @@ contains
     open(unit=45, file=output_folder//'/randomised_data/neighbours.txt', status='unknown',position="append")
     open(unit=46, file=output_folder//'/randomised_data/surface.txt', status='unknown',position="append")
     radius1_mean = 0
-    radius1_min = 1000
+    radius1_min = 1000000000
     radius2_mean = 0
     radius2_max = 0
     radius3_mean = 0
-    radius3_min = 1000
+    radius3_min = 1000000000
     neighbours_mean = 0
     neighbours_max = 0
     surface_mean = 0

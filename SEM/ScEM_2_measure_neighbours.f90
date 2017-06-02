@@ -18,19 +18,6 @@ contains
 		real*8,dimension(3)			:: dx
 		integer, dimension(2,2) :: neighbour_counts
 
-		!Allocate neighbours array defined in scem_0_arrays
-		!Set neighbours array to have the same number of rows and columns as cells in the system.
-		!Only need to reallcate the size of neighbours array if the number of elements in the system has increased, or if it has not yet been allocated in the first place
-		if (allocated(neighbours)) then
-				if (nc.GT.SIZE(neighbours,DIM=1)) then
-					deallocate(neighbours)
-					allocate(neighbours(nc,nc))
-				endif
-		else
-			!Array has not yet been allocated (ie, this is the start of the simulation)
-			allocate(neighbours(nc,nc))
-		endif
-
 		if (.NOT.randomising) open(unit=36,file=output_folder//'/sorting_data/neighbours.txt',status='unknown',position="append")
 
 		!Start by looking at all element-element interaction pairs.
@@ -62,7 +49,7 @@ contains
 		!neighbour_counts(i,j) now equals the total number of nearest neighbour pairs containing a cell of fate i and a cell of fate j
 		!Need to sum neighbour_counts(1,2) + neighbour_counts(2,1) to obtain unlike pair count.
 
-		!Write measurements to file 
+		!Write measurements to file
 		if (randomising) then
 			neighbours_mean = neighbours_mean + neighbour_counts(1,1)
 			neighbours_max  = MAX(neighbours_max,neighbour_counts(1,1))
