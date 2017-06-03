@@ -288,7 +288,7 @@ module scem_0_input
 
       r_s_max = MAXVAL(rel_strength)
 
-      dt_amp_max=dt_amp_max/3.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
+      dt_amp_max=dt_amp_max/5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
                                     ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
 
       ! temporal parameters - all in *seconds*
