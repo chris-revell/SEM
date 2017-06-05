@@ -49,7 +49,7 @@ module scem_2_division
               long_axis(1) = 0
               long_axis(2) = 0
               long_axis(3) = max_sep
-            enddo
+            endif
             x_com(:)=cells(k)%position(:)
             c_el_temp1(:)=0
             c_el_temp2(:)=0

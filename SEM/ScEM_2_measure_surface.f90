@@ -16,8 +16,8 @@ contains
     integer              :: factor1,factor2,factor3
     real*8               :: epi_area,other_area
     real*8               :: pre_area
-    real*8               :: epi_out
-    real*8               :: pre_out
+!    real*8               :: epi_out
+!    real*8               :: pre_out
     real*8               :: area
     real*8, dimension(3) :: a
     real*8, dimension(3) :: b

@@ -44,11 +44,11 @@ module scem_2_output_povray
       write(30,*)
 
       if (flag_background.EQ.1) then !Draw boundary of spherical background
-        write(30,'(A16,F18.14,A77)') &
+        write(30,'(A16,F18.9,A77)') &
               ' sphere {<0,0,0>', spherical_boundary_radius,&
               ' texture { pigment { color Blue transmit .85}finish{phong .8} } } // boundary'
       elseif (flag_background.EQ.4) then !Draw the spherical cap background
-        write(30,'(A18,F18.14,A2,F18.14,A77)') &
+        write(30,'(A18,F18.9,A2,F18.9,A77)') &
               ' sphere {<0.2,0.2,',(-cap_radius+h/2.0),'> ',cap_radius,&
               ' texture { pigment { color Blue transmit .85}finish{phong .8} } } // boundary'
       endif
@@ -61,29 +61,29 @@ module scem_2_output_povray
         do i=1, ne
           if ((elements(i)%type).EQ.1) then
             write(30,'(A12)',advance="no")    ' sphere {  < '
-            write(30,'(F18.14)',advance="no") elements(i)%position(1)
+            write(30,'(F18.9)',advance="no") elements(i)%position(1)
             write(30,'(A2)',advance="no")     ','
-            write(30,'(F18.14)',advance="no") elements(i)%position(2)
+            write(30,'(F18.9)',advance="no") elements(i)%position(2)
             write(30,'(A2)',advance="no")     ','
-            write(30,'(F18.14)',advance="no") elements(i)%position(3)
+            write(30,'(F18.9)',advance="no") elements(i)%position(3)
             write(30,'(A60)',advance="no")    '> 1.5 texture { pigment { color Green } } } // element, cell'
             write(30,'(I2.2)',advance="no")   elements(i)%parent
             write(30,'(A60)',advance="no")     ", fate"
             write(30,'(I1.1)')                cells(elements(i)%parent)%fate
           else
             write(30,'(A12)',advance="no")    ' sphere {  < '
-            write(30,'(F18.14)',advance="no") elements(i)%position(1)
+            write(30,'(F18.9)',advance="no") elements(i)%position(1)
             write(30,'(A2)',advance="no")     ','
-            write(30,'(F18.14)',advance="no") elements(i)%position(2)
+            write(30,'(F18.9)',advance="no") elements(i)%position(2)
             write(30,'(A2)',advance="no")     ','
-            write(30,'(F18.14)',advance="no") elements(i)%position(3)
+            write(30,'(F18.9)',advance="no") elements(i)%position(3)
             write(30,'(A58)',advance="no")    '> 1.5 texture { pigment { color Red } } } // element, cell'
             write(30,'(I2.2)',advance="no")   elements(i)%parent
             write(30,'(A60)',advance="no")     ", fate"
             write(30,'(I1.1)')                cells(elements(i)%parent)%fate
           endif
           if (i.EQ.cells(1)%cortex_elements(1)) then
-            write(30,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F4.2,A64)') ' sphere {  < ',&
+            write(30,'(A12,F18.9,A2,F18.9,A2,F18.9,A2,F4.2,A64)') ' sphere {  < ',&
                 elements(i)%position(1), ',', elements(i)%position(2),',', &
                 elements(i)%position(3),&
                 '> ',r_interaction_max,'texture { pigment { color Blue transmit .85}finish{phong .8} } }'
@@ -106,8 +106,8 @@ module scem_2_output_povray
           l = elements(n)%parent
           if (k.NE.l) then !Elements are not in the same cell
             !Inter-cell interactions in black
-            write(30,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                          F18.14,A62,I2.2,A7,I2.2)') &
+            write(30,'(A14,F18.9,A2,F18.9,A2,F18.9,A4,F18.9,A2,F18.9,A2,&
+                          F18.9,A62,I2.2,A7,I2.2)') &
                           ' cylinder {  < ', &
                           elements(m)%position(1), ',', &
                           elements(m)%position(2), ',', &
@@ -121,8 +121,8 @@ module scem_2_output_povray
           else !Elements are in the same cell
             CYCLE
             !All intra-cell interactions in blue
-!            write(30,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-!                            F18.14,A61,I2.2,A7,I2.2)') &
+!            write(30,'(A14,F18.9,A2,F18.9,A2,F18.9,A4,F18.9,A2,F18.9,A2,&
+!                            F18.9,A61,I2.2,A7,I2.2)') &
 !                            ' cylinder {  < ', &
 !                            elements(pairs(j,1))%position(1), ',', &
 !                            elements(pairs(j,1))%position(2), ',', &
@@ -149,13 +149,13 @@ module scem_2_output_povray
         do i=1, nc
           sphere_radius = (3.0*cells(i)%volume/(pi*4.0))**(1.0/3.0)     !Radius is cube root of (3*volume/4pi)
           if ((cells(i)%fate).EQ.1) then
-            write(30,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A81,I2.2)') &
+            write(30,'(A12,F18.9,A2,F18.9,A2,F18.9,A2,F18.9,A81,I2.2)') &
                   ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
                   ',', cells(i)%position(3), '> ', sphere_radius,&
                   ' texture { pigment { color Green transmit .66}finish{phong .8} } } // volume cell', &
                   cells(i)%label
           else
-            write(30,'(A12,F18.14,A2,F18.14,A2,F18.14,A2,F18.14,A79,I2.2)') &
+            write(30,'(A12,F18.9,A2,F18.9,A2,F18.9,A2,F18.9,A79,I2.2)') &
                   ' sphere {  < ', cells(i)%position(1), ',', cells(i)%position(2), &
                   ',', cells(i)%position(3), '> ', sphere_radius,&
                   ' texture { pigment { color Red transmit .66}finish{phong .8} } } // volume cell', &
@@ -177,9 +177,9 @@ module scem_2_output_povray
               corner_element = cells(i)%triplets(k,j)
               corner(:) = elements(corner_element)%position(:)    !Calculate corner and normal for the element
               normal(:) = corner(:)-cells(i)%position(:)
-              write(30,'(A1,F18.14,A1,F18.14,A1,F18.14,A2)',advance='no') "<", &
+              write(30,'(A1,F18.9,A1,F18.9,A1,F18.9,A2)',advance='no') "<", &
                   corner(1), ',', corner(2), ',', corner(3), '>,'  !Write corner and normal to file
-              write(30,'(A1,F18.14,A1,F18.14,A1,F18.14,A1)',advance='no') "<", &
+              write(30,'(A1,F18.9,A1,F18.9,A1,F18.9,A1)',advance='no') "<", &
                   normal(1), ',', normal(2), ',', normal(3), '>'
               if (k.LT.3) then
                 write(30,'(A1)',advance='no') ","
@@ -204,8 +204,8 @@ module scem_2_output_povray
       if (flag_povray_cortex_pairs.EQ.1) then
         do i=1, np_cortex
           if (pairs_cortex(i)%cortex_factor.EQ.1) then
-            write(30,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                            F18.14,A61,I2.2)') &
+            write(30,'(A14,F18.9,A2,F18.9,A2,F18.9,A4,F18.9,A2,F18.9,A2,&
+                            F18.9,A61,I2.2)') &
                             ' cylinder {  < ', &
                             elements(pairs_cortex(i)%label1)%position(1), ',', &
                             elements(pairs_cortex(i)%label1)%position(2), ',', &
@@ -216,8 +216,8 @@ module scem_2_output_povray
                             '> 0.5 texture { pigment { color Red } } } // cortex pair cell',&
                             elements(pairs_cortex(i)%label1)%parent !Both elements are in the same cell so we only need one label
           else
-            write(30,'(A14,F18.14,A2,F18.14,A2,F18.14,A4,F18.14,A2,F18.14,A2,&
-                            F18.14,A63,I2.2)') &
+            write(30,'(A14,F18.9,A2,F18.9,A2,F18.9,A4,F18.9,A2,F18.9,A2,&
+                            F18.9,A63,I2.2)') &
                             ' cylinder {  < ', &
                             elements(pairs_cortex(i)%label1)%position(1), ',', &
                             elements(pairs_cortex(i)%label1)%position(2), ',', &
