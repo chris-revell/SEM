@@ -38,17 +38,11 @@ my $file_name_out;
 my $i = 0;
 
 #Loop over all 100 timepoints
-while ($i < 100) {
+while ( -e $originalfolder."/povray_data/snap_".sprintf("%02d",$i).".pov") {
 
   #Define filenames
-  if ($i < 10) {
-    $file_name_in = $originalfolder."/povray_data/snap_0".$i.".pov";
-    $file_name_out = $directoryname."/snap_0".$i.".pov";
-  }
-  else {
-    $file_name_in = $originalfolder."/povray_data/snap_".$i.".pov";
-    $file_name_out = $directoryname."/snap_".$i.".pov";
-  }
+  $file_name_in = $originalfolder."/povray_data/snap_".sprintf("%02d",$i).".pov";
+  $file_name_out = $directoryname."/snap_".sprintf("%02d",$i).".pov";
 
   open(my $file_handle_out, '>', $file_name_out) or die "can't open output data file";
   open(my $file_handle_in, '<', $file_name_in) or die "can't open input data file";
