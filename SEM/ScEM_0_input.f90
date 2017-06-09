@@ -95,17 +95,17 @@ module scem_0_input
       flag_random_init= 1
       flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
-      flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
-      flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
-      flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
-      flag_randomise  = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
+      flag_background = 0 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
+      flag_growth     = 0 ! flag_growth = 0 (1) for no growth (growth)
+      flag_division   = 0 ! flag_division = 0 (1) for growth with no cell division (with cell division)
+      flag_randomise  = 0 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
 
       !Output control switches
-      flag_povray = 1                ! Switch to turn off povray output entirely
+      flag_povray = 0                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
-        flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
+        flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 1 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
@@ -165,6 +165,7 @@ module scem_0_input
       !Create labelled file for data output
       !Catch date and time, create folder to store data in
       CALL GET_COMMAND_ARGUMENT(5,arg5)
+      if (arg5.EQ."1") flag_povray = 1
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
       output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
         arg4(1:1)//arg4(3:4)//"_"//arg5(1:1)
