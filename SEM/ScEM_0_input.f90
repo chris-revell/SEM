@@ -124,7 +124,7 @@ module scem_0_input
       nc_initial        = 10
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) stiffness_factor
-      cell_cycle_time   = 12000 ! Cell cycle time in seconds
+      cell_cycle_time   = 6000 ! Cell cycle time in seconds
       n_cellcycles      = 2
 
       CALL GET_COMMAND_ARGUMENT(2,arg2)
@@ -287,7 +287,7 @@ module scem_0_input
   		rel_strength(2,2,2,1,2,2) = 3.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
   		rel_strength(2,2,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
-      r_s_max = MAXVAL(rel_strength)
+!      r_s_max = MAXVAL(rel_strength)
 
       dt_amp_max=dt_amp_max/5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
                                     ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
@@ -295,7 +295,7 @@ module scem_0_input
       ! temporal parameters - all in *seconds*
       time_max=n_cellcycles*cell_cycle_time ! --> time of simulation in seconds
       output_interval=time_max/49.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
-      output_interval2=time_max/10.0
+      output_interval2=time_max/49.0
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities
         diff_amp=sqrt(dt*diff_coeff) ! amplitude of noise in diffusion term
