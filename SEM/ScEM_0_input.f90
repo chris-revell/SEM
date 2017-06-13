@@ -137,8 +137,6 @@ module scem_0_input
       DIT_response(1,0) = 1.0 ! Epiblast external system surface DIT response factor
       CALL GET_COMMAND_ARGUMENT(4,arg4)
       READ(arg4,*) DIT_response(1,1) ! Epiblast homotypic interface DIT response factor
-      DIT_response(1,0) = 1.0 ! Epiblast external system surface DIT response factor
-      DIT_response(1,1) = 1.0 ! Epiblast homotypic interface DIT response factor
       DIT_response(1,2) = 1.0 ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0 ! Primitive endoderm external system surface DIT response factor
       CALL GET_COMMAND_ARGUMENT(5,arg5)
