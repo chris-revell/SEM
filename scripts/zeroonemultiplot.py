@@ -150,3 +150,35 @@ if os.path.exists(os.path.join(parameters[0],"0-1data/neighbour0-1.txt")):
     ax1.set_ylim([-0.1,1.1])
     fig1.savefig(os.path.join(plotfolder,"neighbour.png"),bbox_inches="tight",dpi=500)
     np.savetxt(os.path.join(datafolder,"neighbour.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
+
+if os.path.exists(os.path.join(parameters[0],"0-1data/radius0-1.txt")):
+    combined_radius = np.genfromtxt(os.path.join(parameters[0],"0-1data/radius0-1.txt"))
+    for i in range(1,len(parameters)):
+        data = np.genfromtxt(os.path.join(parameters[i],"0-1data/radius0-1.txt"))
+        combined_radius = np.vstack((combined_radius,data))
+
+    zerodata = np.array([])
+    for i in range(0,len(combined_radius)):
+        if combined_radius[i,0] == 0.0:
+            zerodata = np.append(zerodata,combined_radius[i,1])
+
+    radius_mean,bin_edges,binnumber = binned_statistic(combined_radius[:,0],combined_radius[:,1],bins=5)
+    radius_zeromean = np.mean(zerodata)
+    radius_std,bin_edges,binnumber = binned_statistic(combined_radius[:,0],combined_radius[:,1],statistic=sem,bins=5)
+    radius_zerostd = sem(zerodata)
+
+    outbin_edges = np.append([0],bin_edges[0:5]+(bin_edges[1]-bin_edges[0])/2.0)
+    outmean = np.append(radius_zeromean,radius_mean)
+    outstd = np.append(radius_zerostd,radius_std)
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot(111)
+    ax1.errorbar(outbin_edges,outmean,yerr=outstd,color="Red",ls="none")
+    ax1.scatter(outbin_edges,outmean,color="Red")
+    #ax1.set_title("Mean distance of primitive endoderm from centre of mass as a\nproportion of maximum possible value, averaged over "+str(len(parameters))+" runs",y=1.05)
+    ax1.set_title("State of system as a proportion of the difference between perfectly sorted and random,\nas measured by mean distance of primitive endoderm from system centre of mass,\naveraged over "+str(len(parameters))+" runs",y=1.05)
+    ax1.set_xlabel("Time")
+    #ax1.set_ylabel("Distance from centre of mass as a proportion of maximum")
+    ax1.set_ylabel("Sorting Index")
+    ax1.set_ylim([-0.1,1.1])
+    fig1.savefig(os.path.join(plotfolder,"radius.png"),bbox_inches="tight",dpi=500)
+    np.savetxt(os.path.join(datafolder,"radius.txt"),np.stack((outbin_edges,outmean,outstd),axis=1))
