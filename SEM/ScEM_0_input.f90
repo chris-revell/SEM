@@ -85,6 +85,9 @@ module scem_0_input
   integer :: n_random_max = 20000
 
   real*8  :: area_normalisation_factor
+  real*4,dimension(3,80)  :: normalisation_factors
+  real*4  :: epsilon1 = 0.0001
+  integer :: loopcount
 
   contains
 
@@ -360,65 +363,20 @@ module scem_0_input
       intro_rel_strength(2,2,2,2,2,2) = 0.5*intro_rel_strength(1,2,2,2,2,2)  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
 
-
-      if (stiffness_factor.LE.0.25) then
-        if (real(cortex_constant1,4).LE.0.01) then
-          area_normalisation_factor = 27.1
-        elseif (real(cortex_constant1,4).LE.0.05) then
-          area_normalisation_factor = 17.8
-        elseif (real(cortex_constant1,4).LE.0.1) then
-          area_normalisation_factor = 13.9
-        elseif (real(cortex_constant1,4).LE.0.15) then
-          area_normalisation_factor = 11.3
-        elseif (real(cortex_constant1,4).LE.0.2) then
-          area_normalisation_factor = 9.39
-        else
-          area_normalisation_factor = 20
+      !Import local area normalisation factors
+      open(12, file="normalisationfactors.txt")
+      read(12,*) normalisation_factors
+      do loopcount=1,80
+        if (normalisation_factors(1,loopcount).LT.(stiffness_factor+epsilon1).AND.&
+              normalisation_factors(1,loopcount).GT.(stiffness_factor-epsilon1)) then
+          if (normalisation_factors(2,loopcount).LT.(cortex_constant1+epsilon1).AND.&
+              normalisation_factors(2,loopcount).GT.(cortex_constant1-epsilon1)) then
+            area_normalisation_factor = normalisation_factors(3,loopcount)
+            !print*, normalisation_factors(:,loopcount)
+          endif
         endif
-      elseif (stiffness_factor.LE.0.5) then
-        if (real(cortex_constant1,4).LE.0.01) then
-          area_normalisation_factor = 29.7
-        elseif (real(cortex_constant1,4).LE.0.05) then
-          area_normalisation_factor = 22.0
-        elseif (real(cortex_constant1,4).LE.0.1) then
-          area_normalisation_factor = 17.7
-        elseif (real(cortex_constant1,4).LE.0.15) then
-          area_normalisation_factor = 15.5
-        elseif (real(cortex_constant1,4).LE.0.2) then
-          area_normalisation_factor = 13.4
-        else
-          area_normalisation_factor = 20
-        endif
-      elseif (stiffness_factor.LE.0.75) then
-        if (real(cortex_constant1,4).LE.0.01) then
-          area_normalisation_factor = 31.3
-        elseif (real(cortex_constant1,4).LE.0.05) then
-          area_normalisation_factor = 24.2
-        elseif (real(cortex_constant1,4).LE.0.1) then
-          area_normalisation_factor = 20.4
-        elseif (real(cortex_constant1,4).LE.0.15) then
-          area_normalisation_factor = 18.0
-        elseif (real(cortex_constant1,4).LE.0.2) then
-          area_normalisation_factor = 16.1
-        else
-          area_normalisation_factor = 20
-        endif
-      else
-        if (real(cortex_constant1,4).LE.0.01) then
-          area_normalisation_factor = 31.8
-        elseif (real(cortex_constant1,4).LE.0.05) then
-          area_normalisation_factor = 26.3
-        elseif (real(cortex_constant1,4).LE.0.1) then
-          area_normalisation_factor = 22.4
-        elseif (real(cortex_constant1,4).LE.0.15) then
-          area_normalisation_factor = 19.9
-        elseif (real(cortex_constant1,4).LE.0.2) then
-          area_normalisation_factor = 17.9
-        else
-          area_normalisation_factor = 20
-        endif
-      endif
-
+      enddo
+      close(12)
 
     end subroutine scem_input
 
