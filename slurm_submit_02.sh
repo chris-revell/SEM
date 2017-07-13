@@ -115,23 +115,9 @@ fi
 
 for i in 1.00; do
   for j in 0.50 1.00 1.50 2.00 2.50 3.00; do
-    for k in 0.01 0.05 0.10 0.15 0.20; do
-      for l in 0.10 0.20 0.30 0.40; do
-        for m in 1 2 3 4; do
-          ./ScEM_master $i $j $k $l $m
-        done
-      done
-      wait
-      for l in 0.50 0.60 0.70 0.80; do
-        for m in 1 2 3 4; do
-          ./ScEM_master $i $j $k $l $m
-        done
-      done
-      wait
-      for l in 0.90 1.00 2.00; do
-        for m in 1 2 3 4; do
-          ./ScEM_master $i $j $k $l $m
-        done
+    for k in 0.10 0.20 0.30 0.40 0.50 0.60 0.70 0.80 0.90 1.00; do
+      for l in 0.01 0.02 0.03 0.04 0.06 0.07 0.08 0.09 0.11 0.12 0.13 0.14 0.16 0.17 0.18 0.19; do
+        srun --exclusive -n 1 $application $i $j $l $k 1 >> /dev/null & sleep 2;
       done
       wait
     done

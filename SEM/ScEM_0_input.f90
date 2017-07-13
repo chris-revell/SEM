@@ -85,7 +85,7 @@ module scem_0_input
   integer :: n_random_max = 20000
 
   real*8  :: area_normalisation_factor
-  real*4,dimension(3,80)  :: normalisation_factors
+  real*4,dimension(3,200)  :: normalisation_factors
   real*4  :: epsilon1 = 0.0001
   integer :: loopcount
 
@@ -108,7 +108,7 @@ module scem_0_input
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
-        flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
+        flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 1 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
@@ -127,8 +127,8 @@ module scem_0_input
       nc_initial        = 2
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) stiffness_factor
-      cell_cycle_time   = 12000 ! Cell cycle time in seconds
-      n_cellcycles      = 0.1
+      cell_cycle_time   = 6000 ! Cell cycle time in seconds
+      n_cellcycles      = 0.2
 
       CALL GET_COMMAND_ARGUMENT(2,arg2)
       READ(arg2,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
@@ -168,7 +168,7 @@ module scem_0_input
       !Create labelled file for data output
       !Catch date and time, create folder to store data in
       CALL GET_COMMAND_ARGUMENT(5,arg5)
-      if (arg5.EQ."1") flag_povray = 1
+      !if (arg5.EQ."1") flag_povray = 1
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
       output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
         arg4(1:1)//arg4(3:4)//"_"//arg5(1:1)
@@ -278,19 +278,19 @@ module scem_0_input
 		  rel_strength(2,2,2,1,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
 		  rel_strength(2,2,2,2,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cortex-hypoblast cortex
 
-		  rel_strength(2,1,1,1,1,2) = 3.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
-		  rel_strength(2,1,1,1,2,2) = 3.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
-		  rel_strength(2,1,1,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
-  		rel_strength(2,1,2,1,1,2) = 3.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
-  		rel_strength(2,1,2,1,2,2) = 3.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
-  		rel_strength(2,1,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
-  		rel_strength(2,2,2,1,1,2) = 3.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-  		rel_strength(2,2,2,1,2,2) = 3.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
-  		rel_strength(2,2,2,2,2,2) = 1.0  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
+		  rel_strength(2,1,1,1,1,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(2,1,1,1,2,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+		  rel_strength(2,1,1,2,2,2) = 0.5*epi_adhesion  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
+  		rel_strength(2,1,2,1,1,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(2,1,2,1,2,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+  		rel_strength(2,1,2,2,2,2) = 0.5*epi_adhesion  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
+  		rel_strength(2,2,2,1,1,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(2,2,2,1,2,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+  		rel_strength(2,2,2,2,2,2) = 0.5*epi_adhesion  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
       r_s_max = MAXVAL(rel_strength)
 
-      dt_amp_max=dt_amp_max/5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
+      dt_amp_max=dt_amp_max/(epi_adhesion*2)!5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
                                     ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
 
       ! temporal parameters - all in *seconds*
@@ -366,14 +366,11 @@ module scem_0_input
       !Import local area normalisation factors
       open(12, file="normalisationfactors.txt")
       read(12,*) normalisation_factors
-      do loopcount=1,80
-        if (normalisation_factors(1,loopcount).LT.(stiffness_factor+epsilon1).AND.&
-              normalisation_factors(1,loopcount).GT.(stiffness_factor-epsilon1)) then
-          if (normalisation_factors(2,loopcount).LT.(cortex_constant1+epsilon1).AND.&
-              normalisation_factors(2,loopcount).GT.(cortex_constant1-epsilon1)) then
+      do loopcount=1,200
+        if ((ABS(normalisation_factors(1,loopcount)-stiffness_factor).LT.epsilon1).AND.&
+          (ABS(normalisation_factors(2,loopcount)-cortex_constant1).LT.epsilon1)) then
             area_normalisation_factor = normalisation_factors(3,loopcount)
             !print*, normalisation_factors(:,loopcount)
-          endif
         endif
       enddo
       close(12)
