@@ -188,7 +188,7 @@ module scem_0_input
       ! system parameters
       trigger_frac=0.5 ! safety margin for triggering array reallocation
       ! derived quantitites
-      dt_amp_max=0.2    !0.1
+      dt_amp_max=0.1
       ! cell parameters
       n_c_types=2 ! Number of cell types. 1=epiblast, 2=hypoblast
       n_e_types=2 ! Number of element types. 1=cytoplasm, 2=cortex
@@ -280,17 +280,17 @@ module scem_0_input
 
 		  rel_strength(2,1,1,1,1,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
 		  rel_strength(2,1,1,1,2,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
-		  rel_strength(2,1,1,2,2,2) = 0.5*epi_adhesion  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
+		  rel_strength(2,1,1,2,2,2) = 0.4*epi_adhesion  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
   		rel_strength(2,1,2,1,1,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
   		rel_strength(2,1,2,1,2,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
-  		rel_strength(2,1,2,2,2,2) = 0.5*epi_adhesion  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
+  		rel_strength(2,1,2,2,2,2) = 0.4*epi_pre_adhesion  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
   		rel_strength(2,2,2,1,1,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
   		rel_strength(2,2,2,1,2,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
-  		rel_strength(2,2,2,2,2,2) = 0.5*epi_adhesion  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
+  		rel_strength(2,2,2,2,2,2) = 0.4*pre_adhesion  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
       r_s_max = MAXVAL(rel_strength)
 
-      dt_amp_max=dt_amp_max/(epi_adhesion*2)!5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
+      dt_amp_max=dt_amp_max/(epi_adhesion)!5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
                                     ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
 
       ! temporal parameters - all in *seconds*
