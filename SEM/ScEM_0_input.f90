@@ -104,7 +104,7 @@ module scem_0_input
       flag_randomise  = 0 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
 
       !Output control switches
-      flag_povray = 0                ! Switch to turn off povray output entirely
+      flag_povray = 1                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
@@ -128,7 +128,7 @@ module scem_0_input
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) stiffness_factor
       cell_cycle_time   = 6000 ! Cell cycle time in seconds
-      n_cellcycles      = 0.2
+      n_cellcycles      = 2.0
 
       CALL GET_COMMAND_ARGUMENT(2,arg2)
       READ(arg2,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
