@@ -58,9 +58,10 @@ module scem_0_input
   !Variables for setting output folder
 !  character(len=8) :: date_of_run   !Date of simulation run
 !  character(len=10):: time_of_run   !Time of simulation run
-  character(len=25):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+  character(len=26):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
-  character(len=4) :: arg1,arg2,arg3,arg4!,arg5
+  character(len=4) :: arg1,arg2,arg4!,arg5
+  character(len=5) :: arg3
   character(len=1) :: arg5
   logical :: randomising
   logical :: intro
@@ -85,7 +86,7 @@ module scem_0_input
   integer :: n_random_max = 20000
 
   real*8  :: area_normalisation_factor
-  real*4,dimension(3,200)  :: normalisation_factors
+  real*4,dimension(3,90)  :: normalisation_factors
   real*4  :: epsilon1 = 0.0001
   integer :: loopcount
 
@@ -120,7 +121,7 @@ module scem_0_input
       flag_measure_type_radius= 0    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
-      flag_measure_com        = 0
+      flag_measure_com        = 1
       flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
 
       !Simulation control parameters
@@ -170,7 +171,7 @@ module scem_0_input
       CALL GET_COMMAND_ARGUMENT(5,arg5)
       !if (arg5.EQ."1") flag_povray = 1
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
+      output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:5)//"_"//&
         arg4(1:1)//arg4(3:4)//"_"//arg5(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
@@ -354,19 +355,19 @@ module scem_0_input
 
       intro_rel_strength(2,1,1,1,1,2) = 3.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
       intro_rel_strength(2,1,1,1,2,2) = 3.0  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
-      intro_rel_strength(2,1,1,2,2,2) = 0.5*intro_rel_strength(1,1,1,2,2,2) !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
+      intro_rel_strength(2,1,1,2,2,2) = 0.4*intro_rel_strength(1,1,1,2,2,2) !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
       intro_rel_strength(2,1,2,1,1,2) = 3.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
       intro_rel_strength(2,1,2,1,2,2) = 3.0  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
-      intro_rel_strength(2,1,2,2,2,2) = 0.5*intro_rel_strength(1,1,2,2,2,2) !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
+      intro_rel_strength(2,1,2,2,2,2) = 0.4*intro_rel_strength(1,1,2,2,2,2) !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
       intro_rel_strength(2,2,2,1,1,2) = 3.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
       intro_rel_strength(2,2,2,1,2,2) = 3.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
-      intro_rel_strength(2,2,2,2,2,2) = 0.5*intro_rel_strength(1,2,2,2,2,2)  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
+      intro_rel_strength(2,2,2,2,2,2) = 0.4*intro_rel_strength(1,2,2,2,2,2)  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
 
       !Import local area normalisation factors
       open(12, file="normalisationfactors.txt")
       read(12,*) normalisation_factors
-      do loopcount=1,200
+      do loopcount=1,90
         if ((ABS(normalisation_factors(1,loopcount)-stiffness_factor).LT.epsilon1).AND.&
           (ABS(normalisation_factors(2,loopcount)-cortex_constant1).LT.epsilon1)) then
             area_normalisation_factor = normalisation_factors(3,loopcount)
