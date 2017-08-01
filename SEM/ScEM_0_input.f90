@@ -86,7 +86,7 @@ module scem_0_input
   integer :: n_random_max = 20000
 
   real*8  :: area_normalisation_factor
-  real*4,dimension(3,90)  :: normalisation_factors
+  real*4,dimension(3,200)  :: normalisation_factors
   real*4  :: epsilon1 = 0.0001
   integer :: loopcount
 
@@ -97,7 +97,7 @@ module scem_0_input
       !Simulation control switches
       flag_create     = 1 ! flag_create = 0 (1) for initial cell from file (created de novo)
       flag_random_init= 1
-      flag_diffusion  = 0 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
+      flag_diffusion  = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background = 0 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
       flag_growth     = 0 ! flag_growth = 0 (1) for no growth (growth)
@@ -291,7 +291,7 @@ module scem_0_input
 
       r_s_max = MAXVAL(rel_strength)
 
-      dt_amp_max=dt_amp_max/(epi_adhesion)!5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
+      dt_amp_max=dt_amp_max/(4*stiffness_factor)!5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
                                     ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
 
       ! temporal parameters - all in *seconds*
@@ -367,7 +367,8 @@ module scem_0_input
       !Import local area normalisation factors
       open(12, file="normalisationfactors.txt")
       read(12,*) normalisation_factors
-      do loopcount=1,90
+      area_normalisation_factor = 1
+      do loopcount=1,200
         if ((ABS(normalisation_factors(1,loopcount)-stiffness_factor).LT.epsilon1).AND.&
           (ABS(normalisation_factors(2,loopcount)-cortex_constant1).LT.epsilon1)) then
             area_normalisation_factor = normalisation_factors(3,loopcount)
