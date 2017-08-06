@@ -86,7 +86,7 @@ module scem_0_input
   integer :: n_random_max = 20000
 
   real*8  :: area_normalisation_factor
-  real*4,dimension(3,200)  :: normalisation_factors
+  real*4,dimension(3,30)  :: normalisation_factors
   real*4  :: epsilon1 = 0.0001
   integer :: loopcount
 
@@ -129,7 +129,7 @@ module scem_0_input
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) stiffness_factor
       cell_cycle_time   = 6000 ! Cell cycle time in seconds
-      n_cellcycles      = 2.0
+      n_cellcycles      = 1.0
 
       CALL GET_COMMAND_ARGUMENT(2,arg2)
       READ(arg2,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
@@ -189,7 +189,7 @@ module scem_0_input
       ! system parameters
       trigger_frac=0.5 ! safety margin for triggering array reallocation
       ! derived quantitites
-      dt_amp_max=0.1
+      dt_amp_max=0.2
       ! cell parameters
       n_c_types=2 ! Number of cell types. 1=epiblast, 2=hypoblast
       n_e_types=2 ! Number of element types. 1=cytoplasm, 2=cortex
@@ -279,15 +279,15 @@ module scem_0_input
 		  rel_strength(2,2,2,1,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cytoplasm-hypoblast cortex
 		  rel_strength(2,2,2,2,2,1) = stiffness_factor	 !Repulsive component, intra-cellular Hypoblast cortex-hypoblast cortex
 
-		  rel_strength(2,1,1,1,1,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
-		  rel_strength(2,1,1,1,2,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
-		  rel_strength(2,1,1,2,2,2) = 0.4*epi_adhesion  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
-  		rel_strength(2,1,2,1,1,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
-  		rel_strength(2,1,2,1,2,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
-  		rel_strength(2,1,2,2,2,2) = 0.4*epi_pre_adhesion  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
-  		rel_strength(2,2,2,1,1,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
-  		rel_strength(2,2,2,1,2,2) = 3.0*epi_adhesion  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
-  		rel_strength(2,2,2,2,2,2) = 0.4*pre_adhesion  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
+		  rel_strength(2,1,1,1,1,2) = 4.0*stiffness_factor  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cytoplasm
+		  rel_strength(2,1,1,1,2,2) = 4.0*stiffness_factor  !Repulsive component, inter-cellular Epiblast cytoplasm-epiblast cortex
+		  rel_strength(2,1,1,2,2,2) = MAX(0.5*stiffness_factor,0.4*epi_adhesion)  !Repulsive component, inter-cellular Epiblast cortex-epiblast cortex
+  		rel_strength(2,1,2,1,1,2) = 4.0*stiffness_factor  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(2,1,2,1,2,2) = 4.0*stiffness_factor  !Repulsive component, inter-cellular Epiblast cytoplasm-hypoblast cortex
+  		rel_strength(2,1,2,2,2,2) = MAX(0.5*stiffness_factor,0.4*epi_pre_adhesion)  !Repulsive component, inter-cellular Epiblast cortex-hypoblast cortex
+  		rel_strength(2,2,2,1,1,2) = 4.0*stiffness_factor  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cytoplasm
+  		rel_strength(2,2,2,1,2,2) = 4.0*stiffness_factor  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
+  		rel_strength(2,2,2,2,2,2) = MAX(0.5*stiffness_factor,0.4*pre_adhesion)  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
       r_s_max = MAXVAL(rel_strength)
 
@@ -368,7 +368,7 @@ module scem_0_input
       open(12, file="normalisationfactors.txt")
       read(12,*) normalisation_factors
       area_normalisation_factor = 1
-      do loopcount=1,200
+      do loopcount=1,30
         if ((ABS(normalisation_factors(1,loopcount)-stiffness_factor).LT.epsilon1).AND.&
           (ABS(normalisation_factors(2,loopcount)-cortex_constant1).LT.epsilon1)) then
             area_normalisation_factor = normalisation_factors(3,loopcount)
