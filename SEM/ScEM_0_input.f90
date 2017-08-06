@@ -187,7 +187,7 @@ module scem_0_input
       ! system parameters
       trigger_frac=0.5 ! safety margin for triggering array reallocation
       ! derived quantitites
-      dt_amp_max=0.2    !0.1
+      dt_amp_max=0.2
       ! cell parameters
       n_c_types=2 ! Number of cell types. 1=epiblast, 2=hypoblast
       n_e_types=2 ! Number of element types. 1=cytoplasm, 2=cortex
