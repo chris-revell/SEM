@@ -113,15 +113,14 @@ fi
 
 #eval $CMD
 
-for i in 1.00; do
-  for j in 5.50 6.00 6.50 7.00 7.50 8.00 8.50 9.00 9.50 10.0; do
-    for k in 0.50; do
-      for l in 0.090 0.100 0.110 0.120 0.130 0.140 0.150 0.160; do
-        srun --exclusive -n 1 $application $i $j $l $k 1 >> /dev/null & sleep 10;
-        srun --exclusive -n 1 $application $i $j $l $k 2 >> /dev/null & sleep 10;
-      done
-      wait
+
+for j in 5.50 6.00 6.50 7.00 7.50 8.00 8.50 9.00 9.50 10.0; do
+  for k in 0.50; do
+    for l in 0.09 0.10 0.11 0.12 0.13 0.14 0.15 0.16; do
+      srun --exclusive -n 1 $application $j $l $k 1 >> /dev/null & sleep 10;
+      srun --exclusive -n 1 $application $j $l $k 2 >> /dev/null & sleep 10;
     done
+    wait
   done
 done
 wait

@@ -58,11 +58,10 @@ module scem_0_input
   !Variables for setting output folder
 !  character(len=8) :: date_of_run   !Date of simulation run
 !  character(len=10):: time_of_run   !Time of simulation run
-  character(len=26):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+  character(len=21):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
-  character(len=4) :: arg1,arg2,arg4!,arg5
-  character(len=5) :: arg3
-  character(len=1) :: arg5
+  character(len=4) :: arg1,arg2,arg3
+  character(len=1) :: arg4
   logical :: randomising
   logical :: intro
 
@@ -105,12 +104,12 @@ module scem_0_input
       flag_randomise  = 0 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
 
       !Output control switches
-      flag_povray = 1                ! Switch to turn off povray output entirely
+      flag_povray = 0                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
         flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
-        flag_povray_cortex_pairs = 1 ! Switch to turn Delaunay cortex interaction on and off
+        flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
@@ -126,21 +125,20 @@ module scem_0_input
 
       !Simulation control parameters
       nc_initial        = 2
-      CALL GET_COMMAND_ARGUMENT(1,arg1)
-      READ(arg1,*) stiffness_factor
+      stiffness_factor  = 1.0
       cell_cycle_time   = 6000 ! Cell cycle time in seconds
       n_cellcycles      = 1.0
 
-      CALL GET_COMMAND_ARGUMENT(2,arg2)
-      READ(arg2,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
+      CALL GET_COMMAND_ARGUMENT(1,arg1)
+      READ(arg1,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
       pre_adhesion     = epi_adhesion ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_pre_adhesion = pre_adhesion   ! Magnitude of adhesion between epiblasts and primitive endoderm
-      CALL GET_COMMAND_ARGUMENT(3,arg3)
-      READ(arg3,*) cortex_constant1   ! Magnitude of baseline cortical tension in epiblasts
+      CALL GET_COMMAND_ARGUMENT(2,arg2)
+      READ(arg2,*) cortex_constant1   ! Magnitude of baseline cortical tension in epiblasts
       cortex_constant2  = cortex_constant1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0 ! Epiblast external system surface DIT response factor
-      CALL GET_COMMAND_ARGUMENT(4,arg4)
-      READ(arg4,*) DIT_response(1,1) ! Epiblast homotypic interface DIT response factor
+      CALL GET_COMMAND_ARGUMENT(3,arg3)
+      READ(arg3,*) DIT_response(1,1) ! Epiblast homotypic interface DIT response factor
       DIT_response(1,2) = 1.0 ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0 ! Primitive endoderm external system surface DIT response factor
       DIT_response(2,1) = 1.0 ! Primitive endoderm homotypic interface DIT response factor
@@ -168,11 +166,10 @@ module scem_0_input
 
       !Create labelled file for data output
       !Catch date and time, create folder to store data in
-      CALL GET_COMMAND_ARGUMENT(5,arg5)
+      CALL GET_COMMAND_ARGUMENT(4,arg4)
       !if (arg5.EQ."1") flag_povray = 1
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:5)//"_"//&
-        arg4(1:1)//arg4(3:4)//"_"//arg5(1:1)
+      output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//arg4(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/sorting_data")
