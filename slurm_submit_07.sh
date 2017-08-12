@@ -116,7 +116,7 @@ fi
 
 for j in 0.00 0.50 1.00 1.50 2.00 2.50 3.00 3.50 4.00 4.50 5.00; do
   for k in 0.50; do
-    for l in 0.17 0.18 0.19 0.20 0.21 0.22 0.23 0.24; do
+    for l in 0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08; do
       srun --exclusive -n 1 $application $j $l $k 1 >> /dev/null & sleep 10;
       srun --exclusive -n 1 $application $j $l $k 2 >> /dev/null & sleep 10;
     done

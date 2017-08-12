@@ -85,7 +85,7 @@ module scem_0_input
   integer :: n_random_max = 20000
 
   real*8  :: area_normalisation_factor
-  real*4,dimension(3,30)  :: normalisation_factors
+  real*4,dimension(3,50)  :: normalisation_factors
   real*4  :: epsilon1 = 0.0001
   integer :: loopcount
 
@@ -104,12 +104,12 @@ module scem_0_input
       flag_randomise  = 0 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
 
       !Output control switches
-      flag_povray = 0                ! Switch to turn off povray output entirely
+      flag_povray = 1                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
         flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
-        flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
+        flag_povray_cortex_pairs = 1 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
@@ -228,7 +228,9 @@ module scem_0_input
         rho=-(1.0/(frac_interaction_max**2-1.0))*log(1.0-sqrt(1.0-epsilon)) ! value of rho to ensure V/V_min=epsilon
         pot_min=(kappa_element/8)*(r_equil/rho)**2 ! value of V_min to ensure correct spring constant
         force_amplitude=4.0*pot_min*rho/r_equil**2 ! prefactor of force expression
-
+        print*, "force_amplitude", force_amplitude
+        print*, "rho",rho
+        print*, "r_equil_sq",r_equil_sq
       ! diffusion parameters
       diff_coeff=0.001 ! --> diffusion coefficient of elements in units of micron^2/s
 
@@ -288,7 +290,7 @@ module scem_0_input
 
       r_s_max = MAXVAL(rel_strength)
 
-      dt_amp_max=dt_amp_max/(4*stiffness_factor)!5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
+      dt_amp_max=dt_amp_max/(0.5*r_s_max)!(4*stiffness_factor)!5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
                                     ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
 
       ! temporal parameters - all in *seconds*
@@ -365,7 +367,7 @@ module scem_0_input
       open(12, file="normalisationfactors.txt")
       read(12,*) normalisation_factors
       area_normalisation_factor = 1
-      do loopcount=1,30
+      do loopcount=1,50
         if ((ABS(normalisation_factors(1,loopcount)-stiffness_factor).LT.epsilon1).AND.&
           (ABS(normalisation_factors(2,loopcount)-cortex_constant1).LT.epsilon1)) then
             area_normalisation_factor = normalisation_factors(3,loopcount)
