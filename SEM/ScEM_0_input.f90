@@ -85,7 +85,7 @@ module scem_0_input
   integer :: n_random_max = 20000
 
   real*8  :: area_normalisation_factor
-  real*4,dimension(3,50)  :: normalisation_factors
+  real*4,dimension(3,70)  :: normalisation_factors
   real*4  :: epsilon1 = 0.0001
   integer :: loopcount
 
@@ -169,7 +169,7 @@ module scem_0_input
       CALL GET_COMMAND_ARGUMENT(4,arg4)
       !if (arg5.EQ."1") flag_povray = 1
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "../data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//arg4(1:1)
+      output_folder = "../data/"//arg1(1:2)//arg1(4:)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//arg4(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/sorting_data")
@@ -228,9 +228,7 @@ module scem_0_input
         rho=-(1.0/(frac_interaction_max**2-1.0))*log(1.0-sqrt(1.0-epsilon)) ! value of rho to ensure V/V_min=epsilon
         pot_min=(kappa_element/8)*(r_equil/rho)**2 ! value of V_min to ensure correct spring constant
         force_amplitude=4.0*pot_min*rho/r_equil**2 ! prefactor of force expression
-        print*, "force_amplitude", force_amplitude
-        print*, "rho",rho
-        print*, "r_equil_sq",r_equil_sq
+
       ! diffusion parameters
       diff_coeff=0.001 ! --> diffusion coefficient of elements in units of micron^2/s
 
@@ -290,7 +288,7 @@ module scem_0_input
 
       r_s_max = MAXVAL(rel_strength)
 
-      dt_amp_max=dt_amp_max/(0.5*r_s_max)!(4*stiffness_factor)!5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
+      dt_amp_max=dt_amp_max/(r_s_max)!(4*stiffness_factor)!5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
                                     ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
 
       ! temporal parameters - all in *seconds*
@@ -367,7 +365,7 @@ module scem_0_input
       open(12, file="normalisationfactors.txt")
       read(12,*) normalisation_factors
       area_normalisation_factor = 1
-      do loopcount=1,50
+      do loopcount=1,70
         if ((ABS(normalisation_factors(1,loopcount)-stiffness_factor).LT.epsilon1).AND.&
           (ABS(normalisation_factors(2,loopcount)-cortex_constant1).LT.epsilon1)) then
             area_normalisation_factor = normalisation_factors(3,loopcount)

@@ -18,7 +18,7 @@
 #! How many (MPI) tasks will there be in total? (<= nodes*16)
 #SBATCH --ntasks=16
 #! How much wallclock time will be required?
-#SBATCH --time=03:00:00
+#SBATCH --time=04:00:00
 #! What types of email messages do you wish to receive?
 #SBATCH --mail-type=ALL
 #! Uncomment this to prevent the job from being requeued (e.g. if
@@ -114,9 +114,9 @@ fi
 #eval $CMD
 
 
-for j in 0.00 0.50 1.00 1.50 2.00 2.50 3.00 3.50 4.00 4.50 5.00; do
+for j in 10.5 11.0 11.5 12.0 12.5 13.0 13.5 14.0 14.5 15.0; do
   for k in 0.50; do
-    for l in 0.33 0.34 0.35 0.36 0.37 0.38 0.39 0.40; do
+    for l in 0.09 0.10 0.11 0.12 0.13 0.14 0.15 0.16; do
       srun --exclusive -n 1 $application $j $l $k 1 >> /dev/null & sleep 10;
       srun --exclusive -n 1 $application $j $l $k 2 >> /dev/null & sleep 10;
     done
