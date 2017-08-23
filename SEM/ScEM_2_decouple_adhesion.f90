@@ -41,12 +41,15 @@ contains
           endif
         enddo
         !adhesion_factor for this element updated according to the local area around the element.
-        elements(element_label)%adhesion_factor = local_area/area_normalisation_factor !Might be worth introducing a constant here so that the adhesion magnitude in scem_input can be maintained as a nice number
 
-  !      if (mod(time,(output_interval2)).LT.dt) write(31,*) ne, local_area
-
+        if (nc.GT.1) then
+          elements(element_label)%adhesion_factor = local_area/area_normalisation_factor
+        else
+          area_normalisation_factor = area_normalisation_factor+local_area
+        endif
 
       enddo
+      if (nc.EQ.1) area_normalisation_count = area_normalisation_count+cells(i)%cortex_elements(0)
     enddo
 
   end subroutine scem_decouple_adhesion

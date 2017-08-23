@@ -85,9 +85,9 @@ module scem_0_input
   integer :: n_random_max = 20000
 
   real*8  :: area_normalisation_factor
-  real*4,dimension(3,70)  :: normalisation_factors
-  real*4  :: epsilon1 = 0.0001
-  integer :: loopcount
+  !real*4,dimension(3,100)  :: normalisation_factors
+  !real*4  :: epsilon1 = 0.0001
+  integer :: area_normalisation_count!,loopcount
 
   contains
 
@@ -127,7 +127,7 @@ module scem_0_input
       nc_initial        = 2
       stiffness_factor  = 1.0
       cell_cycle_time   = 6000 ! Cell cycle time in seconds
-      n_cellcycles      = 1.0
+      n_cellcycles      = 0.5
 
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
@@ -245,7 +245,7 @@ module scem_0_input
       ! Explanation of indices:
       ! rel_strength(adhesive/repulsive,fate1,fate2,type1,type1,intra/inter)
       allocate(rel_strength(2,0:n_c_types,0:n_c_types,0:n_e_types,0:n_e_types,2))
-
+      rel_strength(:,:,:,:,:,:) = 0.0
       rel_strength(1,1,1,1,1,1) = stiffness_factor  !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cytoplasm
 		  rel_strength(1,1,1,1,2,1) = stiffness_factor	 !Adhesive component, intra-cellular Epiblast cytoplasm-epiblast cortex
       rel_strength(1,1,1,2,2,1)	= stiffness_factor  !Adhesive component, intra-cellular Epiblast cortex-epiblast cortex
@@ -288,7 +288,7 @@ module scem_0_input
 
       r_s_max = MAXVAL(rel_strength)
 
-      dt_amp_max=dt_amp_max/(r_s_max)!(4*stiffness_factor)!5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
+      dt_amp_max=dt_amp_max/MAX(0.2*cortex_constant1/0.03357,r_s_max)!(4*stiffness_factor)!5.0!r_s_max ! rescale dt by largest interaction strength to ensure stable integration
                                     ! Note that this slows the system down significantly for higher interaction strengths. Is this really necessary?
 
       ! temporal parameters - all in *seconds*
@@ -362,17 +362,17 @@ module scem_0_input
 
 
       !Import local area normalisation factors
-      open(12, file="normalisationfactors.txt")
-      read(12,*) normalisation_factors
-      area_normalisation_factor = 1
-      do loopcount=1,70
-        if ((ABS(normalisation_factors(1,loopcount)-stiffness_factor).LT.epsilon1).AND.&
-          (ABS(normalisation_factors(2,loopcount)-cortex_constant1).LT.epsilon1)) then
-            area_normalisation_factor = normalisation_factors(3,loopcount)
-            !print*, normalisation_factors(:,loopcount)
-        endif
-      enddo
-      close(12)
+      !open(12, file="normalisationfactors.txt")
+      !read(12,*) normalisation_factors
+      area_normalisation_factor = 0
+      area_normalisation_count = 0
+      !do loopcount=1,100
+      !  if ((ABS(normalisation_factors(1,loopcount)-stiffness_factor).LT.epsilon1).AND.&
+      !    (ABS(normalisation_factors(2,loopcount)-cortex_constant1).LT.epsilon1)) then
+      !      area_normalisation_factor = normalisation_factors(3,loopcount)
+      !  endif
+      !enddo
+      !close(12)
 
     end subroutine scem_input
 
