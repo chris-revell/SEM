@@ -125,10 +125,10 @@ module scem_0_input
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
 
       !Simulation control parameters
-      nc_initial        = 5
+      nc_initial        = 2
       stiffness_factor  = 1.0
       cell_cycle_time   = 6000 ! Cell cycle time in seconds
-      n_cellcycles      = 1.0
+      n_cellcycles      = 2.0
 
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)

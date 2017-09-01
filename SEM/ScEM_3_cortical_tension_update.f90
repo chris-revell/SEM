@@ -16,7 +16,7 @@ contains
   subroutine scem_cortical_tension_update
 
     integer :: m,n,nn
-    real    :: sep_sq
+    real    :: sep_sq,bled_factor
     real*8, dimension(3) :: dx
 
     !Now update velocities for all pairs in this network.
@@ -36,8 +36,9 @@ contains
         elements(n)%velocity(:) = elements(n)%velocity(:) - dx(:)*cortex_constant1*pairs_cortex(m)%cortex_factor
         elements(nn)%velocity(:)= elements(nn)%velocity(:)+ dx(:)*cortex_constant1*pairs_cortex(m)%cortex_factor
       else
-        elements(n)%velocity(:) = elements(n)%velocity(:) - dx(:)*cortex_constant2*pairs_cortex(m)%cortex_factor
-        elements(nn)%velocity(:)= elements(nn)%velocity(:)+ dx(:)*cortex_constant2*pairs_cortex(m)%cortex_factor
+        bled_factor = SIN(10*2.0*pi*elements(n)%age/cell_cycle_time)*SIN(10*2.0*pi*elements(nn)%age/cell_cycle_time)
+        elements(n)%velocity(:) = elements(n)%velocity(:) - dx(:)*cortex_constant2*pairs_cortex(m)%cortex_factor*bled_factor
+        elements(nn)%velocity(:)= elements(nn)%velocity(:)+ dx(:)*cortex_constant2*pairs_cortex(m)%cortex_factor*bled_factor
       endif
     end do
 

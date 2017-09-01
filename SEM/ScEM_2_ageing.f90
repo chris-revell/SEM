@@ -15,6 +15,7 @@ module scem_2_ageing
     subroutine scem_ageing
 
       integer :: n
+      real*8  :: age_ran
 
       ! update age and stage of each element
       do n=1,ne
@@ -25,6 +26,8 @@ module scem_2_ageing
             if (elements(n)%age.gt.establishment_time) then
                elements(n)%stage=1
                elements(n)%strength=1.0
+               CALL RANDOM_NUMBER(age_ran)
+               elements(n)%age=elements(n)%age+age_ran*2.0*pi
             end if
          endif
       end do
