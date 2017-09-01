@@ -100,6 +100,11 @@ module scem_2_division
          end if
       end do
 
+      if (nc_old.EQ.1.AND.nc.GT.nc_old) then
+        area_normalisation_factor = area_normalisation_factor/area_normalisation_count
+        print*, area_normalisation_factor
+      endif
+
       deallocate(c_el_temp1)
       deallocate(c_el_temp2)
 
