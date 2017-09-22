@@ -108,11 +108,11 @@ module scem_0_input
       flag_pre_blebbing= 1 ! Causes blebbing in primitive endoderm (cell type 2) when equal to 1.
 
       !Output control switches
-      flag_povray = 0                ! Switch to turn off povray output entirely
+      flag_povray = 1                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
-        flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
+        flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
@@ -130,7 +130,7 @@ module scem_0_input
       !Simulation control parameters
       nc_initial        = 10
       stiffness_factor  = 1.0
-      cell_cycle_time   = 3000 ! Cell cycle time in seconds
+      cell_cycle_time   = 1500 ! Cell cycle time in seconds
       n_cellcycles      = 2.0
 
       CALL GET_COMMAND_ARGUMENT(1,arg1)
