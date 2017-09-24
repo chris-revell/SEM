@@ -126,7 +126,7 @@ module scem_0_input
       !Simulation control parameters
       nc_initial        = 2
       stiffness_factor  = 1.0
-      cell_cycle_time   = 6000 ! Cell cycle time in seconds
+      cell_cycle_time   = 1500 ! Cell cycle time in seconds
       n_cellcycles      = 0.5
 
       CALL GET_COMMAND_ARGUMENT(1,arg1)
@@ -186,7 +186,7 @@ module scem_0_input
       ! system parameters
       trigger_frac=0.5 ! safety margin for triggering array reallocation
       ! derived quantitites
-      dt_amp_max=0.2
+      dt_amp_max=0.1
       ! cell parameters
       n_c_types=2 ! Number of cell types. 1=epiblast, 2=hypoblast
       n_e_types=2 ! Number of element types. 1=cytoplasm, 2=cortex
