@@ -21,7 +21,7 @@ def zeroonemeasurements(arg):
             neighbourdata = np.genfromtxt(os.path.join(arg,"sorting_data/neighbours.txt"))
             neighbourrandomdata = np.genfromtxt(os.path.join(arg,"randomised_data/neighbours.txt"))
             meanvalues = neighbourrandomdata[:,1]
-            maxvalues  = neighbourrandomdata[:,2]
+            maxvalues  = np.maximum(neighbourrandomdata[:,2],neighbourdata[:,1])
             normalisedneighbourdata = (neighbourdata[:,1]-meanvalues)/(maxvalues[:]-meanvalues[:])
             fig1 = plt.figure()
             ax1 = fig1.add_subplot(111)
@@ -37,7 +37,7 @@ def zeroonemeasurements(arg):
             surfacedata = np.genfromtxt(os.path.join(arg,"sorting_data/surface.txt"))
             surfacerandomdata = np.genfromtxt(os.path.join(arg,"randomised_data/surface.txt"))
             meanvalues = surfacerandomdata[:,1]
-            maxvalues  = surfacerandomdata[:,2]
+            maxvalues  = np.maximum(surfacerandomdata[:,2],surfacedata[:,2])
             normalisedsurfacedata = (surfacedata[:,2]-meanvalues)/(maxvalues[:]-meanvalues[:])
             fig2 = plt.figure()
             ax2 = fig2.add_subplot(111)
@@ -76,7 +76,9 @@ def zeroonemeasurements(arg):
             #plt.close()
             radiusdata = np.genfromtxt(os.path.join(arg,"sorting_data/radius.txt"))
             radiusrandomdata = np.genfromtxt(os.path.join(arg,"randomised_data/radius.txt"))
-            normalisedradiusdata = (radiusdata[:,1]-radiusrandomdata[:,-2])/(radiusrandomdata[:,-1]-radiusrandomdata[:,-2])
+            meanvalues = radiusrandomdata[:,1]
+            maxvalues  = np.maximum(radiusrandomdata[:,2],radiusdata[:,1])
+            normalisedradiusdata = (radiusdata[:,1]-meanvalues)/(maxvalues[:]-meanvalues[:])
             fig3 = plt.figure()
             ax3 = fig3.add_subplot(111)
             ax3.plot(radiusdata[:,0],normalisedradiusdata[:])
