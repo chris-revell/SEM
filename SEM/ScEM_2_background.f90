@@ -35,11 +35,11 @@ contains
     do n=1, nc
       volume_sum = volume_sum + cells(n)%volume
     enddo
-    spherical_boundary_radius = 1.1*(((3.0*volume_sum)/(pi*4.0))**(1.0/3.0)) !Boundary radius scales with total system volume
+    spherical_boundary_radius = 1.2*(((3.0*volume_sum)/(pi*4.0))**(1.0/3.0)) !Boundary radius scales with total system volume
     do n=1, ne
       spherical_radius = DOT_PRODUCT(elements(n)%position,elements(n)%position)
       if (spherical_radius.gt.spherical_boundary_radius) then
-        elements(n)%velocity(:) = elements(n)%velocity(:) - 0.1*elements(n)%position(:)/spherical_radius    !Constant potential beyond boundary
+        elements(n)%velocity(:) = elements(n)%velocity(:) - 0.1*stiffness_factor*elements(n)%position(:)/spherical_radius    !Constant potential beyond boundary
       endif
     enddo
   end subroutine

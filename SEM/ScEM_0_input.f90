@@ -23,7 +23,7 @@ module scem_0_input
   integer :: flag_povray_pairs,flag_povray_volumes,flag_povray,flag_povray_triangles,flag_povray_cortex_pairs
   integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_radius,flag_measure_type_radius
   integer :: flag_measure_neighbours,flag_measure_displacement,flag_measure_surface,flag_elements_final
-  integer :: flag_measure_randomised,flag_measure_velocity,flag_measure_com,flag_random_init
+  integer :: flag_measure_randomised,flag_measure_velocity,flag_measure_com,flag_random_init,flag_pre_blebbing
   integer :: flag_relist ! flag triggering relist of sector assignments
   !Variables for initiating randoms number sequence
   integer :: seedarraylength
@@ -58,10 +58,10 @@ module scem_0_input
   !Variables for setting output folder
 !  character(len=8) :: date_of_run   !Date of simulation run
 !  character(len=10):: time_of_run   !Time of simulation run
-  character(len=21):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+  character(len=25):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
-  character(len=4) :: arg1,arg2,arg3
-  character(len=1) :: arg4
+  character(len=4) :: arg1,arg2,arg3,arg4
+  character(len=1) :: arg5
   logical :: randomising
   logical :: intro
 
@@ -90,19 +90,22 @@ module scem_0_input
 !  real*4  :: epsilon1 = 0.0001
 !  integer :: loopcount
 
+  real*8  :: bleb_amp
+
   contains
 
     subroutine scem_input
 
       !Simulation control switches
-      flag_create     = 1 ! flag_create = 0 (1) for initial cell from file (created de novo)
-      flag_random_init= 1
-      flag_diffusion  = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
-      flag_conserve   = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
-      flag_background = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
-      flag_growth     = 1 ! flag_growth = 0 (1) for no growth (growth)
-      flag_division   = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
-      flag_randomise  = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
+      flag_create      = 1 ! flag_create = 0 (1) for initial cell from file (created de novo)
+      flag_random_init = 1
+      flag_diffusion   = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
+      flag_conserve    = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
+      flag_background  = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
+      flag_growth      = 1 ! flag_growth = 0 (1) for no growth (growth)
+      flag_division    = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
+      flag_randomise   = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
+      flag_pre_blebbing= 1 ! Causes blebbing in primitive endoderm (cell type 2) when equal to 1.
 
       !Output control switches
       flag_povray = 1                ! Switch to turn off povray output entirely
@@ -125,10 +128,10 @@ module scem_0_input
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
 
       !Simulation control parameters
-      nc_initial        = 5
+      nc_initial        = 10
       stiffness_factor  = 1.0
-      cell_cycle_time   = 6000 ! Cell cycle time in seconds
-      n_cellcycles      = 1.0
+      cell_cycle_time   = 1500 ! Cell cycle time in seconds
+      n_cellcycles      = 2.0
 
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
@@ -144,6 +147,9 @@ module scem_0_input
       DIT_response(2,0) = 1.0 ! Primitive endoderm external system surface DIT response factor
       DIT_response(2,1) = 1.0 ! Primitive endoderm homotypic interface DIT response factor
       DIT_response(2,2) = 1.0 ! Primitive endoderm heterotypic interface DIT response factor
+
+      CALL GET_COMMAND_ARGUMENT(4,arg4)
+      READ(arg4,*) bleb_amp
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
 
@@ -167,9 +173,10 @@ module scem_0_input
 
       !Create labelled file for data output
       !Catch date and time, create folder to store data in
-      CALL GET_COMMAND_ARGUMENT(4,arg4)
+      CALL GET_COMMAND_ARGUMENT(5,arg5)
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "../data/"//arg1(1:2)//arg1(4:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//arg4(1:1)
+      output_folder = "../data/"//arg1(1:2)//arg1(4:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
+        arg4(1:1)//arg4(3:4)//"_"//arg5(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/sorting_data")
@@ -186,7 +193,7 @@ module scem_0_input
       ! system parameters
       trigger_frac=0.5 ! safety margin for triggering array reallocation
       ! derived quantitites
-      dt_amp_max=0.2
+      dt_amp_max=0.1
       ! cell parameters
       n_c_types=2 ! Number of cell types. 1=epiblast, 2=hypoblast
       n_e_types=2 ! Number of element types. 1=cytoplasm, 2=cortex
@@ -293,7 +300,7 @@ module scem_0_input
       ! temporal parameters - all in *seconds*
       time_max=n_cellcycles*cell_cycle_time ! --> time of simulation in seconds
       output_interval=time_max/49.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
-      output_interval2=time_max/49.0
+      output_interval2=time_max/19.0
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities
         diff_amp=sqrt(dt*diff_coeff) ! amplitude of noise in diffusion term
