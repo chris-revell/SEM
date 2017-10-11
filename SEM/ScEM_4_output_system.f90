@@ -40,11 +40,9 @@ module scem_4_output_system
       !Write cell volume data to file
       if (flag_volume_output.EQ.1) then
         open(unit=27,file=output_folder//'/system_data/cell_volumes.txt',status='unknown',position="append")
-        write(27,'(F24.12,A)',advance="no") time, "	"
-        do n=1, nc-1
-          write(27,'(F24.12,A)',advance="no") cells(n)%volume, "	"
+        do n=1, nc
+          write(27,*) time, cells(n)%label, cells(n)%volume
         end do
-        write(27,'(F24.12,A)',advance='yes') cells(nc)%volume		!Advance line only after the last volume value so that all volumes appear on the same line.
         close(unit=27)
       endif
 
