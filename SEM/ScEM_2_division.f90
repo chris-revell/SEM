@@ -17,7 +17,7 @@ module scem_2_division
       real*8, dimension(3) :: pos,long_axis,relative_pos,x_com
       real*8 :: max_sep,max_sep_old,epsilon
       integer :: i,j,k,m,n,nn
-      !real*8  :: fate_decider
+      real*8  :: fate_decider
 
       allocate(c_el_temp1(0:4*ne_cell))
       allocate(c_el_temp2(0:4*ne_cell))
@@ -67,7 +67,7 @@ module scem_2_division
             cells(k)%c_elements(:)=c_el_temp1(:)
             cells(nc)%c_elements(:)=c_el_temp2(:)
 
-            if (flag_symmetric_division.EQ.1) then
+            if (flag_symmetric_division.EQ.1.OR.intro) then
               cells(nc)%fate=cells(k)%fate
               cells(nc)%label=nc
             else

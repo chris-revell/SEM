@@ -18,7 +18,7 @@ contains
     real*8, dimension(3) :: dx
 
     !Change adhesion magnitudes to account for local surface element density
-    call scem_decouple_adhesion
+    if (nc.LE.1.OR..NOT.intro) call scem_decouple_adhesion
 
     do m=1,np
 

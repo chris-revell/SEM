@@ -52,14 +52,14 @@ contains
       if (success) then
         icount=icount+1                       ! increment counter of successfully placed elements
         elements(icount)%label=icount         ! define new element label
-        elements(icount)%type=2               ! define type of element
-        elements(icount)%stage=1              ! define status of element to be steady-state
+        elements(icount)%type=1               ! define type of element
+        elements(icount)%stage=0              ! define status of element to be fading in
         elements(icount)%strength=1.0         ! weighting for potential interactions
         elements(icount)%parent=1             ! associate new element with this cell
         elements(icount)%position(:)=pos_1(:) ! position of new element w.r.t. origin
         elements(icount)%age=0.0              ! initialize age of new element
         elements(icount)%velocity(:)=0.0      ! initialize velocity of new element
-      endif 
+      endif
 
   	end do
 
