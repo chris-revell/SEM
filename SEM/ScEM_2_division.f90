@@ -17,7 +17,7 @@ module scem_2_division
       real*8, dimension(3) :: pos,long_axis,relative_pos,x_com
       real*8 :: max_sep,max_sep_old,epsilon
       integer :: i,j,k,m,n,nn
-      real*8  :: fate_decider
+      !real*8  :: fate_decider
 
       allocate(c_el_temp1(0:4*ne_cell))
       allocate(c_el_temp2(0:4*ne_cell))
@@ -67,19 +67,17 @@ module scem_2_division
             cells(k)%c_elements(:)=c_el_temp1(:)
             cells(nc)%c_elements(:)=c_el_temp2(:)
 
-            !fate_decider is a random number between 0 and 1. If this random number is greater than 0.2
-            !then division is symmetric, otherwise it is asymmetric.
-            !This models the 80:20 split for symmetric vs asymmetric observed for ICM cell division
-            CALL RANDOM_NUMBER(fate_decider) !Fill fate_decider variable with a random number between 0 and 1.
-            if (fate_decider.GE.0.5) then
-              cells(nc)%fate=cells(k)%fate	!Symmetric division
-            elseif (cells(k)%fate.eq.1) then
-              cells(nc)%fate=2			!Asymmetric division where parent cell has type 1
+            if (flag_symmetric_division.EQ.1) then
+              cells(nc)%fate=cells(k)%fate
+              cells(nc)%label=nc
             else
-              cells(nc)%fate=1			!Asymmetric division where parent cell has type 2
-            end if
-
-            cells(nc)%label=nc
+              CALL RANDOM_NUMBER(fate_decider) !Fill fate_decider variable with a random number between 0 and 1.
+              if (fate_decider.GE.0.5) then
+                cells(nc)%fate=cells(k)%fate	!Symmetric division
+              else
+                cells(nc)%fate=MOD(cells(k)%fate,2)+1  !Asymmetric division. New cell has the opposite fate of parent cell.
+              endif
+            endif
 
             !Calculate the centres of mass of the two new daughter cells and store in the original_position component of the cells data type
             x_com(:)=0.0

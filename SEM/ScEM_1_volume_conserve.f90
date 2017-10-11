@@ -23,6 +23,7 @@ module scem_1_volume_conserve
 			real*8, dimension(3)								::	P					!Vector position of element in triplet relative to centre of cell
 			real*8, dimension(3)								::	Q					!Vector position of element in triplet relative to centre of cell
 			real*8, dimension(3)								::	R					!Vector position of element in triplet relative to centre of cell
+			real*8, dimension(3)								::	QcrossR
 			integer															::	label_p		!Global label for element whose position is P
 			integer															::	label_q		!Global label for element whose position is Q
 			integer															::	label_r		!Global label for element whose position is P
@@ -85,24 +86,25 @@ module scem_1_volume_conserve
 									R(:)		= xe_prev(label_r,:)-cells(c)%position(:)
 								end if
 
+								QcrossR = CROSS_PRODUCT(Q,R)
 								!The following calculation determines whether the dot product P.(QxR) gives a positive or negative result, and therefore whether this value requires a positive or negative sign when adding to the total volume sum (and hence volume derivative)
-								volume_fragment=P(1)*Q(2)*R(3)-P(1)*Q(3)*R(2)+P(2)*Q(3)*R(1) &
-																	-P(2)*Q(1)*R(3)+P(3)*Q(1)*R(2)-P(3)*Q(2)*R(1)
+								!volume_fragment=P(1)*Q(2)*R(3)-P(1)*Q(3)*R(2)+P(2)*Q(3)*R(1) - P(2)*Q(1)*R(3)+P(3)*Q(1)*R(2)-P(3)*Q(2)*R(1)
+								volume_fragment = DOT_PRODUCT(P,QcrossR)
 
-
-								if(volume_fragment.LT.0) then
-									!Product is negative, so we add it to the volume sum with a negative sign to ensure positive volume contribution
-									!Hence need a negative sign in front of the corresponding term in the derivative.
-									!Derivative of volume fragment with respect to coordinates of P is +/-(QxR)
-									D(3*i-2)=D(3*i-2)-(Q(2)*R(3)-Q(3)*R(2))
-									D(3*i-1)=D(3*i-1)-(Q(3)*R(1)-Q(1)*R(3))
-									D(3*i)	=D(3*i)	 -(Q(1)*R(2)-Q(2)*R(1))
-								else
-									!Product is positive, so need a positive sign when adding its contribution to the derivative.
-									D(3*i-2)=D(3*i-2)+(Q(2)*R(3)-Q(3)*R(2))
-									D(3*i-1)=D(3*i-1)+(Q(3)*R(1)-Q(1)*R(3))
-									D(3*i)	=D(3*i)	 +(Q(1)*R(2)-Q(2)*R(1))
-								end if
+								!if(volume_fragment.LT.0) then
+								!	!Product is negative, so we add it to the volume sum with a negative sign to ensure positive volume contribution
+								!	!Hence need a negative sign in front of the corresponding term in the derivative.
+								!	!Derivative of volume fragment with respect to coordinates of P is +/-(QxR)
+								!	D(3*i-2)=D(3*i-2)-(Q(2)*R(3)-Q(3)*R(2))
+								!	D(3*i-1)=D(3*i-1)-(Q(3)*R(1)-Q(1)*R(3))
+								!	D(3*i)	=D(3*i)	 -(Q(1)*R(2)-Q(2)*R(1))
+								!else
+								!	!Product is positive, so need a positive sign when adding its contribution to the derivative.
+								!	D(3*i-2)=D(3*i-2)+(Q(2)*R(3)-Q(3)*R(2))
+								!	D(3*i-1)=D(3*i-1)+(Q(3)*R(1)-Q(1)*R(3))
+								!	D(3*i)	=D(3*i)	 +(Q(1)*R(2)-Q(2)*R(1))
+								!end if
+								D(3*i-2:3*i) = D(3*i-2:3*i) + SIGN(1.0,volume_fragment)*QcrossR
 
 								EXIT
 							else

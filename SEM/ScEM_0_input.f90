@@ -22,7 +22,7 @@ module scem_0_input
   integer :: flag_background,flag_povray_elements, flag_randomise
   integer :: flag_povray_pairs,flag_povray_volumes,flag_povray,flag_povray_triangles,flag_povray_cortex_pairs
   integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_radius,flag_measure_type_radius
-  integer :: flag_measure_neighbours,flag_measure_displacement,flag_measure_surface,flag_elements_final
+  integer :: flag_measure_neighbours,flag_measure_displacement,flag_measure_surface,flag_elements_final,flag_symmetric_division
   integer :: flag_measure_randomised,flag_measure_velocity,flag_measure_com,flag_random_init,flag_pre_blebbing
   integer :: flag_relist ! flag triggering relist of sector assignments
   !Variables for initiating randoms number sequence
@@ -106,6 +106,7 @@ module scem_0_input
       flag_division    = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_randomise   = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
       flag_pre_blebbing= 1 ! Causes blebbing in primitive endoderm (cell type 2) when equal to 1.
+      flag_symmetric_division=1 ! If =1, division will always produce daughter cells of the same fate as the parent cell. 
 
       !Output control switches
       flag_povray = 1                ! Switch to turn off povray output entirely
@@ -131,7 +132,7 @@ module scem_0_input
       nc_initial        = 10
       stiffness_factor  = 1.0
       cell_cycle_time   = 1500 ! Cell cycle time in seconds
-      n_cellcycles      = 1.2
+      n_cellcycles      = 2.0
 
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)

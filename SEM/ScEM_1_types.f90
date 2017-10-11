@@ -17,7 +17,6 @@ module scem_1_types
     integer :: DIT_factor     ! Factor for setting adjustement of inter-element interactions according to differential adhesion hypothesis. This factor essentially labels the kind of interface at which an element sits.
     real    :: adhesion_factor! Factor for adjusting the magnitude of adhesion according to local density of surface elements.
     real*8  :: age            ! element age (an internal clock for each element)
-    real*8  :: blebfactor     ! element age (an internal clock for each element)
     real*8  :: strength       ! a linear measure of presence/age for elements of status=0 (fading in)
     real*8, dimension(3) :: position ! element's position in absolute frame
     real*8, dimension(3) :: velocity ! element's instanteous velocity
