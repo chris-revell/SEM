@@ -71,16 +71,6 @@ module scem_0_input
   real*8 :: spherical_boundary_radius
 !**********
 
-  real*8  :: radius1_mean
-  real*8  :: radius1_min
-  real*8  :: radius2_mean
-  real*8  :: radius2_max
-  real*8  :: radius3_mean
-  real*8  :: radius3_max
-  integer :: neighbours_mean
-  integer :: neighbours_max
-  real*8  :: surface_mean
-  real*8  :: surface_max
   integer :: n_random     = 0
   integer :: n_random_max = 20000
 
@@ -91,6 +81,13 @@ module scem_0_input
 !  integer :: loopcount
 
   real*8  :: bleb_amp
+  integer	:: neighbour_measurement
+  real*8  :: surface_measurement
+  real*8  :: epiradius_measurement,preradius_measurement
+  real*8  :: sysepiradius_measurement,syspreradius_measurement
+  integer :: neighbour_below,surface_below
+  integer :: radius_pre_below, radius_pre_sys_below
+  integer :: radius_epi_below, radius_epi_sys_below
 
   contains
 
@@ -106,20 +103,20 @@ module scem_0_input
       flag_division    = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_randomise   = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
       flag_pre_blebbing= 1 ! Causes blebbing in primitive endoderm (cell type 2) when equal to 1.
-      flag_symmetric_division=1 ! If =1, division will always produce daughter cells of the same fate as the parent cell. 
+      flag_symmetric_division=1 ! If =1, division will always produce daughter cells of the same fate as the parent cell.
 
       !Output control switches
-      flag_povray = 1                ! Switch to turn off povray output entirely
+      flag_povray = 0                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
-        flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
+        flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
-      flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
+      flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
       flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
       flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 0    ! Switch to turn off type radius sorting measurement

@@ -21,9 +21,10 @@ contains
 
   subroutine scem_measure_randomised
 
-    integer                          :: n,i,epi_counter,epi_ran_counter,configuration
-    real*8                           :: fate_decider
-    logical                          :: fatesnotbalanced
+    integer :: n,i,epi_counter,epi_ran_counter,configuration
+    real*8  :: fate_decider
+    logical :: fatesnotbalanced
+
 
     !Store current system state
     epi_counter=0
@@ -31,6 +32,9 @@ contains
       stored_fates(n) = cells(n)%fate
       if (cells(n)%fate.EQ.1) epi_counter = epi_counter+1
     enddo
+
+    neighbour_below = 0
+    surface_below   = 0
 
     !Set n_random. The number of random tests is set to be the minimum of nc choose n_epiblasts or 20000. This prevents an infinite loop when the number of possible configurations is smaller than 10000.
     !Use Stirling's approximation in binomial coefficient.
@@ -49,12 +53,12 @@ contains
 !    radius1_min = 1000000000
 !    radius2_mean = 0
 !    radius2_max = 0
-    radius3_mean = 0
-    radius3_max = 0
-    neighbours_mean = 0
-    neighbours_max = 0
-    surface_mean = 0
-    surface_max = 0
+!    radius3_mean = 0
+!    radius3_max = 0
+!    neighbours_mean = 0
+!    neighbours_max = 0
+!    surface_mean = 0
+!    surface_max = 0
 
     do i=1, n_random
 
@@ -103,12 +107,13 @@ contains
 
 !    radius1_mean    = radius1_mean/n_random
 !    radius2_mean    = radius2_mean/n_random
-    radius3_mean    = radius3_mean/n_random
-    neighbours_mean = neighbours_mean/n_random
-    surface_mean    = surface_mean/n_random
-    write(44,"(*(G0,:,1X))") time,radius3_mean,radius3_max!,radius1_mean,radius1_min,radius2_mean,radius2_max,radius3_mean,radius3_max
-    write(45,"(*(G0,:,1X))") time,neighbours_mean,neighbours_max
-    write(46,"(*(G0,:,1X))") time,surface_mean,surface_max
+!    radius3_mean    = radius3_mean/n_random
+!    neighbours_mean = neighbours_mean/n_random
+!    surface_mean    = surface_mean/n_random
+    write(44,"(*(G0,:,1X))") time,radius_pre_below*100/n_random,radius_pre_sys_below*100/n_random,&
+      radius_epi_below*100/n_random,radius_epi_sys_below*100/n_random!,radius3_mean,radius3_max!,radius1_mean,radius1_min,radius2_mean,radius2_max,radius3_mean,radius3_max
+    write(45,"(*(G0,:,1X))") time,neighbour_below*100.0/n_random!neighbours_mean,neighbours_max
+    write(46,"(*(G0,:,1X))") time,surface_below*100.0/n_random!surface_mean,surface_max
     close(44)
     close(45)
     close(46)

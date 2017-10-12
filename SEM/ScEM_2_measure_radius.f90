@@ -13,69 +13,72 @@ contains
 
 	subroutine scem_measure_radius
 
-		integer :: i,precount!,epicount
-		real*8	:: sysmeanradius!,premeanradius,epimeanradius
-		real*8, dimension(3) :: sys_COM!,pre_COM,epi_COM		!Vector position of system centres of mass
+		integer :: i,preelementcount,epielementcount,precellcount,epicellcount
+		real*8	:: syspremeanradius,sysepimeanradius,premeanradius,epimeanradius
+		real*8, dimension(3) :: sys_COM,pre_COM,epi_COM		!Vector position of system centres of mass
 		real*8, dimension(3) :: cell_vector		!Vector position of cell relative to system centre of mass
 
-		if (.NOT.randomising) open(unit=35,file=output_folder//'/sorting_data/radius.txt', status='unknown',position="append")
+!		if (.NOT.randomising) open(unit=35,file=output_folder//'/sorting_data/radius.txt', status='unknown',position="append")
 
 		!Need to start by calculating the centre of mass of the system, which can change after each iteration due to cell movement.
-!		pre_COM(:)= 0
-!		epi_COM(:)= 0
+		pre_COM(:)= 0
+		epi_COM(:)= 0
 		sys_COM(:)= 0
-!		precount  = 0
-!		epicount  = 0
+		preelementcount  = 0
+		epielementcount  = 0
 		do i=1, ne
 			sys_COM(:)=sys_COM(:)+elements(i)%position(:)
-!			if (cells(elements(i)%parent)%fate.EQ.2) then
-!				pre_COM(:)=pre_COM(:)+elements(i)%position(:)
-!				precount = precount + 1
-!			else
-!				epi_COM(:)=epi_COM(:)+elements(i)%position(:)
-!				epicount = epicount + 1
-!			endif
+			if (cells(elements(i)%parent)%fate.EQ.2) then
+				pre_COM(:)=pre_COM(:)+elements(i)%position(:)
+				preelementcount = preelementcount + 1
+			else
+				epi_COM(:)=epi_COM(:)+elements(i)%position(:)
+				epielementcount = epielementcount + 1
+			endif
 		enddo
-!		pre_COM(:)=pre_COM(:)/precount  !Centre of mass found by dividing sum by total mass, ie total number of elements.
-!		epi_COM(:)=epi_COM(:)/epicount
+		pre_COM(:)=pre_COM(:)/preelementcount  !Centre of mass found by dividing sum by total mass, ie total number of elements.
+		epi_COM(:)=epi_COM(:)/epielementcount
 		sys_COM(:)=sys_COM(:)/ne
 
 		!Now switching from elements to cells
-		precount = 0
-!		premeanradius = 0
-!		epicount = 0
-!		epimeanradius = 0
-		sysmeanradius = 0
+		precellcount = 0
+		epicellcount = 0
+		epimeanradius = 0
+		premeanradius = 0
+		sysepimeanradius = 0
+		syspremeanradius = 0
 		do i=1, nc
 			if (cells(i)%fate.EQ.2) then
-!				cell_vector = cells(i)%position - pre_COM
-!				premeanradius = premeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))*cells(i)%c_elements(0)
+				cell_vector = cells(i)%position - pre_COM
+				premeanradius = premeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))*cells(i)%c_elements(0)
 				cell_vector = cells(i)%position - sys_COM
-				precount = precount + 1
-				sysmeanradius = sysmeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))!*cells(i)%c_elements(0)
+				precellcount = precellcount + 1
+				syspremeanradius = syspremeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))!*cells(i)%c_elements(0)
 			else
-!				cell_vector = cells(i)%position - epi_COM
-!				epimeanradius = epimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))*cells(i)%c_elements(0)
-!				epicount = epicount + 1
+				cell_vector = cells(i)%position - epi_COM
+				epimeanradius = epimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))*cells(i)%c_elements(0)
+				epicellcount = epicellcount + 1
 				CYCLE
 			endif
 		enddo
-!		premeanradius = premeanradius/precount
-!		epimeanradius = epimeanradius/epicount
-		sysmeanradius = sysmeanradius/precount
+		premeanradius = premeanradius/precellcount
+		epimeanradius = epimeanradius/epicellcount
+		syspremeanradius = syspremeanradius/precellcount
+		sysepimeanradius = sysepimeanradius/epicellcount
 
 		if (randomising) then
-!			radius1_mean = radius1_mean + epimeanradius
-!			radius1_min  = MIN(radius1_min,epimeanradius)
-!			radius2_mean = radius2_mean + premeanradius
-!			radius2_max  = MAX(radius2_max,premeanradius)
-			radius3_mean = radius3_mean + sysmeanradius
-			radius3_max  = MAX(radius3_max,sysmeanradius)
+			if (premeanradius.LE.preradius_measurement) radius_pre_below = radius_pre_below+1
+			if (epimeanradius.LE.epiradius_measurement) radius_epi_below = radius_epi_below+1
+			if (syspremeanradius.LE.syspreradius_measurement) radius_pre_sys_below = radius_pre_sys_below+1
+			if (sysepimeanradius.LE.sysepiradius_measurement) radius_epi_sys_below = radius_epi_sys_below+1
 		else
-			write(35,"(*(G0,:,1X))") time, sysmeanradius ! epimeanradius, premeanradius, sysmeanradius
+			epiradius_measurement = epimeanradius
+			preradius_measurement = premeanradius
+		  sysepiradius_measurement = sysepimeanradius
+			syspreradius_measurement = syspremeanradius
 		endif
 
-		close(35)
+	!	close(35)
 
 	end subroutine scem_measure_radius
 
