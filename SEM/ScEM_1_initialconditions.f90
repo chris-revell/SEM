@@ -49,10 +49,11 @@ contains
     write(22,"(*(G0,:,1X))") 'cell cycle time      = ',cell_cycle_time
     write(22,"(*(G0,:,1X))") 'number of cell cycles= ',n_cellcycles
     write(22,"(*(G0,:,1X))") "epi_adhesion         = ",epi_adhesion
-    write(22,"(*(G0,:,1X))") "pre_adhesion        = ",pre_adhesion
-    write(22,"(*(G0,:,1X))") "epi_pre_adhesion    = ",epi_pre_adhesion
+    write(22,"(*(G0,:,1X))") "pre_adhesion         = ",pre_adhesion
+    write(22,"(*(G0,:,1X))") "epi_pre_adhesion     = ",epi_pre_adhesion
     write(22,"(*(G0,:,1X))") 'cortex_constant1     = ',cortex_constant1
     write(22,"(*(G0,:,1X))") 'cortex_constant2     = ',cortex_constant2
+    write(22,"(*(G0,:,1X))") 'bleb_amp             = ',bleb_amp
     write(22,"(*(G0,:,1X))") ""
     write(22,"(*(G0,:,1X))") "DIT_response(1,0) = ",DIT_response(1,0)," (Epiblast external system surface DIT response factor)"
     write(22,"(*(G0,:,1X))") "DIT_response(1,1) = ",DIT_response(1,1)," (Epiblast homotypic interface DIT response factor)"

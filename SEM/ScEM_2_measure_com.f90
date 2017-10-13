@@ -13,9 +13,7 @@ contains
   subroutine scem_measure_com
 
     open(unit=39,file=output_folder//'/sorting_data/com.txt', status='unknown', position="append")
-
     write(39,*) time, SQRT(DOT_PRODUCT(pre_com-epi_com,pre_com-epi_com))
-
     close(unit=39)
 
   end subroutine scem_measure_com

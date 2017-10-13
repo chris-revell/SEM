@@ -19,7 +19,6 @@ contains
 
 !		if (.NOT.randomising) open(unit=35,file=output_folder//'/sorting_data/radius.txt', status='unknown',position="append")
 
-		!Now switching from elements to cells
 		epimeanradius = 0
 		premeanradius = 0
 		sysepimeanradius = 0
@@ -27,12 +26,12 @@ contains
 		do i=1, nc
 			if (cells(i)%fate.EQ.2) then
 				cell_vector = cells(i)%position - pre_com
-				premeanradius = premeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))*cells(i)%c_elements(0)
+				premeanradius = premeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))!*cells(i)%c_elements(0)
 				cell_vector = cells(i)%position - sys_com
 				syspremeanradius = syspremeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))
 			else
 				cell_vector = cells(i)%position - epi_com
-				epimeanradius = epimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))*cells(i)%c_elements(0)
+				epimeanradius = epimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))!*cells(i)%c_elements(0)
 				cell_vector = cells(i)%position - sys_com
 				sysepimeanradius = sysepimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))
 			endif

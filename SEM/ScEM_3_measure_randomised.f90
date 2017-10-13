@@ -27,8 +27,10 @@ contains
       stored_fates(n) = cells(n)%fate
     enddo
 
-    neighbour_below      = 0
-    surface_below        = 0
+    neighbour_epi_below  = 0
+    neighbour_pre_below  = 0
+    surface_epi_below    = 0
+    surface_pre_below    = 0
     radius_pre_below     = 0
     radius_pre_sys_below = 0
     radius_epi_below     = 0
@@ -87,12 +89,12 @@ contains
     endif
     if (flag_measure_neighbours.EQ.1) then
       open(unit=45, file=output_folder//'/randomised_data/neighbours.txt',status='unknown',position="append")
-      write(45,"(*(G0,:,1X))") time,neighbour_below*100.0/n_random
+      write(45,"(*(G0,:,1X))") time,neighbour_epi_below*100.0/n_random,neighbour_pre_below*100.0/n_random
       close(45)
     endif
     if (flag_measure_surface.EQ.1) then
       open(unit=46, file=output_folder//'/randomised_data/surface.txt',status='unknown',position="append")
-      write(46,"(*(G0,:,1X))") time,surface_below*100.0/n_random
+      write(46,"(*(G0,:,1X))") time,surface_epi_below*100.0/n_random,surface_pre_below*100.0/n_random
       close(46)
     endif
 

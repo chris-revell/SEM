@@ -16,12 +16,8 @@ contains
     integer              :: factor1,factor2,factor3
     real*8               :: epi_area
     real*8               :: pre_area
-!    real*8               :: epi_out
-!    real*8               :: pre_out
     real*8               :: area
     real*8, dimension(3) :: a,b,c
-!    real*8, dimension(3) :: b
-!    real*8, dimension(3) :: c
 
     !if (.NOT.randomising) open(unit=43,file=output_folder//"/sorting_data/surface.txt",status="unknown",position="append")
 
@@ -52,18 +48,16 @@ contains
     enddo
 
     if (epi_area.GT.0.AND.pre_area.GT.0) then
-!      epi_out = real(epi_area)/real(epi_area+pre_area)
-!      pre_out = real(pre_area)/real(epi_area+pre_area)
-
       if (randomising) then
-        if (pre_area.LE.surface_measurement) surface_below = surface_below+1
+        if (pre_area.LE.surface_pre_measurement) surface_pre_below = surface_pre_below+1
+        if (epi_area.LE.surface_epi_measurement) surface_epi_below = surface_epi_below+1
       else
-        surface_measurement = pre_area
+        surface_pre_measurement = pre_area
+        surface_epi_measurement = epi_area
       endif
-
     endif
 
-    close(43)
+    !close(43)
 
   end subroutine scem_measure_surface
 

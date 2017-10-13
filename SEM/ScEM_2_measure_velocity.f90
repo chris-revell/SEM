@@ -18,13 +18,13 @@ contains
     real*8, dimension(3)              :: displacement
     real*8,allocatable,dimension(:,:) :: cell_velocities
 
-    if (randomising) then
-      open(unit=37,file=output_folder//'/randomised_data/velocity1.txt', status='unknown', position="append")
-      open(unit=38,file=output_folder//'/randomised_data/velocity2.txt', status='unknown', position="append")
-    else
+!    if (randomising) then
+!      open(unit=37,file=output_folder//'/randomised_data/velocity1.txt', status='unknown', position="append")
+!      open(unit=38,file=output_folder//'/randomised_data/velocity2.txt', status='unknown', position="append")
+!    else
       open(unit=37,file=output_folder//'/sorting_data/velocity1.txt', status='unknown', position="append")
       open(unit=38,file=output_folder//'/sorting_data/velocity2.txt', status='unknown', position="append")
-    endif
+!    endif
 
     if (allocated(cell_velocities)) then
 				if (nc.GT.SIZE(cell_velocities,DIM=1)) then

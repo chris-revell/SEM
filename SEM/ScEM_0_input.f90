@@ -71,18 +71,18 @@ module scem_0_input
 !**********
 
   integer :: n_random     = 0
-  integer :: n_random_max = 20000
+  integer :: n_random_max = 100000
 
   real*8  :: area_normalisation_factor
   integer :: area_normalisation_count
   real*8  :: bleb_amp
-  integer	:: neighbour_measurement
-  real*8  :: surface_measurement
+  integer	:: neighbour_epi_measurement,neighbour_pre_measurement
+  real*8  :: surface_epi_measurement,surface_pre_measurement
   real*8  :: epiradius_measurement,preradius_measurement
   real*8  :: sysepiradius_measurement,syspreradius_measurement
   integer :: neighbour_below,surface_below
-  integer :: radius_pre_below, radius_pre_sys_below
-  integer :: radius_epi_below, radius_epi_sys_below
+  integer :: radius_pre_below,radius_pre_sys_below
+  integer :: radius_epi_below,radius_epi_sys_below
   integer :: epielementcount
   integer :: epicellcount
 
@@ -133,7 +133,7 @@ module scem_0_input
       epi_pre_adhesion = pre_adhesion   ! Magnitude of adhesion between epiblasts and primitive endoderm
       CALL GET_COMMAND_ARGUMENT(2,arg2)
       READ(arg2,*) cortex_constant1   ! Magnitude of baseline cortical tension in epiblasts
-      cortex_constant2  = 0.9*cortex_constant1   ! Magnitude of baseline cortical tension in primitive endoderm
+      cortex_constant2  = cortex_constant1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0 ! Epiblast external system surface DIT response factor
       CALL GET_COMMAND_ARGUMENT(3,arg3)
       READ(arg3,*) DIT_response(1,1) ! Epiblast homotypic interface DIT response factor

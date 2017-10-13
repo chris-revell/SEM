@@ -16,13 +16,13 @@ contains
     real*8  :: displacement
     real*8, dimension(3) :: displacement_vector
 
-    if (randomising) then
-      open(unit=41, file=output_folder//"/randomised_data/displacement1.txt", status="unknown", position="append")
-      open(unit=42, file=output_folder//"/randomised_data/displacement2.txt", status="unknown", position="append")
-    else
+!    if (randomising) then
+!      open(unit=41, file=output_folder//"/randomised_data/displacement1.txt", status="unknown", position="append")
+!      open(unit=42, file=output_folder//"/randomised_data/displacement2.txt", status="unknown", position="append")
+!    else
       open(unit=41, file=output_folder//"/sorting_data/displacement1.txt", status="unknown", position="append")
       open(unit=42, file=output_folder//"/sorting_data/displacement2.txt", status="unknown", position="append")
-    endif
+!    endif
 
     do n=1, nc
 
