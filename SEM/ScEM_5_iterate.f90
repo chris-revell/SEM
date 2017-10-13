@@ -34,7 +34,7 @@ contains
     logical :: fatesnotbalanced
 
     ! iterate system for pre-defined time interval
-    do while (time.LT.time_max)
+    do while (nc.LE.30)
 
       if (intro.AND.nc.GE.nc_initial) then
         write(*,'(A21,I2,A41)') "Grew intro system to ",nc_initial," cells. Initiating simulation parameters."
@@ -62,6 +62,7 @@ contains
         enddo
         write(*,'(A29,I2)') "Initial number of epiblasts: ", epi_counter
         write(*,'(A30,I2)') "Initial number of hypoblasts: ", pre_counter
+        call scem_com
         call scem_output_system
         if (flag_povray.EQ.1) call scem_output_povray
       endif
@@ -74,7 +75,6 @@ contains
       call scem_integrate ! first integration and increment by half a step
       forall(n=1:ne) elements(n)%position(:)=elements(n)%position(:)+0.5*dt*elements(n)%velocity(:)
       forall(n=1:ne) elements(n)%velocity(:)=0.0
-      !call scem_cortex
       call scem_integrate ! second integration and increment by a full step
       forall(n=1:ne) elements(n)%position(:)=xe_prev(n,:)+dt*elements(n)%velocity(:)
 

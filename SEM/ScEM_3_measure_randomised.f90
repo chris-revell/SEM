@@ -9,11 +9,7 @@ module scem_3_measure_randomised
   use scem_1_types
   use scem_2_measure_radius
   use scem_2_measure_neighbours
-  use scem_2_measure_displacement
-  use scem_2_measure_type_radius
   use scem_2_measure_surface
-  use scem_2_measure_velocity
-  use scem_2_measure_com
 
   implicit none
 
@@ -21,47 +17,34 @@ contains
 
   subroutine scem_measure_randomised
 
-    integer :: n,i,epi_counter,epi_ran_counter,configuration
+    integer :: n,i,epi_ran_counter,configuration
     real*8  :: fate_decider
     logical :: fatesnotbalanced
 
 
     !Store current system state
-    epi_counter=0
     do n=1,nc
       stored_fates(n) = cells(n)%fate
-      if (cells(n)%fate.EQ.1) epi_counter = epi_counter+1
     enddo
 
-    neighbour_below = 0
-    surface_below   = 0
+    neighbour_below      = 0
+    surface_below        = 0
+    radius_pre_below     = 0
+    radius_pre_sys_below = 0
+    radius_epi_below     = 0
+    radius_epi_sys_below = 0
 
     !Set n_random. The number of random tests is set to be the minimum of nc choose n_epiblasts or 20000. This prevents an infinite loop when the number of possible configurations is smaller than 10000.
     !Use Stirling's approximation in binomial coefficient.
     if (n_random.LT.n_random_max.AND.nc.GT.20) n_random = n_random_max
     if (n_random.LT.n_random_max) n_random = MIN(20000,&
-      INT(0.95*(nc**(nc+0.5))/(SQRT(2*pi)*epi_counter**(epi_counter+0.5)*(nc-epi_counter)**(nc-epi_counter+0.5))))
+      INT(0.95*(nc**(nc+0.5))/(SQRT(2*pi)*epicellcount**(epicellcount+0.5)*(nc-epicellcount)**(nc-epicellcount+0.5))))
 
     !Set randomising = .TRUE. in order to divert output from measurement subroutines to randomised data files.
     randomising = .TRUE.
     tested(:) = 0
 
-    open(unit=44, file=output_folder//'/randomised_data/radius.txt', status='unknown',position="append")
-    open(unit=45, file=output_folder//'/randomised_data/neighbours.txt', status='unknown',position="append")
-    open(unit=46, file=output_folder//'/randomised_data/surface.txt', status='unknown',position="append")
-!    radius1_mean = 0
-!    radius1_min = 1000000000
-!    radius2_mean = 0
-!    radius2_max = 0
-!    radius3_mean = 0
-!    radius3_max = 0
-!    neighbours_mean = 0
-!    neighbours_max = 0
-!    surface_mean = 0
-!    surface_max = 0
-
     do i=1, n_random
-
       fatesnotbalanced = .TRUE.
       do while (fatesnotbalanced)
         epi_ran_counter = 0
@@ -74,7 +57,7 @@ contains
             cells(n)%fate = 2
           endif
         enddo
-        if (epi_ran_counter.EQ.epi_counter) fatesnotbalanced = .FALSE.
+        if (epi_ran_counter.EQ.epicellcount) fatesnotbalanced = .FALSE.
         configuration = 0
         do n=1,nc
           configuration = configuration + (2**(n-1))*(cells(n)%fate-1)
@@ -92,32 +75,26 @@ contains
 
       !Perform sorting measurements on newly randomised system. Randomised measurements not required for velocity or surface measurements.
       if (flag_measure_radius.EQ.1)       call scem_measure_radius
-
       if (flag_measure_neighbours.EQ.1)   call scem_measure_neighbours
-
-!      if (flag_measure_displacement.EQ.1) call scem_measure_displacement
-
-!      if (flag_measure_type_radius.EQ.1)  call scem_measure_type_radius
-
       if (flag_measure_surface.EQ.1)      call scem_measure_surface
-
-!      if (flag_measure_velocity.EQ.1)     call scem_measure_velocity
-
     enddo
 
-!    radius1_mean    = radius1_mean/n_random
-!    radius2_mean    = radius2_mean/n_random
-!    radius3_mean    = radius3_mean/n_random
-!    neighbours_mean = neighbours_mean/n_random
-!    surface_mean    = surface_mean/n_random
-    write(44,"(*(G0,:,1X))") time,radius_pre_below*100/n_random,radius_pre_sys_below*100/n_random,&
-      radius_epi_below*100/n_random,radius_epi_sys_below*100/n_random!,radius3_mean,radius3_max!,radius1_mean,radius1_min,radius2_mean,radius2_max,radius3_mean,radius3_max
-    write(45,"(*(G0,:,1X))") time,neighbour_below*100.0/n_random!neighbours_mean,neighbours_max
-    write(46,"(*(G0,:,1X))") time,surface_below*100.0/n_random!surface_mean,surface_max
-    close(44)
-    close(45)
-    close(46)
-
+    if (flag_measure_radius.EQ.1) then
+      open(unit=44, file=output_folder//'/randomised_data/radius.txt',status='unknown',position="append")
+      write(44,"(*(G0,:,1X))") time,radius_pre_below*100/n_random,radius_pre_sys_below*100/n_random,&
+        radius_epi_below*100/n_random,radius_epi_sys_below*100/n_random
+      close(44)
+    endif
+    if (flag_measure_neighbours.EQ.1) then
+      open(unit=45, file=output_folder//'/randomised_data/neighbours.txt',status='unknown',position="append")
+      write(45,"(*(G0,:,1X))") time,neighbour_below*100.0/n_random
+      close(45)
+    endif
+    if (flag_measure_surface.EQ.1) then
+      open(unit=46, file=output_folder//'/randomised_data/surface.txt',status='unknown',position="append")
+      write(46,"(*(G0,:,1X))") time,surface_below*100.0/n_random
+      close(46)
+    endif
 
     !Restore original system state.
     do n=1,nc

@@ -21,7 +21,7 @@ module scem_0_input
   integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve
   integer :: flag_background,flag_povray_elements, flag_randomise
   integer :: flag_povray_pairs,flag_povray_volumes,flag_povray,flag_povray_triangles,flag_povray_cortex_pairs
-  integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_radius,flag_measure_type_radius
+  integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_radius
   integer :: flag_measure_neighbours,flag_measure_displacement,flag_measure_surface,flag_elements_final,flag_symmetric_division
   integer :: flag_measure_randomised,flag_measure_velocity,flag_measure_com,flag_random_init,flag_pre_blebbing
   integer :: flag_relist ! flag triggering relist of sector assignments
@@ -56,12 +56,11 @@ module scem_0_input
   real   :: n_cellcycles !Number of cell cycles for run
 
   !Variables for setting output folder
-!  character(len=8) :: date_of_run   !Date of simulation run
-!  character(len=10):: time_of_run   !Time of simulation run
   character(len=25):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
   character(len=4) :: arg1,arg2,arg3,arg4
   character(len=1) :: arg5
+
   logical :: randomising
   logical :: intro
 
@@ -76,10 +75,6 @@ module scem_0_input
 
   real*8  :: area_normalisation_factor
   integer :: area_normalisation_count
-!  real*4,dimension(3,30)  :: normalisation_factors
-!  real*4  :: epsilon1 = 0.0001
-!  integer :: loopcount
-
   real*8  :: bleb_amp
   integer	:: neighbour_measurement
   real*8  :: surface_measurement
@@ -88,6 +83,8 @@ module scem_0_input
   integer :: neighbour_below,surface_below
   integer :: radius_pre_below, radius_pre_sys_below
   integer :: radius_epi_below, radius_epi_sys_below
+  integer :: epielementcount
+  integer :: epicellcount
 
   contains
 
@@ -116,10 +113,9 @@ module scem_0_input
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
-      flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
+      flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
       flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
       flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
-      flag_measure_type_radius= 0    ! Switch to turn off type radius sorting measurement
       flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
       flag_measure_com        = 0
@@ -364,21 +360,8 @@ module scem_0_input
       intro_rel_strength(2,2,2,1,2,2) = 3.0  !Repulsive component, inter-cellular Hypoblast cytoplasm-hypoblast cortex
       intro_rel_strength(2,2,2,2,2,2) = 0.5*intro_rel_strength(1,2,2,2,2,2)  !Repulsive component, inter-cellular Hypoblast cortex-hypoblast cortex
 
-
       area_normalisation_factor = 0.0
       area_normalisation_count  = 0
-
-!      !Import local area normalisation factors
-!      open(12, file="normalisationfactors.txt")
-!      read(12,*) normalisation_factors
-!      area_normalisation_factor = 1
-!      do loopcount=1,30
-!        if ((ABS(normalisation_factors(1,loopcount)-stiffness_factor).LT.epsilon1).AND.&
-!    (ABS(normalisation_factors(2,loopcount)-cortex_constant1).LT.epsilon1)) then
-!          area_normalisation_factor = normalisation_factors(3,loopcount)
-!        endif
-!      enddo
-!      close(12)
 
     end subroutine scem_input
 

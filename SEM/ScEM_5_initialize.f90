@@ -48,27 +48,15 @@ module scem_5_initialize
       x_cen(2)=sector_size*int(ny/2)
       x_cen(3)=sector_size*int(nz/2)
 
-      ! create initial values for sector arrays
-      call scem_relist(0)
-
-      ! locate element pairs
-      call scem_pairs
-
-      ! identify elements with cell
-      call scem_identity
-
-      ! calculate initial center of mass and radius of gyration of cell(s)
-      call scem_com
-
-      !Find cortex elements
-      call scem_cortex
-
+      call scem_relist(0)! Create initial values for sector arrays
+      call scem_pairs    ! Locate element pairs
+      call scem_identity ! Identify elements with cell
+      call scem_com      ! Calculate initial center of mass and radius of gyration of cell(s)
+      call scem_cortex   ! Find cortex elements
 	    ! Calculate initial cell volumes
       if (flag_volume_output.EQ.1.OR.flag_conserve.EQ.1.OR.flag_background.NE.0) call scem_volume_calculate
-
       ! write initial system data to file
       if (.NOT.intro) call scem_output_system
-
       ! Write element data to files in povray format
       if ((flag_povray.EQ.1).AND.(.NOT.intro)) call scem_output_povray
 

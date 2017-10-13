@@ -39,7 +39,6 @@ contains
     write(22,"(*(G0,:,1X))") "flag_measure_radius      = ",flag_measure_radius
     write(22,"(*(G0,:,1X))") "flag_measure_neighbours  = ",flag_measure_neighbours
     write(22,"(*(G0,:,1X))") "flag_measure_displacement= ",flag_measure_displacement
-    write(22,"(*(G0,:,1X))") "flag_measure_type_radius = ",flag_measure_type_radius
     write(22,"(*(G0,:,1X))") "flag_measure_surface     = ",flag_measure_surface
     write(22,"(*(G0,:,1X))") "flag_measure_velocity    = ",flag_measure_velocity
     write(22,"(*(G0,:,1X))") "flag_measure_com         = ",flag_measure_com

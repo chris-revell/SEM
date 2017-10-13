@@ -8,7 +8,6 @@ module scem_4_output_system
   use scem_2_measure_radius
   use scem_2_measure_neighbours
   use scem_2_measure_displacement
-  use scem_2_measure_type_radius
   use scem_2_measure_surface
   use scem_2_measure_velocity
   use scem_2_measure_com
@@ -20,21 +19,13 @@ module scem_4_output_system
 
     subroutine scem_output_system
 
-      integer :: n,epi_count,pre_count
+      integer :: n
 
       !Print time and cell count to cell_count file to allow cell count to be plotted against time
       if (flag_count_output.EQ.1) then
         open(unit=28,file=output_folder//'/system_data/cell_count.txt', status='unknown')
-        epi_count = 0
-        pre_count = 0
-        do n=1,nc
-          if (cells(n)%fate.EQ.1) then
-            epi_count = epi_count + 1
-          else
-            pre_count = pre_count + 1
-          endif
-        enddo
-        write(28,*) real(time), epi_count, pre_count
+        write(28,*) real(time), epicellcount, (nc-epicellcount) !epicellcount calculated in scem_com
+        close(28)
       endif
 
       !Write cell volume data to file
@@ -43,24 +34,16 @@ module scem_4_output_system
         do n=1, nc
           write(27,*) time, cells(n)%label, cells(n)%volume
         end do
-        close(unit=27)
+        close(27)
       endif
 
       !Sorting measurements
       if (flag_measure_radius.EQ.1)       call scem_measure_radius
-
       if (flag_measure_neighbours.EQ.1)   call scem_measure_neighbours
-
-      if (flag_measure_displacement.EQ.1) call scem_measure_displacement
-
-      if (flag_measure_type_radius.EQ.1)  call scem_measure_type_radius
-
       if (flag_measure_surface.EQ.1)      call scem_measure_surface
-
       if (flag_measure_randomised.EQ.1)   call scem_measure_randomised
-
+      if (flag_measure_displacement.EQ.1) call scem_measure_displacement
       if (flag_measure_velocity.EQ.1)     call scem_measure_velocity
-
       if (flag_measure_com.EQ.1)          call scem_measure_com
 
     end subroutine scem_output_system

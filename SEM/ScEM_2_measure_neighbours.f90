@@ -22,8 +22,7 @@ contains
 		!if (.NOT.randomising) open(unit=36,file=output_folder//'/sorting_data/neighbours.txt',status='unknown',position="append")
 
 		!Start by looking at all element-element interaction pairs.
-		!If a pair acts between elements in cells of different parents i and j where i=!j,
-		!set neighbours(i,j) = .TRUE.
+		!If a pair acts between elements in cells of different parents i and j where i=!j, set neighbours(i,j) = .TRUE.
 		neighbours(:,:) = .FALSE.
 		do n=1, np
 			!Find labels of parent cells for elements in interaction pair
@@ -52,15 +51,12 @@ contains
 
 		!Write measurements to file
 		if (randomising) then
-			!neighbours_mean = neighbours_mean + neighbour_counts(1,1)
-			!neighbours_max  = MAX(neighbours_max,neighbour_counts(1,1))
 			if (neighbour_counts(1,1).LE.neighbour_measurement) neighbour_below = neighbour_below+1
 		else
 			neighbour_measurement = neighbour_counts(1,1)
-			!write(36,*) time, neighbour_counts(1,1), neighbour_counts(2,2), (neighbour_counts(1,2)+neighbour_counts(2,1))
 		endif
 
-		close(36)
+		!close(36)
 
 	end subroutine scem_measure_neighbours
 

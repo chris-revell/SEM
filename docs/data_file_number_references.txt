@@ -12,8 +12,8 @@ List of file numbers in SEM code
 30 = povray data
 31 =
 32 =
-33 = type_radius1.txt
-34 = type_radius2.txt
+33 =
+34 = 
 35 = radius.txt
 36 = neighbours.txt
 37 = velocity1.txt

@@ -16,12 +16,12 @@ contains
     integer              :: factor1,factor2,factor3
     real*8               :: epi_area
     real*8               :: pre_area
-    real*8               :: epi_out
-    real*8               :: pre_out
+!    real*8               :: epi_out
+!    real*8               :: pre_out
     real*8               :: area
-    real*8, dimension(3) :: a
-    real*8, dimension(3) :: b
-    real*8, dimension(3) :: c
+    real*8, dimension(3) :: a,b,c
+!    real*8, dimension(3) :: b
+!    real*8, dimension(3) :: c
 
     !if (.NOT.randomising) open(unit=43,file=output_folder//"/sorting_data/surface.txt",status="unknown",position="append")
 
@@ -52,16 +52,13 @@ contains
     enddo
 
     if (epi_area.GT.0.AND.pre_area.GT.0) then
-      epi_out = real(epi_area)/real(epi_area+pre_area)
-      pre_out = real(pre_area)/real(epi_area+pre_area)
+!      epi_out = real(epi_area)/real(epi_area+pre_area)
+!      pre_out = real(pre_area)/real(epi_area+pre_area)
 
       if (randomising) then
-  			!surface_mean = surface_mean + pre_out
-        !surface_max  = MAX(surface_max,pre_out)
-        if (pre_out.LE.surface_measurement) surface_below = surface_below+1
+        if (pre_area.LE.surface_measurement) surface_below = surface_below+1
       else
-        surface_measurement = pre_out
-        !write(43,*) time, epi_out, pre_out
+        surface_measurement = pre_area
       endif
 
     endif
