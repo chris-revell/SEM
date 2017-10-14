@@ -18,7 +18,7 @@ module scem_3_output_final
       !Calculate total time of run. Print to command line and end_of_run_data
       call SYSTEM_CLOCK(current_time)
       total_system_time = (current_time-start_time)/count_rate
-      write(*,*) "Time taken for run (seconds):", total_system_time/60, "minutes"
+      write(*,*) "Time taken for run:", total_system_time/60, "minutes"
 
       ! write final system data to files
       if (flag_elements_final.EQ.1) then

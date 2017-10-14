@@ -42,10 +42,10 @@ contains
 		sysepimeanradius = sysepimeanradius/epicellcount
 
 		if (randomising) then
-			if (premeanradius.LE.preradius_measurement) radius_pre_below = radius_pre_below+1
-			if (epimeanradius.LE.epiradius_measurement) radius_epi_below = radius_epi_below+1
-			if (syspremeanradius.LE.syspreradius_measurement) radius_pre_sys_below = radius_pre_sys_below+1
-			if (sysepimeanradius.LE.sysepiradius_measurement) radius_epi_sys_below = radius_epi_sys_below+1
+			if (premeanradius.LT.preradius_measurement) radius_pre_below = radius_pre_below+1
+			if (epimeanradius.LT.epiradius_measurement) radius_epi_below = radius_epi_below+1
+			if (syspremeanradius.LT.syspreradius_measurement) radius_pre_sys_below = radius_pre_sys_below+1
+			if (sysepimeanradius.LT.sysepiradius_measurement) radius_epi_sys_below = radius_epi_sys_below+1
 		else
 			epiradius_measurement = epimeanradius
 			preradius_measurement = premeanradius

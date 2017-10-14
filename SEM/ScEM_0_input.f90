@@ -71,7 +71,7 @@ module scem_0_input
 !**********
 
   integer :: n_random     = 0
-  integer :: n_random_max = 100000
+  integer :: n_random_max = 20000
 
   real*8  :: area_normalisation_factor
   integer :: area_normalisation_count
@@ -80,7 +80,8 @@ module scem_0_input
   real*8  :: surface_epi_measurement,surface_pre_measurement
   real*8  :: epiradius_measurement,preradius_measurement
   real*8  :: sysepiradius_measurement,syspreradius_measurement
-  integer :: neighbour_below,surface_below
+  integer :: neighbour_epi_below,surface_epi_below
+  integer :: neighbour_pre_below,surface_pre_below
   integer :: radius_pre_below,radius_pre_sys_below
   integer :: radius_epi_below,radius_epi_sys_below
   integer :: epielementcount

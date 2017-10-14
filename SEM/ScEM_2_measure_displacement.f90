@@ -16,29 +16,13 @@ contains
     real*8  :: displacement
     real*8, dimension(3) :: displacement_vector
 
-!    if (randomising) then
-!      open(unit=41, file=output_folder//"/randomised_data/displacement1.txt", status="unknown", position="append")
-!      open(unit=42, file=output_folder//"/randomised_data/displacement2.txt", status="unknown", position="append")
-!    else
-      open(unit=41, file=output_folder//"/sorting_data/displacement1.txt", status="unknown", position="append")
-      open(unit=42, file=output_folder//"/sorting_data/displacement2.txt", status="unknown", position="append")
-!    endif
-
+    open(unit=41, file=output_folder//"/sorting_data/displacement.txt", status="unknown", position="append")
     do n=1, nc
-
       displacement_vector(:) = cells(n)%position(:) - cells(n)%original_position(:)
-      displacement = (DOT_PRODUCT(displacement_vector,displacement_vector))
-
-      if (cells(n)%fate.EQ.1) then
-        write(41,*) MIN(cells(n)%age,time), displacement
-      else
-        write(42,*) MIN(cells(n)%age,time), displacement
-      endif
-
+      displacement = SQRT(DOT_PRODUCT(displacement_vector,displacement_vector))
+      write(41,*) MIN(cells(n)%age,time), cells(n)%fate, displacement
     enddo
-
     close(41)
-    close(42)
 
   end subroutine scem_measure_displacement
 

@@ -13,13 +13,13 @@ List of file numbers in SEM code
 31 =
 32 =
 33 =
-34 = 
+34 =
 35 = radius.txt
 36 = neighbours.txt
 37 = velocity1.txt
 38 = velocity2.txt
 39 = com.txt
 40 =
-41 = displacement1.txt
-42 = displacement2.txt
+41 = displacement.txt
+42 = 
 43 = surface.txt
