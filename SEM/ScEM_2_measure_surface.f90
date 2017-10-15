@@ -49,7 +49,7 @@ contains
 
     if (randomising) then
       if (pre_area.LT.surface_pre_measurement) surface_pre_below = surface_pre_below+1
-      if (epi_area.LT.surface_epi_measurement) surface_epi_below = surface_epi_below+1
+      if (epi_area.GT.surface_epi_measurement) surface_epi_above = surface_epi_above+1
     else
       surface_pre_measurement = pre_area
       surface_epi_measurement = epi_area

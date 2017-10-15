@@ -52,7 +52,7 @@ contains
 		!Write measurements to file
 		if (randomising) then
 			if (neighbour_counts(1,1).LT.neighbour_epi_measurement) neighbour_epi_below = neighbour_epi_below+1
-			if (neighbour_counts(2,2).LT.neighbour_pre_measurement) neighbour_pre_below = neighbour_pre_below+1
+			if (neighbour_counts(2,2).GT.neighbour_pre_measurement) neighbour_pre_above = neighbour_pre_above+1
 		else
 			neighbour_epi_measurement = neighbour_counts(1,1)
 			neighbour_pre_measurement = neighbour_counts(2,2)

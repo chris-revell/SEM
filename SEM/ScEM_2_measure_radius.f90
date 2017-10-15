@@ -43,9 +43,9 @@ contains
 
 		if (randomising) then
 			if (premeanradius.LT.preradius_measurement) radius_pre_below = radius_pre_below+1
-			if (epimeanradius.LT.epiradius_measurement) radius_epi_below = radius_epi_below+1
+			if (epimeanradius.GT.epiradius_measurement) radius_epi_above = radius_epi_above+1
 			if (syspremeanradius.LT.syspreradius_measurement) radius_pre_sys_below = radius_pre_sys_below+1
-			if (sysepimeanradius.LT.sysepiradius_measurement) radius_epi_sys_below = radius_epi_sys_below+1
+			if (sysepimeanradius.GT.sysepiradius_measurement) radius_epi_sys_above = radius_epi_sys_above+1
 		else
 			epiradius_measurement = epimeanradius
 			preradius_measurement = premeanradius
