@@ -28,13 +28,13 @@ contains
     enddo
 
     neighbour_epi_below  = 0
-    neighbour_pre_above  = 0
-    surface_epi_above    = 0
+    neighbour_pre_below  = 0
+    surface_epi_below    = 0
     surface_pre_below    = 0
     radius_pre_below     = 0
     radius_pre_sys_below = 0
-    radius_epi_above     = 0
-    radius_epi_sys_above = 0
+    radius_epi_below     = 0
+    radius_epi_sys_below = 0
 
     !Set n_random. The number of random tests is set to be the minimum of nc choose n_epiblasts or 20000. This prevents an infinite loop when the number of possible configurations is smaller than 10000.
     !Use Stirling's approximation in binomial coefficient.
@@ -81,21 +81,20 @@ contains
       if (flag_measure_surface.EQ.1)      call scem_measure_surface
     enddo
 
-    print*, n_random
     if (flag_measure_radius.EQ.1) then
       open(unit=44, file=output_folder//'/randomised_data/radius.txt',status='unknown',position="append")
-      write(44,"(*(G0,:,1X))") time,radius_epi_above*100.0/n_random,radius_epi_sys_above*100.0/n_random,&
-        radius_pre_below*100.0/n_random,radius_pre_sys_below*100.0/n_random
+      write(44,"(*(G0,:,1X))") time,radius_pre_below*100/n_random,radius_pre_sys_below*100/n_random,&
+        radius_epi_below*100/n_random,radius_epi_sys_below*100/n_random
       close(44)
     endif
     if (flag_measure_neighbours.EQ.1) then
       open(unit=45, file=output_folder//'/randomised_data/neighbours.txt',status='unknown',position="append")
-      write(45,"(*(G0,:,1X))") time,neighbour_epi_below*100.0/n_random,neighbour_pre_above*100.0/n_random
+      write(45,"(*(G0,:,1X))") time,neighbour_epi_below*100.0/n_random,neighbour_pre_below*100.0/n_random
       close(45)
     endif
     if (flag_measure_surface.EQ.1) then
       open(unit=46, file=output_folder//'/randomised_data/surface.txt',status='unknown',position="append")
-      write(46,"(*(G0,:,1X))") time,surface_epi_above*100.0/n_random,surface_pre_below*100.0/n_random
+      write(46,"(*(G0,:,1X))") time,surface_epi_below*100.0/n_random,surface_pre_below*100.0/n_random
       close(46)
     endif
 
