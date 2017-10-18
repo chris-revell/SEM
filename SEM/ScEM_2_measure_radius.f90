@@ -17,8 +17,6 @@ contains
 		real*8	:: syspremeanradius,sysepimeanradius,premeanradius,epimeanradius
 		real*8, dimension(3) :: cell_vector		!Vector position of cell relative to system centre of mass
 
-!		if (.NOT.randomising) open(unit=35,file=output_folder//'/sorting_data/radius.txt', status='unknown',position="append")
-
 		epimeanradius = 0
 		premeanradius = 0
 		sysepimeanradius = 0
@@ -42,18 +40,28 @@ contains
 		sysepimeanradius = sysepimeanradius/epicellcount
 
 		if (randomising) then
+			if (randomising) open(unit=45,file=output_folder//'/radius_dist.txt', status='unknown',position="append")
 			if (premeanradius.LT.preradius_measurement) radius_pre_below = radius_pre_below+1
 			if (epimeanradius.GT.epiradius_measurement) radius_epi_above = radius_epi_above+1
 			if (syspremeanradius.LT.syspreradius_measurement) radius_pre_sys_below = radius_pre_sys_below+1
 			if (sysepimeanradius.GT.sysepiradius_measurement) radius_epi_sys_above = radius_epi_sys_above+1
+			WRITE(45,"(*(G0,:,1X))") time, epimeanradius, sysepimeanradius, premeanradius, syspremeanradius
+			if (premeanradius.GT.rad_max) then
+				rad_max = premeanradius
+				do i=1,nc
+					stored_fates_max_rad(i) = cells(i)%fate
+				enddo
+			endif 
+			close(45)
 		else
 			epiradius_measurement = epimeanradius
 			preradius_measurement = premeanradius
 		  sysepiradius_measurement = sysepimeanradius
 			syspreradius_measurement = syspremeanradius
+			open(unit=35,file=output_folder//'/sorting_data/radius.txt', status='unknown',position="append")
+			write(35,"(*(G0,:,1X))") time, epimeanradius,sysepimeanradius,premeanradius,syspremeanradius
+			close(35)
 		endif
-
-	!	close(35)
 
 	end subroutine scem_measure_radius
 

@@ -71,7 +71,7 @@ module scem_0_input
 !**********
 
   integer :: n_random     = 0
-  integer :: n_random_max = 20000
+  integer :: n_random_max = 100000
 
   real*8  :: area_normalisation_factor
   integer :: area_normalisation_count
@@ -86,6 +86,10 @@ module scem_0_input
   integer :: radius_epi_above,radius_epi_sys_above
   integer :: epielementcount
   integer :: epicellcount
+
+  real*8 :: rad_max
+  real*8 :: surface_max
+  integer:: epineighbourmax
 
   contains
 

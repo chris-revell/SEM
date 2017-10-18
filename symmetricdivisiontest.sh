@@ -1,9 +1,15 @@
-echo 1 2
+echo 1 2 3 4
+caffeinate -im ./ScEM_master 06.0 0.50 1.00 0.20 2 >> /dev/null & sleep 30;
+caffeinate -im ./ScEM_master 06.0 0.50 1.00 0.00 2 >> /dev/null & sleep 30;
+caffeinate -im ./ScEM_master 06.0 0.50 0.50 0.20 2 >> /dev/null & sleep 30;
 caffeinate -im ./ScEM_master 06.0 0.50 0.50 0.00 2 >> /dev/null & sleep 30;
-caffeinate -im ./ScEM_master 06.0 0.50 0.50 0.20 3 >> /dev/null & sleep 30;
-caffeinate -im ./ScEM_master 06.0 0.50 0.50 0.20 4 >> /dev/null & sleep 30;
 wait
 
+#echo 4 5 6
+#caffeinate -im ./ScEM_master 06.0 0.50 0.50 0.00 1 >> /dev/null & sleep 30;
+#caffeinate -im ./ScEM_master 06.0 0.50 0.50 0.00 2 >> /dev/null & sleep 30;
+#caffeinate -im ./ScEM_master 06.0 0.50 0.50 0.00 3 >> /dev/null & sleep 30;
+#wait
 
 #echo 3 4
 #caffeinate -im ./ScEM_master 06.0 0.50 1.00 0.00 1 >> /dev/null & sleep 30;
@@ -29,7 +35,7 @@ wait
 #caffeinate -im ./ScEM_master 06.0 0.50 0.75 0.00 4 >> /dev/null & sleep 30;
 #caffeinate -im ./ScEM_master 06.0 0.50 0.75 0.20 4 >> /dev/null;
 #wait
-#echo 15 16 
+#echo 15 16
 #caffeinate -im ./ScEM_master 06.0 0.50 1.00 0.00 4 >> /dev/null & sleep 30;
 #caffeinate -im ./ScEM_master 06.0 0.50 1.00 0.20 4 >> /dev/null;
 #wait

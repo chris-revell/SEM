@@ -127,7 +127,7 @@ contains
       if (mod(time,output_interval2).LT.dt.AND..NOT.intro) then
         n_snapshots=n_snapshots+1
         call scem_output_system
-        if (flag_povray.EQ.1) call scem_output_povray
+        !if (flag_povray.EQ.1) call scem_output_povray
       end if
 
       forall(n=1:ne) elements(n)%velocity(:)=0.0

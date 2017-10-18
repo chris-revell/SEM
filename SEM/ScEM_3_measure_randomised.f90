@@ -10,6 +10,7 @@ module scem_3_measure_randomised
   use scem_2_measure_radius
   use scem_2_measure_neighbours
   use scem_2_measure_surface
+  use scem_2_output_povray
 
   implicit none
 
@@ -25,6 +26,9 @@ contains
     !Store current system state
     do n=1,nc
       stored_fates(n) = cells(n)%fate
+      stored_fates_max_surf(n) = cells(n)%fate
+      stored_fates_max_rad(n) = cells(n)%fate
+      stored_fates_max_neighbour(n) = cells(n)%fate
     enddo
 
     neighbour_epi_below  = 0
@@ -36,10 +40,14 @@ contains
     radius_epi_above     = 0
     radius_epi_sys_above = 0
 
+    rad_max = 0
+    surface_max = 0
+    epineighbourmax = 0
+
     !Set n_random. The number of random tests is set to be the minimum of nc choose n_epiblasts or 20000. This prevents an infinite loop when the number of possible configurations is smaller than 10000.
     !Use Stirling's approximation in binomial coefficient.
-    if (n_random.LT.n_random_max.AND.nc.GT.20) n_random = n_random_max
-    if (n_random.LT.n_random_max) n_random = MIN(20000,&
+!    if (n_random.LT.n_random_max.AND.nc.GT.20) n_random = n_random_max
+    if (n_random.LT.n_random_max) n_random = MIN(n_random_max,&
       INT(0.95*(nc**(nc+0.5))/(SQRT(2*pi)*epicellcount**(epicellcount+0.5)*(nc-epicellcount)**(nc-epicellcount+0.5))))
 
     !Set randomising = .TRUE. in order to divert output from measurement subroutines to randomised data files.
@@ -99,6 +107,22 @@ contains
       close(46)
     endif
 
+    !output povray data for max value systems
+    do n=1,nc
+      cells(n)%fate = stored_fates_max_neighbour(n)
+    enddo
+    call scem_output_povray
+    n_snapshots=n_snapshots+1
+    do n=1,nc
+      cells(n)%fate = stored_fates_max_surf(n)
+    enddo
+    call scem_output_povray
+    n_snapshots=n_snapshots+1
+    do n=1,nc
+      cells(n)%fate = stored_fates_max_rad(n)
+    enddo
+    call scem_output_povray
+    n_snapshots=n_snapshots+1
     !Restore original system state.
     do n=1,nc
       cells(n)%fate = stored_fates(n)

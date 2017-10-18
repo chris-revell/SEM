@@ -19,8 +19,6 @@ contains
 		integer, dimension(2,2) :: neighbour_counts
 
 
-		!if (.NOT.randomising) open(unit=36,file=output_folder//'/sorting_data/neighbours.txt',status='unknown',position="append")
-
 		!Start by looking at all element-element interaction pairs.
 		!If a pair acts between elements in cells of different parents i and j where i=!j, set neighbours(i,j) = .TRUE.
 		neighbours(:,:) = .FALSE.
@@ -51,11 +49,22 @@ contains
 
 		!Write measurements to file
 		if (randomising) then
+			open(unit=46,file=output_folder//'/neighbours_dist.txt',status='unknown',position="append")
 			if (neighbour_counts(1,1).LT.neighbour_epi_measurement) neighbour_epi_below = neighbour_epi_below+1
 			if (neighbour_counts(2,2).GT.neighbour_pre_measurement) neighbour_pre_above = neighbour_pre_above+1
+			write(46,"(*(G0,:,1X))") time, neighbour_counts(1,1), neighbour_counts(2,2), neighbour_counts(2,1)+neighbour_counts(1,2)
+			close(46)
+			if (neighbour_counts(1,1).GT.epineighbourmax) then
+				epineighbourmax = neighbour_counts(1,1)
+				do i=1,nc
+					stored_fates_max_neighbour(i) = cells(i)%fate
+				enddo
+			endif
 		else
+			open(unit=36,file=output_folder//'/sorting_data/neighbours.txt',status='unknown',position="append")
 			neighbour_epi_measurement = neighbour_counts(1,1)
 			neighbour_pre_measurement = neighbour_counts(2,2)
+			write(36,"(*(G0,:,1X))") time, neighbour_counts(1,1), neighbour_counts(2,2), neighbour_counts(2,1)+neighbour_counts(1,2)
 		endif
 
 		!close(36)
