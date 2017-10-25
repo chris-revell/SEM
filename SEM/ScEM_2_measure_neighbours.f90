@@ -49,21 +49,22 @@ contains
 
 		!Write measurements to file
 		if (randomising) then
-			open(unit=46,file=output_folder//'/neighbours_dist.txt',status='unknown',position="append")
-			if (neighbour_counts(1,1).LT.neighbour_epi_measurement) neighbour_epi_below = neighbour_epi_below+1
-			if (neighbour_counts(2,2).GT.neighbour_pre_measurement) neighbour_pre_above = neighbour_pre_above+1
-			write(46,"(*(G0,:,1X))") time, neighbour_counts(1,1), neighbour_counts(2,2), neighbour_counts(2,1)+neighbour_counts(1,2)
-			close(46)
-			if (neighbour_counts(1,1).GT.epineighbourmax) then
-				epineighbourmax = neighbour_counts(1,1)
-				do i=1,nc
-					stored_fates_max_neighbour(i) = cells(i)%fate
-				enddo
-			endif
+!			open(unit=45, file=output_folder//'/randomised_data/neighbours.txt',status='unknown',position="append")
+!			if (neighbour_counts(1,1).LT.neighbour_epi_measurement) neighbour_epi_below = neighbour_epi_below+1
+!			if (neighbour_counts(2,2).GT.neighbour_pre_measurement) neighbour_pre_above = neighbour_pre_above+1
+!			write(45,"(*(G0,:,1X))") time, neighbour_counts(1,1), neighbour_counts(2,2), neighbour_counts(2,1)+neighbour_counts(1,2)
+!			close(45)
+!			if (neighbour_counts(1,1).GT.epineighbourmax) then
+!				epineighbourmax = neighbour_counts(1,1)
+!				do i=1,nc
+!					stored_fates_max_neighbour(i) = cells(i)%fate
+!				enddo
+!			endif
+			random_values_neighbours(ran_loop,:) = (/neighbour_counts(1,1), neighbour_counts(2,2)/)
 		else
 			open(unit=36,file=output_folder//'/sorting_data/neighbours.txt',status='unknown',position="append")
-			neighbour_epi_measurement = neighbour_counts(1,1)
-			neighbour_pre_measurement = neighbour_counts(2,2)
+!			neighbour_epi_measurement = neighbour_counts(1,1)
+!			neighbour_pre_measurement = neighbour_counts(2,2)
 			write(36,"(*(G0,:,1X))") time, neighbour_counts(1,1), neighbour_counts(2,2), neighbour_counts(2,1)+neighbour_counts(1,2)
 		endif
 

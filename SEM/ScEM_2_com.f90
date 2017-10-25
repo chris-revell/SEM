@@ -61,8 +61,10 @@ module scem_2_com
             pre_com(:) = pre_com(:) + cells(n)%position(:)*cells(n)%c_elements(0)
           endif
         enddo
-        epi_com = epi_com/epielementcount
-        pre_com = pre_com/(ne-epielementcount)
+        if (epielementcount.GT.0.AND.epielementcount.LT.ne) then
+          epi_com = epi_com/epielementcount
+          pre_com = pre_com/(ne-epielementcount)
+        endif
         sys_com = sys_com/ne
       endif
 

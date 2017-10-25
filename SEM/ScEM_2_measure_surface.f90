@@ -47,20 +47,21 @@ contains
     enddo
 
     if (randomising) then
-      if (pre_area.LT.surface_pre_measurement) surface_pre_below = surface_pre_below+1
-      if (epi_area.GT.surface_epi_measurement) surface_epi_above = surface_epi_above+1
-      open(unit=53,file=output_folder//"/surface_dist.txt",status="unknown",position="append")
-      write(53,"(*(G0,:,1X))") time, epi_area, pre_area
-      close(53)
-      if (pre_area.GT.surface_max) then
-        surface_max = pre_area
-        do i=1,nc
-					stored_fates_max_surf(i) = cells(i)%fate
-				enddo
-			endif
+      !if (pre_area.LT.surface_pre_measurement) surface_pre_below = surface_pre_below+1
+      !if (epi_area.GT.surface_epi_measurement) surface_epi_above = surface_epi_above+1
+!      open(unit=46, file=output_folder//'/randomised_data/surface.txt',status='unknown',position="append")
+!      write(46,"(*(G0,:,1X))") time, epi_area, pre_area
+!      close(46)
+!      if (pre_area.GT.surface_max) then
+!        surface_max = pre_area
+!        do i=1,nc
+!					stored_fates_max_surf(i) = cells(i)%fate
+!				enddo
+!			endif
+      random_values_surface(ran_loop) = pre_area
     else
-      surface_pre_measurement = pre_area
-      surface_epi_measurement = epi_area
+!      surface_pre_measurement = pre_area
+!      surface_epi_measurement = epi_area
       open(unit=43,file=output_folder//"/sorting_data/surface.txt",status="unknown",position="append")
       write(43,"(*(G0,:,1X))") time, epi_area, pre_area
       close(43)
