@@ -140,8 +140,8 @@ contains
     do n=1,4
       means(n) = SUM(random_values_radius(:,n))/n_random
       squaremeans(n) = SUM(random_values_radius(:,n)**2)/n_random
-      maximums(n) = MAX(random_values_radius(:,n))
-      minimums(n) = MIN(random_values_radius(:,n))
+      maximums(n) = MAXVAL(random_values_radius(:,n))
+      minimums(n) = MINVAL(random_values_radius(:,n))
     enddo
     do n=1,4
       stds(n) = SQRT(ABS(squaremeans(n)-means(n)**2))
@@ -154,8 +154,8 @@ contains
     do n=1,2
       means(n) = SUM(random_values_neighbours(:,n))/n_random
       squaremeans(n) = SUM(random_values_neighbours(:,n)**2)/n_random
-      maximums(n) = MAX(random_values_neighbours(:,n))
-      minimums(n) = MIN(random_values_neighbours(:,n))
+      maximums(n) = MAXVAL(random_values_neighbours(:,n))
+      minimums(n) = MINVAL(random_values_neighbours(:,n))
     enddo
     do n=1,2
       stds(n) = SQRT(ABS(squaremeans(n)-means(n)**2))
@@ -167,8 +167,8 @@ contains
     means(1) = SUM(random_values_surface)/n_random
     squaremeans(1) = SUM(random_values_surface**2)/n_random
     stds(1) = SQRT(ABS(squaremeans(1)-means(1)**2))
-    maximums(1) = MAX(random_values_surface(:,1))
-    minimums(1) = MIN(random_values_surface(:,1))
+    maximums(1) = MAXVAL(random_values_surface(:))
+    minimums(1) = MINVAL(random_values_surface(:))
     open(unit=46, file=output_folder//'/randomised_data/surface.txt',status='unknown',position="append")
     WRITE(46,"(*(G0,:,1X))") time,means(1),minimums(1),maximums(1),stds(1)
     close(46)
