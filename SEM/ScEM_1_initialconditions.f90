@@ -20,11 +20,15 @@ contains
     write(22,"(*(G0,:,1X))")'elements per cell          = ',ne_cell
     write(22,"(*(G0,:,1X))") ""
     write(22,"(*(G0,:,1X))") "flag_create     = ",flag_create
+    write(22,"(*(G0,:,1X))") "flag_random_init= ",flag_random_init
     write(22,"(*(G0,:,1X))") "flag_diffusion  = ",flag_diffusion
     write(22,"(*(G0,:,1X))") "flag_conserve   = ",flag_conserve
     write(22,"(*(G0,:,1X))") "flag_background = ",flag_background
     write(22,"(*(G0,:,1X))") "flag_growth     = ",flag_growth
     write(22,"(*(G0,:,1X))") "flag_division   = ",flag_division
+    write(22,"(*(G0,:,1X))") "flag_randomise  = ",flag_randomise
+    write(22,"(*(G0,:,1X))") "flag_pre_blebbing= ",flag_pre_blebbing
+    write(22,"(*(G0,:,1X))") "flag_symmetric_division= ",flag_symmetric_division
     write(22,"(*(G0,:,1X))") ""
     write(22,"(*(G0,:,1X))") "flag_povray     = ",flag_povray
     write(22,"(*(G0,:,1X))") "  flag_povray_volumes      = ",flag_povray_volumes

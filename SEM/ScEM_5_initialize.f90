@@ -58,7 +58,7 @@ module scem_5_initialize
       ! write initial system data to file
       if (.NOT.intro) call scem_output_system
       ! Write element data to files in povray format
-      !if ((flag_povray.EQ.1).AND.(.NOT.intro)) call scem_output_povray
+      if ((flag_povray.EQ.1).AND.(.NOT.intro)) call scem_output_povray
 
       call scem_initialconditions
 
