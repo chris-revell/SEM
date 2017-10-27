@@ -58,12 +58,10 @@ contains
 !					stored_fates_max_surf(i) = cells(i)%fate
 !				enddo
 !			endif
-      random_values_surface(ran_loop) = pre_area
+      random_values_surface(ran_loop) = pre_area/(epi_area+pre_area)
     else
-!      surface_pre_measurement = pre_area
-!      surface_epi_measurement = epi_area
       open(unit=43,file=output_folder//"/sorting_data/surface.txt",status="unknown",position="append")
-      write(43,"(*(G0,:,1X))") time, epi_area, pre_area
+      write(43,"(*(G0,:,1X))") time, pre_area/(epi_area+pre_area)
       close(43)
     endif
 

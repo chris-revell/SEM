@@ -63,12 +63,9 @@ contains
 			random_values_neighbours(ran_loop,:) = (/neighbour_counts(1,1), neighbour_counts(2,2)/)
 		else
 			open(unit=36,file=output_folder//'/sorting_data/neighbours.txt',status='unknown',position="append")
-!			neighbour_epi_measurement = neighbour_counts(1,1)
-!			neighbour_pre_measurement = neighbour_counts(2,2)
 			write(36,"(*(G0,:,1X))") time, neighbour_counts(1,1), neighbour_counts(2,2), neighbour_counts(2,1)+neighbour_counts(1,2)
+			close(36)
 		endif
-
-		!close(36)
 
 	end subroutine scem_measure_neighbours
 

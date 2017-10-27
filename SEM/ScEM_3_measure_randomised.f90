@@ -30,27 +30,11 @@ contains
     !Store current system state
     do n=1,nc
       stored_fates(n) = cells(n)%fate
-!      stored_fates_max_surf(n) = cells(n)%fate
-!      stored_fates_max_rad(n) = cells(n)%fate
-!      stored_fates_max_neighbour(n) = cells(n)%fate
     enddo
 
     random_values_surface    = 0
     random_values_radius     = 0
     random_values_neighbours = 0
-
-!    neighbour_epi_below  = 0
-!    neighbour_pre_above  = 0
-!    surface_epi_above    = 0
-!    surface_pre_below    = 0
-!    radius_pre_below     = 0
-!    radius_pre_sys_below = 0
-!    radius_epi_above     = 0
-!    radius_epi_sys_above = 0
-
-!    rad_max = 0
-!    surface_max = 0
-!    epineighbourmax = 0
 
     !Set n_random. The number of random tests is set to be the minimum of nc choose n_epiblasts or 20000. This prevents an infinite loop when the number of possible configurations is smaller than 10000.
     !Use Stirling's approximation in binomial coefficient.
@@ -97,54 +81,15 @@ contains
       if (flag_measure_surface.EQ.1)      call scem_measure_surface
     enddo
 
-!    print*, n_random
-!    if (flag_measure_radius.EQ.1) then
-!      open(unit=44, file=output_folder//'/randomised_data/radius.txt',status='unknown',position="append")
-!      write(44,"(*(G0,:,1X))") time,radius_epi_above*100.0/n_random,radius_epi_sys_above*100.0/n_random,&
-!        radius_pre_below*100.0/n_random,radius_pre_sys_below*100.0/n_random
-!      close(44)
-!    endif
-!    if (flag_measure_neighbours.EQ.1) then
-!      open(unit=45, file=output_folder//'/randomised_data/neighbours.txt',status='unknown',position="append")
-!      write(45,"(*(G0,:,1X))") time,neighbour_epi_below*100.0/n_random,neighbour_pre_above*100.0/n_random
-!      close(45)
-!    endif
-!    if (flag_measure_surface.EQ.1) then
-!      open(unit=46, file=output_folder//'/randomised_data/surface.txt',status='unknown',position="append")
-!      write(46,"(*(G0,:,1X))") time,surface_epi_above*100.0/n_random,surface_pre_below*100.0/n_random
-!      close(46)
-!    endif
-!
-!    !output povray data for max value systems
-!    do n=1,nc
-!      cells(n)%fate = stored_fates_max_neighbour(n)
-!    enddo
-!    call scem_output_povray
-!    n_snapshots=n_snapshots+1
-!    do n=1,nc
-!      cells(n)%fate = stored_fates_max_surf(n)
-!    enddo
-!    call scem_output_povray
-!    n_snapshots=n_snapshots+1
-!    do n=1,nc
-!      cells(n)%fate = stored_fates_max_rad(n)
-!    enddo
-!    call scem_output_povray
-!    n_snapshots=n_snapshots+1
-!    !Restore original system state.
-!    do n=1,nc
-!      cells(n)%fate = stored_fates(n)
-!    enddo
-
 	  ! radius mean and standard deviations
     do n=1,4
-      means(n) = SUM(random_values_radius(:,n))/n_random
-      squaremeans(n) = SUM(random_values_radius(:,n)**2)/n_random
-      maximums(n) = MAXVAL(random_values_radius(:,n))
-      minimums(n) = MINVAL(random_values_radius(:,n))
+      means(n) = (1.0*SUM(random_values_radius(:n_random,n)))/n_random
+      squaremeans(n) = (1.0*SUM(random_values_radius(:n_random,n)**2))/n_random
+      maximums(n) = MAXVAL(random_values_radius(:n_random,n))
+      minimums(n) = MINVAL(random_values_radius(:n_random,n))
     enddo
     do n=1,4
-      stds(n) = SQRT(ABS(squaremeans(n)-means(n)**2))
+      stds(n) = SQRT(squaremeans(n)-means(n)**2)
     enddo
     open(unit=44, file=output_folder//'/randomised_data/radius.txt',status='unknown',position="append")
     WRITE(44,"(*(G0,:,1X))") time,means(1),minimums(1),maximums(1),stds(1),means(2),minimums(2),maximums(2),stds(2),&
@@ -152,26 +97,33 @@ contains
     close(44)
 
     do n=1,2
-      means(n) = SUM(random_values_neighbours(:,n))/n_random
-      squaremeans(n) = SUM(random_values_neighbours(:,n)**2)/n_random
-      maximums(n) = MAXVAL(random_values_neighbours(:,n))
-      minimums(n) = MINVAL(random_values_neighbours(:,n))
+      means(n) = (1.0*SUM(random_values_neighbours(:n_random,n)))/n_random
+      squaremeans(n) = (1.0*SUM(random_values_neighbours(:n_random,n)**2))/n_random
+      maximums(n) = MAXVAL(random_values_neighbours(:n_random,n))
+      minimums(n) = MINVAL(random_values_neighbours(:n_random,n))
     enddo
     do n=1,2
-      stds(n) = SQRT(ABS(squaremeans(n)-means(n)**2))
+      stds(n) = SQRT(squaremeans(n)-means(n)**2)
     enddo
     open(unit=45, file=output_folder//'/randomised_data/neighbours.txt',status='unknown',position="append")
     WRITE(45,"(*(G0,:,1X))") time,means(1),minimums(1),maximums(1),stds(1),means(2),minimums(2),maximums(2),stds(2)
     close(45)
 
-    means(1) = SUM(random_values_surface)/n_random
-    squaremeans(1) = SUM(random_values_surface**2)/n_random
-    stds(1) = SQRT(ABS(squaremeans(1)-means(1)**2))
-    maximums(1) = MAXVAL(random_values_surface(:))
-    minimums(1) = MINVAL(random_values_surface(:))
+    means(1) = (1.0*SUM(random_values_surface(:n_random)))/n_random
+    squaremeans(1) = (1.0*SUM(random_values_surface(:n_random)**2))/n_random
+    stds(1) = SQRT(squaremeans(1)-means(1)**2)
+    maximums(1) = MAXVAL(random_values_surface(:n_random))
+    minimums(1) = MINVAL(random_values_surface(:n_random))
     open(unit=46, file=output_folder//'/randomised_data/surface.txt',status='unknown',position="append")
     WRITE(46,"(*(G0,:,1X))") time,means(1),minimums(1),maximums(1),stds(1)
     close(46)
+
+
+
+    !Restore original system state.
+    do n=1,nc
+      cells(n)%fate = stored_fates(n)
+    enddo
 
     randomising = .FALSE.
 
