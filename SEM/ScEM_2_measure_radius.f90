@@ -40,9 +40,6 @@ contains
 		sysepimeanradius = sysepimeanradius/epicellcount
 
 		if (randomising) then
-!			open(unit=44, file=output_folder//'/randomised_data/radius.txt',status='unknown',position="append")
-!			WRITE(44,"(*(G0,:,1X))") time, epimeanradius, sysepimeanradius, premeanradius, syspremeanradius
-!			close(44)
 			random_values_radius(ran_loop,:) = (/epimeanradius, sysepimeanradius, premeanradius, syspremeanradius/)
 		else
 			open(unit=35,file=output_folder//'/sorting_data/radius.txt', status='unknown',position="append")
