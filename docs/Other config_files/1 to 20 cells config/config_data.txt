@@ -1,8 +1,0 @@
-          20
-        4042
-       38106
- number of cells =           20
- number of elements =         4042
- number of element pairs =        38106
- time =    21600.16    
- Time taken for run (seconds):          93
