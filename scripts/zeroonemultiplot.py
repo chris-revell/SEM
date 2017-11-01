@@ -9,7 +9,7 @@ import zerooneplotting
 folderstoignore = ["p_values","meandata","meanplots","0-1data","0-1plots"]
 runs = [os.path.join(argv[1],f) for f in os.listdir(argv[1]) if os.path.isdir(os.path.join(argv[1], f)) and f not in folderstoignore ]
 
-nbins = 10
+nbins = 5
 cct=1500
 
 datafolder = os.path.join(argv[1],"0-1data")
@@ -24,7 +24,7 @@ else:
     os.mkdir(plotfolder)
 
 for i in runs:
-    zerooneplotting.zeroonemeasurements(i)
+    zerooneplotting.zeroonemeasurements(i,0)
 
 if os.path.exists(os.path.join(runs[0],"0-1data/epiepiradius0-1.txt")):
     combined_data = np.genfromtxt(os.path.join(runs[0],"0-1data/epiepiradius0-1.txt"))

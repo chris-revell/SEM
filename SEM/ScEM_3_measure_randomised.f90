@@ -38,7 +38,7 @@ contains
 
     !Set n_random. The number of random tests is set to be the minimum of nc choose n_epiblasts or 20000. This prevents an infinite loop when the number of possible configurations is smaller than 10000.
     !Use Stirling's approximation in binomial coefficient.
-!    if (n_random.LT.n_random_max.AND.nc.GT.20) n_random = n_random_max
+    if (n_random.LT.n_random_max.AND.nc.GT.20) n_random = n_random_max
     if (n_random.LT.n_random_max) n_random = MIN(n_random_max,&
       INT(0.95*(nc**(nc+0.5))/(SQRT(2*pi)*epicellcount**(epicellcount+0.5)*(nc-epicellcount)**(nc-epicellcount+0.5))))
 

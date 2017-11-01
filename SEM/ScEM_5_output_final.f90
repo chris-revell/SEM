@@ -6,6 +6,7 @@ module scem_3_output_final
   use scem_0_input
   use scem_1_types
   use scem_2_output_povray
+  use scem_4_output_system
 
   implicit none
 
@@ -14,6 +15,8 @@ module scem_3_output_final
     subroutine scem_output_final
 
       integer :: i,n
+
+      call scem_output_system
 
       !Calculate total time of run. Print to command line and end_of_run_data
       call SYSTEM_CLOCK(current_time)
