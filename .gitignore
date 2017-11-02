@@ -4,3 +4,4 @@ ScEM_master
 *.o
 *.mod
 scripts/__pycache__
+data/*
