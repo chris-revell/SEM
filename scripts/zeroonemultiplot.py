@@ -9,7 +9,7 @@ import zerooneplotting
 folderstoignore = ["p_values","meandata","meanplots","0-1data","0-1plots"]
 runs = [os.path.join(argv[1],f) for f in os.listdir(argv[1]) if os.path.isdir(os.path.join(argv[1], f)) and f not in folderstoignore ]
 
-nbins = 5
+nbins = 10
 cct=1500
 
 datafolder = os.path.join(argv[1],"0-1data")
