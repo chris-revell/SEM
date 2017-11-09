@@ -20,8 +20,8 @@ module scem_0_arrays
   integer, dimension(32)                   :: bin_counters    !For use in scem_cortex
   real*8, dimension(32)                    :: bin_max_radius  !For use in scem_cortex
   integer,dimension(200)                   :: stored_fates  !For use in scem_measure_randomised
-  integer,dimension(20000)                :: tested
-  integer,dimension(20000,2)              :: random_values_neighbours !For use in scem_measure_randomised
-  real*8,dimension(20000,4)               :: random_values_radius     !For use in scem_measure_randomised
-  real*8,dimension(20000)                 :: random_values_surface    !For use in scem_measure_randomised
+  integer,dimension(10000)                :: tested
+  integer,dimension(10000,2)              :: random_values_neighbours !For use in scem_measure_randomised
+  real*8,dimension(10000,4)               :: random_values_radius     !For use in scem_measure_randomised
+  real*8,dimension(10000)                 :: random_values_surface    !For use in scem_measure_randomised
 end module scem_0_arrays

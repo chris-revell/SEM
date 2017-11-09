@@ -71,7 +71,7 @@ module scem_0_input
 !**********
 
   integer :: n_random     = 0
-  integer :: n_random_max = 20000
+  integer :: n_random_max = 10000
 
   real*8  :: area_normalisation_factor
   integer :: area_normalisation_count
