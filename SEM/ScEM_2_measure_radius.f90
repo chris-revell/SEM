@@ -26,12 +26,12 @@ contains
 				cell_vector = cells(i)%position - pre_com
 				premeanradius = premeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))!*cells(i)%c_elements(0)
 				cell_vector = cells(i)%position - sys_com
-				syspremeanradius = syspremeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))
+				syspremeanradius = syspremeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))!*cells(i)%c_elements(0)
 			else
 				cell_vector = cells(i)%position - epi_com
 				epimeanradius = epimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))!*cells(i)%c_elements(0)
 				cell_vector = cells(i)%position - sys_com
-				sysepimeanradius = sysepimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))
+				sysepimeanradius = sysepimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))!*cells(i)%c_elements(0)
 			endif
 		enddo
 		premeanradius = premeanradius/(nc-epicellcount)
