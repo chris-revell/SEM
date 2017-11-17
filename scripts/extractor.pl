@@ -58,7 +58,7 @@ while ( -e $originalfolder."/povray_data/snap_".sprintf("%02d",$i).".pov") {
   while (my $line = <$file_handle_in>) {
     if (($line =~ /sphere/) or ($line =~ /cylinder/) or ($line =~ /smooth_/)) {
       if ($line =~ /boundary/) {
-        print $file_handle_out $line;
+#        print $file_handle_out $line;
       }
       else {
         my $switch = 1;

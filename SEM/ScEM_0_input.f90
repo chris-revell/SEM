@@ -56,7 +56,7 @@ module scem_0_input
   real   :: n_cellcycles !Number of cell cycles for run
 
   !Variables for setting output folder
-  character(len=25):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+  character(len=22):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
   character(len=4) :: arg1,arg2,arg3,arg4
   character(len=1) :: arg5
@@ -110,11 +110,11 @@ module scem_0_input
       flag_symmetric_division=1 ! If =1, division will always produce daughter cells of the same fate as the parent cell.
 
       !Output control switches
-      flag_povray = 1                ! Switch to turn off povray output entirely
+      flag_povray = 0                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
-        flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
+        flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
@@ -132,7 +132,7 @@ module scem_0_input
       nc_initial        = 10
       stiffness_factor  = 1.0
       cell_cycle_time   = 1500 ! Cell cycle time in seconds
-      n_cellcycles      = 2.3
+      n_cellcycles      = 1.3
 
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
@@ -176,7 +176,7 @@ module scem_0_input
       !Catch date and time, create folder to store data in
       CALL GET_COMMAND_ARGUMENT(5,arg5)
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "../data/"//arg1(1:2)//arg1(4:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
+      output_folder = "data/"//arg1(1:2)//arg1(4:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
         arg4(1:1)//arg4(3:4)//"_"//arg5(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")

@@ -17,4 +17,4 @@ done
 #convert -delay 20 -loop 0 red_green_comparison/*.jpg red_green_comparison/red_green_comparison.gif
 rm -r $1/extracted_Green_triangle
 rm -r $1/extracted_Red_triangle
-rm -r $1/extracted_triangle
+rm $1/extracted_triangle/*.pov
