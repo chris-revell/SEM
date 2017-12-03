@@ -52,20 +52,20 @@ module scem_2_com
         epielementcount  = 0
         epicellcount = 0
         do n=1, nc
-          sys_com = sys_com + cells(n)%position(:)*cells(n)%c_elements(0)
+          sys_com = sys_com + cells(n)%position(:)!*cells(n)%c_elements(0)
           if (cells(n)%fate.EQ.1) then
             epielementcount  = epielementcount + cells(n)%c_elements(0)
             epicellcount = epicellcount + 1
-            epi_com(:) = epi_com(:) + cells(n)%position(:)*cells(n)%c_elements(0)
+            epi_com(:) = epi_com(:) + cells(n)%position(:)!*cells(n)%c_elements(0)
           else
-            pre_com(:) = pre_com(:) + cells(n)%position(:)*cells(n)%c_elements(0)
+            pre_com(:) = pre_com(:) + cells(n)%position(:)!*cells(n)%c_elements(0)
           endif
         enddo
         if (epielementcount.GT.0.AND.epielementcount.LT.ne) then
-          epi_com = epi_com/epielementcount
-          pre_com = pre_com/(ne-epielementcount)
+          epi_com = epi_com/epicellcount!epielementcount
+          pre_com = pre_com/(nc-epicellcount)!(ne-epielementcount)
         endif
-        sys_com = sys_com/ne
+        sys_com = sys_com/nc!ne
       endif
 
     end subroutine scem_com

@@ -24,20 +24,20 @@ contains
 		do i=1, nc
 			if (cells(i)%fate.EQ.2) then
 				cell_vector = cells(i)%position - pre_com
-				premeanradius = premeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))*cells(i)%c_elements(0)
+				premeanradius = premeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))!*cells(i)%c_elements(0)
 				cell_vector = cells(i)%position - sys_com
-				syspremeanradius = syspremeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))*cells(i)%c_elements(0)
+				syspremeanradius = syspremeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))!*cells(i)%c_elements(0)
 			else
 				cell_vector = cells(i)%position - epi_com
-				epimeanradius = epimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))*cells(i)%c_elements(0)
+				epimeanradius = epimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))!*cells(i)%c_elements(0)
 				cell_vector = cells(i)%position - sys_com
-				sysepimeanradius = sysepimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))*cells(i)%c_elements(0)
+				sysepimeanradius = sysepimeanradius + SQRT(DOT_PRODUCT(cell_vector,cell_vector))!*cells(i)%c_elements(0)
 			endif
 		enddo
-		premeanradius = premeanradius/(ne-epielementcount)
-		epimeanradius = epimeanradius/epielementcount
-		syspremeanradius = syspremeanradius/(ne-epielementcount)
-		sysepimeanradius = sysepimeanradius/epielementcount
+		premeanradius = premeanradius/(nc-epicellcount)!(ne-epielementcount)
+		epimeanradius = epimeanradius/epicellcount!epielementcount
+		syspremeanradius = syspremeanradius/(nc-epicellcount)!(ne-epielementcount)
+		sysepimeanradius = sysepimeanradius/epicellcount!epielementcount
 
 		if (randomising) then
 			random_values_radius(ran_loop,:) = (/epimeanradius, sysepimeanradius, premeanradius, syspremeanradius/)
