@@ -1,0 +1,12 @@
+./ScEM_master 06.0 0.005 1.00 1 >> /dev/null & sleep 20;
+./ScEM_master 06.0 0.005 0.75 1 >> /dev/null;
+./ScEM_master 06.0 0.005 0.50 1 >> /dev/null & sleep 20;
+./ScEM_master 06.0 0.100 1.00 1 >> /dev/null;
+./ScEM_master 06.0 0.100 0.75 1 >> /dev/null & sleep 20;
+./ScEM_master 06.0 0.100 0.50 1 >> /dev/null;
+./ScEM_master 06.0 0.600 1.00 1 >> /dev/null & sleep 20;
+./ScEM_master 06.0 0.600 0.75 1 >> /dev/null;
+./ScEM_master 06.0 0.600 0.50 1 >> /dev/null & sleep 20;
+./ScEM_master 06.0 0.050 1.00 1 >> /dev/null;
+./ScEM_master 06.0 0.050 0.75 1 >> /dev/null & sleep 20;
+./ScEM_master 06.0 0.050 0.50 1 >> /dev/null;

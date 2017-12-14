@@ -1,8 +1,0 @@
-           8
-        1024
-        5882
- number of cells =            8
- number of elements =         1024
- number of element pairs =         5882
- time =    12960.26    
- Time taken for run (seconds):          42

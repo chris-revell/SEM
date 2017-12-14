@@ -1,8 +1,0 @@
-          10
-        1280
-        7043
- number of cells =           10
- number of elements =         1280
- number of element pairs =         7043
- time =    12528.34    
- Time taken for run (seconds):          55

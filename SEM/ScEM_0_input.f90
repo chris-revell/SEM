@@ -58,9 +58,10 @@ module scem_0_input
   !Variables for setting output folder
 !  character(len=8) :: date_of_run   !Date of simulation run
 !  character(len=10):: time_of_run   !Time of simulation run
-  character(len=21):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+  character(len=19):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
-  character(len=4) :: arg1,arg2,arg3
+  character(len=4) :: arg1,arg3
+  character(len=5) :: arg2
   character(len=1) :: arg4
   logical :: randomising
   logical :: intro
@@ -118,9 +119,9 @@ module scem_0_input
       flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
       flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 0    ! Switch to turn off type radius sorting measurement
-      flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
+      flag_measure_surface    = 0    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
-      flag_measure_com        = 1
+      flag_measure_com        = 0
       flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
 
       !Simulation control parameters
@@ -169,7 +170,7 @@ module scem_0_input
       CALL GET_COMMAND_ARGUMENT(4,arg4)
       !if (arg5.EQ."1") flag_povray = 1
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "../data/"//arg1(1:2)//arg1(4:)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//arg4(1:1)
+      output_folder = "data/"//arg1(1:2)//arg1(4:)//"_"//arg2(1:1)//arg2(3:5)//"_"//arg3(1:1)//arg3(3:4)//"_"//arg4(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
       call system("mkdir "//output_folder//"/sorting_data")
