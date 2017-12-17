@@ -5,7 +5,7 @@ import os
 from sys import argv
 from scipy.stats import binned_statistic
 
-def zeroonemeasurements(arg,plot):
+def zeroonemeasurements(arg,plot,sigfac):
     if os.path.exists(os.path.join(arg,"0-1plots")):
         pass
     else:
@@ -25,7 +25,7 @@ def zeroonemeasurements(arg,plot):
             minvalues  = np.minimum(neighbourrandomdata[:,2],neighbourdata[:,1])
             maxvalues  = np.maximum(neighbourrandomdata[:,3],neighbourdata[:,1])
             sigmavalues= neighbourrandomdata[:,4]
-            rangevalues= np.minimum((maxvalues-meanvalues),3*sigmavalues)
+            rangevalues= np.minimum((maxvalues-meanvalues),sigfac*sigmavalues)
             normalisedneighbourdata = (neighbourdata[:,1]-meanvalues)/rangevalues
             if plot == 1:
                 fig,ax = plt.subplots()
@@ -39,7 +39,7 @@ def zeroonemeasurements(arg,plot):
             minvalues  = np.minimum(neighbourrandomdata[:,6],neighbourdata[:,2])
             maxvalues  = np.maximum(neighbourrandomdata[:,7],neighbourdata[:,2])
             sigmavalues= neighbourrandomdata[:,8]
-            rangevalues= np.minimum((meanvalues-minvalues),3*sigmavalues)
+            rangevalues= np.minimum((meanvalues-minvalues),sigfac*sigmavalues)
             normalisedneighbourdata = (meanvalues-neighbourdata[:,2])/rangevalues
             if plot == 1:
                 fig,ax = plt.subplots()
@@ -57,7 +57,7 @@ def zeroonemeasurements(arg,plot):
             meanvalues = surfacerandomdata[:,1]
             maxvalues  = np.maximum(surfacerandomdata[:,3],surfacedata[:,1])
             sigmavalues= surfacerandomdata[:,4]
-            rangevalues= np.minimum((maxvalues-meanvalues),3*sigmavalues)
+            rangevalues= np.minimum((maxvalues-meanvalues),sigfac*sigmavalues)
             normalisedsurfacedata = (surfacedata[:,1]-meanvalues)/rangevalues
             if plot == 1:
                 fig,ax = plt.subplots()
@@ -77,7 +77,7 @@ def zeroonemeasurements(arg,plot):
             minvalues  = np.minimum(radiusrandomdata[:,2],radiusdata[:,1])
             maxvalues  = np.maximum(radiusrandomdata[:,3],radiusdata[:,1])
             sigmavalues= radiusrandomdata[:,4]
-            rangevalues= np.minimum((meanvalues-minvalues),3*sigmavalues)
+            rangevalues= np.minimum((meanvalues-minvalues),sigfac*sigmavalues)
             normalisedradiusdata = (meanvalues-radiusdata[:,1])/rangevalues
             if plot == 1:
                 fig,ax = plt.subplots()
@@ -91,7 +91,7 @@ def zeroonemeasurements(arg,plot):
             minvalues  = np.minimum(radiusrandomdata[:,6],radiusdata[:,2])
             maxvalues  = np.maximum(radiusrandomdata[:,7],radiusdata[:,2])
             sigmavalues= radiusrandomdata[:,8]
-            rangevalues= np.minimum((meanvalues-minvalues),3*sigmavalues)
+            rangevalues= np.minimum((meanvalues-minvalues),sigfac*sigmavalues)
             normalisedradiusdata = (meanvalues-radiusdata[:,2])/rangevalues
             if plot == 1:
                 fig,ax = plt.subplots()
@@ -105,7 +105,7 @@ def zeroonemeasurements(arg,plot):
             minvalues  = np.minimum(radiusrandomdata[:,10],radiusdata[:,3])
             maxvalues  = np.maximum(radiusrandomdata[:,11],radiusdata[:,3])
             sigmavalues= radiusrandomdata[:,12]
-            rangevalues= np.minimum((maxvalues-meanvalues),3*sigmavalues)
+            rangevalues= np.minimum((maxvalues-meanvalues),sigfac*sigmavalues)
             normalisedradiusdata = (radiusdata[:,3]-meanvalues)/rangevalues
             if plot == 1:
                 fig,ax = plt.subplots()
@@ -119,7 +119,7 @@ def zeroonemeasurements(arg,plot):
             minvalues  = np.minimum(radiusrandomdata[:,14],radiusdata[:,4])
             maxvalues  = np.maximum(radiusrandomdata[:,15],radiusdata[:,4])
             sigmavalues= radiusrandomdata[:,16]
-            rangevalues= np.minimum((maxvalues-meanvalues),3*sigmavalues)
+            rangevalues= np.minimum((maxvalues-meanvalues),sigfac*sigmavalues)
             normalisedradiusdata = (radiusdata[:,1]-meanvalues)/rangevalues
             if plot == 1:
                 fig,ax = plt.subplots()
