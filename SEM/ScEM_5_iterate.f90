@@ -34,7 +34,7 @@ contains
     logical :: fatesnotbalanced
 
     ! iterate system for pre-defined time interval
-    do while (nc.LE.50)
+    do while (nc.LE.30)
 
       if (intro.AND.nc.GE.nc_initial) then
         write(*,'(A21,I2,A41)') "Grew intro system to ",nc_initial," cells. Initiating simulation parameters."
@@ -126,7 +126,7 @@ contains
       !Outputting data to file at intervals of output_interval.
       if (mod(time,output_interval2).LT.dt.AND..NOT.intro) then
         n_snapshots=n_snapshots+1
-        call scem_output_system
+      !  call scem_output_system
         if (flag_povray.EQ.1) call scem_output_povray
       end if
 
