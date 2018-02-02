@@ -18,7 +18,7 @@ contains
 
   subroutine scem_measure_randomised
 
-    integer :: n,epi_ran_counter,configuration,m
+    integer :: n,epi_ran_counter,configuration
     real*8  :: fate_decider
     logical :: fatesnotbalanced
     real*8,dimension(4) :: means
@@ -82,21 +82,18 @@ contains
     enddo
 
 	  ! radius mean and standard deviations
-    !do n=1,4
-    !  means(n) = (1.0*SUM(random_values_radius(:n_random,n)))/n_random
-    !  squaremeans(n) = (1.0*SUM(random_values_radius(:n_random,n)**2))/n_random
-    !  maximums(n) = MAXVAL(random_values_radius(:n_random,n))
-    !  minimums(n) = MINVAL(random_values_radius(:n_random,n))
-    !enddo
-    !do n=1,4
-    !  stds(n) = SQRT(squaremeans(n)-means(n)**2)
-    !enddo
-    open(unit=44, file=output_folder//'/randomised_data/radius.txt',status='unknown',position="append")
-    !WRITE(44,"(*(G0,:,1X))") time,means(1),minimums(1),maximums(1),stds(1),means(2),minimums(2),maximums(2),stds(2),&
-    !  means(3),minimums(3),maximums(3),stds(3),means(4),minimums(4),maximums(4),stds(4)
     do n=1,4
-      write(*,"(*(G0,:,1X))") (random_values_radius(n,m), m=1,n_random_max)
+      means(n) = (1.0*SUM(random_values_radius(:n_random,n)))/n_random
+      squaremeans(n) = (1.0*SUM(random_values_radius(:n_random,n)**2))/n_random
+      maximums(n) = MAXVAL(random_values_radius(:n_random,n))
+      minimums(n) = MINVAL(random_values_radius(:n_random,n))
     enddo
+    do n=1,4
+      stds(n) = SQRT(squaremeans(n)-means(n)**2)
+    enddo
+    open(unit=44, file=output_folder//'/randomised_data/radius.txt',status='unknown',position="append")
+    WRITE(44,"(*(G0,:,1X))") time,means(1),minimums(1),maximums(1),stds(1),means(2),minimums(2),maximums(2),stds(2),&
+      means(3),minimums(3),maximums(3),stds(3),means(4),minimums(4),maximums(4),stds(4)
     close(44)
 
     do n=1,2
