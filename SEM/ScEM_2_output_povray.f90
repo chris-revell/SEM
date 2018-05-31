@@ -43,15 +43,15 @@ module scem_2_output_povray
       write(30,*) 'light_source { < 0, 0, -60 > color White }'
       write(30,*)
 
-      if (flag_background.EQ.1) then !Draw boundary of spherical background
-        write(30,'(A16,F18.9,A77)') &
-              ' sphere {<0,0,0>', spherical_boundary_radius,&
-              ' texture { pigment { color Blue transmit .85}finish{phong .8} } } // boundary'
-      elseif (flag_background.EQ.4) then !Draw the spherical cap background
-        write(30,'(A18,F18.9,A2,F18.9,A77)') &
-              ' sphere {<0.2,0.2,',(-cap_radius+h/2.0),'> ',cap_radius,&
-              ' texture { pigment { color Blue transmit .85}finish{phong .8} } } // boundary'
-      endif
+!      if (flag_background.EQ.1) then !Draw boundary of spherical background
+!        write(30,'(A16,F18.9,A77)') &
+!              ' sphere {<0,0,0>', spherical_boundary_radius,&
+!              ' texture { pigment { color Blue transmit .85}finish{phong .8} } } // boundary'
+!      elseif (flag_background.EQ.4) then !Draw the spherical cap background
+!        write(30,'(A18,F18.9,A2,F18.9,A77)') &
+!              ' sphere {<0.2,0.2,',(-cap_radius+h/2.0),'> ',cap_radius,&
+!              ' texture { pigment { color Blue transmit .85}finish{phong .8} } } // boundary'
+!      endif
 
       !Write element position data to file in Pov-Ray format.
       !Loop over all elements. Draw a small sphere at the position of each element.
@@ -82,12 +82,12 @@ module scem_2_output_povray
             write(30,'(A60)',advance="no")     ", fate"
             write(30,'(I1.1)')                cells(elements(i)%parent)%fate
           endif
-          if (i.EQ.cells(1)%cortex_elements(1)) then
-            write(30,'(A12,F18.9,A2,F18.9,A2,F18.9,A2,F4.2,A64)') ' sphere {  < ',&
-                elements(i)%position(1), ',', elements(i)%position(2),',', &
-                elements(i)%position(3),&
-                '> ',r_interaction_max,'texture { pigment { color Blue transmit .85}finish{phong .8} } }'
-          endif
+!          if (i.EQ.cells(1)%cortex_elements(1)) then
+!            write(30,'(A12,F18.9,A2,F18.9,A2,F18.9,A2,F4.2,A64)') ' sphere {  < ',&
+!                elements(i)%position(1), ',', elements(i)%position(2),',', &
+!                elements(i)%position(3),&
+!                '> ',r_interaction_max,'texture { pigment { color Blue transmit .85}finish{phong .8} } }'
+!          endif
         enddo
       endif
       write(30,*)
@@ -118,21 +118,20 @@ module scem_2_output_povray
                           '> 0.5 texture { pigment { color Black } } } // pair inter cell',&
                           elements(m)%parent, ' , cell',&
                           elements(n)%parent
-          else !Elements are in the same cell
-            CYCLE
+          else !Elements are in the same cell            
             !All intra-cell interactions in blue
-!            write(30,'(A14,F18.9,A2,F18.9,A2,F18.9,A4,F18.9,A2,F18.9,A2,&
-!                            F18.9,A61,I2.2,A7,I2.2)') &
-!                            ' cylinder {  < ', &
-!                            elements(pairs(j,1))%position(1), ',', &
-!                            elements(pairs(j,1))%position(2), ',', &
-!                            elements(pairs(j,1))%position(3), '>, <', &
-!                            elements(pairs(j,2))%position(1), ',', &
-!                            elements(pairs(j,2))%position(2), ',', &
-!                            elements(pairs(j,2))%position(3), &
-!                            '> 0.5 texture { pigment { color Blue } } } // pair intra cell',&
-!                            elements(pairs(j,1))%parent, ' , cell',&
-!                            elements(pairs(j,2))%parent
+            write(30,'(A14,F18.9,A2,F18.9,A2,F18.9,A4,F18.9,A2,F18.9,A2,&
+                            F18.9,A61,I2.2,A7,I2.2)') &
+                            ' cylinder {  < ', &
+                            elements(pairs(j,1))%position(1), ',', &
+                            elements(pairs(j,1))%position(2), ',', &
+                            elements(pairs(j,1))%position(3), '>, <', &
+                            elements(pairs(j,2))%position(1), ',', &
+                            elements(pairs(j,2))%position(2), ',', &
+                            elements(pairs(j,2))%position(3), &
+                            '> 0.5 texture { pigment { color Blue } } } // pair intra cell',&
+                            elements(pairs(j,1))%parent, ' , cell',&
+                            elements(pairs(j,2))%parent
 
           endif
         enddo
