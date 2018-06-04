@@ -20,7 +20,7 @@ module scem_0_input
   !System switches
   integer :: flag_create,flag_diffusion,flag_growth,flag_division,flag_conserve
   integer :: flag_background,flag_povray_elements, flag_randomise
-  integer :: flag_povray_pairs,flag_povray_volumes,flag_povray,flag_povray_triangles,flag_povray_cortex_pairs
+  integer :: flag_povray_pairs,flag_povray_volumes,flag_povray,flag_povray_triangles,flag_povray_cortex_pairs,flag_povray_boundary
   integer :: flag_count_output,flag_fate_output,flag_volume_output,flag_measure_radius
   integer :: flag_measure_neighbours,flag_measure_displacement,flag_measure_surface,flag_elements_final,flag_symmetric_division
   integer :: flag_measure_randomised,flag_measure_velocity,flag_measure_com,flag_random_init,flag_pre_blebbing
@@ -56,10 +56,10 @@ module scem_0_input
   real   :: n_cellcycles !Number of cell cycles for run
 
   !Variables for setting output folder
-  character(len=22):: output_folder !Name of folder created for data output, labelled according to date and time of run.
+  character(len=24):: output_folder !Name of folder created for data output, labelled according to date and time of run.
   !Variables defined for command line input
   character(len=4) :: arg1,arg2,arg3,arg4
-  character(len=1) :: arg5
+  character(len=1) :: arg0,arg5
 
   logical :: randomising
   logical :: intro
@@ -107,7 +107,6 @@ module scem_0_input
       flag_division    = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_randomise   = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
       flag_pre_blebbing= 1 ! Causes blebbing in primitive endoderm (cell type 2) when equal to 1.
-      flag_symmetric_division=1 ! If =1, division will always produce daughter cells of the same fate as the parent cell.
 
       !Output control switches
       flag_povray = 1                ! Switch to turn off povray output entirely
@@ -116,6 +115,7 @@ module scem_0_input
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
         flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
+        flag_povray_boundary     = 0 ! Switch to turn on boundary visualisation.
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
@@ -129,28 +129,29 @@ module scem_0_input
       flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
 
       !Simulation control parameters
-      nc_initial        = 8
+      nc_initial        = 10
       stiffness_factor  = 1.0
       cell_cycle_time   = 1500 ! Cell cycle time in seconds
       n_cellcycles      = 2.3
 
-      CALL GET_COMMAND_ARGUMENT(1,arg1)
-      READ(arg1,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
-      pre_adhesion     = epi_adhesion ! Magnitude of mutual adhesion between primitive endoderm (type 2)
-      epi_pre_adhesion = pre_adhesion   ! Magnitude of adhesion between epiblasts and primitive endoderm
-      CALL GET_COMMAND_ARGUMENT(2,arg2)
-      READ(arg2,*) cortex_constant1   ! Magnitude of baseline cortical tension in epiblasts
-      cortex_constant2  = cortex_constant1   ! Magnitude of baseline cortical tension in primitive endoderm
-      DIT_response(1,0) = 1.0 ! Epiblast external system surface DIT response factor
-      CALL GET_COMMAND_ARGUMENT(3,arg3)
-      READ(arg3,*) DIT_response(1,1) ! Epiblast homotypic interface DIT response factor
-      DIT_response(1,2) = 1.0 ! Epiblast heterotypic interface DIT response factor
-      DIT_response(2,0) = 1.0 ! Primitive endoderm external system surface DIT response factor
-      DIT_response(2,1) = 1.0 ! Primitive endoderm homotypic interface DIT response factor
-      DIT_response(2,2) = 1.0 ! Primitive endoderm heterotypic interface DIT response factor
-
-      CALL GET_COMMAND_ARGUMENT(4,arg4)
-      READ(arg4,*) bleb_amp
+      CALL GET_COMMAND_ARGUMENT(1,arg0)
+      READ(arg0,*) flag_symmetric_division ! If flag_symmetric_division=1, division will always produce daughter cells of the same fate as the parent cell.
+      CALL GET_COMMAND_ARGUMENT(2,arg1)
+      READ(arg1,*) epi_adhesion            ! Magnitude of mutual adhesion between epiblasts (type 1)
+      pre_adhesion     = epi_adhesion      ! Magnitude of mutual adhesion between primitive endoderm (type 2)
+      epi_pre_adhesion = pre_adhesion      ! Magnitude of adhesion between epiblasts and primitive endoderm
+      CALL GET_COMMAND_ARGUMENT(3,arg2)
+      READ(arg2,*) cortex_constant1        ! Magnitude of baseline cortical tension in epiblasts
+      cortex_constant2  = cortex_constant1 ! Magnitude of baseline cortical tension in primitive endoderm
+      DIT_response(1,0) = 1.0              ! Epiblast external system surface DIT response factor
+      CALL GET_COMMAND_ARGUMENT(4,arg3)
+      READ(arg3,*) DIT_response(1,1)       ! Epiblast homotypic interface DIT response factor
+      DIT_response(1,2) = 1.0              ! Epiblast heterotypic interface DIT response factor
+      DIT_response(2,0) = 1.0              ! Primitive endoderm external system surface DIT response factor
+      DIT_response(2,1) = 1.0              ! Primitive endoderm homotypic interface DIT response factor
+      DIT_response(2,2) = 1.0              ! Primitive endoderm heterotypic interface DIT response factor
+      CALL GET_COMMAND_ARGUMENT(5,arg4)
+      READ(arg4,*) bleb_amp                ! Blebbing amplitude
 
       ! *** Everything from here on can effectively be ignored for the purposes of testing simulation parameters ***
 
@@ -174,9 +175,9 @@ module scem_0_input
 
       !Create labelled file for data output
       !Catch date and time, create folder to store data in
-      CALL GET_COMMAND_ARGUMENT(5,arg5)
+      CALL GET_COMMAND_ARGUMENT(6,arg5)
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "data/"//arg1(1:2)//arg1(4:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
+      output_folder = "data/"//arg0//"_"//arg1(1:2)//arg1(4:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
         arg4(1:1)//arg4(3:4)//"_"//arg5(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
