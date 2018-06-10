@@ -5,3 +5,4 @@ ScEM_master
 *.mod
 scripts/__pycache__
 data/*
+!data/.gitkeep

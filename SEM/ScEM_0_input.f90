@@ -136,10 +136,12 @@ module scem_0_input
 
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
+      epi_adhesion     = epi_adhesion/0.03357
       pre_adhesion     = epi_adhesion ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_pre_adhesion = pre_adhesion   ! Magnitude of adhesion between epiblasts and primitive endoderm
       CALL GET_COMMAND_ARGUMENT(2,arg2)
       READ(arg2,*) cortex_constant1   ! Magnitude of baseline cortical tension in epiblasts
+      cortex_constant1  = cortex_constant1/2
       cortex_constant2  = cortex_constant1   ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0 ! Epiblast external system surface DIT response factor
       CALL GET_COMMAND_ARGUMENT(3,arg3)
@@ -176,7 +178,7 @@ module scem_0_input
       !Catch date and time, create folder to store data in
       CALL GET_COMMAND_ARGUMENT(5,arg5)
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "data/"//arg1(1:2)//arg1(4:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
+      output_folder = "data/"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
         arg4(1:1)//arg4(3:4)//"_"//arg5(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")
