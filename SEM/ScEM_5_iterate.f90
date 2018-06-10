@@ -34,7 +34,7 @@ contains
     logical :: fatesnotbalanced
 
     ! iterate system for pre-defined time interval
-    do while (nc.LE.50)
+    do while (time.LE.time_max)
 
       if (intro.AND.nc.GE.nc_initial) then
         write(*,'(A21,I2,A41)') "Grew intro system to ",nc_initial," cells. Initiating simulation parameters."

@@ -62,7 +62,12 @@ contains
 
   	end do
 
-    write(*,'(A20,I3,A10)')"Created 1 cell with ", icount, " elements."
+    write(*,'(A20,I3,A10)') "Created 1 cell with ", icount, " elements."
+    if (flag_symmetric_division.EQ.1) then
+      write(*,'(A20,I3,A10)') "Symmetric division"
+    else
+      write(*,'(A20,I3,A10)') "Asymmetric division"
+    endif
 
   end subroutine scem_initial_create
 
