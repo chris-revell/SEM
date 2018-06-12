@@ -6,11 +6,11 @@
 
 This code is an expansion of the Subcellular Element Method (SCEM). SCEM was originally developed by Tim Newman at the University of Arizona [1]. It models multicellular systems by treating each cell as a group of infinitesimal elements interacting via local nearest-neighbour forces.
 
-![](/Users/christopher/Dropbox/PhD/snap_03small.jpg)
+![](http://www.christopherrevell.com/research/researchimages/seminteractions.jpg)
 
 Our expansion utilises a Delaunay triangulation across boundary elements identified within each cell to define a cortical tension network. The theory and algorithms are explained in more detail in [2].
 
-![](/Users/christopher/Dropbox/PhD/cutawaycell.png)
+![](http://www.christopherrevell.com/research/researchimages/cutawaycell.png)
 
 ### Running
 
