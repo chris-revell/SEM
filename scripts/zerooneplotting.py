@@ -134,4 +134,4 @@ def zeroonemeasurements(arg,plot,sigfac):
 
 
 if __name__ == "__main__":
-    zeroonemeasurements(argv[1],1)
+    zeroonemeasurements(argv[1],int(argv[2]),float(argv[3]))
