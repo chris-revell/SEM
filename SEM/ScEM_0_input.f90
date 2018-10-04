@@ -129,10 +129,10 @@ module scem_0_input
       flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
 
       !Simulation control parameters
-      nc_initial        = 10
+      nc_initial        = 10.0
       stiffness_factor  = 1.0
-      cell_cycle_time   = 1500 ! Cell cycle time in seconds
-      n_cellcycles      = 2.3
+      cell_cycle_time   = 1500.0 ! Cell cycle time in seconds
+      n_cellcycles      = 2.0
 
       CALL GET_COMMAND_ARGUMENT(1,arg0)
       READ(arg0,*) flag_symmetric_division ! If flag_symmetric_division=1, division will always produce daughter cells of the same fate as the parent cell.
