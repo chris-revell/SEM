@@ -5,6 +5,7 @@ module scem_2_measure_displacement
 
   use scem_0_input
   use scem_1_types
+  use scem_2_com
 
   implicit none
 
@@ -17,11 +18,12 @@ contains
     real*8, dimension(3) :: displacement_vector
 
     open(unit=41, file=output_folder//"/sorting_data/displacement.txt", status="unknown", position="append")
+    displacement = 0
     do n=1, nc
       displacement_vector(:) = cells(n)%position(:) - cells(n)%original_position(:)
-      displacement = SQRT(DOT_PRODUCT(displacement_vector,displacement_vector))
-      write(41,*) MIN(cells(n)%age,time), cells(n)%fate, displacement
+      displacement = displacement + DOT_PRODUCT(displacement_vector,displacement_vector)
     enddo
+    write(41,*) time, displacement/nc
     close(41)
 
   end subroutine scem_measure_displacement
