@@ -19,11 +19,11 @@ contains
 
     open(unit=41, file=output_folder//"/sorting_data/displacement.txt", status="unknown", position="append")
     displacement = 0
-    do n=1, nc
+    do n=1, nc_initial
       displacement_vector(:) = cells(n)%position(:) - cells(n)%original_position(:)
       displacement = displacement + DOT_PRODUCT(displacement_vector,displacement_vector)
     enddo
-    write(41,*) time, displacement/nc
+    write(41,*) time, displacement/nc_initial
     close(41)
 
   end subroutine scem_measure_displacement
