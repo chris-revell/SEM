@@ -222,7 +222,7 @@ module scem_0_input
       ! Interactions:
       epsilon=0.01   ! value of potential relative to minimum at r_interaction_max
       n_bins=1024    ! number of bins for potential table
-      frac_close=0.8 ! fraction of equilibrium distance for initialization (< approx 0.85)
+
       frac_interaction_max=1.8  !1.8 ! --> fraction of equilibrium distance for maximum interaction range (in window 1.5 to 1.9)
                                 !     1.5 has sharply contracted potential and efficient
                                 !     1.9 has more relaxed potential, and still reasonably efficient (factor of 2.5 slower)
@@ -231,7 +231,7 @@ module scem_0_input
         ! derived quantitites
         r_equil=2*r_cell*(p3/ne_cell)**ot ! equilibrium distance between elements (assuming 3D here)
         r_equil_sq=r_equil**2 ! square of equilibrium distance
-        r_close_sq=(frac_close*r_equil)**2 ! square of minimum distance for initialization
+
         r_interaction_max=frac_interaction_max*r_equil ! maximum interaction range
         r_interaction_max_sq=r_interaction_max**2 ! square of maximum interaction range
         d_r_sq=r_interaction_max_sq/n_bins
@@ -245,12 +245,11 @@ module scem_0_input
 
       ! growth parameters
       frac_growth=0.9 ! fraction of current cell radius within which new elements may be placed
-      frac_placement_min=0.6 ! minimum separation of new element from nearest neighbour, as fraction of r_equil
         ! derived quantities
         rate_new_element=ne_cell/cell_cycle_time ! rate per cell at which new elements introduced
         establishment_time=1.0/rate_new_element ! transient time for each new element to become established ("faded in")
                                                 ! note: may need better derivation for this time and relationship to cell_cycle_time
-        r_placement_min_sq=(frac_placement_min*r_equil)**2 ! squared minimum distance from new element to nearest neighbour
+
 
       ! Define rel_strength array
       ! Explanation of indices:
