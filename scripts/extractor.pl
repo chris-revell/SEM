@@ -1,4 +1,4 @@
-#!/opt/local/bin/perl
+#!/usr/bin/perl
 #Perl script to extract data relating to a given set of criteria from a povray file for the whole SEM system
 #Take folder location of data and criteria for extraction at command line.
 #Loop over all 100 timepoint povray files.

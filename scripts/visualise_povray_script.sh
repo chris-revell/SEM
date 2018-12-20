@@ -20,6 +20,6 @@ for i in $(ls $1); do
   fi
 done
 
-#convert -delay 15 -loop 0 $1/*.jpg $1/animated.gif
+convert -delay 15 -loop 0 $1/*.jpg $1/animated.gif
 #rm $1/*.jpg
 #rm $1/*.pov

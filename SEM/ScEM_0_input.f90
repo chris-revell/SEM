@@ -109,11 +109,11 @@ module scem_0_input
       flag_pre_blebbing= 1 ! Causes blebbing in primitive endoderm (cell type 2) when equal to 1.
 
       !Output control switches
-      flag_povray = 0                ! Switch to turn off povray output entirely
+      flag_povray = 1                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
-        flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
+        flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
         flag_povray_boundary     = 0 ! Switch to turn on boundary visualisation.
       flag_count_output       = 0    ! Switch to turn off outputting cell count
@@ -122,7 +122,7 @@ module scem_0_input
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
       flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
       flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
-      flag_measure_displacement=1    ! Switch to turn off displacement sorting measurement
+      flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_surface    = 0    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
       flag_measure_com        = 0
@@ -303,7 +303,7 @@ module scem_0_input
       ! temporal parameters - all in *seconds*
       time_max=n_cellcycles*cell_cycle_time ! --> time of simulation in seconds
       output_interval=time_max/49.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
-      output_interval2=time_max/30.0
+      output_interval2=output_interval
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities
         diff_amp=sqrt(dt*diff_coeff) ! amplitude of noise in diffusion term
