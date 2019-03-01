@@ -5,7 +5,6 @@ module ScEM_2_measure_surface
 
   use scem_0_input
   use scem_1_types
-  use scem_0_arrays
 
   implicit none
 
@@ -15,13 +14,20 @@ contains
 
     integer              :: i,j
     integer              :: factor1,factor2,factor3
-    real*8               :: epi_area
+    real*8               :: epi_area,other_area
     real*8               :: pre_area
+!    real*8               :: epi_out
+!    real*8               :: pre_out
     real*8               :: area
-    real*8, dimension(3) :: a,b,c
+    real*8, dimension(3) :: a
+    real*8, dimension(3) :: b
+    real*8, dimension(3) :: c
+
+    if (.NOT.randomising) open(unit=43,file=output_folder//"/sorting_data/surface.txt",status="unknown",position="append")
 
     epi_area = 0
     pre_area = 0
+    other_area=0
 
     do i=1, nc
       do j=1, cells(i)%triplet_count
@@ -29,7 +35,7 @@ contains
         factor2 = elements(cells(i)%triplets(2,j))%DIT_factor
         factor3 = elements(cells(i)%triplets(3,j))%DIT_factor
 
-        if ((factor1.EQ.0).AND.(factor2.EQ.0).AND.(factor3.EQ.0)) then
+        if ((factor1.EQ.1).AND.(factor2.EQ.1).AND.(factor3.EQ.1)) then
           !If all 3 elements in a triplet have DIT_factor.EQ.0, then this triplet is on the external system surface
           a = elements(cells(i)%triplets(1,j))%position - elements(cells(i)%triplets(2,j))%position
           b = elements(cells(i)%triplets(1,j))%position - elements(cells(i)%triplets(3,j))%position
@@ -41,18 +47,29 @@ contains
             pre_area = pre_area + area
           endif
         else
-          CYCLE
+          a = elements(cells(i)%triplets(1,j))%position - elements(cells(i)%triplets(2,j))%position
+          b = elements(cells(i)%triplets(1,j))%position - elements(cells(i)%triplets(3,j))%position
+          c = CROSS_PRODUCT(a,b)
+          area = 0.5*SQRT(DOT_PRODUCT(c,c)) !0.5*|axb|
+          other_area = other_area + area
         endif
       enddo
     enddo
 
-    if (randomising) then
-      random_values_surface(ran_loop) = pre_area/(epi_area+pre_area)
-    else
-      open(unit=43,file=output_folder//"/sorting_data/surface.txt",status="unknown",position="append")
-      write(43,"(*(G0,:,1X))") time, pre_area/(epi_area+pre_area)
-      close(43)
-    endif
+  !  if (epi_area.GT.0.AND.pre_area.GT.0) then
+  !    epi_out = real(epi_area)/real(epi_area+pre_area)
+  !    pre_out = real(pre_area)/real(epi_area+pre_area)
+
+  !    if (randomising) then
+  !			surface_mean = surface_mean + pre_out
+  !      surface_max  = MAX(surface_max,pre_out)
+  !    else
+        write(43,*) time, epi_area, other_area+epi_area
+  !    endif
+
+  !  endif
+
+    close(43)
 
   end subroutine scem_measure_surface
 

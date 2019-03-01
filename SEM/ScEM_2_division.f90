@@ -45,6 +45,11 @@ module scem_2_division
                   max_sep_old=max_sep
                end do
             end do
+            if (arg4.EQ."1") then
+              long_axis(1) = 0
+              long_axis(2) = 0
+              long_axis(3) = max_sep
+            endif
             x_com(:)=cells(k)%position(:)
             c_el_temp1(:)=0
             c_el_temp2(:)=0
@@ -67,17 +72,17 @@ module scem_2_division
             cells(k)%c_elements(:)=c_el_temp1(:)
             cells(nc)%c_elements(:)=c_el_temp2(:)
 
-            if (flag_symmetric_division.EQ.1.OR.intro) then
-              cells(nc)%fate=cells(k)%fate
-              cells(nc)%label=nc
+            !fate_decider is a random number between 0 and 1. If this random number is greater than 0.2
+            !then division is symmetric, otherwise it is asymmetric.
+            !This models the 80:20 split for symmetric vs asymmetric observed for ICM cell division
+            CALL RANDOM_NUMBER(fate_decider) !Fill fate_decider variable with a random number between 0 and 1.
+            if (cells(k)%fate.eq.1) then
+              cells(nc)%fate=2			!Asymmetric division where parent cell has type 1
             else
-              CALL RANDOM_NUMBER(fate_decider) !Fill fate_decider variable with a random number between 0 and 1.
-              if (fate_decider.GE.0.5) then
-                cells(nc)%fate=cells(k)%fate	!Symmetric division
-              else
-                cells(nc)%fate=MOD(cells(k)%fate,2)+1  !Asymmetric division. New cell has the opposite fate of parent cell.
-              endif
-            endif
+              cells(nc)%fate=1			!Asymmetric division where parent cell has type 2
+            end if
+
+            cells(nc)%label=nc
 
             !Calculate the centres of mass of the two new daughter cells and store in the original_position component of the cells data type
             x_com(:)=0.0
@@ -100,7 +105,7 @@ module scem_2_division
 
       if (nc_old.EQ.1.AND.nc.GT.nc_old) then
         area_normalisation_factor = area_normalisation_factor/area_normalisation_count
-!        print*, area_normalisation_factor
+        print*, area_normalisation_factor
       endif
 
       deallocate(c_el_temp1)
