@@ -132,7 +132,7 @@ module scem_0_input
       nc_initial        = 2
       stiffness_factor  = 1.0
       cell_cycle_time   = 1500 ! Cell cycle time in seconds
-      n_cellcycles      = 0.5
+      n_cellcycles      = 2.0
 
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
@@ -298,7 +298,7 @@ module scem_0_input
 
       ! temporal parameters - all in *seconds*
       time_max=n_cellcycles*cell_cycle_time ! --> time of simulation in seconds
-      output_interval=time_max/49.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
+      output_interval=time_max/10.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
       output_interval2=output_interval
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities
