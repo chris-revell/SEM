@@ -144,10 +144,10 @@ module scem_0_input
       DIT_response(1,0) = 1.0 ! Epiblast external system surface DIT response factor
       CALL GET_COMMAND_ARGUMENT(3,arg3)
       READ(arg3,*) DIT_response(1,1) ! Epiblast homotypic interface DIT response factor
-      DIT_response(1,2) = 1.0 ! Epiblast heterotypic interface DIT response factor
-      DIT_response(2,0) = 1.0 ! Primitive endoderm external system surface DIT response factor
-      DIT_response(2,1) = 1.0 ! Primitive endoderm homotypic interface DIT response factor
-      DIT_response(2,2) = 1.0 ! Primitive endoderm heterotypic interface DIT response factor
+      DIT_response(1,2) = DIT_response(1,1) ! Epiblast heterotypic interface DIT response factor
+      DIT_response(2,0) = DIT_response(1,1) ! Primitive endoderm external system surface DIT response factor
+      DIT_response(2,1) = DIT_response(1,1) ! Primitive endoderm homotypic interface DIT response factor
+      DIT_response(2,2) = DIT_response(1,1) ! Primitive endoderm heterotypic interface DIT response factor
       CALL GET_COMMAND_ARGUMENT(4,arg4)
       READ(arg4,*) bleb_amp                ! Blebbing amplitude
 
