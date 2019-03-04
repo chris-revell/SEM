@@ -109,11 +109,11 @@ module scem_0_input
       flag_pre_blebbing=1
 
       !Output control switches
-      flag_povray = 1                ! Switch to turn off povray output entirely
+      flag_povray = 0                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
-        flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
+        flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
@@ -123,7 +123,7 @@ module scem_0_input
       flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
       flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
     !  flag_measure_type_radius= 0    ! Switch to turn off type radius sorting measurement
-      flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
+      flag_measure_surface    = 0    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
       flag_measure_com        = 0
       flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
@@ -132,7 +132,7 @@ module scem_0_input
       nc_initial        = 2
       stiffness_factor  = 1.0
       cell_cycle_time   = 1500 ! Cell cycle time in seconds
-      n_cellcycles      = 2.0
+      n_cellcycles      = 0.5
 
       CALL GET_COMMAND_ARGUMENT(1,arg1)
       READ(arg1,*) epi_adhesion ! Magnitude of mutual adhesion between epiblasts (type 1)
@@ -145,7 +145,7 @@ module scem_0_input
       CALL GET_COMMAND_ARGUMENT(3,arg3)
       READ(arg3,*) DIT_response(1,1) ! Epiblast homotypic interface DIT response factor
       DIT_response(1,2) = DIT_response(1,1) ! Epiblast heterotypic interface DIT response factor
-      DIT_response(2,0) = DIT_response(1,1) ! Primitive endoderm external system surface DIT response factor
+      DIT_response(2,0) = 1.0 ! Primitive endoderm external system surface DIT response factor
       DIT_response(2,1) = DIT_response(1,1) ! Primitive endoderm homotypic interface DIT response factor
       DIT_response(2,2) = DIT_response(1,1) ! Primitive endoderm heterotypic interface DIT response factor
       CALL GET_COMMAND_ARGUMENT(4,arg4)
@@ -298,7 +298,7 @@ module scem_0_input
 
       ! temporal parameters - all in *seconds*
       time_max=n_cellcycles*cell_cycle_time ! --> time of simulation in seconds
-      output_interval=time_max/10.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
+      output_interval=time_max/9.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
       output_interval2=output_interval
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities
