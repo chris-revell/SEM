@@ -32,8 +32,9 @@ contains
       if (cells(n)%fate.EQ.1) epi_counter = epi_counter+1
     enddo
 
-    !Set n_random. The number of random tests is set to be the minimum of nc choose n_epiblasts or 10000. This prevents an infinite loop when the number of possible configurations is smaller than 10000.
+    !Set n_random. The number of random tests is set to be the minimum of nc choose n_epiblasts or 20000. This prevents an infinite loop when the number of possible configurations is smaller than 10000.
     !Use Stirling's approximation in binomial coefficient.
+    if (n_random.LT.n_random_max.AND.nc.GT.20) n_random = n_random_max
     if (n_random.LT.n_random_max) n_random = MIN(20000,&
       INT(0.95*(nc**(nc+0.5))/(SQRT(2*pi)*epi_counter**(epi_counter+0.5)*(nc-epi_counter)**(nc-epi_counter+0.5))))
 
@@ -44,12 +45,12 @@ contains
     open(unit=44, file=output_folder//'/randomised_data/radius.txt', status='unknown',position="append")
     open(unit=45, file=output_folder//'/randomised_data/neighbours.txt', status='unknown',position="append")
     open(unit=46, file=output_folder//'/randomised_data/surface.txt', status='unknown',position="append")
-    radius1_mean = 0
-    radius1_min = 1000000000
-    radius2_mean = 0
-    radius2_max = 0
+!    radius1_mean = 0
+!    radius1_min = 1000000000
+!    radius2_mean = 0
+!    radius2_max = 0
     radius3_mean = 0
-    radius3_min = 1000000000
+    radius3_max = 0
     neighbours_mean = 0
     neighbours_max = 0
     surface_mean = 0
@@ -100,11 +101,12 @@ contains
 
     enddo
 
-    radius1_mean    = radius1_mean/n_random
-    radius2_mean    = radius2_mean/n_random
+!    radius1_mean    = radius1_mean/n_random
+!    radius2_mean    = radius2_mean/n_random
+    radius3_mean    = radius3_mean/n_random
     neighbours_mean = neighbours_mean/n_random
     surface_mean    = surface_mean/n_random
-    write(44,"(*(G0,:,1X))") time,radius1_mean,radius1_min,radius2_mean,radius2_max,radius3_mean,radius3_min
+    write(44,"(*(G0,:,1X))") time,radius3_mean,radius3_max!,radius1_mean,radius1_min,radius2_mean,radius2_max,radius3_mean,radius3_max
     write(45,"(*(G0,:,1X))") time,neighbours_mean,neighbours_max
     write(46,"(*(G0,:,1X))") time,surface_mean,surface_max
     close(44)

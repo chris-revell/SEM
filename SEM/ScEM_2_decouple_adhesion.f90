@@ -47,7 +47,6 @@ contains
         else
           area_normalisation_factor = area_normalisation_factor+local_area
         endif
-
       enddo
       if (nc.EQ.1) area_normalisation_count = area_normalisation_count+cells(i)%cortex_elements(0)
     enddo

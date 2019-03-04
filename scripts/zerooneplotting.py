@@ -21,7 +21,7 @@ def zeroonemeasurements(arg):
             neighbourdata = np.genfromtxt(os.path.join(arg,"sorting_data/neighbours.txt"))
             neighbourrandomdata = np.genfromtxt(os.path.join(arg,"randomised_data/neighbours.txt"))
             meanvalues = neighbourrandomdata[:,1]
-            maxvalues  = neighbourrandomdata[:,2]
+            maxvalues  = np.maximum(neighbourrandomdata[:,2],neighbourdata[:,1])
             normalisedneighbourdata = (neighbourdata[:,1]-meanvalues)/(maxvalues[:]-meanvalues[:])
             fig1 = plt.figure()
             ax1 = fig1.add_subplot(111)
@@ -37,7 +37,7 @@ def zeroonemeasurements(arg):
             surfacedata = np.genfromtxt(os.path.join(arg,"sorting_data/surface.txt"))
             surfacerandomdata = np.genfromtxt(os.path.join(arg,"randomised_data/surface.txt"))
             meanvalues = surfacerandomdata[:,1]
-            maxvalues  = surfacerandomdata[:,2]
+            maxvalues  = np.maximum(surfacerandomdata[:,2],surfacedata[:,2])
             normalisedsurfacedata = (surfacedata[:,2]-meanvalues)/(maxvalues[:]-meanvalues[:])
             fig2 = plt.figure()
             ax2 = fig2.add_subplot(111)
@@ -50,30 +50,43 @@ def zeroonemeasurements(arg):
     #For radius measurement
     if os.path.exists(os.path.join(arg,"randomised_data/radius.txt")):
         if os.path.exists(os.path.join(arg,"sorting_data/radius.txt")):
+            #radiusdata = np.genfromtxt(os.path.join(arg,"sorting_data/radius.txt"))
+            #radiusrandomdata = np.genfromtxt(os.path.join(arg,"randomised_data/radius.txt"))
+            ##Epi radius
+            #meanvalues = radiusrandomdata[:,1]
+            #minvalues  = radiusrandomdata[:,2]
+            #normalisedradiusdata = (radiusdata[:,1]-meanvalues)/(minvalues[:]-meanvalues[:])
+            #fig3 = plt.figure()
+            #ax3 = fig3.add_subplot(111)
+            #ax3.plot(radiusdata[:,0],normalisedradiusdata[:])
+            #ax3.set_ylim([0,1])
+            #fig3.savefig(os.path.join(arg,"0-1plots","epiradius0-1.png"),bbox_inches="tight",dpi=500)
+            #np.savetxt(os.path.join(arg,"0-1data","epiradius0-1.txt"),np.stack((radiusdata[:,0],normalisedradiusdata),axis=1))
+            #plt.close()
+            ##PrE radius
+            #meanvalues = radiusrandomdata[:,3]
+            #maxvalues  = radiusrandomdata[:,4]
+            #normalisedradiusdata = (radiusdata[:,2]-meanvalues)/(maxvalues[:]-meanvalues[:])
+            #fig3 = plt.figure()
+            #ax3 = fig3.add_subplot(111)
+            #ax3.plot(radiusdata[:,0],normalisedradiusdata[:])
+            #ax3.set_ylim([0,1])
+            #fig3.savefig(os.path.join(arg,"0-1plots","preradius0-1.png"),bbox_inches="tight",dpi=500)
+            #np.savetxt(os.path.join(arg,"0-1data","preradius0-1.txt"),np.stack((radiusdata[:,0],normalisedradiusdata),axis=1))
+            #plt.close()
             radiusdata = np.genfromtxt(os.path.join(arg,"sorting_data/radius.txt"))
             radiusrandomdata = np.genfromtxt(os.path.join(arg,"randomised_data/radius.txt"))
-            #Epi radius
             meanvalues = radiusrandomdata[:,1]
-            minvalues  = radiusrandomdata[:,2]
-            normalisedradiusdata = (radiusdata[:,1]-meanvalues)/(minvalues[:]-meanvalues[:])
+            maxvalues  = np.maximum(radiusrandomdata[:,2],radiusdata[:,1])
+            normalisedradiusdata = (radiusdata[:,1]-meanvalues)/(maxvalues[:]-meanvalues[:])
             fig3 = plt.figure()
             ax3 = fig3.add_subplot(111)
             ax3.plot(radiusdata[:,0],normalisedradiusdata[:])
             ax3.set_ylim([0,1])
-            fig3.savefig(os.path.join(arg,"0-1plots","epiradius0-1.png"),bbox_inches="tight",dpi=500)
-            np.savetxt(os.path.join(arg,"0-1data","epiradius0-1.txt"),np.stack((radiusdata[:,0],normalisedradiusdata),axis=1))
+            fig3.savefig(os.path.join(arg,"0-1plots","radius0-1.png"),bbox_inches="tight",dpi=500)
+            np.savetxt(os.path.join(arg,"0-1data","radius0-1.txt"),np.stack((radiusdata[:,0],normalisedradiusdata),axis=1))
             plt.close()
-            #PrE radius
-            meanvalues = radiusrandomdata[:,3]
-            maxvalues  = radiusrandomdata[:,4]
-            normalisedradiusdata = (radiusdata[:,2]-meanvalues)/(maxvalues[:]-meanvalues[:])
-            fig3 = plt.figure()
-            ax3 = fig3.add_subplot(111)
-            ax3.plot(radiusdata[:,0],normalisedradiusdata[:])
-            ax3.set_ylim([0,1])
-            fig3.savefig(os.path.join(arg,"0-1plots","preradius0-1.png"),bbox_inches="tight",dpi=500)
-            np.savetxt(os.path.join(arg,"0-1data","preradius0-1.txt"),np.stack((radiusdata[:,0],normalisedradiusdata),axis=1))
-            plt.close()
+
 
 
 if __name__ == "__main__":
