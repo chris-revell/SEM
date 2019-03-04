@@ -105,12 +105,12 @@ module scem_0_input
       flag_randomise  = 0 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
 
       !Output control switches
-      flag_povray = 1                ! Switch to turn off povray output entirely
+      flag_povray = 0                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
-        flag_povray_pairs        = 1 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
+        flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
         flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
-        flag_povray_cortex_pairs = 1 ! Switch to turn Delaunay cortex interaction on and off
+        flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
@@ -119,7 +119,7 @@ module scem_0_input
       flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
       flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_type_radius= 0    ! Switch to turn off type radius sorting measurement
-      flag_measure_surface    = 0    ! Switch to turn off surface sorting measurement
+      flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
       flag_measure_com        = 0
       flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
