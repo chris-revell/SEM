@@ -102,17 +102,17 @@ module scem_0_input
       flag_diffusion   = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve    = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background  = 0 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
-      flag_growth      = 1 ! flag_growth = 0 (1) for no growth (growth)
-      flag_division    = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
+      flag_growth      = 0 ! flag_growth = 0 (1) for no growth (growth)
+      flag_division    = 0 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_randomise   = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
       flag_pre_blebbing= 1 ! Causes blebbing in primitive endoderm (cell type 2) when equal to 1.
 
       !Output control switches
-      flag_povray = 1                ! Switch to turn off povray output entirely
+      flag_povray = 0                ! Switch to turn off povray output entirely
         flag_povray_volumes      = 0 ! flag_povray_volumes = 1 to output cell position data in povray format, 0 to skip.
         flag_povray_elements     = 0 ! flag_povray_elements = 1 to output element position data in povray format, 0 to skip.
         flag_povray_pairs        = 0 ! flag_povray_pairs = 1 to show interaction pairs as cylinders in povray output, 0 to skip.
-        flag_povray_triangles    = 1 ! Switch to turn smoothed triangle povray output on and off.
+        flag_povray_triangles    = 0 ! Switch to turn smoothed triangle povray output on and off.
         flag_povray_cortex_pairs = 0 ! Switch to turn Delaunay cortex interaction on and off
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
@@ -143,10 +143,10 @@ module scem_0_input
       DIT_response(1,0) = 1.0 ! Epiblast external system surface DIT response factor
       CALL GET_COMMAND_ARGUMENT(3,arg3)
       READ(arg3,*) DIT_response(1,1) ! Epiblast homotypic interface DIT response factor
-      DIT_response(1,2) = 1.0 ! Epiblast heterotypic interface DIT response factor
+      DIT_response(1,2) = DIT_response(1,1) ! Epiblast heterotypic interface DIT response factor
       DIT_response(2,0) = 1.0 ! Primitive endoderm external system surface DIT response factor
-      DIT_response(2,1) = 1.0 ! Primitive endoderm homotypic interface DIT response factor
-      DIT_response(2,2) = 1.0 ! Primitive endoderm heterotypic interface DIT response factor
+      DIT_response(2,1) = DIT_response(1,1) ! Primitive endoderm homotypic interface DIT response factor
+      DIT_response(2,2) = DIT_response(1,1) ! Primitive endoderm heterotypic interface DIT response factor
 
       CALL GET_COMMAND_ARGUMENT(4,arg4)
       READ(arg4,*) bleb_amp
