@@ -36,15 +36,13 @@ contains
         elements(n)%velocity(:) = elements(n)%velocity(:) - dx(:)*cortex_constant1*pairs_cortex(m)%cortex_factor
         elements(nn)%velocity(:)= elements(nn)%velocity(:)+ dx(:)*cortex_constant1*pairs_cortex(m)%cortex_factor
       else
+        bleb_factor_n  = 1.0
+        bleb_factor_nn = 1.0
         if (flag_pre_blebbing.EQ.1.AND..NOT.intro) then
           if (elements(n)%DIT_factor.EQ.0)  bleb_factor_n = 1.0 + bleb_amp*SIN(10*2.0*pi*elements(n)%age/cell_cycle_time)
           if (elements(nn)%DIT_factor.EQ.0) bleb_factor_nn= 1.0 + bleb_amp*SIN(10*2.0*pi*elements(nn)%age/cell_cycle_time)
-        else
-          bleb_factor_n  = 1.0
-          bleb_factor_nn = 1.0
         endif
-        print*, bleb_factor_n
-        print*, bleb_factor_nn
+                
         elements(n)%velocity(:) = elements(n)%velocity(:) - dx(:)*cortex_constant2*pairs_cortex(m)%cortex_factor*bleb_factor_n
         elements(nn)%velocity(:)= elements(nn)%velocity(:)+ dx(:)*cortex_constant2*pairs_cortex(m)%cortex_factor*bleb_factor_nn
       endif

@@ -39,8 +39,8 @@ contains
       if (intro.AND.nc.GE.nc_initial) then
         write(*,'(A21,I2,A41)') "Grew intro system to ",nc_initial," cells. Initiating simulation parameters."
         intro = .FALSE.
-        !Set fates for initial cells randomly
-        fatesnotbalanced = .TRUE.
+        !!Set fates for initial cells randomly
+        !fatesnotbalanced = .TRUE.
         !do while (fatesnotbalanced)
         !  epi_counter = 0
         !  pre_counter= 0
@@ -60,10 +60,10 @@ contains
         !    if (ABS(epi_counter-pre_counter).EQ.1) fatesnotbalanced = .FALSE.
         !  endif
         !enddo
-        cells(1)%fate = 2
+        cells(1)%fate = 1
         cells(2)%fate = 2
-        epi_counter=0
-        pre_counter=0
+        epi_counter=1
+        pre_counter=1
         write(*,'(A29,I2)') "Initial number of epiblasts: ", epi_counter
         write(*,'(A30,I2)') "Initial number of hypoblasts: ", pre_counter
         call scem_output_system
