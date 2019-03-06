@@ -32,7 +32,7 @@ contains
 
       !Update element velocities according to interaction potentials with overdamped langevin dynamics
       !Constant force cortex_constant1 or cortex_constant2 applied depending on fate of cell that contains pair.
-      if(cells(elements(n)%parent)%fate.EQ.1) then
+      if(cells(elements(n)%parent)%label.EQ.1) then
         elements(n)%velocity(:) = elements(n)%velocity(:) - dx(:)*cortex_constant1*pairs_cortex(m)%cortex_factor
         elements(nn)%velocity(:)= elements(nn)%velocity(:)+ dx(:)*cortex_constant1*pairs_cortex(m)%cortex_factor
       else
