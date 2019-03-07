@@ -120,13 +120,13 @@ module scem_0_input
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
-      flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
-      flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
+      flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
+      flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
       flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
-      flag_measure_surface    = 0    ! Switch to turn off surface sorting measurement
+      flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
       flag_measure_com        = 0
-      flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
+      flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
 
       !Simulation control parameters
       nc_initial        = 10.0
@@ -138,12 +138,11 @@ module scem_0_input
       READ(arg0,*) flag_symmetric_division ! If flag_symmetric_division=1, division will always produce daughter cells of the same fate as the parent cell.
       CALL GET_COMMAND_ARGUMENT(2,arg1)
       READ(arg1,*) epi_adhesion            ! Magnitude of mutual adhesion between epiblasts (type 1)
-      epi_adhesion     = epi_adhesion/0.03357
+      epi_adhesion     = epi_adhesion
       pre_adhesion     = epi_adhesion      ! Magnitude of mutual adhesion between primitive endoderm (type 2)
       epi_pre_adhesion = pre_adhesion      ! Magnitude of adhesion between epiblasts and primitive endoderm
       CALL GET_COMMAND_ARGUMENT(3,arg2)
       READ(arg2,*) cortex_constant1        ! Magnitude of baseline cortical tension in epiblasts
-      cortex_constant1  = cortex_constant1/2
       cortex_constant2  = cortex_constant1 ! Magnitude of baseline cortical tension in primitive endoderm
       DIT_response(1,0) = 1.0              ! Epiblast external system surface DIT response factor
       CALL GET_COMMAND_ARGUMENT(4,arg3)
@@ -179,7 +178,7 @@ module scem_0_input
       !Catch date and time, create folder to store data in
       CALL GET_COMMAND_ARGUMENT(6,arg5)
       !call date_and_time(DATE=date_of_run,TIME=time_of_run)
-      output_folder = "data/"//arg0//"_"//arg1(1:1)//arg1(3:4)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
+      output_folder = "data/"//arg0//"_"//arg1(1:2)//arg1(4:)//"_"//arg2(1:1)//arg2(3:4)//"_"//arg3(1:1)//arg3(3:4)//"_"//&
         arg4(1:1)//arg4(3:4)//"_"//arg5(1:1)
       call system("mkdir "//output_folder)
       call system("mkdir "//output_folder//"/system_data")

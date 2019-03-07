@@ -48,11 +48,11 @@ contains
         fadein_amp = elements(n)%strength*elements(nn)%strength
         bin        = int(sep_sq*d_r_sq_recip)
         if (intro) then
-          r_s1 = fadein_amp*intro_rel_strength(1,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
-          r_s2 = fadein_amp*intro_rel_strength(2,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
+          r_s1 = fadein_amp*intro_rel_strength(1,cells(k)%fate,cells(k)%fate,elements(n)%type,elements(nn)%type,index_intra)
+          r_s2 = fadein_amp*intro_rel_strength(2,cells(k)%fate,cells(k)%fate,elements(n)%type,elements(nn)%type,index_intra)
         else
-          r_s1 = fadein_amp*rel_strength(1,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
-          r_s2 = fadein_amp*rel_strength(2,cells(k)%fate,cells(kk)%fate,elements(n)%type,elements(nn)%type,index_intra)
+          r_s1 = fadein_amp*rel_strength(1,cells(k)%fate,cells(k)%fate,elements(n)%type,elements(nn)%type,index_intra)
+          r_s2 = fadein_amp*rel_strength(2,cells(k)%fate,cells(k)%fate,elements(n)%type,elements(nn)%type,index_intra)
         endif
 
         !Calculate an adhesion factor to apply from the adhesion factors of the two cells in this pair, and the normalisation factor needed to recover natural number adhesion magnitudes.
