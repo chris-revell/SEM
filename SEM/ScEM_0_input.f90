@@ -103,9 +103,9 @@ module scem_0_input
       flag_diffusion   = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve    = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background  = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
-      flag_growth      = 1 ! flag_growth = 0 (1) for no growth (growth)
-      flag_division    = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
-      flag_randomise   = 1 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
+      flag_growth      = 0 ! flag_growth = 0 (1) for no growth (growth)
+      flag_division    = 0 ! flag_division = 0 (1) for growth with no cell division (with cell division)
+      flag_randomise   = 0 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
       flag_pre_blebbing= 1 ! Causes blebbing in primitive endoderm (cell type 2) when equal to 1.
 
       !Output control switches
@@ -120,16 +120,16 @@ module scem_0_input
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
       flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
-      flag_measure_radius     = 1    ! Switch to turn off radius difference sorting measurement
-      flag_measure_neighbours = 1    ! Switch to turn off neighbour pair ratio sorting measurement
-      flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
-      flag_measure_surface    = 1    ! Switch to turn off surface sorting measurement
+      flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
+      flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
+      flag_measure_displacement=1    ! Switch to turn off displacement sorting measurement
+      flag_measure_surface    = 0    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
       flag_measure_com        = 0
-      flag_measure_randomised = 1    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
+      flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
 
       !Simulation control parameters
-      nc_initial        = 10.0
+      nc_initial        = 30.0
       stiffness_factor  = 1.0
       cell_cycle_time   = 1500.0 ! Cell cycle time in seconds
       n_cellcycles      = 2.0
@@ -301,7 +301,7 @@ module scem_0_input
 
       ! temporal parameters - all in *seconds*
       time_max=n_cellcycles*cell_cycle_time ! --> time of simulation in seconds
-      output_interval=time_max/49.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
+      output_interval=time_max/9.0 ! --> interval between graphical data outputs, set such that there will be no more than 99 outputs regardless of time_max
       output_interval2=output_interval
       dt=dt_amp_max*viscous_timescale_cell/(ne_cell+0.0)**(2*ot) ! --> optimized microscopic time increment
         ! derived quantities

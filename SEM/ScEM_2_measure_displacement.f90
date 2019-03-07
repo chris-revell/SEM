@@ -18,12 +18,18 @@ contains
     real*8, dimension(3) :: displacement_vector
 
     open(unit=41, file=output_folder//"/sorting_data/displacement.txt", status="unknown", position="append")
-    displacement = 0
-    do n=1, nc_initial
+    displacement1 = 0
+    displacement2 = 0
+    do n=1, nc
       displacement_vector(:) = cells(n)%position(:) - cells(n)%original_position(:)
-      displacement = displacement + DOT_PRODUCT(displacement_vector,displacement_vector)
+      if (cells(n)%fate.EQ.1) then
+        displacement1 = displacement1 + DOT_PRODUCT(displacement_vector,displacement_vector)
+      else
+        displacement2 = displacement2 + DOT_PRODUCT(displacement_vector,displacement_vector)
+      endif
     enddo
-    write(41,*) time, displacement/nc_initial
+    write(41,*) cells(0)%age, displacement1/nc, displacement2/nc
+
     close(41)
 
   end subroutine scem_measure_displacement

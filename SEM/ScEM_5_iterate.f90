@@ -34,7 +34,7 @@ contains
     logical :: fatesnotbalanced
 
     ! iterate system for pre-defined time interval
-    do while (nc.LE.30)
+    do while (time.LT.time_max)
 
       if (intro.AND.nc.GE.nc_initial) then
         write(*,'(A21,I2,A41)') "Grew intro system to ",nc_initial," cells. Initiating simulation parameters."
@@ -62,6 +62,7 @@ contains
         enddo
         write(*,'(A29,I2)') "Initial number of epiblasts: ", epi_counter
         write(*,'(A30,I2)') "Initial number of hypoblasts: ", pre_counter
+        FORALL(n=1:nc) cells(n)%age=0
         call scem_com
         call scem_output_system
         if (flag_povray.EQ.1) call scem_output_povray
