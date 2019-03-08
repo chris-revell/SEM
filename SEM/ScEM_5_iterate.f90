@@ -63,6 +63,7 @@ contains
         write(*,'(A29,I2)') "Initial number of epiblasts: ", epi_counter
         write(*,'(A30,I2)') "Initial number of hypoblasts: ", pre_counter
         FORALL(n=1:nc) cells(n)%age=0
+        FORALL(n=1:nc) cells(n)%original_position = cells(n)%position
         call scem_com
         call scem_output_system
         if (flag_povray.EQ.1) call scem_output_povray
