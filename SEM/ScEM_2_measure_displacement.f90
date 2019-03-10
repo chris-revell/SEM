@@ -32,7 +32,7 @@ contains
         count2 = count2+1
       endif
     enddo
-    write(41,*) cells(0)%age, displacement1/count1, displacement2/count2
+    write(41,*) cells(1)%age, displacement1/count1, displacement2/count2
 
     close(41)
 

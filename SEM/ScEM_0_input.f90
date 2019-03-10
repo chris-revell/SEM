@@ -132,7 +132,7 @@ module scem_0_input
       nc_initial        = 30.0
       stiffness_factor  = 1.0
       cell_cycle_time   = 1500.0 ! Cell cycle time in seconds
-      n_cellcycles      = 2.0
+      n_cellcycles      = 3.0
 
       CALL GET_COMMAND_ARGUMENT(1,arg0)
       READ(arg0,*) flag_symmetric_division ! If flag_symmetric_division=1, division will always produce daughter cells of the same fate as the parent cell.
