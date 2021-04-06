@@ -31,6 +31,7 @@ module scem_1_types
     real*8  :: rad_gyration ! radius of gyration of the cell
     real*8  :: age          ! cell age
     real*8  :: volume       ! Value of cell volume
+    real*8  :: surfaceArea  ! Value of cell surface area
     real*8, dimension(3) :: position          ! Cell's center of mass position in absolute frame
     real*8, dimension(3) :: original_position ! The original position of the cell at its creation or the beginning of the simulation
     integer, dimension(0:4*ne_cell)      :: c_elements ! Cell's register of internal elements. Zeroth component gives number of elements in cell

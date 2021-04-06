@@ -103,8 +103,8 @@ module scem_0_input
       flag_diffusion   = 1 ! flag_diffusion = 0 (1) for no diffusion (diffusion)
       flag_conserve    = 0 ! flag_conserve=1 (0) for volume conservation (no volume conservation)
       flag_background  = 1 ! flag_background determines whether to use background potential, and if so which potential. =0 for no background potential, =1 for "test tube", =2 for spherical well
-      flag_growth      = 0 ! flag_growth = 0 (1) for no growth (growth)
-      flag_division    = 0 ! flag_division = 0 (1) for growth with no cell division (with cell division)
+      flag_growth      = 1 ! flag_growth = 0 (1) for no growth (growth)
+      flag_division    = 1 ! flag_division = 0 (1) for growth with no cell division (with cell division)
       flag_randomise   = 0 ! When importing initial system setup from file, if flag_randomise=1, the program will assign fates to the imported cells randomly rather than keeping the initial fate distribution
       flag_pre_blebbing= 1 ! Causes blebbing in primitive endoderm (cell type 2) when equal to 1.
 
@@ -118,21 +118,21 @@ module scem_0_input
         flag_povray_boundary     = 0 ! Switch to turn on boundary visualisation.
       flag_count_output       = 0    ! Switch to turn off outputting cell count
       flag_fate_output        = 0    ! Switch to turn off outputting cell fate data
-      flag_volume_output      = 0    ! Switch to turn off outputting cell volume data
+      flag_volume_output      = 1    ! Switch to turn off outputting cell volume data
       flag_elements_final     = 0    ! Switch to turn off outputting elements_final data file.
       flag_measure_radius     = 0    ! Switch to turn off radius difference sorting measurement
       flag_measure_neighbours = 0    ! Switch to turn off neighbour pair ratio sorting measurement
-      flag_measure_displacement=1    ! Switch to turn off displacement sorting measurement
+      flag_measure_displacement=0    ! Switch to turn off displacement sorting measurement
       flag_measure_surface    = 0    ! Switch to turn off surface sorting measurement
       flag_measure_velocity   = 0    ! Switch to turn off velocity measurement
       flag_measure_com        = 0
       flag_measure_randomised = 0    ! Switch for subroutine that randomises fates in system and takes measurements as a baseline comparison
 
       !Simulation control parameters
-      nc_initial        = 30.0
+      nc_initial        = 30
       stiffness_factor  = 1.0
       cell_cycle_time   = 1500.0 ! Cell cycle time in seconds
-      n_cellcycles      = 3.0
+      n_cellcycles      = 2.3
 
       CALL GET_COMMAND_ARGUMENT(1,arg0)
       READ(arg0,*) flag_symmetric_division ! If flag_symmetric_division=1, division will always produce daughter cells of the same fate as the parent cell.

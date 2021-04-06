@@ -32,7 +32,7 @@ module scem_4_output_system
       if (flag_volume_output.EQ.1) then
         open(unit=27,file=output_folder//'/system_data/cell_volumes.txt',status='unknown',position="append")
         do n=1, nc
-          write(27,*) time, cells(n)%label, cells(n)%volume
+          write(27,*) time, cells(n)%label, cells(n)%fate, cells(n)%volume, cells(n)%surfaceArea
         end do
         close(27)
       endif

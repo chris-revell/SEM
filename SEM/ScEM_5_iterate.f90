@@ -17,7 +17,7 @@ module scem_5_iterate
   use scem_2_resize
   use scem_4_cortex
   use scem_1_volume_calculate
-  use scem_1_volume_conserve
+  !use scem_1_volume_conserve
   use scem_4_integrate
   use scem_4_output_system
 
@@ -84,7 +84,7 @@ contains
       if (flag_diffusion.eq.1.OR.intro) call scem_diffusion
 
       !Conserve cell volumes
-      if (flag_conserve.eq.1) call scem_volume_conserve
+      !if (flag_conserve.eq.1) call scem_volume_conserve
 
       ! determine sector relist flag
       call scem_flag_relist

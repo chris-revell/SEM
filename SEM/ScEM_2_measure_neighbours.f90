@@ -21,14 +21,14 @@ contains
 
 		!Start by looking at all element-element interaction pairs.
 		!If a pair acts between elements in cells of different parents i and j where i=!j, set neighbours(i,j) = .TRUE.
-		neighbours(:,:) = .FALSE.
+		neighbours(:,:) = 0
 		do n=1, np
 			!Find labels of parent cells for elements in interaction pair
 			parent1 = elements(pairs(n,1))%parent
 			parent2 = elements(pairs(n,2))%parent
 			dx(:) = elements(pairs(n,1))%position - elements(pairs(n,2))%position
 			if (parent1.NE.parent2.AND.DOT_PRODUCT(dx,dx).LT.r_interaction_max_sq) then
-				neighbours(parent1,parent2) = .TRUE.
+				neighbours(parent1,parent2) = 1
 			endif
 		enddo
 		!neighbours(i,j) = .TRUE. for any i,j where cell i and cell j are nearest neighbours.
@@ -37,7 +37,7 @@ contains
 		neighbour_counts(:,:) = 0
 		do i=1,nc
 			do j=i+1,nc
-				if (neighbours(i,j)) then
+				if (neighbours(i,j).EQ.1) then
 					fate1 = cells(i)%fate
 					fate2 = cells(j)%fate
 					neighbour_counts(fate1,fate2) = neighbour_counts(fate1,fate2) + 1
