@@ -36,7 +36,7 @@ module scem_1_volume_calculate
 
 					P = elements(cells(j)%triplets(1,i))%position - elements(cells(j)%triplets(3,i))%position
 					Q = elements(cells(j)%triplets(2,i))%position - elements(cells(j)%triplets(3,i))%position
-					surface_cell = surface_cell + 0.5*DOT_PRODUCT(P,Q)
+					surface_cell = surface_cell + 0.5*NORM2(CROSS_PRODUCT(P,Q))
 				end do
 				cells(j)%volume = volume_cell
 				cells(j)%surfaceArea = surface_cell
